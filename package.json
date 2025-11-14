@@ -21,6 +21,7 @@
     "@headlessui/react": "^2.2.9",
     "@iconify/react": "^6.0.2",
     "@react-spring/web": "^10.0.3",
+    "@vercel/analytics": "^1.5.0",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.23.24",
     "lucide-react": "^0.548.0",

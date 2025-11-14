@@ -3,6 +3,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import { ErrorBoundary } from './components/ui/ErrorBoundary'
+import { Analytics } from '@vercel/analytics/react'
 import './index.css'
 import './custom.css'
 import './styles/animations.css'
@@ -67,5 +68,6 @@ root.render(
     <ErrorBoundary>
       <App />
     </ErrorBoundary>
+    <Analytics />
   </React.StrictMode>
 )
