@@ -3,10 +3,23 @@ import { useEffect, useState } from 'react'
 export function useVersionCheck(currentVersion) {
   const [updateAvailable, setUpdateAvailable] = useState(false)
   const [countdown, setCountdown] = useState(10)
-  const [dismiss, setDismiss] = useState(false)
+  const [dismiss, setDismiss] = useState(true) // По умолчанию отключено, если версия не определена
   const [changelog, setChangelog] = useState([])
 
   const [progress, setProgress] = useState(0)
+
+  // КРИТИЧНО: Если версия не определена или пустая, автоматически отключаем проверку
+  const isVersionValid = currentVersion && typeof currentVersion === 'string' && currentVersion.trim() !== ''
+
+  // Активируем проверку, если версия валидна
+  useEffect(() => {
+    if (isVersionValid) {
+      setDismiss(false) // Активируем проверку, если версия валидна
+    } else {
+      setDismiss(true) // Отключаем проверку, если версия не валидна
+      setUpdateAvailable(false) // Сбрасываем флаг обновления
+    }
+  }, [isVersionValid])
 
   // Разрешение уведомлений
   useEffect(() => {
@@ -17,8 +30,10 @@ export function useVersionCheck(currentVersion) {
 
   // Проверка версии
   useEffect(() => {
-    // Если версия не определена или пользователь отклонил обновление, не проверяем
-    if (!currentVersion || dismiss) return
+    // КРИТИЧНО: Если версия не валидна или пользователь отклонил обновление - полностью отключаем проверку
+    if (!isVersionValid || dismiss) {
+      return
+    }
 
     let intervalId = null
 
@@ -32,6 +47,7 @@ export function useVersionCheck(currentVersion) {
           // Проверяем, что версия действительно отличается и не пустая
           if (
             data.version &&
+            isVersionValid &&
             currentVersion &&
             data.version !== currentVersion &&
             !dismiss
@@ -56,7 +72,7 @@ export function useVersionCheck(currentVersion) {
         clearInterval(intervalId)
       }
     }
-  }, [currentVersion, dismiss])
+  }, [currentVersion, dismiss, isVersionValid])
 
   // Таймер
   useEffect(() => {

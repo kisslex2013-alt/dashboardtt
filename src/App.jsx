@@ -72,8 +72,10 @@ import UpdateModal from './components/UpdateModal'
 import { useVersionCheck } from './hooks/useVersionCheck'
 
 function App() {
-  // Проверка обновлений версии (только если версия определена)
-  const currentBuildVersion = import.meta.env.VITE_BUILD_VERSION || ''
+  // Проверка обновлений версии (только если версия определена и не пустая)
+  const currentBuildVersion = import.meta.env.VITE_BUILD_VERSION
+  // Полностью отключаем проверку, если версия не определена
+  const versionCheckEnabled = currentBuildVersion && currentBuildVersion.trim() !== ''
   const {
     updateAvailable,
     countdown,
@@ -81,7 +83,7 @@ function App() {
     setDismiss,
     progress,
     changelog,
-  } = useVersionCheck(currentBuildVersion)
+  } = useVersionCheck(versionCheckEnabled ? currentBuildVersion : null)
 
   // ✅ ОПТИМИЗИРОВАНО: Используем единый хук вместо множества отдельных селекторов
   // Это уменьшает количество подписок и предотвращает избыточные re-renders
@@ -603,7 +605,7 @@ function App() {
         {/* Версия приложения - более заметная надпись */}
         <div className="mt-4 mb-2 px-2 text-center">
           <p className="text-xs text-gray-400 dark:text-gray-500">
-            Time Tracker Dashboard v1.2.3 build_15.56_14.11.25</p>
+            Time Tracker Dashboard v1.2.3 build_16.01_14.11.25</p>
         </div>
 
         <FloatingPanel />
