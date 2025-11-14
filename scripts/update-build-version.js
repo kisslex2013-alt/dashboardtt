@@ -37,8 +37,8 @@ try {
   const versionPattern = /(Time Tracker Dashboard v\d+\.\d+\.\d+)(\s+build[\d:/\s_.]+)?/
 
   if (versionPattern.test(content)) {
-    // Заменяем версию
-    content = content.replace(versionPattern, `Time Tracker Dashboard v1.2.3 ${buildVersion}`)
+    // Заменяем версию БЕЗ build версии (она теперь отображается отдельно в footer)
+    content = content.replace(versionPattern, `Time Tracker Dashboard v1.2.3`)
 
     // Записываем обратно
     writeFileSync(appJsxPath, content, 'utf8')

@@ -67,7 +67,6 @@
     </div>
 
     <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
 
     <!-- Проверка первого запуска до загрузки React -->
     <script>
@@ -77,15 +76,11 @@
 
         if (!promoShown) {
           // Если промо еще не было показано - редиректим на промо-страницу
-          // Показываем анимацию загрузки
-          const loadingCheck = document.getElementById('loading-check')
-
-          // Небольшая задержка для плавности
-          setTimeout(() => {
-            window.location.href = '/promo/time-tracker-promo-variant-2.html'
-          }, 500)
+          // Редирект ДО загрузки React, чтобы избежать проблем
+          window.location.href = '/promo/time-tracker-promo-variant-2.html'
+          return // Прерываем выполнение, чтобы не загружать React
         } else {
-          // Если промо уже было показано - скрываем анимацию и продолжаем загрузку
+          // Если промо уже было показано - скрываем анимацию и загружаем React
           const loadingCheck = document.getElementById('loading-check')
           if (loadingCheck) {
             loadingCheck.classList.add('hidden')
@@ -93,6 +88,12 @@
               loadingCheck.remove()
             }, 300)
           }
+          
+          // Загружаем React только если промо уже было показано
+          const script = document.createElement('script')
+          script.type = 'module'
+          script.src = '/src/main.jsx'
+          document.body.appendChild(script)
         }
       })()
     </script>
