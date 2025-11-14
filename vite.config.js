@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { VitePWA } from 'vite-plugin-pwa'
 import { readFileSync, writeFileSync } from 'fs'
 import { join, resolve } from 'path'
 
@@ -268,6 +269,32 @@ export default defineConfig({
         })
       },
     },
+    VitePWA({
+      registerType: 'autoUpdate',
+      manifest: {
+        name: 'DashboardTT',
+        short_name: 'DashboardTT',
+        theme_color: '#000000',
+        background_color: '#000000',
+        display: 'standalone',
+        start_url: '/',
+        icons: [
+          {
+            src: '/icon-192.png',
+            sizes: '192x192',
+            type: 'image/png',
+          },
+          {
+            src: '/icon-512.png',
+            sizes: '512x512',
+            type: 'image/png',
+          },
+        ],
+      },
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+      },
+    }),
   ],
   // ИСПРАВЛЕНО: Добавлен base path для корректной работы на Netlify
   base: '/',

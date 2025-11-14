@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import { ErrorBoundary } from './components/ui/ErrorBoundary'
 import { Analytics } from '@vercel/analytics/react'
+import { registerSW } from 'virtual:pwa-register'
 import './index.css'
 import './custom.css'
 import './styles/animations.css'
@@ -59,6 +60,9 @@ window.addEventListener('unhandledrejection', event => {
 // ✅ ИСПРАВЛЕНО: StrictMode включен обратно
 // Проблема с lazy loading решена путем правильного преобразования named exports
 // в default exports через .then() модуль трансформацию
+
+// Регистрация Service Worker для PWA
+registerSW()
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 

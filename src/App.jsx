@@ -579,7 +579,7 @@ function App() {
         {/* Версия приложения - более заметная надпись */}
         <div className="mt-4 mb-2 px-2 text-center">
           <p className="text-xs text-gray-400 dark:text-gray-500">
-            Time Tracker Dashboard v1.2.0 build_11.49_14.11.25</p>
+            Time Tracker Dashboard v1.2.0 build_12.06_14.11.25</p>
         </div>
 
         <FloatingPanel />
