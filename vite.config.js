@@ -6,6 +6,7 @@ import { join, resolve } from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: './',
   plugins: [
     react(),
     // * Плагин для обновления дефолтных значений иконок и цветов в коде
@@ -292,8 +293,8 @@ export default defineConfig({
         ],
       },
       workbox: {
-		clientsClaim: true,
-		skipWaiting: true,
+        clientsClaim: true,
+        skipWaiting: true,
         globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
       },
     }),
