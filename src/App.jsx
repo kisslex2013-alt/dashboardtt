@@ -71,6 +71,7 @@ import { useUpdateCategoryColors } from './store/useSettingsStore'
 import UpdateModal from './components/UpdateModal'
 import { useVersionCheck } from './hooks/useVersionCheck'
 import { useAppVersion } from './hooks/useAppVersion'
+import { useIncognitoMode } from './hooks/useIncognitoMode'
 
 function App() {
   // Получаем версию приложения из version.json
@@ -502,18 +503,27 @@ function App() {
     return () => clearTimeout(timer)
   }, [entries.length, importEntries, showSuccess, showError]) // Зависимости
 
-  // Автоматический показ Tutorial при первом запуске (после промо)
+  // Проверка режима инкогнито
+  const isIncognito = useIncognitoMode()
+
+  // Автоматический показ Tutorial при первом запуске и в инкогнито
   useEffect(() => {
     const tutorialCompleted = localStorage.getItem('tutorial_completed')
-    const promoShown = localStorage.getItem('promo_shown')
-    // Показываем Tutorial только если промо уже было показано
-    if (!tutorialCompleted && promoShown) {
+    
+    // Показываем Tutorial если:
+    // 1. Это первый запуск (tutorial_completed не установлен)
+    // 2. ИЛИ режим инкогнито (в инкогнито показываем всегда)
+    const isFirstLaunch = !tutorialCompleted
+    
+    if (isFirstLaunch || isIncognito) {
       // Небольшая задержка для плавности
-      setTimeout(() => {
+      const timer = setTimeout(() => {
         openModal('tutorial')
       }, 1000)
+      
+      return () => clearTimeout(timer)
     }
-  }, [openModal]) // Добавляем openModal в зависимости для безопасности
+  }, [openModal, isIncognito]) // Добавляем isIncognito в зависимости
 
   // ✅ Создание бекапа при загрузке приложения
   useEffect(() => {

@@ -67,90 +67,21 @@
     </div>
 
     <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
 
-    <!-- Проверка первого запуска и режима инкогнито до загрузки React -->
+    <!-- Скрываем анимацию загрузки после загрузки React -->
     <script>
       ;(function () {
-        // Функция для проверки режима инкогнито (асинхронная)
-        async function checkIncognitoMode() {
-          try {
-            // Метод 1: Проверка через navigator.storage.estimate
-            // В инкогнито quota обычно очень маленький (около 120MB)
-            if (navigator.storage && navigator.storage.estimate) {
-              try {
-                const estimate = await navigator.storage.estimate()
-                // В инкогнито quota обычно меньше 120MB
-                if (estimate.quota && estimate.quota < 120000000) {
-                  return true
-                }
-              } catch (e) {
-                // Игнорируем ошибки
-              }
-            }
-
-            // Метод 2: Проверка через indexedDB (fallback)
-            return new Promise((resolve) => {
-              try {
-                const dbName = '__incognito_test_' + Date.now()
-                const req = indexedDB.open(dbName)
-                
-                req.onerror = () => resolve(true)
-                req.onblocked = () => resolve(true)
-                
-                req.onsuccess = () => {
-                  indexedDB.deleteDatabase(dbName)
-                  resolve(false)
-                }
-                
-                // Таймаут на случай блокировки
-                setTimeout(() => resolve(false), 50)
-              } catch (e) {
-                resolve(false)
-              }
-            })
-          } catch (e) {
-            return false
-          }
+        // Скрываем анимацию загрузки после небольшой задержки
+        const loadingCheck = document.getElementById('loading-check')
+        if (loadingCheck) {
+          setTimeout(() => {
+            loadingCheck.classList.add('hidden')
+            setTimeout(() => {
+              loadingCheck.remove()
+            }, 300)
+          }, 500)
         }
-
-        // Проверяем флаг первого запуска
-        let promoShown = false
-
-        try {
-          promoShown = localStorage.getItem('promo_shown') === 'true'
-        } catch (e) {
-          // Если localStorage недоступен - считаем что это первый запуск/инкогнито
-          promoShown = false
-        }
-
-        // Если промо еще не было показано - показываем сразу
-        if (!promoShown) {
-          window.location.href = '/promo/time-tracker-promo-variant-2.html'
-          return
-        }
-
-        // Если промо было показано, проверяем инкогнито режим
-        checkIncognitoMode().then((isIncognito) => {
-          if (isIncognito) {
-            // В инкогнито всегда показываем промо
-            window.location.href = '/promo/time-tracker-promo-variant-2.html'
-            return
-          } else {
-            // Обычный режим - загружаем React
-            const loadingCheck = document.getElementById('loading-check')
-            if (loadingCheck) {
-              loadingCheck.classList.add('hidden')
-              setTimeout(() => {
-                loadingCheck.remove()
-              }, 300)
-            }
-            
-            const script = document.createElement('script')
-            script.type = 'module'
-            script.src = '/src/main.jsx'
-            document.body.appendChild(script)
-          }
-        })
       })()
     </script>
   </body>
