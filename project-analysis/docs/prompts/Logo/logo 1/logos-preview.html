@@ -1,0 +1,622 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Time Tracker Dashboard - Логотипы</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        color: #fff;
+        padding: 40px 20px;
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      header {
+        text-align: center;
+        margin-bottom: 60px;
+      }
+
+      h1 {
+        font-size: 3rem;
+        margin-bottom: 10px;
+        background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .subtitle {
+        font-size: 1.2rem;
+        color: #94a3b8;
+        margin-bottom: 20px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 30px;
+        margin-bottom: 60px;
+      }
+
+      .logo-card {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        padding: 30px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .logo-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(59, 130, 246, 0.3);
+        border-color: rgba(59, 130, 246, 0.5);
+      }
+
+      .logo-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .logo-card:hover::before {
+        opacity: 1;
+      }
+
+      .logo-preview {
+        width: 100%;
+        height: 250px;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+        padding: 30px;
+      }
+
+      .logo-preview svg {
+        width: 100%;
+        height: 100%;
+        filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.5));
+        transition: transform 0.3s ease;
+      }
+
+      .logo-card:hover .logo-preview svg {
+        transform: scale(1.05);
+      }
+
+      .logo-info h3 {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+        color: #3b82f6;
+      }
+
+      .logo-info p {
+        color: #cbd5e1;
+        line-height: 1.6;
+        margin-bottom: 15px;
+      }
+
+      .colors {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+
+      .color-dot {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        transition: transform 0.2s ease;
+      }
+
+      .color-dot:hover {
+        transform: scale(1.2);
+      }
+
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 15px;
+      }
+
+      .tag {
+        background: rgba(59, 130, 246, 0.2);
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        color: #93c5fd;
+      }
+
+      .download-btn {
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        border: none;
+        border-radius: 10px;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: block;
+        text-align: center;
+      }
+
+      .download-btn:hover {
+        transform: scale(1.02);
+        box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+      }
+
+      .comparison-table {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        padding: 30px;
+        overflow-x: auto;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      th,
+      td {
+        padding: 15px;
+        text-align: left;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      th {
+        color: #3b82f6;
+        font-weight: 600;
+      }
+
+      td {
+        color: #cbd5e1;
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+
+      .badge-easy {
+        background: #10b981;
+        color: white;
+      }
+      .badge-medium {
+        background: #f59e0b;
+        color: white;
+      }
+      .badge-hard {
+        background: #ef4444;
+        color: white;
+      }
+
+      @media (max-width: 768px) {
+        h1 {
+          font-size: 2rem;
+        }
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>⏱️ Time Tracker Dashboard</h1>
+        <p class="subtitle">5 профессиональных концепций логотипа</p>
+      </header>
+
+      <div class="grid">
+        <!-- Logo 1 -->
+        <div class="logo-card">
+          <div class="logo-preview">
+            <svg viewBox="0 0 200 200">
+              <defs>
+                <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" style="stop-color: #3b82f6; stop-opacity: 1" />
+                  <stop offset="100%" style="stop-color: #2563eb; stop-opacity: 1" />
+                </linearGradient>
+              </defs>
+              <circle
+                cx="100"
+                cy="100"
+                r="85"
+                fill="none"
+                stroke="url(#grad1)"
+                stroke-width="8"
+                opacity="0.3"
+              />
+              <circle cx="100" cy="100" r="70" fill="url(#grad1)" opacity="0.15" />
+              <circle cx="100" cy="100" r="70" fill="none" stroke="url(#grad1)" stroke-width="4" />
+              <rect x="50" y="85" width="12" height="30" fill="#3B82F6" opacity="0.6" rx="2" />
+              <rect x="68" y="70" width="12" height="45" fill="#3B82F6" opacity="0.8" rx="2" />
+              <rect x="86" y="60" width="12" height="55" fill="#2563EB" rx="2" />
+              <rect x="104" y="75" width="12" height="40" fill="#3B82F6" opacity="0.8" rx="2" />
+              <rect x="122" y="80" width="12" height="35" fill="#3B82F6" opacity="0.6" rx="2" />
+              <line
+                x1="100"
+                y1="100"
+                x2="100"
+                y2="55"
+                stroke="#3B82F6"
+                stroke-width="4"
+                stroke-linecap="round"
+              />
+              <line
+                x1="100"
+                y1="100"
+                x2="125"
+                y2="100"
+                stroke="#2563EB"
+                stroke-width="3"
+                stroke-linecap="round"
+              />
+              <circle cx="100" cy="100" r="6" fill="#3B82F6" />
+              <circle cx="100" cy="30" r="3" fill="#3B82F6" />
+              <circle cx="170" cy="100" r="3" fill="#3B82F6" />
+              <circle cx="100" cy="170" r="3" fill="#3B82F6" />
+              <circle cx="30" cy="100" r="3" fill="#3B82F6" />
+            </svg>
+          </div>
+          <div class="logo-info">
+            <h3>Analytics Clock</h3>
+            <p>
+              Идеальное сочетание времени и аналитики. Показывает суть проекта через графики внутри
+              часов.
+            </p>
+            <div class="colors">
+              <div class="color-dot" style="background: #3b82f6"></div>
+              <div class="color-dot" style="background: #2563eb"></div>
+            </div>
+            <div class="tags">
+              <span class="tag">Информативный</span>
+              <span class="tag">Desktop</span>
+              <span class="tag">Header</span>
+            </div>
+            <a href="logo-1-analytics-clock.svg" download class="download-btn">📥 Скачать SVG</a>
+          </div>
+        </div>
+
+        <!-- Logo 2 -->
+        <div class="logo-card">
+          <div class="logo-preview">
+            <svg viewBox="0 0 200 200">
+              <defs>
+                <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" style="stop-color: #3b82f6; stop-opacity: 1" />
+                  <stop offset="50%" style="stop-color: #8b5cf6; stop-opacity: 1" />
+                  <stop offset="100%" style="stop-color: #ec4899; stop-opacity: 1" />
+                </linearGradient>
+              </defs>
+              <circle
+                cx="100"
+                cy="100"
+                r="75"
+                fill="none"
+                stroke="#374151"
+                stroke-width="12"
+                opacity="0.3"
+              />
+              <circle
+                cx="100"
+                cy="100"
+                r="75"
+                fill="none"
+                stroke="url(#grad2)"
+                stroke-width="12"
+                stroke-dasharray="353 471"
+                transform="rotate(-90 100 100)"
+                stroke-linecap="round"
+              />
+              <circle cx="100" cy="100" r="55" fill="#1F2937" opacity="0.5" />
+              <path d="M 85 75 L 85 125 L 120 100 Z" fill="url(#grad2)" />
+              <circle cx="100" cy="25" r="4" fill="#3B82F6" opacity="0.5" />
+              <circle cx="141" cy="41" r="4" fill="#8B5CF6" opacity="0.5" />
+              <circle cx="175" cy="100" r="4" fill="#EC4899" opacity="0.5" />
+              <circle cx="141" cy="159" r="4" fill="#EC4899" opacity="0.5" />
+              <circle cx="100" cy="175" r="4" fill="#8B5CF6" opacity="0.5" />
+              <circle cx="59" cy="159" r="4" fill="#3B82F6" opacity="0.5" />
+              <circle cx="25" cy="100" r="4" fill="#3B82F6" opacity="0.5" />
+              <circle cx="59" cy="41" r="4" fill="#8B5CF6" opacity="0.5" />
+            </svg>
+          </div>
+          <div class="logo-info">
+            <h3>Progress Timer</h3>
+            <p>
+              Круговой таймер с прогресс-индикатором. Яркий градиент привлекает внимание на домашнем
+              экране.
+            </p>
+            <div class="colors">
+              <div class="color-dot" style="background: #3b82f6"></div>
+              <div class="color-dot" style="background: #8b5cf6"></div>
+              <div class="color-dot" style="background: #ec4899"></div>
+            </div>
+            <div class="tags">
+              <span class="tag">Динамичный</span>
+              <span class="tag">PWA</span>
+              <span class="tag">Mobile</span>
+            </div>
+            <a href="logo-2-progress-timer.svg" download class="download-btn">📥 Скачать SVG</a>
+          </div>
+        </div>
+
+        <!-- Logo 3 -->
+        <div class="logo-card">
+          <div class="logo-preview">
+            <svg viewBox="0 0 200 200">
+              <defs>
+                <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" style="stop-color: #60a5fa; stop-opacity: 1" />
+                  <stop offset="100%" style="stop-color: #3b82f6; stop-opacity: 1" />
+                </linearGradient>
+              </defs>
+              <rect
+                x="30"
+                y="30"
+                width="140"
+                height="140"
+                fill="none"
+                stroke="url(#grad3)"
+                stroke-width="6"
+                rx="20"
+                opacity="0.3"
+              />
+              <circle cx="100" cy="100" r="50" fill="url(#grad3)" opacity="0.15" />
+              <circle cx="100" cy="100" r="50" fill="none" stroke="url(#grad3)" stroke-width="4" />
+              <path d="M 100 100 L 95 50 L 105 50 Z" fill="#3B82F6" />
+              <rect x="97" y="45" width="6" height="55" fill="#60A5FA" rx="3" />
+              <circle cx="45" cy="45" r="5" fill="#3B82F6" opacity="0.6" />
+              <circle cx="155" cy="45" r="5" fill="#3B82F6" opacity="0.6" />
+              <circle cx="155" cy="155" r="5" fill="#3B82F6" opacity="0.6" />
+              <circle cx="45" cy="155" r="5" fill="#3B82F6" opacity="0.6" />
+              <circle cx="100" cy="100" r="8" fill="#3B82F6" />
+              <circle cx="100" cy="100" r="4" fill="#60A5FA" />
+            </svg>
+          </div>
+          <div class="logo-info">
+            <h3>Geometric Time</h3>
+            <p>
+              Минималистичная геометрия. Идеален для маленьких размеров благодаря простой форме.
+            </p>
+            <div class="colors">
+              <div class="color-dot" style="background: #60a5fa"></div>
+              <div class="color-dot" style="background: #3b82f6"></div>
+            </div>
+            <div class="tags">
+              <span class="tag">Минимализм</span>
+              <span class="tag">Favicon</span>
+              <span class="tag">16x16</span>
+            </div>
+            <a href="logo-3-geometric-time.svg" download class="download-btn">📥 Скачать SVG</a>
+          </div>
+        </div>
+
+        <!-- Logo 4 -->
+        <div class="logo-card">
+          <div class="logo-preview">
+            <svg viewBox="0 0 200 200">
+              <defs>
+                <linearGradient id="grad4" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" style="stop-color: #3b82f6; stop-opacity: 1" />
+                  <stop offset="50%" style="stop-color: #10b981; stop-opacity: 1" />
+                  <stop offset="100%" style="stop-color: #f59e0b; stop-opacity: 1" />
+                </linearGradient>
+              </defs>
+              <circle
+                cx="100"
+                cy="100"
+                r="85"
+                fill="none"
+                stroke="#3B82F6"
+                stroke-width="2"
+                opacity="0.2"
+              />
+              <circle
+                cx="100"
+                cy="100"
+                r="70"
+                fill="none"
+                stroke="#10B981"
+                stroke-width="2"
+                opacity="0.3"
+              />
+              <circle
+                cx="100"
+                cy="100"
+                r="55"
+                fill="none"
+                stroke="#F59E0B"
+                stroke-width="2"
+                opacity="0.4"
+              />
+              <circle cx="100" cy="100" r="40" fill="url(#grad4)" opacity="0.2" />
+              <path
+                d="M 30 100 L 50 100 L 60 70 L 70 130 L 80 100 L 100 100 L 110 85 L 120 115 L 130 100 L 150 100 L 170 100"
+                fill="none"
+                stroke="url(#grad4)"
+                stroke-width="4"
+                stroke-linecap="round"
+              />
+              <circle cx="60" cy="70" r="4" fill="#3B82F6" />
+              <circle cx="70" cy="130" r="4" fill="#10B981" />
+              <circle cx="110" cy="85" r="4" fill="#F59E0B" />
+              <circle cx="120" cy="115" r="4" fill="#10B981" />
+              <circle cx="100" cy="100" r="15" fill="none" stroke="#3B82F6" stroke-width="3" />
+              <line
+                x1="100"
+                y1="100"
+                x2="100"
+                y2="90"
+                stroke="#3B82F6"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+              <line
+                x1="100"
+                y1="100"
+                x2="107"
+                y2="100"
+                stroke="#10B981"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+              <circle cx="100" cy="100" r="3" fill="#F59E0B" />
+            </svg>
+          </div>
+          <div class="logo-info">
+            <h3>Data Pulse</h3>
+            <p>Пульсация данных. Технологичный и энергичный дизайн для маркетинговых материалов.</p>
+            <div class="colors">
+              <div class="color-dot" style="background: #3b82f6"></div>
+              <div class="color-dot" style="background: #10b981"></div>
+              <div class="color-dot" style="background: #f59e0b"></div>
+            </div>
+            <div class="tags">
+              <span class="tag">Технологичный</span>
+              <span class="tag">Marketing</span>
+              <span class="tag">Презентации</span>
+            </div>
+            <a href="logo-4-data-pulse.svg" download class="download-btn">📥 Скачать SVG</a>
+          </div>
+        </div>
+
+        <!-- Logo 5 -->
+        <div class="logo-card">
+          <div class="logo-preview">
+            <svg viewBox="0 0 200 200">
+              <defs>
+                <linearGradient id="grad5" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" style="stop-color: #60a5fa; stop-opacity: 1" />
+                  <stop offset="100%" style="stop-color: #1e40af; stop-opacity: 1" />
+                </linearGradient>
+              </defs>
+              <rect x="95" y="25" width="10" height="15" fill="#3B82F6" rx="3" opacity="0.6" />
+              <rect x="90" y="35" width="20" height="8" fill="#3B82F6" rx="4" opacity="0.8" />
+              <circle cx="100" cy="110" r="65" fill="url(#grad5)" opacity="0.1" />
+              <circle cx="100" cy="110" r="65" fill="none" stroke="url(#grad5)" stroke-width="6" />
+              <circle
+                cx="100"
+                cy="110"
+                r="50"
+                fill="none"
+                stroke="#3B82F6"
+                stroke-width="2"
+                opacity="0.3"
+              />
+              <path
+                d="M 75 110 L 90 130 L 125 85"
+                fill="none"
+                stroke="url(#grad5)"
+                stroke-width="8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <circle cx="100" cy="60" r="3" fill="#3B82F6" />
+              <circle cx="135" cy="78" r="3" fill="#3B82F6" opacity="0.7" />
+              <circle cx="150" cy="110" r="3" fill="#3B82F6" opacity="0.5" />
+              <circle cx="135" cy="142" r="3" fill="#3B82F6" opacity="0.7" />
+              <circle cx="100" cy="160" r="3" fill="#3B82F6" />
+              <circle cx="65" cy="142" r="3" fill="#3B82F6" opacity="0.7" />
+              <circle cx="50" cy="110" r="3" fill="#3B82F6" opacity="0.5" />
+              <circle cx="65" cy="78" r="3" fill="#3B82F6" opacity="0.7" />
+            </svg>
+          </div>
+          <div class="logo-info">
+            <h3>Minimal Stopwatch</h3>
+            <p>Универсальный секундомер с галочкой. Сбалансированный дизайн для любых размеров.</p>
+            <div class="colors">
+              <div class="color-dot" style="background: #60a5fa"></div>
+              <div class="color-dot" style="background: #1e40af"></div>
+            </div>
+            <div class="tags">
+              <span class="tag">Универсальный</span>
+              <span class="tag">Простой</span>
+              <span class="tag">Все размеры</span>
+            </div>
+            <a href="logo-5-minimal-stopwatch.svg" download class="download-btn">📥 Скачать SVG</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="comparison-table">
+        <h2 style="margin-bottom: 20px; color: #3b82f6">📊 Сравнение логотипов</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Название</th>
+              <th>Стиль</th>
+              <th>Сложность</th>
+              <th>Лучше для</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Analytics Clock</strong></td>
+              <td>Комплексный, информативный</td>
+              <td><span class="badge badge-medium">Средняя</span></td>
+              <td>Desktop, большие размеры</td>
+            </tr>
+            <tr>
+              <td><strong>Progress Timer</strong></td>
+              <td>Динамичный, современный</td>
+              <td><span class="badge badge-medium">Средняя</span></td>
+              <td>App icon, PWA</td>
+            </tr>
+            <tr>
+              <td><strong>Geometric Time</strong></td>
+              <td>Минималистичный, чистый</td>
+              <td><span class="badge badge-easy">Простая</span></td>
+              <td>Favicon, маленькие размеры</td>
+            </tr>
+            <tr>
+              <td><strong>Data Pulse</strong></td>
+              <td>Технологичный, энергичный</td>
+              <td><span class="badge badge-hard">Высокая</span></td>
+              <td>Marketing, презентации</td>
+            </tr>
+            <tr>
+              <td><strong>Minimal Stopwatch</strong></td>
+              <td>Простой, понятный</td>
+              <td><span class="badge badge-easy">Простая</span></td>
+              <td>Универсальный</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>

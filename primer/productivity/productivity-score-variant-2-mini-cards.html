@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вариант 2: Мини-карточки</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .glass-effect {
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(17, 24, 39, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .glass-card {
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+  </style>
+</head>
+<body class="bg-gray-900 text-white p-8">
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-2xl font-bold mb-4">Вариант 2: Мини-карточки</h1>
+    
+    <!-- Основной блок с заголовком -->
+    <div class="glass-effect rounded-xl p-4 mb-3">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-bold flex items-center gap-2">
+          <span>📊</span>
+          Оценка продуктивности
+        </h3>
+        <div class="flex items-center gap-2">
+          <div class="text-3xl font-bold text-green-500">89</div>
+          <div class="text-sm text-gray-400">/ 100</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Мини-карточки факторов -->
+    <div class="grid grid-cols-4 gap-2">
+      <div class="glass-card rounded-lg p-3">
+        <div class="text-xs text-gray-400 mb-1">Выполнение целей</div>
+        <div class="text-lg font-bold text-yellow-500 mb-1">29</div>
+        <div class="text-xs text-gray-500 mb-1.5">из 40</div>
+        <div class="w-full h-1 bg-gray-700 rounded-full overflow-hidden">
+          <div class="h-full bg-yellow-500 rounded-full" style="width: 72.5%"></div>
+        </div>
+      </div>
+      <div class="glass-card rounded-lg p-3">
+        <div class="text-xs text-gray-400 mb-1">Регулярность</div>
+        <div class="text-lg font-bold text-green-500 mb-1">25</div>
+        <div class="text-xs text-gray-500 mb-1.5">из 25</div>
+        <div class="w-full h-1 bg-gray-700 rounded-full overflow-hidden">
+          <div class="h-full bg-green-500 rounded-full" style="width: 100%"></div>
+        </div>
+      </div>
+      <div class="glass-card rounded-lg p-3">
+        <div class="text-xs text-gray-400 mb-1">Фокус</div>
+        <div class="text-lg font-bold text-green-500 mb-1">20</div>
+        <div class="text-xs text-gray-500 mb-1.5">из 20</div>
+        <div class="w-full h-1 bg-gray-700 rounded-full overflow-hidden">
+          <div class="h-full bg-green-500 rounded-full" style="width: 100%"></div>
+        </div>
+      </div>
+      <div class="glass-card rounded-lg p-3">
+        <div class="text-xs text-gray-400 mb-1">Баланс перерывов</div>
+        <div class="text-lg font-bold text-green-500 mb-1">15</div>
+        <div class="text-xs text-gray-500 mb-1.5">из 15</div>
+        <div class="w-full h-1 bg-gray-700 rounded-full overflow-hidden">
+          <div class="h-full bg-green-500 rounded-full" style="width: 100%"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-4 text-sm text-gray-400">
+      <p><strong>Преимущества:</strong></p>
+      <ul class="list-disc list-inside mt-2 space-y-1">
+        <li>✅ Разбивка на отдельные мини-карточки</li>
+        <li>✅ Каждый фактор в своем блоке</li>
+        <li>✅ Компактный размер каждой карточки</li>
+        <li>✅ Легко сканировать показатели</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>
+

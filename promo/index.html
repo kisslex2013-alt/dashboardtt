@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Tracker Dashboard - Умный учет рабочего времени</title>
+    <meta name="description" content="Современное приложение для учета рабочего времени с мощной аналитикой, графиками и статистикой">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <div>
+                <h1 class="header-title">Time Tracker Dashboard</h1>
+                <div class="feature-badge header-badge">
+                    <svg viewBox="0 0 24 24" fill="#6366f1" style="width: 20px; height: 20px;">
+                        <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke="currentColor" stroke-width="2" fill="none" />
+                    </svg>
+                    <span>Умный учет рабочего времени</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <div style="font-size: 0.9em; opacity: 0.7;">Промо-страница</div>
+                <div style="font-size: 0.8em; margin-top: 5px; opacity: 0.6;">Демонстрация возможностей</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Banner 1: Hero with Stats -->
+    <div class="banner banner-1" style="margin-top: 120px;">
+        <div class="banner-content">
+            <div class="text-content">
+                <h1>Полный контроль над заработком</h1>
+                <p>Отслеживайте каждый час работы, анализируйте доходы и планируйте будущие заработки с помощью умных инструментов.</p>
+                <div class="feature-badge">
+                    <svg viewBox="0 0 24 24" fill="#4ade80">
+                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="2" fill="none" />
+                    </svg>
+                    <span>Все данные в реальном времени</span>
+                </div>
+            </div>
+            <div class="screenshot-preview">
+                <div class="screenshot-wrapper">
+                    <div class="stats-grid">
+                        <div class="stat-card primary">
+                            <div class="stat-label">Затрачено</div>
+                            <div class="stat-value" data-counter="320.5">0</div>
+                        </div>
+                        <div class="stat-card warning">
+                            <div class="stat-label">Перерывы</div>
+                            <div class="stat-value" data-counter="15.17">0</div>
+                        </div>
+                        <div class="stat-card success">
+                            <div class="stat-label">Заработано</div>
+                            <div class="stat-value" data-counter="450000">0</div>
+                        </div>
+                        <div class="stat-card purple">
+                            <div class="stat-label">Ставка</div>
+                            <div class="stat-value" data-counter="1405">0</div>
+                        </div>
+                        <div class="stat-card warning">
+                            <div class="stat-label">Рабочих дней</div>
+                            <div class="stat-value" data-counter="45">0</div>
+                        </div>
+                        <div class="stat-card yellow">
+                            <div class="stat-label">Выходных</div>
+                            <div class="stat-value" data-counter="8">0</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="floating-stat top-right">
+                    <div class="stat-value" data-counter="320.5">0</div>
+                    <div class="stat-label">Отработано</div>
+                </div>
+                <div class="floating-stat bottom-left">
+                    <div class="stat-value" data-counter="1405">0</div>
+                    <div class="stat-label">Средняя ставка</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Banner 2: Timer Feature -->
+    <div class="banner banner-2" style="background: linear-gradient(135deg, #0f1729 0%, #1a1f35 100%);">
+        <div class="banner-content" style="grid-template-columns: 1.3fr 1fr;">
+            <div class="screenshot-preview">
+                <div class="screenshot-wrapper">
+                    <div class="timer-demo-container">
+                        <div class="timer-demo">
+                            <svg viewBox="0 0 200 200" style="width: 100%; height: 100%;">
+                                <!-- Background circle -->
+                                <circle cx="100" cy="100" r="90" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="8" />
+                                <!-- Animated progress circle -->
+                                <circle class="timer-progress" cx="100" cy="100" r="90" fill="none" stroke="#4ecdc4" stroke-width="8" 
+                                    stroke-dasharray="565" stroke-dashoffset="565" 
+                                    style="transform: rotate(-90deg); transform-origin: 100px 100px; transition: stroke-dashoffset 0.3s ease;" />
+                                <!-- Inner pulsing circle -->
+                                <circle class="timer-pulse" cx="100" cy="100" r="60" fill="rgba(78, 205, 196, 0.2)" stroke="rgba(78, 205, 196, 0.4)" stroke-width="2" />
+                                <!-- Center circle -->
+                                <circle cx="100" cy="100" r="50" fill="rgba(26,31,53,0.9)" stroke="rgba(255,255,255,0.2)" stroke-width="2" />
+                                <!-- Timer text -->
+                                <text x="100" y="95" text-anchor="middle" fill="white" font-size="18" font-weight="bold" id="timer-display">00:00:00</text>
+                                <text x="100" y="115" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="10" id="timer-status">активная сессия</text>
+                                <!-- Glowing dots -->
+                                <circle class="timer-glow" cx="100" cy="10" r="3" fill="#4ecdc4" opacity="0.8">
+                                    <animate attributeName="opacity" values="0.8;1;0.8" dur="2s" repeatCount="indefinite" />
+                                </circle>
+                            </svg>
+                        </div>
+                        <div class="timer-controls">
+                            <button class="timer-btn" id="timer-play">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                                    <path d="M8 5v14l11-7z" />
+                                </svg>
+                            </button>
+                            <button class="timer-btn" id="timer-stop">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                                    <rect x="6" y="6" width="12" height="12" />
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="timer-stats">
+                            <div class="timer-stat-item">
+                                <div class="timer-stat-value" id="timer-hours">0.0</div>
+                                <div class="timer-stat-label">часов</div>
+                            </div>
+                            <div class="timer-stat-item">
+                                <div class="timer-stat-value" id="timer-earned">0</div>
+                                <div class="timer-stat-label">₽</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-content">
+                <h1 style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">
+                    Таймер в реальном времени</h1>
+                <p>Точный учет времени с автоматическим сохранением. Запускайте таймер и сосредоточьтесь на работе.</p>
+                <div class="feature-badge">
+                    <svg viewBox="0 0 24 24" fill="#667eea">
+                        <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="2" fill="none" />
+                    </svg>
+                    <span>Автоматическое сохранение</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Banner 3: Analytics Charts -->
+    <div class="banner banner-3" style="background: linear-gradient(135deg, #1a1f35 0%, #2d1b3d 100%);">
+        <div class="banner-content">
+            <div class="text-content">
+                <h1>Детальная аналитика</h1>
+                <p>12+ различных графиков для анализа вашей продуктивности, доходов и трендов. Визуализируйте данные и находите закономерности.</p>
+                <div class="feature-badge">
+                    <svg viewBox="0 0 24 24" fill="#f59e0b">
+                        <path d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" stroke="currentColor" stroke-width="2" fill="none" />
+                    </svg>
+                    <span>Многомерный анализ данных</span>
+                </div>
+            </div>
+            <div class="screenshot-preview">
+                <div class="screenshot-wrapper">
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <div class="chart-title">Динамика доходов</div>
+                            <div class="chart-tabs">
+                                <div class="chart-tab" data-type="bar">Столбцы</div>
+                                <div class="chart-tab" data-type="line">Линия</div>
+                                <div class="chart-tab active" data-type="area">Область</div>
+                            </div>
+                        </div>
+                        <div class="chart-wrapper">
+                            <svg class="chart-svg" id="analytics-chart" viewBox="0 0 400 300" style="width: 100%; height: 300px;">
+                                <!-- Grid lines -->
+                                <rect x="50" y="50" width="300" height="200" fill="rgba(255,255,255,0.05)" rx="8" />
+                                <line x1="50" y1="200" x2="350" y2="200" stroke="rgba(255,255,255,0.1)" stroke-width="1" />
+                                <line x1="50" y1="150" x2="350" y2="150" stroke="rgba(255,255,255,0.1)" stroke-width="1" />
+                                <line x1="50" y1="100" x2="350" y2="100" stroke="rgba(255,255,255,0.1)" stroke-width="1" />
+                                <line x1="50" y1="50" x2="350" y2="50" stroke="rgba(255,255,255,0.1)" stroke-width="1" />
+                                <!-- Chart content will be inserted by JS -->
+                                <defs>
+                                    <linearGradient id="gradient1" x1="0%" y1="0%" x2="0%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#6366f1;stop-opacity:0.8" />
+                                        <stop offset="100%" style="stop-color:#6366f1;stop-opacity:0" />
+                                    </linearGradient>
+                                    <linearGradient id="gradient2" x1="0%" y1="0%" x2="0%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.8" />
+                                        <stop offset="100%" style="stop-color:#10b981;stop-opacity:0" />
+                                    </linearGradient>
+                                </defs>
+                                <!-- Labels -->
+                                <text x="90" y="220" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="10">Пн</text>
+                                <text x="150" y="220" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="10">Вт</text>
+                                <text x="210" y="220" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="10">Ср</text>
+                                <text x="270" y="220" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="10">Чт</text>
+                                <text x="330" y="220" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="10">Пт</text>
+                                <!-- Y-axis labels -->
+                                <text x="40" y="55" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="10">8000</text>
+                                <text x="40" y="105" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="10">6000</text>
+                                <text x="40" y="155" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="10">4000</text>
+                                <text x="40" y="205" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="10">2000</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Banner 4: Statistics Overview -->
+    <div class="banner banner-4" style="background: linear-gradient(135deg, #0a1628 0%, #1a1f35 100%);">
+        <div class="banner-content" style="grid-template-columns: 1.3fr 1fr;">
+            <div class="screenshot-preview">
+                <div class="screenshot-wrapper">
+                    <div class="analytics-grid">
+                        <div class="analytics-card">
+                            <div class="analytics-title">Доход по дням недели</div>
+                            <div class="bar-chart" id="weekday-chart">
+                                <div class="bar-item" data-value="5874">
+                                    <div class="bar" style="height: 0%; background: linear-gradient(180deg, #3b82f6, #1e40af);"></div>
+                                    <div class="bar-label">Пн</div>
+                                    <div class="bar-value">0 ₽</div>
+                                </div>
+                                <div class="bar-item" data-value="4200">
+                                    <div class="bar" style="height: 0%; background: linear-gradient(180deg, #10b981, #059669);"></div>
+                                    <div class="bar-label">Вт</div>
+                                    <div class="bar-value">0 ₽</div>
+                                </div>
+                                <div class="bar-item" data-value="5000">
+                                    <div class="bar" style="height: 0%; background: linear-gradient(180deg, #f59e0b, #d97706);"></div>
+                                    <div class="bar-label">Ср</div>
+                                    <div class="bar-value">0 ₽</div>
+                                </div>
+                                <div class="bar-item" data-value="6800">
+                                    <div class="bar" style="height: 0%; background: linear-gradient(180deg, #8b5cf6, #7c3aed);"></div>
+                                    <div class="bar-label">Чт</div>
+                                    <div class="bar-value">0 ₽</div>
+                                </div>
+                                <div class="bar-item" data-value="8500">
+                                    <div class="bar" style="height: 0%; background: linear-gradient(180deg, #ec4899, #db2777);"></div>
+                                    <div class="bar-label">Пт</div>
+                                    <div class="bar-value">0 ₽</div>
+                                </div>
+                                <div class="bar-item" data-value="6200">
+                                    <div class="bar" style="height: 0%; background: linear-gradient(180deg, #06b6d4, #0891b2);"></div>
+                                    <div class="bar-label">Сб</div>
+                                    <div class="bar-value">0 ₽</div>
+                                </div>
+                                <div class="bar-item" data-value="3500">
+                                    <div class="bar" style="height: 0%; background: linear-gradient(180deg, #64748b, #475569);"></div>
+                                    <div class="bar-label">Вс</div>
+                                    <div class="bar-value">0 ₽</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="analytics-card">
+                            <div class="analytics-title">Распределение по категориям</div>
+                            <svg viewBox="0 0 200 200" style="width: 100%; height: 200px;" id="category-chart">
+                                <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2" />
+                                <!-- Разработка 40% -->
+                                <path d="M 100 20 A 80 80 0 0 1 180 100" fill="#3b82f6" />
+                                <!-- Дизайн 30% -->
+                                <path d="M 180 100 A 80 80 0 0 1 100 180" fill="#10b981" />
+                                <!-- Консультации 20% -->
+                                <path d="M 100 180 A 80 80 0 0 1 20 100" fill="#f59e0b" />
+                                <!-- Другое 10% -->
+                                <path d="M 20 100 A 80 80 0 0 1 100 20" fill="#8b5cf6" />
+                                <circle cx="100" cy="100" r="40" fill="rgba(26,31,53,0.9)" />
+                                <text x="100" y="105" text-anchor="middle" fill="white" font-size="14" font-weight="bold">100%</text>
+                            </svg>
+                            <div class="category-legend">
+                                <div class="legend-item"><span class="legend-color" style="background: #3b82f6;"></span> Разработка 40%</div>
+                                <div class="legend-item"><span class="legend-color" style="background: #10b981;"></span> Дизайн 30%</div>
+                                <div class="legend-item"><span class="legend-color" style="background: #f59e0b;"></span> Консультации 20%</div>
+                                <div class="legend-item"><span class="legend-color" style="background: #8b5cf6;"></span> Другое 10%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-content">
+                <h1 style="background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">
+                    Визуализация прогресса</h1>
+                <p>Столбчатые диаграммы и графики показывают распределение времени и доходов. Анализируйте структуру вашей работы.</p>
+                <div class="feature-badge">
+                    <svg viewBox="0 0 24 24" fill="#00d4ff">
+                        <path d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" stroke="currentColor" stroke-width="2" fill="none" />
+                    </svg>
+                    <span>Структурный анализ</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Banner 5: Views -->
+    <div class="banner banner-5" style="background: linear-gradient(135deg, #1a1f35 0%, #0f1a29 100%);">
+        <div class="banner-content">
+            <div class="text-content">
+                <h1>Три вида отображения</h1>
+                <p>Выберите удобный для вас формат: список, сетка или таймлайн с визуализацией времени. Переключайтесь между видами одним кликом.</p>
+                <div class="feature-badge">
+                    <svg viewBox="0 0 24 24" fill="#8b5cf6">
+                        <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" fill="none" />
+                    </svg>
+                    <span>Гибкое отображение данных</span>
+                </div>
+            </div>
+            <div class="screenshot-preview">
+                <div class="screenshot-wrapper">
+                    <div class="views-demo">
+                        <div class="view-tabs">
+                            <button class="view-btn active" data-view="list">Список</button>
+                            <button class="view-btn" data-view="grid">Сетка</button>
+                            <button class="view-btn" data-view="timeline">Таймлайн</button>
+                        </div>
+                        <div class="view-content">
+                            <!-- List View -->
+                            <div class="entries-list view-panel active" id="list-view">
+                                <div class="entry-item">
+                                    <div class="entry-dot" style="background: #3b82f6;"></div>
+                                    <div class="entry-content">
+                                        <div class="entry-title">Разработка</div>
+                                        <div class="entry-time">09:00 - 18:00</div>
+                                    </div>
+                                    <div class="entry-duration">8.0 ч</div>
+                                </div>
+                                <div class="entry-item">
+                                    <div class="entry-dot" style="background: #10b981;"></div>
+                                    <div class="entry-content">
+                                        <div class="entry-title">Дизайн</div>
+                                        <div class="entry-time">10:00 - 14:00</div>
+                                    </div>
+                                    <div class="entry-duration">4.0 ч</div>
+                                </div>
+                                <div class="entry-item">
+                                    <div class="entry-dot" style="background: #f59e0b;"></div>
+                                    <div class="entry-content">
+                                        <div class="entry-title">Консультации</div>
+                                        <div class="entry-time">15:00 - 17:00</div>
+                                    </div>
+                                    <div class="entry-duration">2.0 ч</div>
+                                </div>
+                            </div>
+                            <!-- Grid View -->
+                            <div class="entries-grid view-panel" id="grid-view">
+                                <div class="entry-card">
+                                    <div class="entry-card-dot" style="background: #3b82f6;"></div>
+                                    <div class="entry-card-title">Разработка</div>
+                                    <div class="entry-card-time">09:00 - 18:00</div>
+                                    <div class="entry-card-duration">8.0 ч</div>
+                                </div>
+                                <div class="entry-card">
+                                    <div class="entry-card-dot" style="background: #10b981;"></div>
+                                    <div class="entry-card-title">Дизайн</div>
+                                    <div class="entry-card-time">10:00 - 14:00</div>
+                                    <div class="entry-card-duration">4.0 ч</div>
+                                </div>
+                                <div class="entry-card">
+                                    <div class="entry-card-dot" style="background: #f59e0b;"></div>
+                                    <div class="entry-card-title">Консультации</div>
+                                    <div class="entry-card-time">15:00 - 17:00</div>
+                                    <div class="entry-card-duration">2.0 ч</div>
+                                </div>
+                            </div>
+                            <!-- Timeline View -->
+                            <div class="entries-timeline view-panel" id="timeline-view">
+                                <div class="timeline-line"></div>
+                                <div class="timeline-entry">
+                                    <div class="timeline-marker" style="background: #3b82f6;"></div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-time">09:00 - 18:00</div>
+                                        <div class="timeline-title">Разработка</div>
+                                        <div class="timeline-duration">8.0 ч</div>
+                                    </div>
+                                </div>
+                                <div class="timeline-entry">
+                                    <div class="timeline-marker" style="background: #10b981;"></div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-time">10:00 - 14:00</div>
+                                        <div class="timeline-title">Дизайн</div>
+                                        <div class="timeline-duration">4.0 ч</div>
+                                    </div>
+                                </div>
+                                <div class="timeline-entry">
+                                    <div class="timeline-marker" style="background: #f59e0b;"></div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-time">15:00 - 17:00</div>
+                                        <div class="timeline-title">Консультации</div>
+                                        <div class="timeline-duration">2.0 ч</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Banner 6: Export/Import -->
+    <div class="banner banner-6" style="background: linear-gradient(135deg, #0f1729 0%, #1a2332 100%);">
+        <div class="banner-content" style="grid-template-columns: 1.3fr 1fr;">
+            <div class="screenshot-preview">
+                <div class="screenshot-wrapper">
+                    <div class="export-demo">
+                        <div class="export-title">Экспорт данных</div>
+                        <div class="export-buttons">
+                            <div class="export-btn-item">
+                                <div class="export-icon">📊</div>
+                                <div class="export-label">Excel</div>
+                            </div>
+                            <div class="export-btn-item">
+                                <div class="export-icon">📄</div>
+                                <div class="export-label">PDF</div>
+                            </div>
+                            <div class="export-btn-item">
+                                <div class="export-icon">🔧</div>
+                                <div class="export-label">JSON</div>
+                            </div>
+                        </div>
+                        <div class="export-file">
+                            <div class="file-icon">📁</div>
+                            <div class="file-name">tracker-data.json</div>
+                            <div class="file-status">✓ Импорт</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-content">
+                <h1>Экспорт и импорт</h1>
+                <p>Сохраняйте свои данные в различных форматах. Экспортируйте отчеты, создавайте резервные копии и импортируйте записи из других систем.</p>
+                <div class="feature-badge">
+                    <svg viewBox="0 0 24 24" fill="#10b981">
+                        <path d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke="currentColor" stroke-width="2" fill="none" />
+                    </svg>
+                    <span>Гибкий экспорт</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Banner 7: Insights -->
+    <div class="banner banner-7" style="background: linear-gradient(135deg, #1a1f35 0%, #0f1a29 100%);">
+        <div class="banner-content">
+            <div class="text-content">
+                <h1>Персональные инсайты</h1>
+                <p>Получайте рекомендации на основе ваших данных: лучший день недели, пик продуктивности, тренды заработка.</p>
+                <div class="feature-badge">
+                    <svg viewBox="0 0 24 24" fill="#f59e0b">
+                        <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke="currentColor" stroke-width="2" fill="none" />
+                    </svg>
+                    <span>ИИ анализирует ваши паттерны</span>
+                </div>
+            </div>
+            <div class="screenshot-preview">
+                <div class="screenshot-wrapper">
+                    <div class="insights-grid">
+                        <div class="insight-card">
+                            <div class="insight-title">🏆 Лучший день недели</div>
+                            <div class="insight-value">Вы зарабатываете больше всего по Пн — в среднем 5 874 ₽ в день.</div>
+                        </div>
+                        <div class="insight-card">
+                            <div class="insight-title">⚡ Пик продуктивности</div>
+                            <div class="insight-value">Ваша средняя ставка максимальна с 03:00 до 04:00 — 1000 ₽/ч.</div>
+                        </div>
+                        <div class="insight-card">
+                            <div class="insight-title">📈 Тренд заработка</div>
+                            <div class="insight-value">За последний месяц ваш заработок растет!</div>
+                        </div>
+                        <div class="insight-card">
+                            <div class="insight-title">⏱️ Самая длинная сессия</div>
+                            <div class="insight-value">Самая продолжительная сессия была 12.10.2025 — 7:12 ч (8 000 ₽).</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Banner 8: CTA -->
+    <div class="banner banner-8" style="background: linear-gradient(135deg, #1a1f35 0%, #2d1b3d 100%);">
+        <div class="banner-content" style="grid-template-columns: 1fr;">
+            <div class="text-content" style="text-align: center; padding-right: 0;">
+                <h1 style="background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">
+                    Начните отслеживать время сегодня</h1>
+                <p style="font-size: 1.5em; margin-bottom: 50px;">Присоединяйтесь к тысячам пользователей, которые уже повысили свою продуктивность</p>
+                <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                    <a href="#" class="feature-badge" style="background: linear-gradient(135deg, #6366f1, #8b5cf6); border: none; padding: 20px 40px; font-size: 1.2em;">
+                        <span>Запустить приложение</span>
+                    </a>
+                    <a href="#features" class="feature-badge" style="background: rgba(255, 255, 255, 0.1); padding: 20px 40px; font-size: 1.2em;">
+                        <span>Узнать больше</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

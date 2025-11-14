@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>List View - Все варианты отображения</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 2rem;
+    }
+    
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+    
+    iframe {
+      width: 100%;
+      height: 700px;
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    }
+    
+    .variant-card {
+      transition: all 0.3s ease;
+    }
+    
+    .variant-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 48px rgba(0,0,0,0.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="max-w-7xl mx-auto">
+    <!-- Заголовок -->
+    <div class="text-center mb-10">
+      <h1 class="text-5xl font-bold text-white mb-4">📋 List View - Варианты отображения</h1>
+      <p class="text-xl text-white/90">5 различных подходов к отображению записей списком</p>
+      <p class="text-lg text-white/80 mt-2">Фокус на компактность и минимизацию пустого пространства</p>
+    </div>
+    
+    <!-- Краткое сравнение -->
+    <div class="glass-effect rounded-2xl p-8 mb-10">
+      <h2 class="text-3xl font-bold mb-6 text-gray-800">📊 Сравнение вариантов</h2>
+      
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b-2 border-gray-300">
+              <th class="text-left py-3 px-4 font-bold text-gray-700">Вариант</th>
+              <th class="text-left py-3 px-4 font-bold text-gray-700">Концепция</th>
+              <th class="text-left py-3 px-4 font-bold text-gray-700">Ключевые особенности</th>
+              <th class="text-center py-3 px-4 font-bold text-gray-700">Аккордеон</th>
+              <th class="text-center py-3 px-4 font-bold text-gray-700">Инсайты</th>
+              <th class="text-center py-3 px-4 font-bold text-gray-700">Компактность</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-gray-200 hover:bg-gray-50">
+              <td class="py-4 px-4">
+                <span class="font-bold text-blue-600">Вариант 1</span>
+                <p class="text-xs text-gray-500">Текущий</p>
+              </td>
+              <td class="py-4 px-4">Аккордеон с детальными метриками дня</td>
+              <td class="py-4 px-4">
+                <ul class="text-xs space-y-1">
+                  <li>• Раскрывающиеся секции</li>
+                  <li>• 3 плашки инсайтов</li>
+                  <li>• Прогресс-бар</li>
+                </ul>
+              </td>
+              <td class="py-4 px-4 text-center">
+                <span class="inline-block px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-semibold">Да</span>
+              </td>
+              <td class="py-4 px-4 text-center">
+                <span class="inline-block px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-semibold">Да (3)</span>
+              </td>
+              <td class="py-4 px-4 text-center">
+                <span class="inline-block px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs font-semibold">Средняя</span>
+              </td>
+            </tr>
+            
+            <tr class="border-b border-gray-200 hover:bg-gray-50">
+              <td class="py-4 px-4">
+                <span class="font-bold text-purple-600">Вариант 2</span>
+                <p class="text-xs text-gray-500">Плотный аккордеон</p>
+              </td>
+              <td class="py-4 px-4">Максимально компактный аккордеон</td>
+              <td class="py-4 px-4">
+                <ul class="text-xs space-y-1">
+                  <li>• Фоновый прогресс-бар</li>
+                  <li>• Однострочный заголовок</li>
+                  <li>• Минимальные отступы</li>
+                </ul>
+              </td>
+              <td class="py-4 px-4 text-center">
+                <span class="inline-block px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-semibold">Да</span>
+              </td>
+              <td class="py-4 px-4 text-center">
+                <span class="inline-block px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-semibold">Да (эмодзи)</span>
+              </td>
+              <td class="py-4 px-4 text-center">
+                <span class="inline-block px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-semibold">Высокая</span>
+              </td>
+            </tr>
+            
+            <tr class="border-b border-gray-200 hover:bg-gray-50">
+              <td class="py-4 px-4">
+                <span class="font-bold text-green-600">Вариант 3</span>
+                <p class="text-xs text-gray-500">Табличный стиль</p>
+              </td>
+              <td class="py-4 px-4">Классическая таблица с группировкой</td>
+              <td class="py-4 px-4">
+                <ul class="text-xs space-y-1">
+                  <li>• Табличный формат</li>
+                  <li>• Чередующиеся строки</li>
+                  <li>• Инсайты в заголовке дня</li>
+                </ul>
+              </td>
+              <td class="py-4 px-4 text-center">
+                <span class="inline-block px-2 py-1 bg-red-100 text-red-700 rounded text-xs font-semibold">Нет</span>
+              </td>
+              <td class="py-4 px-4 text-center">
+                <span class="inline-block px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-semibold">Да (в заг.)</span>
+              </td>
+              <td class="py-4 px-4 text-center">
+                <span class="inline-block px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-semibold">Высокая</span>
+              </td>
+            </tr>
+            
+            <tr class="border-b border-gray-200 hover:bg-gray-50">
+              <td class="py-4 px-4">
+                <span class="font-bold text-orange-600">Вариант 4</span>
+                <p class="text-xs text-gray-500">Непрерывная таблица</p>
+              </td>
+              <td class="py-4 px-4">Одна большая сплошная таблица</td>
+              <td class="py-4 px-4">
+                <ul class="text-xs space-y-1">
+                  <li>• Rowspan для даты и %</li>
+                  <li>• Круговой прогресс</li>
+                  <li>• Sticky заголовок</li>
+                </ul>
+              </td>
+              <td class="py-4 px-4 text-center">
+                <span class="inline-block px-2 py-1 bg-red-100 text-red-700 rounded text-xs font-semibold">Нет</span>
+              </td>
+              <td class="py-4 px-4 text-center">
+                <span class="inline-block px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-semibold">Да (в строке)</span>
+              </td>
+              <td class="py-4 px-4 text-center">
+                <span class="inline-block px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-semibold">Очень высокая</span>
+              </td>
+            </tr>
+            
+            <tr class="hover:bg-gray-50">
+              <td class="py-4 px-4">
+                <span class="font-bold text-pink-600">Вариант 5</span>
+                <p class="text-xs text-gray-500">Мини-карточки</p>
+              </td>
+              <td class="py-4 px-4">Компактные карточки в 2 колонки</td>
+              <td class="py-4 px-4">
+                <ul class="text-xs space-y-1">
+                  <li>• 2-колоночная сетка</li>
+                  <li>• Круговой прогресс в углу</li>
+                  <li>• Очень компактно</li>
+                </ul>
+              </td>
+              <td class="py-4 px-4 text-center">
+                <span class="inline-block px-2 py-1 bg-red-100 text-red-700 rounded text-xs font-semibold">Нет</span>
+              </td>
+              <td class="py-4 px-4 text-center">
+                <span class="inline-block px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-semibold">Да (эмодзи)</span>
+              </td>
+              <td class="py-4 px-4 text-center">
+                <span class="inline-block px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-semibold">Очень высокая</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+    <!-- Варианты -->
+    <div class="space-y-8">
+      <!-- Вариант 1 -->
+      <div class="glass-effect rounded-2xl p-6 variant-card">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h3 class="text-2xl font-bold text-blue-600">Вариант 1: Текущий (Аккордеон с инсайтами)</h3>
+            <p class="text-gray-600">Раскрывающиеся секции с детальными метриками дня - максимум информации</p>
+          </div>
+          <a href="list-variant-1-current.html" target="_blank" 
+             class="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg transition-colors">
+            Открыть в новом окне →
+          </a>
+        </div>
+        <iframe src="list-variant-1-current.html"></iframe>
+      </div>
+      
+      <!-- Вариант 2 -->
+      <div class="glass-effect rounded-2xl p-6 variant-card">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h3 class="text-2xl font-bold text-purple-600">Вариант 2: Плотный аккордеон</h3>
+            <p class="text-gray-600">Максимально компактный - фоновый прогресс-бар, минимум отступов</p>
+          </div>
+          <a href="list-variant-2-dense-accordion.html" target="_blank" 
+             class="px-6 py-3 bg-purple-500 hover:bg-purple-600 text-white font-semibold rounded-lg transition-colors">
+            Открыть в новом окне →
+          </a>
+        </div>
+        <iframe src="list-variant-2-dense-accordion.html"></iframe>
+      </div>
+      
+      <!-- Вариант 3 -->
+      <div class="glass-effect rounded-2xl p-6 variant-card">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h3 class="text-2xl font-bold text-green-600">Вариант 3: Табличный стиль</h3>
+            <p class="text-gray-600">Классическая таблица - привычен для бухгалтерии, максимум данных</p>
+          </div>
+          <a href="list-variant-3-table-style.html" target="_blank" 
+             class="px-6 py-3 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg transition-colors">
+            Открыть в новом окне →
+          </a>
+        </div>
+        <iframe src="list-variant-3-table-style.html"></iframe>
+      </div>
+      
+      <!-- Вариант 4 -->
+      <div class="glass-effect rounded-2xl p-6 variant-card">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h3 class="text-2xl font-bold text-orange-600">Вариант 4: Непрерывная таблица</h3>
+            <p class="text-gray-600">Одна сплошная таблица с rowspan - нет отступов между днями, очень компактно</p>
+          </div>
+          <a href="list-variant-4-continuous-table.html" target="_blank" 
+             class="px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition-colors">
+            Открыть в новом окне →
+          </a>
+        </div>
+        <iframe src="list-variant-4-continuous-table.html"></iframe>
+      </div>
+      
+      <!-- Вариант 5 -->
+      <div class="glass-effect rounded-2xl p-6 variant-card">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h3 class="text-2xl font-bold text-pink-600">Вариант 5: Мини-карточки в сетке</h3>
+            <p class="text-gray-600">2-колоночная сетка компактных карточек - в 2 раза больше дней на экране</p>
+          </div>
+          <a href="list-variant-5-mini-cards.html" target="_blank" 
+             class="px-6 py-3 bg-pink-500 hover:bg-pink-600 text-white font-semibold rounded-lg transition-colors">
+            Открыть в новом окне →
+          </a>
+        </div>
+        <iframe src="list-variant-5-mini-cards.html"></iframe>
+      </div>
+    </div>
+    
+    <!-- Рекомендации -->
+    <div class="glass-effect rounded-2xl p-8 mt-10">
+      <h2 class="text-3xl font-bold mb-6 text-gray-800">💡 Рекомендации по выбору</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="bg-blue-50 rounded-xl p-6">
+          <h4 class="font-bold text-lg mb-3 text-blue-700">🎯 Для детальной аналитики</h4>
+          <p class="text-gray-700 mb-3">Выбирайте <strong>Вариант 1 (Текущий)</strong></p>
+          <ul class="text-sm space-y-1 text-gray-600">
+            <li>✓ Максимум метрик</li>
+            <li>✓ Визуальные инсайты</li>
+            <li>✓ Раскрытие по необходимости</li>
+          </ul>
+        </div>
+        
+        <div class="bg-purple-50 rounded-xl p-6">
+          <h4 class="font-bold text-lg mb-3 text-purple-700">⚡ Для экономии места</h4>
+          <p class="text-gray-700 mb-3">Выбирайте <strong>Вариант 2 (Плотный)</strong></p>
+          <ul class="text-sm space-y-1 text-gray-600">
+            <li>✓ Максимальная компактность</li>
+            <li>✓ Минимум отступов</li>
+            <li>✓ Фоновый прогресс-бар</li>
+          </ul>
+        </div>
+        
+        <div class="bg-green-50 rounded-xl p-6">
+          <h4 class="font-bold text-lg mb-3 text-green-700">📊 Для бухгалтерии</h4>
+          <p class="text-gray-700 mb-3">Выбирайте <strong>Вариант 3 (Табличный)</strong></p>
+          <ul class="text-sm space-y-1 text-gray-600">
+            <li>✓ Классический формат</li>
+            <li>✓ Максимум данных</li>
+            <li>✓ Легкий экспорт</li>
+          </ul>
+        </div>
+        
+        <div class="bg-orange-50 rounded-xl p-6">
+          <h4 class="font-bold text-lg mb-3 text-orange-700">🗂️ Для больших данных</h4>
+          <p class="text-gray-700 mb-3">Выбирайте <strong>Вариант 4 (Непрерывная таблица)</strong></p>
+          <ul class="text-sm space-y-1 text-gray-600">
+            <li>✓ Нет отступов между днями</li>
+            <li>✓ Очень компактно</li>
+            <li>✓ Sticky заголовок</li>
+          </ul>
+        </div>
+        
+        <div class="bg-pink-50 rounded-xl p-6">
+          <h4 class="font-bold text-lg mb-3 text-pink-700">🎴 Для обзорности</h4>
+          <p class="text-gray-700 mb-3">Выбирайте <strong>Вариант 5 (Мини-карточки)</strong></p>
+          <ul class="text-sm space-y-1 text-gray-600">
+            <li>✓ 2 колонки - в 2 раза больше</li>
+            <li>✓ Круговой прогресс</li>
+            <li>✓ Красиво и компактно</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Инструкции -->
+    <div class="glass-effect rounded-2xl p-8 mt-10">
+      <h2 class="text-3xl font-bold mb-6 text-gray-800">🚀 План реализации</h2>
+      
+      <div class="space-y-6">
+        <div>
+          <h3 class="text-xl font-semibold mb-3 text-gray-800">Этап 1: Выбор вариантов (сейчас)</h3>
+          <ol class="space-y-2 text-gray-700 ml-6">
+            <li><strong>1.</strong> Просмотрите все 3 варианта List View</li>
+            <li><strong>2.</strong> Выберите 2-3 варианта для реализации</li>
+            <li><strong>3.</strong> Определите приоритет (какой делать первым)</li>
+          </ol>
+        </div>
+        
+        <div>
+          <h3 class="text-xl font-semibold mb-3 text-gray-800">Этап 2: Реализация переключателя</h3>
+          <ol class="space-y-2 text-gray-700 ml-6">
+            <li><strong>1.</strong> Добавить настройку в Settings Store (<code class="bg-gray-200 px-2 py-1 rounded">listViewVariant</code>)</li>
+            <li><strong>2.</strong> Создать переключатель в <code class="bg-gray-200 px-2 py-1 rounded">EntriesList.jsx</code></li>
+            <li><strong>3.</strong> Протестировать сохранение выбора</li>
+          </ol>
+        </div>
+        
+        <div>
+          <h3 class="text-xl font-semibold mb-3 text-gray-800">Этап 3: Реализация вариантов</h3>
+          <ol class="space-y-2 text-gray-700 ml-6">
+            <li><strong>1.</strong> Создать компоненты в <code class="bg-gray-200 px-2 py-1 rounded">variants/</code> папке</li>
+            <li><strong>2.</strong> Адаптировать HTML/CSS под React + Tailwind</li>
+            <li><strong>3.</strong> Тестировать каждый вариант отдельно</li>
+            <li><strong>4.</strong> Добавить переключение между вариантами</li>
+          </ol>
+        </div>
+        
+        <div>
+          <h3 class="text-xl font-semibold mb-3 text-gray-800">Этап 4: Применение ко всем видам</h3>
+          <ol class="space-y-2 text-gray-700 ml-6">
+            <li><strong>1.</strong> Протестировать List View с переключением</li>
+            <li><strong>2.</strong> Применить ту же логику к Grid View (используя макеты из <code class="bg-gray-200 px-2 py-1 rounded">grid-variants-index.html</code>)</li>
+            <li><strong>3.</strong> Применить к Timeline View</li>
+            <li><strong>4.</strong> Финальное тестирование всех комбинаций</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Технические детали -->
+    <div class="glass-effect rounded-2xl p-8 mt-10">
+      <h2 class="text-3xl font-bold mb-6 text-gray-800">⚙️ Технические детали</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <h4 class="font-bold text-lg mb-3">Структура файлов</h4>
+          <pre class="bg-gray-900 text-green-400 p-4 rounded-lg text-xs overflow-x-auto">
+<code>src/components/entries/views/
+├── ListView.jsx (основной переключатель)
+├── list-variants/
+│   ├── ListAccordion.jsx
+│   ├── ListCompact.jsx
+│   └── ListTable.jsx
+├── GridView.jsx
+├── grid-variants/
+│   ├── GridCompact.jsx
+│   ├── GridDetailed.jsx
+│   └── GridMinimalist.jsx
+└── TimelineView.jsx</code></pre>
+        </div>
+        
+        <div>
+          <h4 class="font-bold text-lg mb-3">Settings Store</h4>
+          <pre class="bg-gray-900 text-green-400 p-4 rounded-lg text-xs overflow-x-auto">
+<code>{
+  listView: 'list', // 'list' | 'grid' | 'timeline'
+  listViewVariant: 'accordion', // 'accordion' | 'compact' | 'table'
+  gridViewVariant: 'compact', // 'compact' | 'detailed' | 'minimalist'
+  timelineViewVariant: 'default' // пока один вариант
+}</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+

@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ru" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/logo-4-data-pulse.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Time Tracker Dashboard</title>
+    <style>
+      /* Анимация загрузки для проверки первого запуска */
+      #loading-check {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #0a0a0a;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 999999;
+        opacity: 1;
+        transition: opacity 0.3s ease;
+      }
+      
+      #loading-check.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+      
+      .loading-spinner {
+        width: 60px;
+        height: 60px;
+        border: 4px solid rgba(99, 102, 241, 0.2);
+        border-top-color: #6366f1;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+      
+      .loading-text {
+        margin-top: 20px;
+        color: #a0a0a0;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Анимация загрузки при проверке первого запуска -->
+    <div id="loading-check">
+      <div style="text-align: center;">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Загрузка...</div>
+      </div>
+    </div>
+    
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+    
+    <!-- Проверка первого запуска до загрузки React -->
+    <script>
+      (function() {
+        // Проверяем флаг первого запуска
+        const promoShown = localStorage.getItem('promo_shown');
+        
+        if (!promoShown) {
+          // Если промо еще не было показано - редиректим на промо-страницу
+          // Показываем анимацию загрузки
+          const loadingCheck = document.getElementById('loading-check');
+          
+          // Небольшая задержка для плавности
+          setTimeout(() => {
+            window.location.href = '/promo/time-tracker-promo-variant-2.html';
+          }, 500);
+        } else {
+          // Если промо уже было показано - скрываем анимацию и продолжаем загрузку
+          const loadingCheck = document.getElementById('loading-check');
+          if (loadingCheck) {
+            loadingCheck.classList.add('hidden');
+            setTimeout(() => {
+              loadingCheck.remove();
+            }, 300);
+          }
+        }
+      })();
+    </script>
+  </body>
+</html>

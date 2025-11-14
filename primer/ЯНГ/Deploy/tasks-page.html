@@ -1,0 +1,2198 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Задания - Task Management Platform</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0f172a;
+      color: #f1f5f9;
+    }
+    
+    .task-card {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid rgba(71, 85, 105, 0.3);
+      transition: all 0.3s ease;
+      opacity: 1;
+      transform: translateY(0);
+      animation: fadeInSlide 0.3s ease-out;
+    }
+    
+    .task-card.task-card-hiding {
+      animation: fadeOutSlide 0.3s ease-in forwards;
+    }
+    
+    .task-card.task-card-hidden {
+      display: none;
+    }
+    
+    .task-card:hover {
+      background: rgba(30, 41, 59, 0.95);
+      border-color: rgba(71, 85, 105, 0.5);
+      transform: translateY(-2px);
+    }
+    
+    @keyframes fadeInSlide {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes fadeOutSlide {
+      from {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      to {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+    }
+    
+    
+    .timer-badge {
+      color: #fb923c;
+      font-weight: 600;
+    }
+    
+    .skill-progress {
+      transition: background-color 0.3s ease;
+    }
+    
+    .skill-percent {
+      transition: color 0.3s ease;
+    }
+    
+    .skill-progress-container {
+      cursor: help;
+    }
+    
+    .space-y-3 > div[title] {
+      cursor: help;
+    }
+    
+    .favorite-btn.active svg {
+      fill: #fbbf24;
+      color: #fbbf24;
+    }
+    
+    .task-card.favorite {
+      border-color: rgba(251, 191, 36, 0.5);
+      border-width: 2px;
+    }
+    
+    body.light .task-card.favorite {
+      border-color: rgba(251, 191, 36, 0.8);
+      border-width: 2px;
+    }
+    
+    .category-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    
+    .category-exam {
+      background: #ef4444;
+      color: #ffffff;
+      border: none;
+    }
+    
+    .category-training {
+      background: #22c55e;
+      color: #ffffff;
+      border: none;
+    }
+    
+    .age-restriction {
+      background: rgba(245, 158, 11, 0.2);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-left: 8px;
+    }
+    
+    .price-badge {
+      background: rgb(51, 65, 85); /* bg-slate-700 */
+      padding: 0.375rem 0.75rem; /* py-1.5 px-3 */
+      border-radius: 0.25rem; /* rounded */
+      transition: background-color 0.2s ease, color 0.2s ease; /* transition-colors */
+      color: rgb(203, 213, 225); /* text-slate-300 */
+    }
+    
+    .price-badge:hover {
+      background: rgb(71, 85, 105); /* hover:bg-slate-600 */
+      color: rgb(241, 245, 249); /* hover:text-slate-100 */
+    }
+    
+    .skill-badge {
+      background: rgb(51, 65, 85); /* bg-slate-700 */
+      padding: 0.375rem 0.75rem; /* py-1.5 px-3 */
+      border-radius: 0.25rem; /* rounded */
+      transition: background-color 0.2s ease, color 0.2s ease; /* transition-colors */
+      color: rgb(203, 213, 225); /* text-slate-300 */
+    }
+    
+    .skill-badge:hover {
+      background: rgb(71, 85, 105); /* hover:bg-slate-600 */
+      color: rgb(241, 245, 249); /* hover:text-slate-100 */
+    }
+    
+    #timer-task-2,
+    .timer-badge {
+      transition: all 0.3s ease;
+    }
+    
+    #timer-task-2:hover,
+    .timer-badge:hover {
+      transform: translateY(-2px);
+      text-shadow: 0 2px 4px rgba(251, 146, 60, 0.5);
+    }
+    
+    /* Light theme styles for timer */
+    body.light #timer-task-2,
+    body.light .timer-badge {
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+    
+    body.light #timer-task-2:hover,
+    body.light .timer-badge:hover {
+      text-shadow: 0 2px 4px rgba(251, 146, 60, 0.6);
+    }
+    
+    .filter-checkbox {
+      accent-color: #3b82f6;
+    }
+    
+    .task-details {
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.3s ease-out, opacity 0.3s ease-out, padding 0.3s ease-out, margin 0.3s ease-out;
+      padding-top: 0;
+      padding-bottom: 0;
+      margin-top: 0;
+      margin-bottom: 0;
+      border-top: none;
+    }
+    
+    .task-details.open {
+      max-height: 300px;
+      opacity: 1;
+      transition: max-height 0.3s ease-in, opacity 0.3s ease-in, padding 0.3s ease-in, margin 0.3s ease-in;
+      padding-top: 1rem;
+      padding-bottom: 0;
+      margin-top: 1rem;
+      margin-bottom: 0;
+      border-top: 1px solid rgba(71, 85, 105, 0.5);
+    }
+    
+    .task-details.hidden {
+      display: none;
+    }
+    
+    .details-icon.rotate-180 {
+      transform: rotate(180deg);
+    }
+    
+    body.light .task-details {
+      border-color: #cbd5e1;
+    }
+    
+    body.light .task-details.open {
+      border-top-color: #94a3b8;
+    }
+    
+    body.light .task-details .border-slate-700 {
+      border-color: #cbd5e1;
+    }
+    
+    body.light .task-details .border-slate-600 {
+      border-color: #94a3b8;
+    }
+    
+    /* Light theme hover styles for action buttons (Чат, Детали, Инструкция) */
+    body.light .bg-slate-700 {
+      background: rgba(241, 245, 249, 0.9) !important;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      transition: all 0.2s ease;
+    }
+    
+    body.light .bg-slate-700:hover {
+      background: rgba(226, 232, 240, 1) !important;
+      border-color: rgba(148, 163, 184, 0.8);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transform: translateY(-2px);
+    }
+    
+    body.light .bg-slate-700:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    }
+    
+    body.light .text-slate-300 {
+      color: #1e293b !important;
+      font-weight: 500;
+    }
+    
+    body.light .text-slate-300:hover {
+      color: #0f172a !important;
+      font-weight: 600;
+    }
+    
+    body.light .hover\:text-slate-100:hover {
+      color: #0f172a !important;
+    }
+    
+    /* Light theme styles for favorite count badge */
+    body.light #favorite-count {
+      background: rgba(241, 245, 249, 0.9) !important;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      color: #1e293b !important;
+    }
+    
+    /* Light theme styles for toggle switches - base state */
+    body.light .w-11.h-6.bg-slate-700:not([class*="peer-checked"]),
+    body.light .w-9.h-5.bg-slate-700:not([class*="peer-checked"]) {
+      background: rgba(241, 245, 249, 0.9) !important;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+    }
+    
+    /* Light theme styles for unchecked toggle switches */
+    body.light input.peer:not(:checked) ~ div.w-11.h-6.bg-slate-700,
+    body.light input.peer:not(:checked) ~ div.w-9.h-5.bg-slate-700 {
+      background: rgba(241, 245, 249, 0.9) !important;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+    }
+    
+    /* Light theme styles for checked toggle switches - blue background like dark theme */
+    /* When peer input is checked, apply blue background to the toggle switch div */
+    body.light input.peer:checked ~ div.w-11.h-6.bg-slate-700,
+    body.light input.peer:checked ~ div.w-9.h-5.bg-slate-700,
+    body.light input[type="checkbox"].peer:checked ~ div.w-11.h-6,
+    body.light input[type="checkbox"].peer:checked ~ div.w-9.h-5,
+    body.light input[type="checkbox"]:checked ~ div.bg-slate-700.w-11.h-6,
+    body.light input[type="checkbox"]:checked ~ div.bg-slate-700.w-9.h-5 {
+      background: #2563eb !important;
+      border-color: #1d4ed8 !important;
+    }
+    
+    /* Light theme styles for hover states on toggle backgrounds */
+    body.light .hover\:bg-slate-600:hover {
+      background: rgba(226, 232, 240, 1) !important;
+    }
+    
+    /* Custom select dropdown styles */
+    .custom-select-wrapper {
+      position: relative;
+    }
+    
+    #sort-select-dropdown {
+      animation: fadeIn 0.15s ease-in-out;
+    }
+    
+    #sort-select-dropdown.hidden {
+      display: none;
+    }
+    
+    #sort-select-icon.open {
+      transform: rotate(180deg);
+    }
+    
+    /* Light theme styles for custom select in sidebar */
+    body.light #sort-select-btn {
+      background: rgba(241, 245, 249, 0.9) !important;
+      border-color: rgba(148, 163, 184, 0.5) !important;
+      color: #1e293b !important;
+    }
+    
+    body.light #sort-select-btn:hover {
+      background: rgba(226, 232, 240, 1) !important;
+      border-color: rgba(148, 163, 184, 0.8) !important;
+    }
+    
+    body.light #sort-select-dropdown {
+      background: rgba(255, 255, 255, 0.95) !important;
+      border-color: rgba(148, 163, 184, 0.5) !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    body.light .sort-option {
+      color: #1e293b !important;
+    }
+    
+    body.light .sort-option:hover {
+      background: rgba(226, 232, 240, 1) !important;
+    }
+    
+    body.light .sort-option.bg-slate-700 {
+      background: rgba(226, 232, 240, 1) !important;
+      color: #0f172a !important;
+    }
+    
+    body.light #sort-select-icon {
+      color: #64748b !important;
+    }
+    
+    /* Light theme styles for all bg-slate-700 elements */
+    body.light button.bg-slate-700,
+    body.light a.bg-slate-700,
+    body.light .bg-slate-700 {
+      background: rgba(241, 245, 249, 0.9) !important;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+    }
+    
+    body.light button.bg-slate-700:hover,
+    body.light a.bg-slate-700:hover,
+    body.light .bg-slate-700:hover {
+      background: rgba(226, 232, 240, 1) !important;
+      border-color: rgba(148, 163, 184, 0.8);
+    }
+    
+    /* Modal styles */
+    #all-skills-modal {
+      backdrop-filter: blur(4px);
+      animation: fadeIn 0.2s ease-in-out;
+    }
+    
+    #all-skills-modal.hidden {
+      animation: fadeOut 0.2s ease-in-out;
+    }
+    
+    #all-skills-modal > div {
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+      animation: slideUp 0.3s ease-out;
+    }
+    
+    #all-skills-modal.hidden > div {
+      animation: slideDown 0.2s ease-in;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+    
+    @keyframes fadeOut {
+      from {
+        opacity: 1;
+      }
+      to {
+        opacity: 0;
+      }
+    }
+    
+    @keyframes slideUp {
+      from {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+    
+    @keyframes slideDown {
+      from {
+        transform: translateY(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+    }
+    
+    body.light #all-skills-modal > div {
+      background: #f8fafc;
+    }
+    
+    body.light #all-skills-modal > div h2 {
+      color: #1e293b;
+    }
+    
+    .sidebar-section {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(71, 85, 105, 0.3);
+    }
+    
+    .action-button {
+      background: #2563eb;
+      transition: all 0.3s ease;
+      width: 100% !important;
+      min-width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+      height: 2.5rem !important; /* Фиксированная высота для всех кнопок */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.5rem 1.25rem !important; /* px-5 py-2 */
+    }
+    
+    .action-button:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+    }
+    
+    .link-button {
+      color: #60a5fa;
+      transition: color 0.2s ease;
+    }
+    
+    .link-button:hover {
+      color: #93c5fd;
+      text-decoration: underline;
+    }
+    
+    .tab-button {
+      transition: all 0.2s ease;
+    }
+    
+    .tab-button.active {
+      color: #60a5fa;
+      border-bottom: 2px solid #60a5fa;
+    }
+    
+    .stream-mode-button {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    }
+    
+    .stream-mode-button:hover {
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+    }
+    
+    .glass-button {
+      background: rgba(30, 41, 59, 0.8);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(71, 85, 105, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .glass-button:hover {
+      background: rgba(30, 41, 59, 0.95);
+      transform: translateY(-2px);
+    }
+    
+    /* Navigation button with red pulsing glow */
+    #nav-to-tasks-btn,
+    #nav-to-accruals-btn {
+      background: rgba(239, 68, 68, 0.9) !important;
+      backdrop-filter: blur(8px);
+      border: 2px solid rgba(239, 68, 68, 0.8) !important;
+      box-shadow: 0 0 20px rgba(239, 68, 68, 0.6),
+                  0 0 40px rgba(239, 68, 68, 0.4),
+                  inset 0 0 10px rgba(239, 68, 68, 0.3) !important;
+      animation: redPulseGlow 2s ease-in-out infinite;
+      position: relative;
+      z-index: 10;
+    }
+    
+    @keyframes redPulseGlow {
+      0%, 100% {
+        box-shadow: 0 0 20px rgba(239, 68, 68, 0.6),
+                    0 0 40px rgba(239, 68, 68, 0.4),
+                    0 0 60px rgba(239, 68, 68, 0.3),
+                    inset 0 0 10px rgba(239, 68, 68, 0.3);
+        transform: scale(1);
+      }
+      50% {
+        box-shadow: 0 0 30px rgba(239, 68, 68, 0.8),
+                    0 0 60px rgba(239, 68, 68, 0.6),
+                    0 0 90px rgba(239, 68, 68, 0.4),
+                    inset 0 0 15px rgba(239, 68, 68, 0.4);
+        transform: scale(1.05);
+      }
+    }
+    
+    #nav-to-tasks-btn:hover,
+    #nav-to-accruals-btn:hover {
+      background: rgba(220, 38, 38, 1) !important;
+      border-color: rgba(220, 38, 38, 1) !important;
+      transform: translateY(-2px) scale(1.1) !important;
+      box-shadow: 0 0 40px rgba(239, 68, 68, 1),
+                  0 0 80px rgba(239, 68, 68, 0.8),
+                  0 0 120px rgba(239, 68, 68, 0.6),
+                  inset 0 0 20px rgba(239, 68, 68, 0.5) !important;
+      animation: none;
+    }
+    
+    #nav-to-tasks-btn:active,
+    #nav-to-accruals-btn:active {
+      transform: scale(0.95) !important;
+      box-shadow: 0 0 15px rgba(239, 68, 68, 0.8),
+                  inset 0 0 10px rgba(239, 68, 68, 0.4) !important;
+    }
+    
+    #nav-to-tasks-btn svg,
+    #nav-to-accruals-btn svg {
+      color: #ffffff !important;
+      filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.8));
+      animation: iconPulse 1.5s ease-in-out infinite;
+    }
+    
+    @keyframes iconPulse {
+      0%, 100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.8));
+      }
+      50% {
+        transform: scale(1.1);
+        filter: drop-shadow(0 0 8px rgba(255, 255, 255, 1));
+      }
+    }
+    
+    .accordion-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+    
+    .accordion-icon-btn {
+      transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: none;
+      color: inherit;
+    }
+    
+    .accordion-icon-btn:hover {
+      background: rgba(148, 163, 184, 0.1);
+      transform: translateY(-1px);
+    }
+    
+    .accordion-icon-btn:active {
+      transform: translateY(0);
+    }
+    
+    body.light .accordion-icon-btn:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+    
+    /* All skills button - same animations as accordion button */
+    #all-skills-btn {
+      transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: none;
+      color: inherit;
+    }
+    
+    #all-skills-btn:hover {
+      background: rgba(148, 163, 184, 0.1);
+      transform: translateY(-1px);
+    }
+    
+    #all-skills-btn:active {
+      transform: translateY(0);
+    }
+    
+    body.light #all-skills-btn:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+    
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+      opacity: 0;
+    }
+    
+    .accordion-content.open {
+      max-height: 1000px;
+      opacity: 1;
+      transition: max-height 0.3s ease-in, opacity 0.3s ease-in;
+    }
+    
+    /* Make closed accordion sections same height as "Stream Mode" block (only header visible) */
+    .sidebar-section:has(.accordion-content:not(.open)) {
+      padding-bottom: 1rem;
+    }
+    
+    .accordion-icon {
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    /* По умолчанию стрелка смотрит вниз (0deg) - когда контент закрыт */
+    /* Когда контент открыт (.open), стрелка должна смотреть вверх (повернута на 180deg) */
+    .sidebar-section:has(.accordion-content.open) .accordion-icon {
+      transform: rotate(180deg);
+    }
+    
+    /* Light theme styles */
+    body.light {
+      background-color: #f8fafc;
+      color: #1e293b;
+    }
+    
+    body.light .task-card {
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+    }
+    
+    body.light .task-card:hover {
+      background: rgba(255, 255, 255, 1);
+      border-color: rgba(226, 232, 240, 1);
+    }
+    
+    body.light h1,
+    body.light h3 {
+      color: #1e293b;
+    }
+    
+    body.light .text-slate-100 {
+      color: #1e293b;
+    }
+    
+    body.light .text-slate-300 {
+      color: #475569;
+    }
+    
+    body.light .text-slate-400 {
+      color: #64748b;
+    }
+    
+    body.light .sidebar-section {
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(226, 232, 240, 0.6);
+    }
+    
+    body.light .bg-slate-700 {
+      background-color: #e2e8f0;
+    }
+    
+    body.light .bg-slate-600 {
+      background-color: #cbd5e1;
+    }
+    
+    body.light .text-slate-200 {
+      color: #334155;
+    }
+    
+    /* Light theme styles for price-badge */
+    body.light .price-badge {
+      background: rgba(241, 245, 249, 0.9) !important; /* light bg-slate-700 equivalent */
+      color: #334155 !important; /* light text-slate-300 equivalent */
+    }
+    
+    body.light .price-badge:hover {
+      background: rgba(255, 255, 255, 1) !important; /* light hover:bg-slate-600 equivalent */
+      color: #1e293b !important; /* light hover:text-slate-100 equivalent */
+    }
+    
+    /* Light theme styles for skill-badge */
+    body.light .skill-badge {
+      background: rgba(241, 245, 249, 0.9) !important; /* light bg-slate-700 equivalent */
+      color: #334155 !important; /* light text-slate-300 equivalent */
+    }
+    
+    body.light .skill-badge:hover {
+      background: rgba(255, 255, 255, 1) !important; /* light hover:bg-slate-600 equivalent */
+      color: #1e293b !important; /* light hover:text-slate-100 equivalent */
+    }
+    
+    /* Light theme styles for timer */
+    body.light #timer-task-2,
+    body.light .timer-badge {
+      background: rgba(251, 146, 60, 0.6) !important;
+      border: 2px solid rgba(251, 146, 60, 0.9) !important;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.25), 0 0 12px rgba(251, 146, 60, 0.5);
+      box-shadow: 0 3px 10px rgba(251, 146, 60, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+      font-weight: 700;
+      color: #9a3412 !important;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+    
+    body.light #timer-task-2:hover,
+    body.light .timer-badge:hover {
+      box-shadow: 0 5px 15px rgba(251, 146, 60, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+      background: rgba(251, 146, 60, 0.7) !important;
+    }
+    
+    /* Light theme styles for age-restriction */
+    body.light .age-restriction {
+      background: rgba(251, 146, 60, 0.6) !important;
+      border: 2px solid rgba(251, 146, 60, 0.9) !important;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.25), 0 0 12px rgba(251, 146, 60, 0.5);
+      box-shadow: 0 3px 10px rgba(251, 146, 60, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+      font-weight: 700;
+      color: #9a3412 !important;
+    }
+    
+    /* Light theme styles for skill-percent */
+    body.light .skill-percent {
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+      font-weight: 700;
+    }
+    
+    body.light .skill-percent.text-green-400 {
+      color: #15803d !important;
+      background: rgba(34, 197, 94, 0.2);
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid rgba(34, 197, 94, 0.5);
+    }
+    
+    body.light .skill-percent.text-red-400 {
+      color: #dc2626 !important;
+      background: rgba(239, 68, 68, 0.2);
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid rgba(239, 68, 68, 0.5);
+    }
+    
+    /* Light theme styles for theme-toggle button */
+    body.light #theme-toggle {
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      color: #1e293b;
+    }
+    
+    body.light #theme-toggle:hover {
+      background: rgba(255, 255, 255, 1);
+      border-color: rgba(0, 0, 0, 0.2);
+    }
+    
+    body.light #theme-toggle svg {
+      color: #1e293b !important;
+    }
+    
+    /* Light theme for navigation buttons - keep red glow */
+    body.light #nav-to-tasks-btn,
+    body.light #nav-to-accruals-btn {
+      background: rgba(239, 68, 68, 0.95) !important;
+      border: 2px solid rgba(239, 68, 68, 0.9) !important;
+      box-shadow: 0 0 25px rgba(239, 68, 68, 0.7),
+                  0 0 50px rgba(239, 68, 68, 0.5),
+                  inset 0 0 12px rgba(239, 68, 68, 0.4) !important;
+    }
+    
+    body.light #nav-to-tasks-btn:hover,
+    body.light #nav-to-accruals-btn:hover {
+      background: rgba(220, 38, 38, 1) !important;
+      border-color: rgba(220, 38, 38, 1) !important;
+      box-shadow: 0 0 50px rgba(239, 68, 68, 1),
+                  0 0 100px rgba(239, 68, 68, 0.9),
+                  0 0 150px rgba(239, 68, 68, 0.7),
+                  inset 0 0 25px rgba(239, 68, 68, 0.6) !important;
+    }
+    
+    body.light #nav-to-tasks-btn svg,
+    body.light #nav-to-accruals-btn svg {
+      color: #ffffff !important;
+      filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.9));
+    }
+    
+    /* Page transition animation */
+    @keyframes fadeOut {
+      from {
+        opacity: 1;
+      }
+      to {
+        opacity: 0;
+      }
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+    
+    .page-transitioning {
+      animation: fadeOut 0.3s ease-in-out forwards;
+    }
+    
+    body.light .glass-button {
+      background: rgba(255, 255, 255, 0.9) !important;
+      border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    }
+    
+    body.light .glass-button:hover {
+      background: rgba(255, 255, 255, 1) !important;
+      border-color: rgba(0, 0, 0, 0.2) !important;
+    }
+    
+    /* Light theme styles for select */
+    body.light select {
+      background: rgba(255, 255, 255, 0.9) !important;
+      border: 1px solid rgba(0, 0, 0, 0.1) !important;
+      color: #1e293b !important;
+    }
+    
+    body.light select:hover {
+      background: rgba(255, 255, 255, 1) !important;
+      border-color: rgba(0, 0, 0, 0.2) !important;
+    }
+    
+    body.light select:focus {
+      border-color: #3b82f6 !important;
+      outline: none !important;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2) !important;
+    }
+    
+    body.light select option {
+      background: #ffffff;
+      color: #1e293b;
+    }
+  </style>
+</head>
+<body class="dark min-h-screen p-6">
+  <div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="mb-6">
+      <div class="flex items-center justify-between mb-4">
+        <h1 class="text-3xl font-bold text-slate-100">Задания</h1>
+        <div class="flex items-center gap-4">
+          <!-- Navigation to Accruals Page -->
+          <button id="nav-to-accruals-btn" class="glass-button p-2 rounded-lg transition-normal hover-lift-scale click-shrink" title="Перейти к начислениям" onclick="navigateToAccruals()">
+            <svg class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+            </svg>
+          </button>
+          <!-- Theme Toggle -->
+          <button id="theme-toggle" class="glass-button p-2 rounded-lg transition-normal hover-lift-scale click-shrink" title="Переключить тему">
+            <svg id="theme-icon-sun" class="w-5 h-5 text-slate-300 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+            <svg id="theme-icon-moon" class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex gap-6">
+      <!-- Main Content -->
+      <div class="flex-1 space-y-4">
+        <!-- Task 1 -->
+        <div class="task-card rounded-lg p-5" data-task-id="task-1">
+          <div class="flex items-stretch gap-4">
+            <div class="flex-1">
+              <div class="mb-3 flex items-center justify-between">
+                <div>
+                  <h3 class="text-lg font-semibold text-slate-100 mb-2">
+                    Заголовок задания 1
+                  </h3>
+                  <div class="flex items-center gap-2 mb-2">
+                  <span class="category-badge category-exam">ЭКЗАМЕН</span>
+                  <span class="text-xs text-slate-400">экзамен заданий</span>
+                </div>
+                </div>
+                <button class="favorite-btn p-2 rounded-lg transition-colors" data-task-id="task-1" title="Добавить в избранное">
+                  <svg class="w-5 h-5 text-slate-400 hover:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                  </svg>
+                </button>
+              </div>
+              <p class="text-sm text-slate-400 mb-4">
+                Описание задания 1. Здесь будет размещен текст с описанием задания и требованиями к выполнению.
+              </p>
+              <div class="flex items-center gap-4">
+                <a href="#" class="text-sm font-medium bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded text-slate-300 hover:text-slate-100 transition-colors">Инструкция</a>
+                <button class="details-toggle-btn text-sm font-medium bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded text-slate-300 hover:text-slate-100 transition-colors flex items-center gap-1" data-task-id="task-1">
+                  Детали
+                  <svg class="details-icon w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                <button class="text-sm font-medium bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded text-slate-300 hover:text-slate-100 transition-colors">Чат</button>
+              </div>
+            </div>
+            <div class="w-px bg-slate-600 flex-shrink-0"></div>
+            <div class="flex flex-col items-end gap-2 w-[180px] flex-shrink-0">
+              <div class="flex items-center gap-3 mb-2">
+                <span class="price-badge text-xs font-semibold">xxx за задание</span>
+                <span class="text-slate-400">|</span>
+                <div class="skill-badge text-xs font-semibold">Навык - XX%</div>
+              </div>
+              <div class="flex-1 flex items-end">
+                <button class="action-button text-white text-sm font-semibold px-5 py-2 rounded-lg w-full">
+                  Начать экзамен
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="task-details hidden" data-task-details="task-1">
+            <div class="grid grid-cols-2 gap-4">
+              <div class="flex items-center justify-between py-2 border-b border-slate-700">
+                <span class="text-sm font-medium text-slate-300">Заказчик</span>
+                <span class="text-sm text-slate-400">Заглушка заказчика</span>
+              </div>
+              <div class="flex items-center justify-between py-2 border-b border-slate-700">
+                <span class="text-sm font-medium text-slate-300 flex items-center gap-1">
+                  Срок на выполнение
+                  <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </span>
+                <span class="text-sm text-slate-400">час</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Task 2 -->
+        <div class="task-card rounded-lg p-5" data-task-id="task-2">
+          <div class="flex items-stretch gap-4">
+            <div class="flex-1">
+              <div class="mb-3 flex items-center justify-between">
+                <h3 class="text-lg font-semibold text-slate-100 mb-2">
+                  Заголовок задания 2
+                </h3>
+                <button class="favorite-btn p-2 rounded-lg transition-colors" data-task-id="task-2" title="Добавить в избранное">
+                  <svg class="w-5 h-5 text-slate-400 hover:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                  </svg>
+                </button>
+              </div>
+              <p class="text-sm text-slate-400 mb-4">
+                Описание задания 2. Здесь будет размещен текст с описанием задания и требованиями к выполнению.
+              </p>
+              <div class="flex items-center gap-4">
+                <a href="#" class="text-sm font-medium bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded text-slate-300 hover:text-slate-100 transition-colors">Инструкция</a>
+                <a href="#" class="text-sm font-medium bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded text-slate-300 hover:text-slate-100 transition-colors">Детали</a>
+                <button class="text-sm font-medium bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded text-slate-300 hover:text-slate-100 transition-colors">Чат</button>
+              </div>
+            </div>
+            <div class="w-px bg-slate-600 flex-shrink-0"></div>
+            <div class="flex flex-col items-end gap-2 w-[180px] flex-shrink-0">
+              <div class="flex items-center gap-3 mb-2">
+                <span class="price-badge text-xs font-semibold">xxx за задание</span>
+                <span class="text-slate-400">|</span>
+                <div class="skill-badge text-xs font-semibold">Навык - XX%</div>
+              </div>
+              <div class="flex-1 flex flex-col items-end justify-end gap-2 w-full">
+                <span id="timer-task-2" class="text-xs font-semibold text-orange-400">ОСТАЛОСЬ: 28:59 сек</span>
+                <button class="action-button text-white text-sm font-semibold px-5 py-2 rounded-lg w-full" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                  Продолжить
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Task 3 -->
+        <div class="task-card rounded-lg p-5" data-task-id="task-3">
+          <div class="flex items-stretch gap-4">
+            <div class="flex-1">
+              <div class="mb-3 flex items-center justify-between">
+                <div>
+                  <h3 class="text-lg font-semibold text-slate-100 mb-2">
+                    Заголовок задания 3
+                  </h3>
+                  <div class="flex items-center gap-2 mb-2">
+                    <span class="category-badge category-exam">ЭКЗАМЕН</span>
+                  </div>
+                </div>
+                <button class="favorite-btn p-2 rounded-lg transition-colors" data-task-id="task-3" title="Добавить в избранное">
+                  <svg class="w-5 h-5 text-slate-400 hover:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                  </svg>
+                </button>
+              </div>
+              <p class="text-sm text-slate-400 mb-4">
+                Описание задания 3. Здесь будет размещен текст с описанием задания и требованиями к выполнению.
+              </p>
+              <div class="flex items-center gap-4">
+                <a href="#" class="text-sm font-medium bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded text-slate-300 hover:text-slate-100 transition-colors">Инструкция</a>
+                <a href="#" class="text-sm font-medium bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded text-slate-300 hover:text-slate-100 transition-colors">Детали</a>
+                <button class="text-sm font-medium bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded text-slate-300 hover:text-slate-100 transition-colors">Чат</button>
+              </div>
+            </div>
+            <div class="w-px bg-slate-600 flex-shrink-0"></div>
+            <div class="flex flex-col items-end gap-2 w-[180px] flex-shrink-0">
+              <div class="flex items-center gap-3 mb-2">
+                <span class="price-badge text-xs font-semibold">xxx за задание</span>
+                <span class="text-slate-400">|</span>
+                <div class="skill-badge text-xs font-semibold">Навык - XX%</div>
+              </div>
+              <div class="flex-1 flex items-end">
+                <button class="action-button text-white text-sm font-semibold px-5 py-2 rounded-lg w-full">
+                  Начать экзамен
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Task 4 -->
+        <div class="task-card rounded-lg p-5" data-task-id="task-4">
+          <div class="flex items-stretch gap-4">
+            <div class="flex-1">
+              <div class="mb-3 flex items-center justify-between">
+                <h3 class="text-lg font-semibold text-slate-100 mb-2">
+                  Заголовок задания 4
+                </h3>
+                <button class="favorite-btn p-2 rounded-lg transition-colors" data-task-id="task-4" title="Добавить в избранное">
+                  <svg class="w-5 h-5 text-slate-400 hover:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                  </svg>
+                </button>
+              </div>
+              <p class="text-sm text-slate-400 mb-4">
+                Описание задания 4. Здесь будет размещен текст с описанием задания и требованиями к выполнению.
+              </p>
+              <div class="flex items-center gap-4">
+                <a href="#" class="text-sm font-medium bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded text-slate-300 hover:text-slate-100 transition-colors">Инструкция</a>
+                <a href="#" class="text-sm font-medium bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded text-slate-300 hover:text-slate-100 transition-colors">Детали</a>
+                <button class="text-sm font-medium bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded text-slate-300 hover:text-slate-100 transition-colors">Чат</button>
+              </div>
+            </div>
+            <div class="w-px bg-slate-600 flex-shrink-0"></div>
+            <div class="flex flex-col items-end gap-2 w-[180px] flex-shrink-0">
+              <div class="flex items-center gap-3 mb-2">
+                <span class="price-badge text-xs font-semibold">xxx за задание</span>
+                <span class="text-slate-400">|</span>
+                <div class="skill-badge text-xs font-semibold">Навык - XX%</div>
+              </div>
+              <div class="flex-1 flex items-end">
+                <button class="action-button text-white text-sm font-semibold px-5 py-2 rounded-lg w-full">
+                  Приступить
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Task 5 -->
+        <div class="task-card rounded-lg p-5" data-task-id="task-5">
+          <div class="flex items-stretch gap-4">
+            <div class="flex-1">
+              <div class="mb-3 flex items-center justify-between">
+                <div>
+                  <h3 class="text-lg font-semibold text-slate-100 mb-2">
+                    Заголовок задания 5
+                  </h3>
+                  <div class="flex items-center gap-2 mb-2">
+                    <span class="category-badge category-training">ТРЕНИРОВКА</span>
+                    <span class="age-restriction">18+</span>
+                  </div>
+                </div>
+                <button class="favorite-btn p-2 rounded-lg transition-colors" data-task-id="task-5" title="Добавить в избранное">
+                  <svg class="w-5 h-5 text-slate-400 hover:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                  </svg>
+                </button>
+              </div>
+              <p class="text-sm text-slate-400 mb-4">
+                Описание задания 5. Здесь будет размещен текст с описанием задания и требованиями к выполнению.
+              </p>
+              <div class="flex items-center gap-4">
+                <a href="#" class="text-sm font-medium bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded text-slate-300 hover:text-slate-100 transition-colors">Инструкция</a>
+                <a href="#" class="text-sm font-medium bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded text-slate-300 hover:text-slate-100 transition-colors">Детали</a>
+                <button class="text-sm font-medium bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded text-slate-300 hover:text-slate-100 transition-colors">Чат</button>
+              </div>
+            </div>
+            <div class="w-px bg-slate-600 flex-shrink-0"></div>
+            <div class="flex flex-col items-end gap-2 w-[180px] flex-shrink-0">
+              <div class="flex items-center gap-3 mb-2">
+                <span class="price-badge text-xs font-semibold">xxx за задание</span>
+                <span class="text-slate-400">|</span>
+                <div class="skill-badge text-xs font-semibold">Навык - XX%</div>
+              </div>
+              <div class="flex-1 flex items-end">
+                <button class="action-button text-white text-sm font-semibold px-5 py-2 rounded-lg w-full">
+                  Начать тренировку
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Task 6 -->
+        <div class="task-card rounded-lg p-5" data-task-id="task-6">
+          <div class="flex items-stretch gap-4">
+            <div class="flex-1">
+              <div class="mb-3 flex items-center justify-between">
+                <div>
+                  <h3 class="text-lg font-semibold text-slate-100 mb-2">
+                    Заголовок задания 6
+                  </h3>
+                  <div class="flex items-center gap-2 mb-2">
+                    <span class="category-badge category-training">ТРЕНИРОВКА</span>
+                    <span class="age-restriction">18+</span>
+                  </div>
+                </div>
+                <button class="favorite-btn p-2 rounded-lg transition-colors" data-task-id="task-6" title="Добавить в избранное">
+                  <svg class="w-5 h-5 text-slate-400 hover:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                  </svg>
+                </button>
+              </div>
+              <p class="text-sm text-slate-400 mb-4">
+                Описание задания 6. Здесь будет размещен текст с описанием задания и требованиями к выполнению.
+              </p>
+              <div class="flex items-center gap-4">
+                <a href="#" class="text-sm font-medium bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded text-slate-300 hover:text-slate-100 transition-colors">Инструкция</a>
+                <a href="#" class="text-sm font-medium bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded text-slate-300 hover:text-slate-100 transition-colors">Детали</a>
+                <button class="text-sm font-medium bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded text-slate-300 hover:text-slate-100 transition-colors">Чат</button>
+              </div>
+            </div>
+            <div class="w-px bg-slate-600 flex-shrink-0"></div>
+            <div class="flex flex-col items-end gap-2 w-[180px] flex-shrink-0">
+              <div class="flex items-center gap-3 mb-2">
+                <span class="price-badge text-xs font-semibold">xxx за задание</span>
+                <span class="text-slate-400">|</span>
+                <div class="skill-badge text-xs font-semibold">Навык - XX%</div>
+              </div>
+              <div class="flex-1 flex items-end">
+                <button class="action-button text-white text-sm font-semibold px-5 py-2 rounded-lg w-full">
+                  Начать тренировку
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="w-80 space-y-4">
+        <!-- Stream Mode -->
+        <div class="sidebar-section rounded-lg p-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <h3 class="text-sm font-semibold text-slate-200">Режим потока</h3>
+              <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" id="stream-mode-toggle" class="sr-only peer">
+              <div class="w-11 h-6 bg-slate-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Favorite/All Toggle -->
+        <div id="favorite-toggle-container" class="sidebar-section rounded-lg p-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-semibold text-slate-200" id="favorite-toggle-label">Избранные</span>
+              <span class="bg-slate-700 text-slate-300 text-xs px-2 py-0.5 rounded-full" id="favorite-count">0</span>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" id="favorite-toggle" class="sr-only peer">
+              <div class="w-11 h-6 bg-slate-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Сортировка -->
+        <div class="sidebar-section rounded-lg p-4">
+          <div class="flex items-center justify-between gap-3">
+            <h3 class="text-sm font-semibold text-slate-200">Сортировка</h3>
+            <div class="relative custom-select-wrapper">
+              <button id="sort-select-btn" class="flex items-center justify-between gap-2 bg-slate-800 border border-slate-700 text-slate-300 rounded-lg px-4 py-2 text-sm hover:bg-slate-700 transition-colors min-w-[180px]">
+                <span id="sort-select-value">Цена по убыванию</span>
+                <svg class="w-4 h-4 text-slate-400 transition-transform" id="sort-select-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              <div id="sort-select-dropdown" class="absolute top-full right-0 mt-1 w-full bg-slate-800 border border-slate-700 rounded-lg shadow-lg z-50 hidden overflow-hidden">
+                <button class="sort-option w-full text-left px-4 py-2 text-sm text-slate-300 hover:bg-slate-700 transition-colors" data-value="price-desc">Цена по убыванию</button>
+                <button class="sort-option w-full text-left px-4 py-2 text-sm text-slate-300 hover:bg-slate-700 transition-colors" data-value="price-asc">Цена по возрастанию</button>
+                <button class="sort-option w-full text-left px-4 py-2 text-sm text-slate-300 hover:bg-slate-700 transition-colors" data-value="date">Дата добавления</button>
+                <button class="sort-option w-full text-left px-4 py-2 text-sm text-slate-300 hover:bg-slate-700 transition-colors" data-value="popularity">Популярность</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="sidebar-section rounded-lg p-4">
+          <div class="accordion-header">
+            <h3 class="text-sm font-semibold text-slate-200">Фильтры</h3>
+            <button class="accordion-icon-btn" data-target="filters-content" type="button">
+              <svg class="accordion-icon w-4 h-4 text-slate-400 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+          </div>
+          <div id="filters-content" class="accordion-content open">
+            <div class="space-y-1">
+            <div class="flex items-center justify-between hover:bg-slate-800/50 p-1.5 rounded">
+              <span class="text-sm text-slate-300">Название Фильтра 1</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs text-slate-500">4</span>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" class="sr-only peer" checked>
+                  <div class="w-9 h-5 bg-slate-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                </label>
+              </div>
+            </div>
+            <div class="flex items-center justify-between hover:bg-slate-800/50 p-1.5 rounded">
+              <span class="text-sm text-slate-300">Название Фильтра 2</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs text-slate-500">0</span>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" class="sr-only peer" checked>
+                  <div class="w-9 h-5 bg-slate-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                </label>
+              </div>
+            </div>
+            <div class="flex items-center justify-between hover:bg-slate-800/50 p-1.5 rounded">
+              <span class="text-sm text-slate-300">Название Фильтра 3</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs text-slate-500">2</span>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" class="sr-only peer" checked>
+                  <div class="w-9 h-5 bg-slate-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                </label>
+              </div>
+            </div>
+            <div class="flex items-center justify-between hover:bg-slate-800/50 p-1.5 rounded">
+              <span class="text-sm text-slate-300">Название Фильтра 4</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs text-slate-500">0</span>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" class="sr-only peer" checked>
+                  <div class="w-9 h-5 bg-slate-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                </label>
+              </div>
+            </div>
+            <div class="flex items-center justify-between hover:bg-slate-800/50 p-1.5 rounded">
+              <span class="text-sm text-slate-300">Название Фильтра 5</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs text-slate-500">2</span>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" class="sr-only peer" checked>
+                  <div class="w-9 h-5 bg-slate-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                </label>
+              </div>
+            </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Customers -->
+        <div class="sidebar-section rounded-lg p-4">
+          <div class="accordion-header">
+            <h3 class="text-sm font-semibold text-slate-200">Заказчики</h3>
+            <button class="accordion-icon-btn" data-target="customers-content" type="button">
+              <svg class="accordion-icon w-4 h-4 text-slate-400 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+          </div>
+          <div id="customers-content" class="accordion-content open">
+            <div class="space-y-1">
+            <div class="flex items-center justify-between hover:bg-slate-800/50 p-1.5 rounded">
+              <span class="text-sm text-slate-300">Название заказчика 1</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs text-slate-500">8</span>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" class="sr-only peer" checked>
+                  <div class="w-9 h-5 bg-slate-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                </label>
+              </div>
+            </div>
+            <div class="flex items-center justify-between hover:bg-slate-800/50 p-1.5 rounded">
+              <span class="text-sm text-slate-300">Название заказчика 2</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs text-slate-500">4</span>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" class="sr-only peer" checked>
+                  <div class="w-9 h-5 bg-slate-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                </label>
+              </div>
+            </div>
+            <div class="flex items-center justify-between hover:bg-slate-800/50 p-1.5 rounded">
+              <span class="text-sm text-slate-300">Название заказчика 3</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs text-slate-500">2</span>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" class="sr-only peer" checked>
+                  <div class="w-9 h-5 bg-slate-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                </label>
+              </div>
+            </div>
+            <div class="flex items-center justify-between hover:bg-slate-800/50 p-1.5 rounded">
+              <span class="text-sm text-slate-300">Название заказчика 4</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs text-slate-500">2</span>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" class="sr-only peer" checked>
+                  <div class="w-9 h-5 bg-slate-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                </label>
+              </div>
+            </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Key Skills -->
+        <div class="sidebar-section rounded-lg p-4">
+          <div class="accordion-header">
+            <h3 class="text-sm font-semibold text-slate-200">Ключевые навыки</h3>
+            <div class="flex items-center gap-2">
+              <button id="all-skills-btn" class="relative z-50 cursor-pointer" title="Все навыки" type="button" onclick="event.stopPropagation(); event.preventDefault(); const modal = document.getElementById('all-skills-modal'); if(modal) { modal.classList.remove('hidden'); document.body.style.overflow = 'hidden'; void modal.offsetWidth; setTimeout(() => { if (typeof updateSkillColors === 'function') updateSkillColors(); }, 50); } return false;">
+                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                </svg>
+              </button>
+              <button class="accordion-icon-btn" data-target="skills-content" type="button">
+                <svg class="accordion-icon w-4 h-4 text-slate-400 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div id="skills-content" class="accordion-content open">
+            <div class="space-y-3">
+            <div title="Минимальный порог: 82%">
+              <div class="flex justify-between mb-1">
+                <span class="text-sm font-medium text-slate-300">Название проекта 1</span>
+                <span class="text-sm font-medium text-slate-400 skill-percent" data-threshold="82" data-value="95">XX%</span>
+              </div>
+              <div class="w-full bg-slate-700 rounded-full h-2 relative skill-progress-container">
+                <div class="skill-progress bg-green-500 h-2 rounded-full" style="width: 95%" data-threshold="82" data-value="95"></div>
+                <div class="absolute top-0 bottom-0 w-1 bg-slate-100 border border-slate-400 rounded" style="left: 82%"></div>
+              </div>
+            </div>
+            <div title="Минимальный порог: 80%">
+              <div class="flex justify-between mb-1">
+                <span class="text-sm font-medium text-slate-300">Название проекта 2</span>
+                <span class="text-sm font-medium text-slate-400 skill-percent" data-threshold="80" data-value="76">XX%</span>
+              </div>
+              <div class="w-full bg-slate-700 rounded-full h-2 relative skill-progress-container">
+                <div class="skill-progress bg-red-500 h-2 rounded-full" style="width: 76%" data-threshold="80" data-value="76"></div>
+                <div class="absolute top-0 bottom-0 w-1 bg-slate-100 border border-slate-400 rounded" style="left: 80%"></div>
+              </div>
+            </div>
+            <div title="Минимальный порог: 83%">
+              <div class="flex justify-between mb-1">
+                <span class="text-sm font-medium text-slate-300">Название проекта 3</span>
+                <span class="text-sm font-medium text-slate-400 skill-percent" data-threshold="83" data-value="89">XX%</span>
+              </div>
+              <div class="w-full bg-slate-700 rounded-full h-2 relative skill-progress-container">
+                <div class="skill-progress bg-green-500 h-2 rounded-full" style="width: 89%" data-threshold="83" data-value="89"></div>
+                <div class="absolute top-0 bottom-0 w-1 bg-slate-100 border border-slate-400 rounded" style="left: 83%"></div>
+              </div>
+            </div>
+            <div title="Минимальный порог: 77%">
+              <div class="flex justify-between mb-1">
+                <span class="text-sm font-medium text-slate-300">Название проекта 4</span>
+                <span class="text-sm font-medium text-slate-400 skill-percent" data-threshold="77" data-value="85">XX%</span>
+              </div>
+              <div class="w-full bg-slate-700 rounded-full h-2 relative skill-progress-container">
+                <div class="skill-progress bg-green-500 h-2 rounded-full" style="width: 85%" data-threshold="77" data-value="85"></div>
+                <div class="absolute top-0 bottom-0 w-1 bg-slate-100 border border-slate-400 rounded" style="left: 77%"></div>
+              </div>
+            </div>
+            <div title="Минимальный порог: 79%">
+              <div class="flex justify-between mb-1">
+                <span class="text-sm font-medium text-slate-300">Название проекта 5</span>
+                <span class="text-sm font-medium text-slate-400 skill-percent" data-threshold="79" data-value="72">XX%</span>
+              </div>
+              <div class="w-full bg-slate-700 rounded-full h-2 relative skill-progress-container">
+                <div class="skill-progress bg-red-500 h-2 rounded-full" style="width: 72%" data-threshold="79" data-value="72"></div>
+                <div class="absolute top-0 bottom-0 w-1 bg-slate-100 border border-slate-400 rounded" style="left: 79%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Theme toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIconSun = document.getElementById('theme-icon-sun');
+    const themeIconMoon = document.getElementById('theme-icon-moon');
+    const body = document.body;
+    
+    // Check saved theme or default to dark
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    if (savedTheme === 'light') {
+      body.classList.remove('dark');
+      body.classList.add('light');
+      if (themeIconSun) themeIconSun.classList.remove('hidden');
+      if (themeIconMoon) themeIconMoon.classList.add('hidden');
+    }
+    
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        if (body.classList.contains('dark') || !body.classList.contains('light')) {
+          body.classList.remove('dark');
+          body.classList.add('light');
+          localStorage.setItem('theme', 'light');
+          if (themeIconSun) themeIconSun.classList.remove('hidden');
+          if (themeIconMoon) themeIconMoon.classList.add('hidden');
+        } else {
+          body.classList.remove('light');
+          body.classList.add('dark');
+          localStorage.setItem('theme', 'dark');
+          if (themeIconSun) themeIconSun.classList.add('hidden');
+          if (themeIconMoon) themeIconMoon.classList.remove('hidden');
+        }
+      });
+    }
+    
+    // Accordion functionality
+    document.querySelectorAll('.accordion-icon-btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        // Don't toggle accordion if clicking on the all-skills button or favorite toggle
+        if (e.target.closest('#all-skills-btn') || e.target.closest('#favorite-toggle-container')) {
+          return;
+        }
+        const targetId = this.dataset.target;
+        const content = document.getElementById(targetId);
+        const icon = this.querySelector('.accordion-icon');
+        
+        if (content && content.classList.contains('open')) {
+          // Closing: remove open class, rotate icon to point down (remove rotate-180)
+          content.classList.remove('open');
+          if (icon) {
+            icon.classList.remove('rotate-180');
+            icon.style.transform = 'rotate(0deg)';
+          }
+        } else if (content) {
+          // Opening: add open class, rotate icon to point up (add rotate-180)
+          content.classList.add('open');
+          if (icon) {
+            icon.classList.add('rotate-180');
+            icon.style.transform = 'rotate(180deg)';
+          }
+        }
+      });
+    });
+    
+    // Initialize accordion icons - when open, icon should point up (rotate-180)
+    document.querySelectorAll('.accordion-content.open').forEach(content => {
+      const btn = document.querySelector(`[data-target="${content.id}"]`);
+      if (btn) {
+        const icon = btn.querySelector('.accordion-icon');
+        if (icon) {
+          icon.classList.add('rotate-180');
+          icon.style.transform = 'rotate(180deg)';
+        }
+      }
+    });
+    
+    // Timer for Task 2
+    const timerElement = document.getElementById('timer-task-2');
+    if (timerElement) {
+      let minutes = 28;
+      let seconds = 59;
+      
+      const updateTimer = () => {
+        timerElement.textContent = `ОСТАЛОСЬ: ${minutes}:${seconds.toString().padStart(2, '0')} сек`;
+        
+        if (seconds > 0) {
+          seconds--;
+        } else {
+          if (minutes > 0) {
+            minutes--;
+            seconds = 59;
+          } else {
+            clearInterval(timerInterval);
+            timerElement.textContent = 'ОСТАЛОСЬ: 0:00 сек';
+          }
+        }
+      };
+      
+      const timerInterval = setInterval(updateTimer, 1000);
+    }
+    
+    // Skill progress bars threshold check
+    function updateSkillColors() {
+      document.querySelectorAll('.skill-progress').forEach(progress => {
+        const value = parseInt(progress.dataset.value);
+        const threshold = parseInt(progress.dataset.threshold);
+        
+        // Find matching percent element (using closest parent to find the right one)
+        const skillBlock = progress.closest('[title*="Минимальный порог"]');
+        const percentElement = skillBlock ? skillBlock.querySelector(`.skill-percent[data-value="${value}"][data-threshold="${threshold}"]`) : null;
+        
+        if (value < threshold) {
+          progress.classList.remove('bg-blue-500', 'bg-green-500');
+          progress.classList.add('bg-red-500');
+          if (percentElement) {
+            percentElement.classList.remove('text-slate-400', 'text-green-400');
+            percentElement.classList.add('text-red-400');
+          }
+        } else {
+          progress.classList.remove('bg-blue-500', 'bg-red-500');
+          progress.classList.add('bg-green-500');
+          if (percentElement) {
+            percentElement.classList.remove('text-slate-400', 'text-red-400');
+            percentElement.classList.add('text-green-400');
+          }
+        }
+      });
+    }
+    
+    updateSkillColors();
+    
+    // Custom sort select dropdown
+    const sortSelectBtn = document.getElementById('sort-select-btn');
+    const sortSelectDropdown = document.getElementById('sort-select-dropdown');
+    const sortSelectValue = document.getElementById('sort-select-value');
+    const sortSelectIcon = document.getElementById('sort-select-icon');
+    const sortOptions = document.querySelectorAll('.sort-option');
+    
+    if (sortSelectBtn && sortSelectDropdown) {
+      // Toggle dropdown
+      sortSelectBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const isHidden = sortSelectDropdown.classList.contains('hidden');
+        
+        if (isHidden) {
+          sortSelectDropdown.classList.remove('hidden');
+          sortSelectIcon.classList.add('open');
+        } else {
+          sortSelectDropdown.classList.add('hidden');
+          sortSelectIcon.classList.remove('open');
+        }
+      });
+      
+      // Select option
+      sortOptions.forEach(option => {
+        option.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const value = this.textContent.trim();
+          sortSelectValue.textContent = value;
+          sortSelectDropdown.classList.add('hidden');
+          sortSelectIcon.classList.remove('open');
+          
+          // Add active state
+          sortOptions.forEach(opt => opt.classList.remove('bg-slate-700', 'font-semibold'));
+          this.classList.add('bg-slate-700', 'font-semibold');
+          
+          // Here you can add sorting logic
+          console.log('Sort by:', this.dataset.value);
+        });
+      });
+      
+      // Close dropdown when clicking outside
+      document.addEventListener('click', function(e) {
+        if (!sortSelectBtn.contains(e.target) && !sortSelectDropdown.contains(e.target)) {
+          sortSelectDropdown.classList.add('hidden');
+          sortSelectIcon.classList.remove('open');
+        }
+      });
+      
+      // Mark first option as active by default
+      if (sortOptions.length > 0) {
+        sortOptions[0].classList.add('bg-slate-700', 'font-semibold');
+      }
+    }
+    
+    // Favorite functionality
+    const favoriteButtons = document.querySelectorAll('.favorite-btn');
+    const favoriteToggle = document.getElementById('favorite-toggle');
+    const favoriteToggleLabel = document.getElementById('favorite-toggle-label');
+    const favoriteCount = document.getElementById('favorite-count');
+    let favoriteTasks = JSON.parse(localStorage.getItem('favoriteTasks') || '[]');
+    let allTasks = document.querySelectorAll('.task-card');
+    
+    // Update favorite toggle label and count
+    const updateFavoriteToggleLabel = () => {
+      if (favoriteToggleLabel) {
+        favoriteToggleLabel.textContent = 'Избранные';
+      }
+      if (favoriteCount) {
+        favoriteCount.textContent = favoriteTasks.length;
+      }
+    };
+    
+    // Update favorite buttons state
+    const updateFavoriteButtons = () => {
+      favoriteButtons.forEach(btn => {
+        const taskId = btn.dataset.taskId;
+        if (favoriteTasks.includes(taskId)) {
+          btn.classList.add('active');
+          btn.querySelector('svg').setAttribute('fill', 'currentColor');
+        } else {
+          btn.classList.remove('active');
+          btn.querySelector('svg').removeAttribute('fill');
+        }
+      });
+      
+      // Update task cards
+      allTasks.forEach(card => {
+        const taskId = card.dataset.taskId;
+        if (favoriteTasks.includes(taskId)) {
+          card.classList.add('favorite');
+        } else {
+          card.classList.remove('favorite');
+        }
+      });
+      
+      // Update display based on toggle state
+      if (favoriteToggle && favoriteToggle.checked) {
+        // When checked (active), show only favorites
+        allTasks.forEach(card => {
+          const taskId = card.dataset.taskId;
+          if (favoriteTasks.includes(taskId)) {
+            card.classList.remove('task-card-hiding', 'task-card-hidden');
+            card.style.display = '';
+          } else {
+            card.classList.add('task-card-hiding');
+            setTimeout(() => {
+              card.classList.add('task-card-hidden');
+              card.style.display = 'none';
+            }, 300);
+          }
+        });
+      } else if (favoriteToggle && !favoriteToggle.checked) {
+        // When unchecked (inactive), show all tasks
+        allTasks.forEach(card => {
+          if (card.classList.contains('task-card-hidden')) {
+            card.classList.remove('task-card-hidden');
+            card.style.display = '';
+            // Force reflow for animation
+            void card.offsetWidth;
+            card.classList.remove('task-card-hiding');
+          } else {
+            card.classList.remove('task-card-hiding', 'task-card-hidden');
+            card.style.display = '';
+          }
+        });
+      }
+    };
+    
+    // Toggle favorite
+    favoriteButtons.forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const taskId = this.dataset.taskId;
+        
+        if (favoriteTasks.includes(taskId)) {
+          favoriteTasks = favoriteTasks.filter(id => id !== taskId);
+        } else {
+          favoriteTasks.push(taskId);
+        }
+        
+        localStorage.setItem('favoriteTasks', JSON.stringify(favoriteTasks));
+        updateFavoriteButtons();
+        updateFavoriteToggleLabel();
+      });
+    });
+    
+    // Favorite toggle functionality
+    if (favoriteToggle) {
+      favoriteToggle.addEventListener('change', function() {
+        updateFavoriteToggleLabel();
+        
+        if (this.checked) {
+          // When checked (active), show only favorites
+          allTasks.forEach(card => {
+            const taskId = card.dataset.taskId;
+            if (favoriteTasks.includes(taskId)) {
+              // Show card with animation
+              if (card.classList.contains('task-card-hidden')) {
+                card.classList.remove('task-card-hidden');
+                card.style.display = '';
+                // Force reflow for animation
+                void card.offsetWidth;
+                card.classList.remove('task-card-hiding');
+              }
+            } else {
+              // Hide card with animation
+              card.classList.add('task-card-hiding');
+              setTimeout(() => {
+                card.classList.add('task-card-hidden');
+                card.style.display = 'none';
+              }, 300);
+            }
+          });
+        } else {
+          // When unchecked (inactive), show all tasks
+          allTasks.forEach(card => {
+            if (card.classList.contains('task-card-hidden')) {
+              // Show card with animation
+              card.classList.remove('task-card-hidden');
+              card.style.display = '';
+              // Force reflow for animation
+              void card.offsetWidth;
+              card.classList.remove('task-card-hiding');
+            } else {
+              card.classList.remove('task-card-hiding', 'task-card-hidden');
+              card.style.display = '';
+            }
+          });
+        }
+      });
+    }
+    
+    // Initialize favorite toggle state - unchecked = show all tasks
+    if (favoriteToggle) {
+      favoriteToggle.checked = false; // Start unchecked (show all tasks)
+    }
+    
+    // Initialize
+    updateFavoriteToggleLabel();
+    updateFavoriteButtons();
+    
+    // Task details toggle - improved animation function
+    function toggleTaskDetails(taskId) {
+      const detailsBlock = document.querySelector(`[data-task-details="${taskId}"]`);
+      const toggleBtn = document.querySelector(`.details-toggle-btn[data-task-id="${taskId}"]`);
+      const icon = toggleBtn ? toggleBtn.querySelector('.details-icon') : null;
+      
+      if (detailsBlock) {
+        // Remove hidden class first if present
+        detailsBlock.classList.remove('hidden');
+        
+        // Force reflow to reset state
+        void detailsBlock.offsetWidth;
+        
+        if (detailsBlock.classList.contains('open')) {
+          // Closing: remove open class
+          detailsBlock.classList.remove('open');
+          if (icon) icon.classList.remove('rotate-180');
+          setTimeout(() => {
+            detailsBlock.classList.add('hidden');
+          }, 300);
+        } else {
+          // Opening: add open class
+          detailsBlock.classList.add('open');
+          if (icon) icon.classList.add('rotate-180');
+        }
+      } else if (toggleBtn) {
+        // Create details block if it doesn't exist
+        const taskCard = document.querySelector(`[data-task-id="${taskId}"]`);
+        if (taskCard) {
+          const detailsDiv = document.createElement('div');
+          detailsDiv.className = 'task-details hidden';
+          detailsDiv.setAttribute('data-task-details', taskId);
+          detailsDiv.innerHTML = `
+            <div class="grid grid-cols-2 gap-4">
+              <div class="flex items-center justify-between py-2 border-b border-slate-700">
+                <span class="text-sm text-slate-400">Заказчик</span>
+                <span class="text-sm font-medium text-slate-200">Заглушка заказчика</span>
+              </div>
+              <div class="flex items-center justify-between py-2 border-b border-slate-700">
+                <span class="text-sm text-slate-400">Срок на выполнение</span>
+                <span class="text-sm font-medium text-slate-200">1 час</span>
+              </div>
+            </div>
+          `;
+          taskCard.appendChild(detailsDiv);
+          
+          // Force reflow and open
+          void detailsDiv.offsetWidth;
+          detailsDiv.classList.remove('hidden');
+          detailsDiv.classList.add('open');
+          if (icon) icon.classList.add('rotate-180');
+        }
+      }
+    }
+    
+    // Task details toggle for existing buttons
+    document.querySelectorAll('.details-toggle-btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const taskId = this.dataset.taskId;
+        toggleTaskDetails(taskId);
+      });
+    });
+    
+    // Add details toggle functionality to all "Детали" links/buttons that don't have it yet
+    setTimeout(() => {
+      document.querySelectorAll('a, button').forEach(btn => {
+        if (btn.textContent && btn.textContent.trim() === 'Детали' && !btn.classList.contains('details-toggle-btn') && !btn.hasAttribute('data-task-id')) {
+          // Find parent task card
+          const taskCard = btn.closest('.task-card');
+          if (taskCard) {
+            const taskId = taskCard.dataset.taskId;
+            if (taskId) {
+              // Convert to button if it's a link
+              if (btn.tagName === 'A') {
+                const newBtn = document.createElement('button');
+                newBtn.className = btn.className + ' details-toggle-btn flex items-center gap-1';
+                newBtn.setAttribute('data-task-id', taskId);
+                newBtn.innerHTML = 'Детали <svg class="details-icon w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>';
+                btn.parentNode.replaceChild(newBtn, btn);
+                
+                // Add event listener
+                newBtn.addEventListener('click', function(e) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  toggleTaskDetails(taskId);
+                });
+              } else {
+                // If it's already a button, just add classes and event listener
+                btn.classList.add('details-toggle-btn');
+                btn.setAttribute('data-task-id', taskId);
+                if (!btn.querySelector('.details-icon')) {
+                  btn.innerHTML = btn.innerHTML + ' <svg class="details-icon w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>';
+                }
+                btn.addEventListener('click', function(e) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  toggleTaskDetails(taskId);
+                });
+              }
+            }
+          }
+        }
+      });
+    }, 100);
+
+    // Filter interactions
+    document.querySelectorAll('.filter-checkbox').forEach(checkbox => {
+      checkbox.addEventListener('change', function() {
+        console.log('Filter changed:', this.checked);
+        // Здесь можно добавить логику фильтрации
+      });
+    });
+
+    // Task card interactions
+    document.querySelectorAll('.task-card').forEach(card => {
+      card.addEventListener('click', function(e) {
+        if (!e.target.closest('button') && !e.target.closest('a')) {
+          console.log('Task card clicked');
+          // Здесь можно добавить логику открытия деталей задания
+        }
+      });
+    });
+
+    // Action buttons
+    document.querySelectorAll('.action-button').forEach(button => {
+      button.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const taskTitle = this.closest('.task-card').querySelector('h3').textContent;
+        alert(`Начинаем: ${taskTitle}`);
+      });
+    });
+
+    // Stream mode toggle
+    const streamModeToggle = document.getElementById('stream-mode-toggle');
+    if (streamModeToggle) {
+      streamModeToggle.addEventListener('change', function() {
+        if (this.checked) {
+          console.log('Режим потока активирован');
+        } else {
+          console.log('Режим потока деактивирован');
+        }
+      });
+    }
+    
+    // All skills modal - using event delegation and multiple approaches
+    function initAllSkillsModal() {
+      const allSkillsBtn = document.getElementById('all-skills-btn');
+      const allSkillsModal = document.getElementById('all-skills-modal');
+      const closeAllSkillsModal = document.getElementById('close-all-skills-modal');
+      
+      if (!allSkillsBtn || !allSkillsModal) {
+        console.error('All skills modal elements not found');
+        return;
+      }
+      
+      // Add click handler to button with capture phase to intercept before accordion
+      allSkillsBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        console.log('All skills button clicked');
+        const modal = document.getElementById('all-skills-modal');
+        if (modal) {
+          modal.classList.remove('hidden');
+          document.body.style.overflow = 'hidden';
+          void modal.offsetWidth; // Force reflow for animation
+          // Update skill colors in modal after opening
+          setTimeout(() => {
+            if (typeof updateSkillColors === 'function') {
+              updateSkillColors();
+            }
+          }, 50);
+        }
+        return false;
+      }, true); // Use capture phase to intercept before other handlers
+      
+      // Close button handler - use multiple approaches for reliability
+      if (closeAllSkillsModal) {
+        // Clone button to remove any existing listeners
+        const newCloseBtn = closeAllSkillsModal.cloneNode(true);
+        closeAllSkillsModal.parentNode.replaceChild(newCloseBtn, closeAllSkillsModal);
+        
+        // Add event listener with capture phase
+        newCloseBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          e.stopImmediatePropagation();
+          console.log('Close button clicked via listener');
+          const modal = document.getElementById('all-skills-modal');
+          if (modal) {
+            modal.classList.add('hidden');
+            setTimeout(() => {
+              document.body.style.overflow = '';
+            }, 200);
+          }
+          return false;
+        }, true);
+      }
+      
+      // Close modal on Escape key only (backdrop click disabled)
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && allSkillsModal && !allSkillsModal.classList.contains('hidden')) {
+          allSkillsModal.classList.add('hidden');
+          setTimeout(() => {
+            document.body.style.overflow = '';
+          }, 200);
+        }
+      });
+    }
+    
+    // Initialize on DOM ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initAllSkillsModal);
+    } else {
+      initAllSkillsModal();
+    }
+    
+    // Also try after a short delay to ensure everything is loaded
+    setTimeout(initAllSkillsModal, 100);
+    
+    // Navigation function with animation
+    function navigateToAccruals() {
+      document.body.classList.add('page-transitioning');
+      setTimeout(() => {
+        window.location.href = 'accruals-page.html';
+      }, 300);
+    }
+    
+    // Add page load animation
+    window.addEventListener('load', () => {
+      document.body.style.opacity = '0';
+      document.body.style.transition = 'opacity 0.3s ease-in-out';
+      setTimeout(() => {
+        document.body.style.opacity = '1';
+      }, 50);
+    });
+  </script>
+  
+  <!-- All Skills Modal -->
+  <div id="all-skills-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-slate-800 rounded-lg p-6 max-w-xl w-full mx-4 max-h-[80vh] overflow-y-auto">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl font-semibold text-slate-100">Все навыки</h2>
+        <button id="close-all-skills-modal" type="button" class="text-slate-400 hover:text-slate-200 cursor-pointer transition-colors p-1 rounded hover:bg-slate-700" onclick="event.preventDefault(); event.stopPropagation(); const modal = document.getElementById('all-skills-modal'); if(modal) { modal.classList.add('hidden'); setTimeout(() => { document.body.style.overflow = ''; }, 200); } return false;">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="space-y-3">
+        <!-- All skills list with placeholders -->
+        <div title="Минимальный порог: 82%">
+          <div class="flex justify-between mb-1">
+            <span class="text-sm font-medium text-slate-300">Заголовок проекта 1</span>
+            <span class="text-sm font-medium text-slate-400 skill-percent" data-threshold="82" data-value="95">XX%</span>
+          </div>
+          <div class="w-full bg-slate-700 rounded-full h-2 relative skill-progress-container">
+            <div class="skill-progress bg-green-500 h-2 rounded-full" style="width: 95%" data-threshold="82" data-value="95"></div>
+            <div class="absolute top-0 bottom-0 w-1 bg-slate-100 border border-slate-400 rounded" style="left: 82%"></div>
+          </div>
+        </div>
+        <div title="Минимальный порог: 78%">
+          <div class="flex justify-between mb-1">
+            <span class="text-sm font-medium text-slate-300">Заголовок проекта 2</span>
+            <span class="text-sm font-medium text-slate-400 skill-percent" data-threshold="78" data-value="88">XX%</span>
+          </div>
+          <div class="w-full bg-slate-700 rounded-full h-2 relative skill-progress-container">
+            <div class="skill-progress bg-green-500 h-2 rounded-full" style="width: 88%" data-threshold="78" data-value="88"></div>
+            <div class="absolute top-0 bottom-0 w-1 bg-slate-100 border border-slate-400 rounded" style="left: 78%"></div>
+          </div>
+        </div>
+        <div title="Минимальный порог: 80%">
+          <div class="flex justify-between mb-1">
+            <span class="text-sm font-medium text-slate-300">Заголовок проекта 3</span>
+            <span class="text-sm font-medium text-slate-400 skill-percent" data-threshold="80" data-value="76">XX%</span>
+          </div>
+          <div class="w-full bg-slate-700 rounded-full h-2 relative skill-progress-container">
+            <div class="skill-progress bg-red-500 h-2 rounded-full" style="width: 76%" data-threshold="80" data-value="76"></div>
+            <div class="absolute top-0 bottom-0 w-1 bg-slate-100 border border-slate-400 rounded" style="left: 80%"></div>
+          </div>
+        </div>
+        <div title="Минимальный порог: 83%">
+          <div class="flex justify-between mb-1">
+            <span class="text-sm font-medium text-slate-300">Заголовок проекта 4</span>
+            <span class="text-sm font-medium text-slate-400 skill-percent" data-threshold="83" data-value="89">XX%</span>
+          </div>
+          <div class="w-full bg-slate-700 rounded-full h-2 relative skill-progress-container">
+            <div class="skill-progress bg-green-500 h-2 rounded-full" style="width: 89%" data-threshold="83" data-value="89"></div>
+            <div class="absolute top-0 bottom-0 w-1 bg-slate-100 border border-slate-400 rounded" style="left: 83%"></div>
+          </div>
+        </div>
+        <div title="Минимальный порог: 77%">
+          <div class="flex justify-between mb-1">
+            <span class="text-sm font-medium text-slate-300">Заголовок проекта 5</span>
+            <span class="text-sm font-medium text-slate-400 skill-percent" data-threshold="77" data-value="85">XX%</span>
+          </div>
+          <div class="w-full bg-slate-700 rounded-full h-2 relative skill-progress-container">
+            <div class="skill-progress bg-green-500 h-2 rounded-full" style="width: 85%" data-threshold="77" data-value="85"></div>
+            <div class="absolute top-0 bottom-0 w-1 bg-slate-100 border border-slate-400 rounded" style="left: 77%"></div>
+          </div>
+        </div>
+        <div title="Минимальный порог: 79%">
+          <div class="flex justify-between mb-1">
+            <span class="text-sm font-medium text-slate-300">Заголовок проекта 6</span>
+            <span class="text-sm font-medium text-slate-400 skill-percent" data-threshold="79" data-value="72">XX%</span>
+          </div>
+          <div class="w-full bg-slate-700 rounded-full h-2 relative skill-progress-container">
+            <div class="skill-progress bg-red-500 h-2 rounded-full" style="width: 72%" data-threshold="79" data-value="72"></div>
+            <div class="absolute top-0 bottom-0 w-1 bg-slate-100 border border-slate-400 rounded" style="left: 79%"></div>
+          </div>
+        </div>
+        <div title="Минимальный порог: 81%">
+          <div class="flex justify-between mb-1">
+            <span class="text-sm font-medium text-slate-300">Заголовок проекта 7</span>
+            <span class="text-sm font-medium text-slate-400 skill-percent" data-threshold="81" data-value="94">XX%</span>
+          </div>
+          <div class="w-full bg-slate-700 rounded-full h-2 relative skill-progress-container">
+            <div class="skill-progress bg-green-500 h-2 rounded-full" style="width: 94%" data-threshold="81" data-value="94"></div>
+            <div class="absolute top-0 bottom-0 w-1 bg-slate-100 border border-slate-400 rounded" style="left: 81%"></div>
+          </div>
+        </div>
+        <div title="Минимальный порог: 75%">
+          <div class="flex justify-between mb-1">
+            <span class="text-sm font-medium text-slate-300">Заголовок проекта 8</span>
+            <span class="text-sm font-medium text-slate-400 skill-percent" data-threshold="75" data-value="88">XX%</span>
+          </div>
+          <div class="w-full bg-slate-700 rounded-full h-2 relative skill-progress-container">
+            <div class="skill-progress bg-green-500 h-2 rounded-full" style="width: 88%" data-threshold="75" data-value="88"></div>
+            <div class="absolute top-0 bottom-0 w-1 bg-slate-100 border border-slate-400 rounded" style="left: 75%"></div>
+          </div>
+        </div>
+        <div title="Минимальный порог: 76%">
+          <div class="flex justify-between mb-1">
+            <span class="text-sm font-medium text-slate-300">Заголовок проекта 9</span>
+            <span class="text-sm font-medium text-slate-400 skill-percent" data-threshold="76" data-value="82">XX%</span>
+          </div>
+          <div class="w-full bg-slate-700 rounded-full h-2 relative skill-progress-container">
+            <div class="skill-progress bg-green-500 h-2 rounded-full" style="width: 82%" data-threshold="76" data-value="82"></div>
+            <div class="absolute top-0 bottom-0 w-1 bg-slate-100 border border-slate-400 rounded" style="left: 76%"></div>
+          </div>
+        </div>
+        <div title="Минимальный порог: 74%">
+          <div class="flex justify-between mb-1">
+            <span class="text-sm font-medium text-slate-300">Заголовок проекта 10</span>
+            <span class="text-sm font-medium text-slate-400 skill-percent" data-threshold="74" data-value="79">XX%</span>
+          </div>
+          <div class="w-full bg-slate-700 rounded-full h-2 relative skill-progress-container">
+            <div class="skill-progress bg-green-500 h-2 rounded-full" style="width: 79%" data-threshold="74" data-value="79"></div>
+            <div class="absolute top-0 bottom-0 w-1 bg-slate-100 border border-slate-400 rounded" style="left: 74%"></div>
+          </div>
+        </div>
+        <div title="Минимальный порог: 73%">
+          <div class="flex justify-between mb-1">
+            <span class="text-sm font-medium text-slate-300">Заголовок проекта 11</span>
+            <span class="text-sm font-medium text-slate-400 skill-percent" data-threshold="73" data-value="91">XX%</span>
+          </div>
+          <div class="w-full bg-slate-700 rounded-full h-2 relative skill-progress-container">
+            <div class="skill-progress bg-green-500 h-2 rounded-full" style="width: 91%" data-threshold="73" data-value="91"></div>
+            <div class="absolute top-0 bottom-0 w-1 bg-slate-100 border border-slate-400 rounded" style="left: 73%"></div>
+          </div>
+        </div>
+        <div title="Минимальный порог: 72%">
+          <div class="flex justify-between mb-1">
+            <span class="text-sm font-medium text-slate-300">Заголовок проекта 12</span>
+            <span class="text-sm font-medium text-slate-400 skill-percent" data-threshold="72" data-value="86">XX%</span>
+          </div>
+          <div class="w-full bg-slate-700 rounded-full h-2 relative skill-progress-container">
+            <div class="skill-progress bg-green-500 h-2 rounded-full" style="width: 86%" data-threshold="72" data-value="86"></div>
+            <div class="absolute top-0 bottom-0 w-1 bg-slate-100 border border-slate-400 rounded" style="left: 72%"></div>
+          </div>
+        </div>
+        <div title="Минимальный порог: 71%">
+          <div class="flex justify-between mb-1">
+            <span class="text-sm font-medium text-slate-300">Заголовок проекта 13</span>
+            <span class="text-sm font-medium text-slate-400 skill-percent" data-threshold="71" data-value="83">XX%</span>
+          </div>
+          <div class="w-full bg-slate-700 rounded-full h-2 relative skill-progress-container">
+            <div class="skill-progress bg-green-500 h-2 rounded-full" style="width: 83%" data-threshold="71" data-value="83"></div>
+            <div class="absolute top-0 bottom-0 w-1 bg-slate-100 border border-slate-400 rounded" style="left: 71%"></div>
+          </div>
+        </div>
+        <div title="Минимальный порог: 70%">
+          <div class="flex justify-between mb-1">
+            <span class="text-sm font-medium text-slate-300">Заголовок проекта 14</span>
+            <span class="text-sm font-medium text-slate-400 skill-percent" data-threshold="70" data-value="77">XX%</span>
+          </div>
+          <div class="w-full bg-slate-700 rounded-full h-2 relative skill-progress-container">
+            <div class="skill-progress bg-green-500 h-2 rounded-full" style="width: 77%" data-threshold="70" data-value="77"></div>
+            <div class="absolute top-0 bottom-0 w-1 bg-slate-100 border border-slate-400 rounded" style="left: 70%"></div>
+          </div>
+        </div>
+        <div title="Минимальный порог: 69%">
+          <div class="flex justify-between mb-1">
+            <span class="text-sm font-medium text-slate-300">Заголовок проекта 15</span>
+            <span class="text-sm font-medium text-slate-400 skill-percent" data-threshold="69" data-value="84">XX%</span>
+          </div>
+          <div class="w-full bg-slate-700 rounded-full h-2 relative skill-progress-container">
+            <div class="skill-progress bg-green-500 h-2 rounded-full" style="width: 84%" data-threshold="69" data-value="84"></div>
+            <div class="absolute top-0 bottom-0 w-1 bg-slate-100 border border-slate-400 rounded" style="left: 69%"></div>
+          </div>
+        </div>
+        <div title="Минимальный порог: 68%">
+          <div class="flex justify-between mb-1">
+            <span class="text-sm font-medium text-slate-300">Заголовок проекта 16</span>
+            <span class="text-sm font-medium text-slate-400 skill-percent" data-threshold="68" data-value="90">XX%</span>
+          </div>
+          <div class="w-full bg-slate-700 rounded-full h-2 relative skill-progress-container">
+            <div class="skill-progress bg-green-500 h-2 rounded-full" style="width: 90%" data-threshold="68" data-value="90"></div>
+            <div class="absolute top-0 bottom-0 w-1 bg-slate-100 border border-slate-400 rounded" style="left: 68%"></div>
+          </div>
+        </div>
+        <div title="Минимальный порог: 67%">
+          <div class="flex justify-between mb-1">
+            <span class="text-sm font-medium text-slate-300">Заголовок проекта 17</span>
+            <span class="text-sm font-medium text-slate-400 skill-percent" data-threshold="67" data-value="81">XX%</span>
+          </div>
+          <div class="w-full bg-slate-700 rounded-full h-2 relative skill-progress-container">
+            <div class="skill-progress bg-green-500 h-2 rounded-full" style="width: 81%" data-threshold="67" data-value="81"></div>
+            <div class="absolute top-0 bottom-0 w-1 bg-slate-100 border border-slate-400 rounded" style="left: 67%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+

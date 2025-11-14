@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Primer - Библиотека вариантов дизайна</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+    .category-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-gray-100 to-gray-200 min-h-screen p-8">
+  
+  <div class="max-w-7xl mx-auto">
+    <!-- Заголовок -->
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-gray-800 mb-3">🎨 Primer - Библиотека вариантов дизайна</h1>
+      <p class="text-gray-600 text-lg">Выберите категорию для просмотра доступных вариантов</p>
+    </div>
+    
+    <!-- Категории -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      
+      <!-- Timeline View -->
+      <div class="glass-effect rounded-2xl p-6 category-card transition-all duration-300">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-12 h-12 rounded-lg bg-blue-500/20 flex items-center justify-center text-2xl">📅</div>
+          <div>
+            <h2 class="text-xl font-bold text-gray-800">Timeline View</h2>
+            <p class="text-sm text-gray-600">Варианты карточек для таймлайна</p>
+          </div>
+        </div>
+        <p class="text-sm text-gray-600 mb-4">5 вариантов отображения записей в виде временной линии</p>
+        <a href="entries/timeline/variant-1-compact-single-line.html" target="_blank" 
+           class="block w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-center font-semibold">
+          Открыть →
+        </a>
+      </div>
+      
+      <!-- Sound Notifications -->
+      <div class="glass-effect rounded-2xl p-6 category-card transition-all duration-300">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-12 h-12 rounded-lg bg-green-500/20 flex items-center justify-center text-2xl">🔔</div>
+          <div>
+            <h2 class="text-xl font-bold text-gray-800">Звуки и анимация</h2>
+            <p class="text-sm text-gray-600">Настройки уведомлений</p>
+          </div>
+        </div>
+        <p class="text-sm text-gray-600 mb-4">5 вариантов звуковых уведомлений и анимации фавикона</p>
+        <a href="sound-notifications/sound-notifications-variants-index.html" target="_blank" 
+           class="block w-full px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-center font-semibold">
+          Открыть →
+        </a>
+      </div>
+      
+      <!-- Work Schedule -->
+      <div class="glass-effect rounded-2xl p-6 category-card transition-all duration-300">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-12 h-12 rounded-lg bg-purple-500/20 flex items-center justify-center text-2xl">📋</div>
+          <div>
+            <h2 class="text-xl font-bold text-gray-800">Рабочий график</h2>
+            <p class="text-sm text-gray-600">Модальные окна настроек</p>
+          </div>
+        </div>
+        <p class="text-sm text-gray-600 mb-4">5 вариантов дизайна модального окна рабочего графика</p>
+        <a href="work-schedule/work-schedule-modals-index.html" target="_blank" 
+           class="block w-full px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors text-center font-semibold">
+          Открыть →
+        </a>
+      </div>
+      
+      <!-- Statistics Themes -->
+      <div class="glass-effect rounded-2xl p-6 category-card transition-all duration-300">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-12 h-12 rounded-lg bg-yellow-500/20 flex items-center justify-center text-2xl">📊</div>
+          <div>
+            <h2 class="text-xl font-bold text-gray-800">Темы статистики</h2>
+            <p class="text-sm text-gray-600">Визуальные стили</p>
+          </div>
+        </div>
+        <p class="text-sm text-gray-600 mb-4">5 тем оформления для карточек статистики</p>
+        <a href="statistics/themes/statistics-themes-index.html" target="_blank" 
+           class="block w-full px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors text-center font-semibold">
+          Открыть →
+        </a>
+      </div>
+      
+      <!-- Statistics Variants -->
+      <div class="glass-effect rounded-2xl p-6 category-card transition-all duration-300">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-12 h-12 rounded-lg bg-orange-500/20 flex items-center justify-center text-2xl">📈</div>
+          <div>
+            <h2 class="text-xl font-bold text-gray-800">Варианты статистики</h2>
+            <p class="text-sm text-gray-600">Схемы расположения</p>
+          </div>
+        </div>
+        <p class="text-sm text-gray-600 mb-4">5 вариантов компоновки карточек статистики</p>
+        <a href="statistics/variants/statistics-variants-index.html" target="_blank" 
+           class="block w-full px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors text-center font-semibold">
+          Открыть →
+        </a>
+      </div>
+      
+      <!-- Insights -->
+      <div class="glass-effect rounded-2xl p-6 category-card transition-all duration-300">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-12 h-12 rounded-lg bg-teal-500/20 flex items-center justify-center text-2xl">💡</div>
+          <div>
+            <h2 class="text-xl font-bold text-gray-800">Инсайты</h2>
+            <p class="text-sm text-gray-600">Варианты отображения</p>
+          </div>
+        </div>
+        <p class="text-sm text-gray-600 mb-4">5 вариантов компоновки карточек инсайтов</p>
+        <a href="insights/insights-variants-index.html" target="_blank" 
+           class="block w-full px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-colors text-center font-semibold">
+          Открыть →
+        </a>
+      </div>
+      
+      <!-- List View -->
+      <div class="glass-effect rounded-2xl p-6 category-card transition-all duration-300">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-12 h-12 rounded-lg bg-indigo-500/20 flex items-center justify-center text-2xl">📝</div>
+          <div>
+            <h2 class="text-xl font-bold text-gray-800">List View</h2>
+            <p class="text-sm text-gray-600">Список записей</p>
+          </div>
+        </div>
+        <p class="text-sm text-gray-600 mb-4">5+ вариантов отображения списка записей</p>
+        <a href="entries/list/list-variants-index.html" target="_blank" 
+           class="block w-full px-4 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition-colors text-center font-semibold">
+          Открыть →
+        </a>
+      </div>
+      
+      <!-- Grid View -->
+      <div class="glass-effect rounded-2xl p-6 category-card transition-all duration-300">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-12 h-12 rounded-lg bg-pink-500/20 flex items-center justify-center text-2xl">🔲</div>
+          <div>
+            <h2 class="text-xl font-bold text-gray-800">Grid View</h2>
+            <p class="text-sm text-gray-600">Сетка записей</p>
+          </div>
+        </div>
+        <p class="text-sm text-gray-600 mb-4">5 вариантов отображения записей в виде сетки</p>
+        <a href="entries/grid/grid-variants-index.html" target="_blank" 
+           class="block w-full px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors text-center font-semibold">
+          Открыть →
+        </a>
+      </div>
+      
+      <!-- Categories Modal -->
+      <div class="glass-effect rounded-2xl p-6 category-card transition-all duration-300">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-12 h-12 rounded-lg bg-red-500/20 flex items-center justify-center text-2xl">📁</div>
+          <div>
+            <h2 class="text-xl font-bold text-gray-800">Категории</h2>
+            <p class="text-sm text-gray-600">Модальные окна</p>
+          </div>
+        </div>
+        <p class="text-sm text-gray-600 mb-4">3 варианта дизайна модального окна категорий</p>
+        <a href="categories/categories-modal-index.html" target="_blank" 
+           class="block w-full px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors text-center font-semibold">
+          Открыть →
+        </a>
+      </div>
+      
+      <!-- Matrix Text Animations -->
+      <div class="glass-effect rounded-2xl p-6 category-card transition-all duration-300">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-12 h-12 rounded-lg bg-cyan-500/20 flex items-center justify-center text-2xl">✨</div>
+          <div>
+            <h2 class="text-xl font-bold text-gray-800">Матричные анимации</h2>
+            <p class="text-sm text-gray-600">Анимация текста</p>
+          </div>
+        </div>
+        <p class="text-sm text-gray-600 mb-4">5 вариантов анимации текста в стиле матрицы</p>
+        <a href="matrix-text-animations/matrix-animations-index.html" target="_blank" 
+           class="block w-full px-4 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 transition-colors text-center font-semibold">
+          Открыть →
+        </a>
+      </div>
+      
+      <!-- Tasks Page -->
+      <div class="glass-effect rounded-2xl p-6 category-card transition-all duration-300">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-12 h-12 rounded-lg bg-emerald-500/20 flex items-center justify-center text-2xl">📋</div>
+          <div>
+            <h2 class="text-xl font-bold text-gray-800">Страница заданий</h2>
+            <p class="text-sm text-gray-600">Интерактивный интерфейс</p>
+          </div>
+        </div>
+        <p class="text-sm text-gray-600 mb-4">Полнофункциональная страница заданий с фильтрами и карточками</p>
+        <a href="tasks-page.html" target="_blank" 
+           class="block w-full px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors text-center font-semibold">
+          Открыть →
+        </a>
+      </div>
+      
+    </div>
+    
+    <!-- Информация -->
+    <div class="glass-effect rounded-2xl p-6 mt-8">
+      <h2 class="text-xl font-bold text-gray-800 mb-3">📖 О библиотеке</h2>
+      <p class="text-gray-700 mb-2">
+        Эта библиотека содержит все варианты дизайна компонентов проекта Time Tracker Dashboard.
+        Каждая категория содержит несколько вариантов с разными стилями, компоновкой и функциями.
+      </p>
+      <p class="text-gray-700">
+        Выберите понравившийся вариант и сообщите его номер для внедрения в основной проект.
+      </p>
+    </div>
+    
+  </div>
+  
+</body>
+</html>

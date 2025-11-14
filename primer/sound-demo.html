@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Демо всех звуков</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tone@14.7.77/build/Tone.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(16px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .sound-button {
+      transition: all 0.2s ease;
+    }
+    
+    .sound-button:hover {
+      transform: scale(1.05);
+    }
+    
+    .sound-button:active {
+      transform: scale(0.95);
+    }
+    
+    .playing {
+      animation: pulse 1s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+  </style>
+</head>
+<body class="bg-gray-900 min-h-screen p-8">
+  <div class="max-w-6xl mx-auto">
+    
+    <div class="glass-effect rounded-xl p-6 mb-6">
+      <h1 class="text-2xl font-bold text-white mb-2">🎵 Демо всех звуков</h1>
+      <p class="text-gray-400 text-sm mb-4">
+        Нажмите на кнопку, чтобы прослушать звук. Выберите те, которые хотите добавить в настройки уведомлений.
+      </p>
+      <div class="flex gap-2 mb-4">
+        <label class="text-sm text-gray-300">Громкость:</label>
+        <input type="range" id="volumeSlider" min="0" max="100" value="80" class="flex-1">
+        <span id="volumeValue" class="text-sm text-gray-300 w-12 text-right">80%</span>
+      </div>
+      <button 
+        onclick="stopAll()" 
+        class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm font-semibold transition-colors"
+      >
+        ⏹ Остановить все
+      </button>
+    </div>
+
+    <!-- Текущие звуки для периодических уведомлений -->
+    <div class="glass-effect rounded-xl p-6 mb-6">
+      <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+        <span class="text-green-400">✓</span> Текущие звуки уведомлений (используются сейчас)
+      </h2>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3" id="currentSounds">
+        <!-- Заполнится динамически -->
+      </div>
+    </div>
+
+    <!-- Звуки уведомлений -->
+    <div class="glass-effect rounded-xl p-6 mb-6">
+      <h2 class="text-xl font-bold text-white mb-4">🔔 Звуки уведомлений</h2>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3" id="notificationSounds">
+        <!-- Заполнится динамически -->
+      </div>
+    </div>
+
+    <!-- Звуки таймера -->
+    <div class="glass-effect rounded-xl p-6 mb-6">
+      <h2 class="text-xl font-bold text-white mb-4">⏱ Звуки таймера</h2>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3" id="timerSounds">
+        <!-- Заполнится динамически -->
+      </div>
+    </div>
+
+    <!-- Звуки работы с записями -->
+    <div class="glass-effect rounded-xl p-6 mb-6">
+      <h2 class="text-xl font-bold text-white mb-4">📝 Звуки работы с записями</h2>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3" id="entrySounds">
+        <!-- Заполнится динамически -->
+      </div>
+    </div>
+
+    <!-- Звуки достижений -->
+    <div class="glass-effect rounded-xl p-6 mb-6">
+      <h2 class="text-xl font-bold text-white mb-4">🏆 Звуки достижений</h2>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3" id="achievementSounds">
+        <!-- Заполнится динамически -->
+      </div>
+    </div>
+
+    <!-- Звуки интерфейса -->
+    <div class="glass-effect rounded-xl p-6 mb-6">
+      <h2 class="text-xl font-bold text-white mb-4">🖱 Звуки интерфейса</h2>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3" id="interfaceSounds">
+        <!-- Заполнится динамически -->
+      </div>
+    </div>
+
+    <!-- Дополнительные звуки -->
+    <div class="glass-effect rounded-xl p-6 mb-6">
+      <h2 class="text-xl font-bold text-white mb-4">🔧 Дополнительные звуки</h2>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3" id="otherSounds">
+        <!-- Заполнится динамически -->
+      </div>
+    </div>
+
+    <!-- Выбранные звуки -->
+    <div class="glass-effect rounded-xl p-6 mb-6">
+      <h2 class="text-xl font-bold text-white mb-4">⭐ Выбранные звуки</h2>
+      <div id="selectedSounds" class="text-gray-400 text-sm mb-2">
+        Нажмите на звуки, чтобы добавить их в список выбранных
+      </div>
+      <div class="flex flex-wrap gap-2" id="selectedList"></div>
+    </div>
+
+  </div>
+
+  <script>
+    let synth = null;
+    let isInitialized = false;
+    let currentPlaying = null;
+    let selectedSounds = new Set();
+
+    // Инициализация Tone.js
+    async function initTone() {
+      if (!isInitialized) {
+        try {
+          await Tone.start();
+          synth = new Tone.Synth({
+            oscillator: {
+              type: 'sine'
+            },
+            envelope: {
+              attack: 0.1,
+              decay: 0.2,
+              sustain: 0.3,
+              release: 0.4
+            }
+          }).toDestination();
+          isInitialized = true;
+          updateVolume();
+          console.log('✅ Tone.js инициализирован');
+        } catch (error) {
+          console.error('Ошибка инициализации Tone.js:', error);
+          alert('Ошибка инициализации звуков. Проверьте консоль.');
+        }
+      }
+    }
+
+    // Обновление громкости
+    function updateVolume() {
+      if (synth) {
+        const volume = document.getElementById('volumeSlider').value;
+        synth.volume.value = Tone.gainToDb(volume / 100);
+        document.getElementById('volumeValue').textContent = volume + '%';
+      }
+    }
+
+    document.getElementById('volumeSlider').addEventListener('input', updateVolume);
+
+    // Остановка всех звуков
+    function stopAll() {
+      if (synth) {
+        synth.triggerRelease();
+      }
+      if (currentPlaying) {
+        currentPlaying.classList.remove('playing');
+        currentPlaying = null;
+      }
+    }
+
+    // Воспроизведение звука
+    async function playSound(soundName, button) {
+      await initTone();
+      
+      if (!synth) {
+        alert('Синтезатор не инициализирован');
+        return;
+      }
+
+      // Останавливаем предыдущий звук
+      stopAll();
+      
+      // Помечаем кнопку как играющую
+      if (button) {
+        button.classList.add('playing');
+        currentPlaying = button;
+      }
+
+      try {
+        const sounds = {
+          // Текущие звуки для периодических уведомлений
+          chime: () => {
+            synth.triggerAttackRelease("E5", "8n", Tone.now());
+            synth.triggerAttackRelease("C5", "8n", Tone.now() + 0.2);
+          },
+          alert: () => {
+            synth.triggerAttackRelease("G5", "16n", Tone.now());
+            synth.triggerAttackRelease("C6", "16n", Tone.now() + 0.1);
+          },
+          phone: () => {
+            synth.triggerAttackRelease("C5", "4n", Tone.now());
+            synth.triggerAttackRelease("E5", "4n", Tone.now() + 0.5);
+          },
+          doorbell: () => {
+            synth.triggerAttackRelease("G4", "8n", Tone.now());
+            synth.triggerAttackRelease("B4", "8n", Tone.now() + 0.3);
+            synth.triggerAttackRelease("D5", "8n", Tone.now() + 0.6);
+          },
+          alarm: () => {
+            synth.triggerAttackRelease("A4", "16n", Tone.now());
+            synth.triggerAttackRelease("A4", "16n", Tone.now() + 0.2);
+            synth.triggerAttackRelease("A4", "16n", Tone.now() + 0.4);
+          },
+          notification: () => {
+            synth.triggerAttackRelease("F5", "8n", Tone.now());
+            synth.triggerAttackRelease("A5", "8n", Tone.now() + 0.2);
+          },
+          bell: () => {
+            synth.triggerAttackRelease("C6", "4n", Tone.now());
+            synth.triggerAttackRelease("G5", "4n", Tone.now() + 0.5);
+          },
+          beep: () => {
+            synth.triggerAttackRelease("C5", "8n");
+          },
+          ping: () => {
+            synth.triggerAttackRelease("E5", "16n");
+            synth.triggerAttackRelease("G5", "16n", Tone.now() + 0.1);
+          },
+
+          // Звуки уведомлений
+          success: () => {
+            synth.triggerAttackRelease('C5', '8n');
+            setTimeout(() => synth.triggerAttackRelease('E5', '8n'), 100);
+            setTimeout(() => synth.triggerAttackRelease('G5', '8n'), 200);
+          },
+          error: () => {
+            synth.triggerAttackRelease('C3', '4n');
+            setTimeout(() => synth.triggerAttackRelease('B2', '4n'), 200);
+          },
+          warning: () => {
+            synth.triggerAttackRelease('F4', '8n');
+            setTimeout(() => synth.triggerAttackRelease('F4', '8n'), 300);
+          },
+          info: () => {
+            synth.triggerAttackRelease('A4', '8n');
+            setTimeout(() => synth.triggerAttackRelease('A4', '8n'), 200);
+          },
+
+          // Звуки таймера
+          timerStart: () => {
+            synth.triggerAttackRelease('C5', '8n');
+            setTimeout(() => synth.triggerAttackRelease('E5', '8n'), 100);
+            setTimeout(() => synth.triggerAttackRelease('G5', '8n'), 200);
+          },
+          timerStop: () => {
+            synth.triggerAttackRelease('G5', '8n');
+            setTimeout(() => synth.triggerAttackRelease('E5', '8n'), 150);
+            setTimeout(() => synth.triggerAttackRelease('C5', '8n'), 300);
+          },
+          timerPause: () => {
+            synth.triggerAttackRelease('F4', '4n');
+          },
+          timerResume: () => {
+            synth.triggerAttackRelease('A4', '8n');
+            setTimeout(() => synth.triggerAttackRelease('C5', '8n'), 100);
+          },
+
+          // Звуки работы с записями
+          newEntry: () => {
+            synth.triggerAttackRelease('C4', '16n');
+            setTimeout(() => synth.triggerAttackRelease('E4', '16n'), 50);
+          },
+          deleteEntry: () => {
+            synth.triggerAttackRelease('C3', '8n');
+          },
+          saveEntry: () => {
+            synth.triggerAttackRelease('G4', '8n');
+            setTimeout(() => synth.triggerAttackRelease('C5', '8n'), 100);
+          },
+
+          // Звуки достижений
+          goalReached: () => {
+            synth.triggerAttackRelease('C5', '4n');
+            setTimeout(() => synth.triggerAttackRelease('E5', '4n'), 200);
+            setTimeout(() => synth.triggerAttackRelease('G5', '4n'), 400);
+            setTimeout(() => synth.triggerAttackRelease('C6', '2n'), 600);
+          },
+          milestone: () => {
+            synth.triggerAttackRelease('G4', '8n');
+            setTimeout(() => synth.triggerAttackRelease('B4', '8n'), 100);
+            setTimeout(() => synth.triggerAttackRelease('D5', '8n'), 200);
+          },
+          hourlyAlert: () => {
+            synth.triggerAttackRelease('C5', '8n');
+            setTimeout(() => synth.triggerAttackRelease('E5', '8n'), 100);
+            setTimeout(() => synth.triggerAttackRelease('G5', '8n'), 200);
+          },
+          dailyGoal: () => {
+            synth.triggerAttackRelease('C5', '4n');
+            setTimeout(() => synth.triggerAttackRelease('E5', '4n'), 200);
+            setTimeout(() => synth.triggerAttackRelease('G5', '4n'), 400);
+            setTimeout(() => synth.triggerAttackRelease('C6', '2n'), 600);
+          },
+
+          // Звуки интерфейса
+          click: () => {
+            synth.triggerAttackRelease('C5', '32n');
+          },
+          hover: () => {
+            synth.triggerAttackRelease('C6', '32n');
+          },
+
+          // Дополнительные звуки
+          export: () => {
+            synth.triggerAttackRelease('C4', '8n');
+            setTimeout(() => synth.triggerAttackRelease('E4', '8n'), 100);
+            setTimeout(() => synth.triggerAttackRelease('G4', '8n'), 200);
+          },
+          import: () => {
+            synth.triggerAttackRelease('G4', '8n');
+            setTimeout(() => synth.triggerAttackRelease('E4', '8n'), 100);
+            setTimeout(() => synth.triggerAttackRelease('C4', '8n'), 200);
+          },
+          settingsChange: () => {
+            synth.triggerAttackRelease('A4', '16n');
+          },
+          themeChange: () => {
+            synth.triggerAttackRelease('F4', '8n');
+            setTimeout(() => synth.triggerAttackRelease('A4', '8n'), 100);
+          },
+          workComplete: () => {
+            synth.triggerAttackRelease('C4', '4n');
+            setTimeout(() => synth.triggerAttackRelease('E4', '4n'), 200);
+            setTimeout(() => synth.triggerAttackRelease('G4', '4n'), 400);
+            setTimeout(() => synth.triggerAttackRelease('C5', '2n'), 600);
+          },
+          validationError: () => {
+            synth.triggerAttackRelease('C3', '8n');
+            setTimeout(() => synth.triggerAttackRelease('B2', '8n'), 100);
+          },
+          networkError: () => {
+            synth.triggerAttackRelease('C2', '4n');
+            setTimeout(() => synth.triggerAttackRelease('C2', '4n'), 200);
+          },
+        };
+
+        if (sounds[soundName]) {
+          sounds[soundName]();
+          
+          // Убираем класс playing через некоторое время
+          setTimeout(() => {
+            if (button) {
+              button.classList.remove('playing');
+              currentPlaying = null;
+            }
+          }, 1000);
+        } else {
+          console.warn('Звук не найден:', soundName);
+        }
+      } catch (error) {
+        console.error('Ошибка воспроизведения звука:', error);
+        if (button) {
+          button.classList.remove('playing');
+          currentPlaying = null;
+        }
+      }
+    }
+
+    // Добавление звука в список выбранных
+    function toggleSelection(soundName, button) {
+      if (selectedSounds.has(soundName)) {
+        selectedSounds.delete(soundName);
+        button.classList.remove('ring-2', 'ring-blue-500');
+      } else {
+        selectedSounds.add(soundName);
+        button.classList.add('ring-2', 'ring-blue-500');
+      }
+      updateSelectedList();
+    }
+
+    // Обновление списка выбранных звуков
+    function updateSelectedList() {
+      const list = document.getElementById('selectedList');
+      const info = document.getElementById('selectedSounds');
+      
+      if (selectedSounds.size === 0) {
+        info.textContent = 'Нажмите на звуки, чтобы добавить их в список выбранных';
+        list.innerHTML = '';
+        return;
+      }
+
+      info.textContent = `Выбрано звуков: ${selectedSounds.size}`;
+      list.innerHTML = Array.from(selectedSounds).map(sound => {
+        const labels = {
+          chime: 'Мелодия', alert: 'Предупреждение', phone: 'Звонок', doorbell: 'Дверной звонок',
+          alarm: 'Тревога', notification: 'Уведомление', bell: 'Колокол', beep: 'Сигнал', ping: 'Пинг',
+          success: 'Успех', error: 'Ошибка', warning: 'Предупреждение', info: 'Информация',
+          timerStart: 'Старт таймера', timerStop: 'Стоп таймера', timerPause: 'Пауза', timerResume: 'Возобновление',
+          newEntry: 'Новая запись', deleteEntry: 'Удаление', saveEntry: 'Сохранение',
+          goalReached: 'Цель достигнута', milestone: 'Веха', hourlyAlert: 'Часовое уведомление', dailyGoal: 'Дневная цель',
+          click: 'Клик', hover: 'Наведение',
+          export: 'Экспорт', import: 'Импорт', settingsChange: 'Изменение настроек', themeChange: 'Смена темы',
+          workComplete: 'Работа завершена', validationError: 'Ошибка валидации', networkError: 'Сетевая ошибка'
+        };
+        return `<span class="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-lg text-sm">${labels[sound] || sound}</span>`;
+      }).join('');
+    }
+
+    // Создание кнопки звука
+    function createSoundButton(soundName, label, container) {
+      const button = document.createElement('button');
+      button.className = 'sound-button px-4 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg text-sm font-semibold transition-all';
+      button.textContent = `▶ ${label}`;
+      button.onclick = (e) => {
+        e.stopPropagation();
+        playSound(soundName, button);
+        toggleSelection(soundName, button);
+      };
+      container.appendChild(button);
+    }
+
+    // Инициализация страницы
+    document.addEventListener('DOMContentLoaded', () => {
+      // Текущие звуки уведомлений
+      const currentSounds = [
+        { name: 'chime', label: 'Мелодия' },
+        { name: 'alert', label: 'Предупреждение' },
+        { name: 'phone', label: 'Звонок' },
+        { name: 'doorbell', label: 'Дверной звонок' },
+        { name: 'alarm', label: 'Тревога' },
+        { name: 'notification', label: 'Уведомление' },
+        { name: 'bell', label: 'Колокол' },
+        { name: 'beep', label: 'Сигнал' },
+        { name: 'ping', label: 'Пинг' },
+      ];
+      currentSounds.forEach(s => createSoundButton(s.name, s.label, document.getElementById('currentSounds')));
+
+      // Звуки уведомлений
+      const notificationSounds = [
+        { name: 'success', label: 'Успех' },
+        { name: 'error', label: 'Ошибка' },
+        { name: 'warning', label: 'Предупреждение' },
+        { name: 'info', label: 'Информация' },
+      ];
+      notificationSounds.forEach(s => createSoundButton(s.name, s.label, document.getElementById('notificationSounds')));
+
+      // Звуки таймера
+      const timerSounds = [
+        { name: 'timerStart', label: 'Старт таймера' },
+        { name: 'timerStop', label: 'Стоп таймера' },
+        { name: 'timerPause', label: 'Пауза' },
+        { name: 'timerResume', label: 'Возобновление' },
+      ];
+      timerSounds.forEach(s => createSoundButton(s.name, s.label, document.getElementById('timerSounds')));
+
+      // Звуки работы с записями
+      const entrySounds = [
+        { name: 'newEntry', label: 'Новая запись' },
+        { name: 'deleteEntry', label: 'Удаление' },
+        { name: 'saveEntry', label: 'Сохранение' },
+      ];
+      entrySounds.forEach(s => createSoundButton(s.name, s.label, document.getElementById('entrySounds')));
+
+      // Звуки достижений
+      const achievementSounds = [
+        { name: 'goalReached', label: 'Цель достигнута' },
+        { name: 'milestone', label: 'Веха' },
+        { name: 'hourlyAlert', label: 'Часовое уведомление' },
+        { name: 'dailyGoal', label: 'Дневная цель' },
+      ];
+      achievementSounds.forEach(s => createSoundButton(s.name, s.label, document.getElementById('achievementSounds')));
+
+      // Звуки интерфейса
+      const interfaceSounds = [
+        { name: 'click', label: 'Клик' },
+        { name: 'hover', label: 'Наведение' },
+      ];
+      interfaceSounds.forEach(s => createSoundButton(s.name, s.label, document.getElementById('interfaceSounds')));
+
+      // Дополнительные звуки
+      const otherSounds = [
+        { name: 'export', label: 'Экспорт' },
+        { name: 'import', label: 'Импорт' },
+        { name: 'settingsChange', label: 'Изменение настроек' },
+        { name: 'themeChange', label: 'Смена темы' },
+        { name: 'workComplete', label: 'Работа завершена' },
+        { name: 'validationError', label: 'Ошибка валидации' },
+        { name: 'networkError', label: 'Сетевая ошибка' },
+      ];
+      otherSounds.forEach(s => createSoundButton(s.name, s.label, document.getElementById('otherSounds')));
+    });
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вариант 3: Компактный вертикальный</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .glass-effect {
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(17, 24, 39, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+  </style>
+</head>
+<body class="bg-gray-900 text-white p-8">
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-2xl font-bold mb-4">Вариант 3: Компактный вертикальный</h1>
+    
+    <!-- Компактный блок -->
+    <div class="glass-effect rounded-xl p-4">
+      <div class="flex items-start gap-4">
+        <!-- Круглый индикатор (компактный) -->
+        <div class="flex-shrink-0">
+          <div class="relative w-16 h-16">
+            <svg width="64" height="64" class="transform -rotate-90">
+              <circle cx="32" cy="32" r="26" stroke="currentColor" stroke-width="5" fill="none" class="text-gray-200 dark:text-gray-700" />
+              <circle cx="32" cy="32" r="26" stroke="currentColor" stroke-width="5" fill="none" stroke-dasharray="163" stroke-dashoffset="18" stroke-linecap="round" class="text-green-500" />
+            </svg>
+            <div class="absolute inset-0 flex items-center justify-center">
+              <div class="text-xl font-bold text-green-500">89</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Факторы в колонку -->
+        <div class="flex-1 space-y-2">
+          <div class="flex items-center gap-2">
+            <div class="flex-1">
+              <div class="flex items-center justify-between text-xs mb-0.5">
+                <span class="text-gray-400">Выполнение целей</span>
+                <span class="font-bold text-yellow-500">29/40</span>
+              </div>
+              <div class="w-full h-1.5 bg-gray-700 rounded-full overflow-hidden">
+                <div class="h-full bg-yellow-500 rounded-full" style="width: 72.5%"></div>
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="flex-1">
+              <div class="flex items-center justify-between text-xs mb-0.5">
+                <span class="text-gray-400">Регулярность</span>
+                <span class="font-bold text-green-500">25/25</span>
+              </div>
+              <div class="w-full h-1.5 bg-gray-700 rounded-full overflow-hidden">
+                <div class="h-full bg-green-500 rounded-full" style="width: 100%"></div>
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="flex-1">
+              <div class="flex items-center justify-between text-xs mb-0.5">
+                <span class="text-gray-400">Фокус</span>
+                <span class="font-bold text-green-500">20/20</span>
+              </div>
+              <div class="w-full h-1.5 bg-gray-700 rounded-full overflow-hidden">
+                <div class="h-full bg-green-500 rounded-full" style="width: 100%"></div>
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="flex-1">
+              <div class="flex items-center justify-between text-xs mb-0.5">
+                <span class="text-gray-400">Баланс перерывов</span>
+                <span class="font-bold text-green-500">15/15</span>
+              </div>
+              <div class="w-full h-1.5 bg-gray-700 rounded-full overflow-hidden">
+                <div class="h-full bg-green-500 rounded-full" style="width: 100%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-4 text-sm text-gray-400">
+      <p><strong>Преимущества:</strong></p>
+      <ul class="list-disc list-inside mt-2 space-y-1">
+        <li>✅ Компактный круглый индикатор (64px)</li>
+        <li>✅ Факторы в вертикальном списке</li>
+        <li>✅ Меньше вертикального пространства</li>
+        <li>✅ Легко читать показатели</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>
+

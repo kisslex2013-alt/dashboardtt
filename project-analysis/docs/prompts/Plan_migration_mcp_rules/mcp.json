@@ -1,0 +1,236 @@
+{
+  "$schema": "https://modelcontextprotocol.io/schema/mcp.json",
+  "mcpServers": {
+    "docs-search": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-docs"],
+      "env": {
+        "DOCS_URLS": "https://react.dev,https://tailwindcss.com,https://vitejs.dev,https://recharts.org,https://lucide.dev,https://tonejs.github.io,https://developer.mozilla.org/en-US/docs/Web/JavaScript"
+      },
+      "description": "Поиск в официальной документации React, Tailwind, Vite и других технологий. Используй в Cursor через @docs-search",
+      "enabled": true,
+      "priority": "high"
+    },
+    "web-search": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-brave-search"],
+      "env": {
+        "BRAVE_API_KEY": "YOUR_BRAVE_API_KEY_HERE"
+      },
+      "description": "Поиск актуальной информации в интернете. Полезно для решения проблем, поиска примеров кода, Stack Overflow решений. Используй через @web-search",
+      "enabled": false,
+      "priority": "medium",
+      "notes": [
+        "Получи бесплатный API ключ на: https://brave.com/search/api/",
+        "После получения ключа замени YOUR_BRAVE_API_KEY_HERE на свой ключ",
+        "Затем измени 'enabled': false на 'enabled': true"
+      ]
+    },
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_TOKEN": "YOUR_GITHUB_TOKEN_HERE"
+      },
+      "description": "Поиск примеров кода в GitHub репозиториях, просмотр issues, pull requests. Отлично для поиска решений и примеров использования библиотек. Используй через @github",
+      "enabled": false,
+      "priority": "medium",
+      "notes": [
+        "Создай Personal Access Token: https://github.com/settings/tokens",
+        "Выбери scope: public_repo (для публичных репозиториев)",
+        "Замени YOUR_GITHUB_TOKEN_HERE на свой токен",
+        "Измени 'enabled': false на 'enabled': true"
+      ]
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/Users/ТВОЙ_USER/templates",
+        "/Users/ТВОЙ_USER/snippets"
+      ],
+      "description": "Доступ к файлам вне проекта. Полезно для шаблонов компонентов, сниппетов, или импорта кода из других проектов. Используй через @filesystem",
+      "enabled": false,
+      "priority": "low",
+      "notes": [
+        "Замени /Users/ТВОЙ_USER на свой домашний каталог",
+        "Создай папки ~/templates и ~/snippets для хранения шаблонов",
+        "Добавь туда полезные шаблоны компонентов",
+        "Измени 'enabled': false на 'enabled': true"
+      ]
+    },
+    "sequential-thinking": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
+      "description": "Расширенное пошаговое мышление для решения сложных задач. AI будет показывать процесс рассуждения при решении проблем. Полезно для отладки и понимания логики.",
+      "enabled": true,
+      "priority": "high"
+    },
+    "memory": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-memory"],
+      "description": "Долговременная память для AI. Cursor будет помнить твои предпочтения, стиль кода, и контекст проекта между сессиями.",
+      "enabled": true,
+      "priority": "high"
+    }
+  },
+  "settings": {
+    "autoStart": true,
+    "showNotifications": true,
+    "retryOnError": true,
+    "maxRetries": 3,
+    "timeout": 30000
+  },
+  "comments": {
+    "usage": {
+      "description": "Как использовать MCP серверы в Cursor",
+      "examples": [
+        {
+          "command": "@docs-search",
+          "description": "Поиск в документации",
+          "example": "@docs-search как использовать useState в React?"
+        },
+        {
+          "command": "@web-search",
+          "description": "Поиск в интернете",
+          "example": "@web-search React useEffect cleanup pattern"
+        },
+        {
+          "command": "@github",
+          "description": "Поиск примеров на GitHub",
+          "example": "@github примеры использования Recharts LineChart"
+        },
+        {
+          "command": "@filesystem",
+          "description": "Доступ к локальным файлам",
+          "example": "@filesystem прочитай мой шаблон компонента из ~/templates/Component.jsx"
+        }
+      ]
+    },
+    "setup": {
+      "step1": "Положи этот файл в корень проекта: /time-tracker/mcp.json",
+      "step2": "В Cursor Settings → Features → Enable Model Context Protocol",
+      "step3": "В Cursor Settings → MCP → Add Configuration File → выбери этот mcp.json",
+      "step4": "Перезапусти Cursor",
+      "step5": "Протестируй: открой чат (Cmd+L) и попробуй '@docs-search React hooks'"
+    },
+    "priorities": {
+      "high": "Серверы с высоким приоритетом включены по умолчанию и очень полезны для zero-coder",
+      "medium": "Серверы со средним приоритетом требуют API ключи, но очень полезны после настройки",
+      "low": "Серверы с низким приоритетом опциональны, включай по необходимости"
+    },
+    "recommendations_for_zero_coder": {
+      "must_have": [
+        "docs-search - обязательно! Прямой доступ к официальной документации",
+        "sequential-thinking - показывает как AI думает, помогает понять логику",
+        "memory - запоминает твой стиль, очень удобно"
+      ],
+      "nice_to_have": [
+        "web-search - для поиска решений проблем (нужен API ключ)",
+        "github - для примеров кода (нужен токен)"
+      ],
+      "optional": ["filesystem - если хочешь создать библиотеку своих шаблонов"]
+    },
+    "troubleshooting": {
+      "server_not_starting": [
+        "Проверь что MCP включен в Cursor Settings → Features",
+        "Убедись что путь к mcp.json правильный",
+        "Перезапусти Cursor",
+        "Проверь консоль на ошибки (Cmd+Shift+P → 'Show Console')"
+      ],
+      "docs_search_not_working": [
+        "Проверь интернет соединение",
+        "Убедись что DOCS_URLS содержит валидные URL",
+        "Попробуй уменьшить количество URL (оставь только самые важные)"
+      ],
+      "api_key_errors": [
+        "Проверь что API ключ правильно вставлен (без лишних пробелов)",
+        "Убедись что ключ валиден (не истёк)",
+        "Для GitHub токена проверь что выбран правильный scope"
+      ]
+    }
+  },
+  "documentation_urls": {
+    "react": "https://react.dev",
+    "tailwind": "https://tailwindcss.com/docs",
+    "vite": "https://vitejs.dev/guide",
+    "recharts": "https://recharts.org/en-US/api",
+    "lucide": "https://lucide.dev/icons",
+    "tonejs": "https://tonejs.github.io/docs",
+    "javascript": "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
+    "mdn": "https://developer.mozilla.org"
+  },
+  "useful_github_repos": {
+    "react_examples": "https://github.com/facebook/react/tree/main/packages/react-dom/src/__tests__",
+    "tailwind_components": "https://github.com/tailwindlabs/tailwindcss",
+    "recharts_examples": "https://github.com/recharts/recharts/tree/master/demo/component",
+    "react_hooks_examples": "https://github.com/streamich/react-use"
+  },
+  "quick_reference": {
+    "commands": {
+      "@docs-search [query]": "Искать в официальной документации",
+      "@web-search [query]": "Искать в интернете (нужен API ключ)",
+      "@github [query]": "Искать на GitHub (нужен токен)",
+      "@filesystem [path]": "Прочитать локальный файл",
+      "@codebase [query]": "Искать в текущем проекте (встроенная функция Cursor)"
+    },
+    "examples": {
+      "how_to_use_hook": "@docs-search React useEffect cleanup",
+      "find_solution": "@web-search react state not updating inside useEffect",
+      "find_example": "@github recharts responsive container example",
+      "use_template": "@filesystem ~/templates/Button.jsx",
+      "search_project": "@codebase где используется useTimer?"
+    }
+  },
+  "for_zero_coder": {
+    "start_here": [
+      "1. Сначала включи только обязательные серверы (docs-search, sequential-thinking, memory)",
+      "2. Протестируй их работу",
+      "3. Затем при желании добавь web-search и github (потребуются API ключи)",
+      "4. filesystem добавляй только если создашь библиотеку шаблонов"
+    ],
+    "typical_workflow": [
+      "Вопрос о React → @docs-search как использовать useState",
+      "Не работает код → @web-search react error message from console",
+      "Нужен пример → @github примеры использования библиотеки",
+      "Использовать шаблон → @filesystem ~/templates/Component.jsx"
+    ],
+    "tips": [
+      "Всегда начинай с @docs-search - там официальная и правильная инфа",
+      "@web-search используй когда docs не помогла или нужны примеры",
+      "@github полезен для просмотра реального кода из популярных проектов",
+      "@codebase (встроенный в Cursor) для поиска в твоём проекте"
+    ]
+  },
+  "migration_specific": {
+    "useful_searches": [
+      "@docs-search React useState",
+      "@docs-search React useEffect",
+      "@docs-search Tailwind responsive design",
+      "@docs-search Vite configuration",
+      "@web-search convert HTML to React JSX",
+      "@web-search HTML onclick to React onClick",
+      "@web-search localStorage in React hooks",
+      "@github react localStorage hook examples"
+    ],
+    "common_questions": [
+      {
+        "question": "Как конвертировать HTML в JSX?",
+        "command": "@docs-search JSX syntax differences from HTML"
+      },
+      {
+        "question": "Как заменить inline styles на Tailwind?",
+        "command": "@web-search convert inline css to tailwind classes"
+      },
+      {
+        "question": "Как работает useEffect?",
+        "command": "@docs-search React useEffect hook"
+      },
+      {
+        "question": "Примеры glassmorphism в Tailwind",
+        "command": "@web-search tailwind glassmorphism examples"
+      }
+    ]
+  }
+}

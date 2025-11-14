@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Tracker Dashboard - Минималистичный дизайн</title>
+    <meta name="description" content="Современное приложение для учета рабочего времени с мощной аналитикой">
+    <link rel="stylesheet" href="variant-1-minimal.css">
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <h1 class="header-title">Time Tracker Dashboard</h1>
+            <div class="header-subtitle">Умный учет рабочего времени</div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">Контролируйте каждую минуту</h1>
+                <p class="hero-description">Простой и эффективный инструмент для учета рабочего времени с мощной аналитикой</p>
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <div class="hero-stat-value" data-counter="320">0</div>
+                        <div class="hero-stat-label">Часов</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-value" data-counter="450000">0</div>
+                        <div class="hero-stat-label">₽ Заработано</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-value" data-counter="45">0</div>
+                        <div class="hero-stat-label">Дней</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-card">
+                    <div class="hero-card-header">
+                        <div class="hero-card-dot"></div>
+                        <div class="hero-card-title">Текущая сессия</div>
+                    </div>
+                    <div class="hero-timer" id="hero-timer">00:00:00</div>
+                    <div class="hero-card-stats">
+                        <div class="hero-card-stat">
+                            <div class="stat-label">Часов</div>
+                            <div class="stat-value" id="hero-hours">0.0</div>
+                        </div>
+                        <div class="hero-card-stat">
+                            <div class="stat-label">₽</div>
+                            <div class="stat-value" id="hero-earned">0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">Ключевые возможности</h2>
+            <div class="features-grid">
+                <!-- Feature 1 -->
+                <div class="feature-item">
+                    <div class="feature-icon">⏱️</div>
+                    <h3 class="feature-title">Таймер</h3>
+                    <p class="feature-description">Точный учет времени с автоматическим сохранением</p>
+                </div>
+                <!-- Feature 2 -->
+                <div class="feature-item">
+                    <div class="feature-icon">📊</div>
+                    <h3 class="feature-title">Аналитика</h3>
+                    <p class="feature-description">12+ графиков для анализа продуктивности</p>
+                </div>
+                <!-- Feature 3 -->
+                <div class="feature-item">
+                    <div class="feature-icon">📈</div>
+                    <h3 class="feature-title">Статистика</h3>
+                    <p class="feature-description">Детальные показатели и сравнение периодов</p>
+                </div>
+                <!-- Feature 4 -->
+                <div class="feature-item">
+                    <div class="feature-icon">👁️</div>
+                    <h3 class="feature-title">Виды</h3>
+                    <p class="feature-description">Три формата отображения: список, сетка, таймлайн</p>
+                </div>
+                <!-- Feature 5 -->
+                <div class="feature-item">
+                    <div class="feature-icon">💾</div>
+                    <h3 class="feature-title">Экспорт</h3>
+                    <p class="feature-description">Сохранение данных в JSON, Excel, PDF</p>
+                </div>
+                <!-- Feature 6 -->
+                <div class="feature-item">
+                    <div class="feature-icon">↩️</div>
+                    <h3 class="feature-title">История</h3>
+                    <p class="feature-description">Undo/Redo для всех действий</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistics Section -->
+    <section class="statistics">
+        <div class="container">
+            <h2 class="section-title">Статистика в реальном времени</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">🕐</div>
+                    <div class="stat-number" data-counter="320.5">0</div>
+                    <div class="stat-unit">часов</div>
+                    <div class="stat-change">+15% за месяц</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-number" data-counter="450000">0</div>
+                    <div class="stat-unit">₽</div>
+                    <div class="stat-change">+22% за месяц</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-number" data-counter="45">0</div>
+                    <div class="stat-unit">дней</div>
+                    <div class="stat-change">+8% за месяц</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⚡</div>
+                    <div class="stat-number" data-counter="1405">0</div>
+                    <div class="stat-unit">₽/час</div>
+                    <div class="stat-change">+5% за месяц</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Charts Section -->
+    <section class="charts">
+        <div class="container">
+            <h2 class="section-title">Визуализация данных</h2>
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h3 class="chart-title">Доход по дням недели</h3>
+                    <div class="chart-bars">
+                        <div class="chart-bar-item" data-value="5874">
+                            <div class="chart-bar" style="height: 0%;"></div>
+                            <div class="chart-bar-label">Пн</div>
+                        </div>
+                        <div class="chart-bar-item" data-value="4200">
+                            <div class="chart-bar" style="height: 0%;"></div>
+                            <div class="chart-bar-label">Вт</div>
+                        </div>
+                        <div class="chart-bar-item" data-value="5000">
+                            <div class="chart-bar" style="height: 0%;"></div>
+                            <div class="chart-bar-label">Ср</div>
+                        </div>
+                        <div class="chart-bar-item" data-value="6800">
+                            <div class="chart-bar" style="height: 0%;"></div>
+                            <div class="chart-bar-label">Чт</div>
+                        </div>
+                        <div class="chart-bar-item" data-value="8500">
+                            <div class="chart-bar" style="height: 0%;"></div>
+                            <div class="chart-bar-label">Пт</div>
+                        </div>
+                        <div class="chart-bar-item" data-value="6200">
+                            <div class="chart-bar" style="height: 0%;"></div>
+                            <div class="chart-bar-label">Сб</div>
+                        </div>
+                        <div class="chart-bar-item" data-value="3500">
+                            <div class="chart-bar" style="height: 0%;"></div>
+                            <div class="chart-bar-label">Вс</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <h3 class="chart-title">Распределение по категориям</h3>
+                    <div class="chart-pie">
+                        <svg viewBox="0 0 200 200" style="width: 100%; height: 200px;">
+                            <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2" />
+                            <path d="M 100 20 A 80 80 0 0 1 180 100" fill="#3b82f6" />
+                            <path d="M 180 100 A 80 80 0 0 1 100 180" fill="#10b981" />
+                            <path d="M 100 180 A 80 80 0 0 1 20 100" fill="#f59e0b" />
+                            <path d="M 20 100 A 80 80 0 0 1 100 20" fill="#8b5cf6" />
+                            <circle cx="100" cy="100" r="40" fill="rgba(26,31,53,0.9)" />
+                            <text x="100" y="105" text-anchor="middle" fill="white" font-size="14" font-weight="bold">100%</text>
+                        </svg>
+                        <div class="pie-legend">
+                            <div class="pie-legend-item"><span class="pie-color" style="background: #3b82f6;"></span> Разработка 40%</div>
+                            <div class="pie-legend-item"><span class="pie-color" style="background: #10b981;"></span> Дизайн 30%</div>
+                            <div class="pie-legend-item"><span class="pie-color" style="background: #f59e0b;"></span> Консультации 20%</div>
+                            <div class="pie-legend-item"><span class="pie-color" style="background: #8b5cf6;"></span> Другое 10%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <h2 class="cta-title">Начните отслеживать время сегодня</h2>
+            <p class="cta-description">Присоединяйтесь к тысячам пользователей, которые уже повысили свою продуктивность</p>
+            <a href="#" class="cta-button">Запустить приложение</a>
+        </div>
+    </section>
+
+    <script src="variant-1-minimal.js"></script>
+</body>
+</html>
+

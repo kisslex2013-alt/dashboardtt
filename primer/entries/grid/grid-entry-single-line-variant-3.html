@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вариант 3: Умная обрезка по символам</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 2rem;
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+  </style>
+</head>
+<body>
+  <div class="max-w-6xl mx-auto">
+    <h1 class="text-3xl font-bold text-white mb-6">📝 Вариант 3: Умная обрезка по символам</h1>
+    
+    <div class="glass-effect rounded-2xl p-6 mb-8">
+      <h2 class="text-xl font-bold mb-4">📝 Описание</h2>
+      <ul class="space-y-2 text-gray-700">
+        <li><strong>Концепция:</strong> Фиксированная длина с обрезкой по символам</li>
+        <li><strong>Особенности:</strong>
+          <ul class="ml-6 mt-2 space-y-1">
+            <li>• Обрезка по количеству символов (например, 15 символов)</li>
+            <li>• Добавление многоточия при обрезке</li>
+            <li>• Простая реализация</li>
+            <li>• Tooltip для полного названия</li>
+            <li>• Фиксированная ширина категории</li>
+          </ul>
+        </li>
+        <li><strong>Рекомендуется:</strong> ⚡ Для простых случаев</li>
+      </ul>
+    </div>
+    
+    <!-- Примеры записей -->
+    <div class="space-y-4">
+      <div class="glass-effect rounded-xl p-4">
+        <h3 class="text-lg font-bold mb-4 text-gray-800">Примеры записей:</h3>
+        
+        <!-- Запись 1: Короткое название -->
+        <div class="bg-white/50 dark:bg-gray-700/50 rounded-lg p-2 hover:bg-white/80 dark:hover:bg-gray-600/50 transition-colors cursor-pointer mb-2">
+          <div class="flex items-center gap-2 text-xs">
+            <div class="flex items-center gap-1.5 min-w-0" title="remix">
+              <svg class="w-3.5 h-3.5 flex-shrink-0 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
+                <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/>
+              </svg>
+              <span class="font-semibold text-gray-700 dark:text-gray-300 truncate max-w-[100px]">
+                remix
+              </span>
+            </div>
+            <span class="font-bold text-gray-800 dark:text-gray-100 flex-shrink-0">
+              800 ₽
+            </span>
+            <span class="text-gray-500 dark:text-gray-400 flex-shrink-0">
+              16:14 - 18:03
+            </span>
+            <span class="text-gray-500 dark:text-gray-400 text-[10px] flex-shrink-0">
+              1.8 часа • 440 ₽/ч
+            </span>
+          </div>
+        </div>
+        
+        <!-- Запись 2: Среднее название (обрезается) -->
+        <div class="bg-white/50 dark:bg-gray-700/50 rounded-lg p-2 hover:bg-white/80 dark:hover:bg-gray-600/50 transition-colors cursor-pointer mb-2">
+          <div class="flex items-center gap-2 text-xs">
+            <div class="flex items-center gap-1.5 min-w-0" title="Разработка веб-приложений">
+              <svg class="w-3.5 h-3.5 flex-shrink-0 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
+                <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/>
+              </svg>
+              <span class="font-semibold text-gray-700 dark:text-gray-300 truncate max-w-[100px]">
+                Разработка веб-приложений
+              </span>
+            </div>
+            <span class="font-bold text-gray-800 dark:text-gray-100 flex-shrink-0">
+              2000 ₽
+            </span>
+            <span class="text-gray-500 dark:text-gray-400 flex-shrink-0">
+              09:00 - 13:00
+            </span>
+            <span class="text-gray-500 dark:text-gray-400 text-[10px] flex-shrink-0">
+              4.0 часа • 500 ₽/ч
+            </span>
+          </div>
+        </div>
+        
+        <!-- Запись 3: Очень длинное название (обрезается) -->
+        <div class="bg-white/50 dark:bg-gray-700/50 rounded-lg p-2 hover:bg-white/80 dark:hover:bg-gray-600/50 transition-colors cursor-pointer mb-2">
+          <div class="flex items-center gap-2 text-xs">
+            <div class="flex items-center gap-1.5 min-w-0" title="Очень длинное название категории работы которое не помещается в одну строку">
+              <svg class="w-3.5 h-3.5 flex-shrink-0 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
+                <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/>
+              </svg>
+              <span class="font-semibold text-gray-700 dark:text-gray-300 truncate max-w-[100px]">
+                Очень длинное название категории работы которое не помещается в одну строку
+              </span>
+            </div>
+            <span class="font-bold text-gray-800 dark:text-gray-100 flex-shrink-0">
+              3500 ₽
+            </span>
+            <span class="text-gray-500 dark:text-gray-400 flex-shrink-0">
+              14:00 - 18:30
+            </span>
+            <span class="text-gray-500 dark:text-gray-400 text-[10px] flex-shrink-0">
+              4.5 часа • 780 ₽/ч
+            </span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Код реализации -->
+      <div class="glass-effect rounded-xl p-4">
+        <h3 class="text-lg font-bold mb-4 text-gray-800">💻 Код реализации:</h3>
+        <pre class="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto text-xs"><code>&lt;div class="bg-white/50 dark:bg-gray-700/50 rounded-lg p-2 hover:bg-white/80 dark:hover:bg-gray-600/50 transition-colors cursor-pointer"&gt;
+  &lt;div class="flex items-center gap-2 text-xs"&gt;
+    &lt;!-- Категория с умной обрезкой --&gt;
+    &lt;div class="flex items-center gap-1.5 min-w-0" title="{categoryName}"&gt;
+      {CategoryIcon && (
+        &lt;CategoryIcon className="w-3.5 h-3.5 flex-shrink-0" /&gt;
+      )}
+      &lt;span class="font-semibold text-gray-700 dark:text-gray-300 truncate max-w-[100px]"&gt;
+        {categoryName.length > 15 
+          ? categoryName.substring(0, 15).trim() + '...' 
+          : categoryName}
+      &lt;/span&gt;
+    &lt;/div&gt;
+    
+    &lt;!-- Остальные данные --&gt;
+    &lt;span class="font-bold text-gray-800 dark:text-gray-100 flex-shrink-0"&gt;
+      {earned} ₽
+    &lt;/span&gt;
+    &lt;span class="text-gray-500 dark:text-gray-400 flex-shrink-0"&gt;
+      {timeRange}
+    &lt;/span&gt;
+    &lt;span class="text-gray-500 dark:text-gray-400 text-[10px] flex-shrink-0"&gt;
+      {duration} часа • {rate} ₽/ч
+    &lt;/span&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+      </div>
+      
+      <!-- Преимущества и недостатки -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="glass-effect rounded-xl p-4 bg-green-50">
+          <h4 class="font-bold text-green-700 mb-2">✅ Преимущества</h4>
+          <ul class="text-sm space-y-1 text-gray-700">
+            <li>• Простая реализация</li>
+            <li>• Фиксированная ширина</li>
+            <li>• Легко поддерживать</li>
+            <li>• Предсказуемое поведение</li>
+            <li>• Tooltip для полного названия</li>
+          </ul>
+        </div>
+        
+        <div class="glass-effect rounded-xl p-4 bg-yellow-50">
+          <h4 class="font-bold text-yellow-700 mb-2">⚠️ Недостатки</h4>
+          <ul class="text-sm space-y-1 text-gray-700">
+            <li>• Может обрезать в середине слова</li>
+            <li>• Фиксированная длина не всегда оптимальна</li>
+            <li>• Нужно навести для полного названия</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="mt-6 text-center">
+      <a href="grid-entry-single-line-variants-index.html" 
+         class="inline-block px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg transition-colors">
+        ← Назад к списку вариантов
+      </a>
+    </div>
+  </div>
+</body>
+</html>
+

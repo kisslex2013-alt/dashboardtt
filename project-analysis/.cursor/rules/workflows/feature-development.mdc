@@ -1,0 +1,622 @@
+---
+description: Пошаговый workflow для разработки новых фич от идеи до production
+alwaysApply: false
+---
+
+# Feature Development Workflow
+
+## Когда использовать
+
+Активируй этот workflow когда пользователь говорит:
+
+- "Добавь новую фичу [описание]"
+- "Реализуй [функциональность]"
+- "Создай [компонент/страницу/модуль]"
+- "Нужна возможность [что-то делать]"
+
+## Этапы разработки фичи
+
+### Этап 1: Анализ и планирование (5-10 минут)
+
+**Задай уточняющие вопросы:**
+
+```text
+1. Какая основная цель фичи?
+2. Кто будет использовать? (пользователи/админы/все)
+3. Есть ли UI/UX референсы или макеты?
+4. Какие данные нужны? (откуда брать?)
+5. Нужна ли аутентификация/авторизация?
+6. Есть ли зависимости от других фич?
+7. Мобильная версия нужна?
+```
+
+**Создай техническое описание:**
+
+```markdown
+## Фича: [Название]
+
+### Цель
+[Что решает, зачем нужно]
+
+### Scope
+- ✅ Включено: [что делаем]
+- ❌ Не включено: [что НЕ делаем в этой итерации]
+
+### Компоненты
+1. Frontend: [список компонентов]
+2. Backend: [список API endpoints]
+3. State: [какие stores затронуты]
+4. Database: [новые таблицы/поля]
+
+### User Flow
+1. Пользователь...
+2. Система...
+3. Результат...
+
+### Edge Cases
+- Что если нет данных?
+- Что если ошибка сети?
+- Что если нет прав доступа?
+```
+
+### Этап 2: Структура файлов (2 минуты)
+
+**Создай файловую структуру:**
+
+```text
+src/
+├── components/
+│   └── FeatureName/
+│       ├── FeatureName.tsx          # Главный компонент
+│       ├── FeatureNameForm.tsx      # Форма (если нужна)
+│       ├── FeatureNameList.tsx      # Список (если нужен)
+│       └── FeatureName.test.tsx     # Тесты
+├── store/
+│   └── featureStore.ts              # Zustand store
+├── api/
+│   └── feature/
+│       └── route.ts                 # API endpoints
+└── types/
+    └── feature.ts                   # TypeScript types
+```
+
+**Определи типы данных первым делом:**
+
+```typescript
+// types/feature.ts
+export interface Feature {
+  id: string
+  title: string
+  description: string
+  createdAt: Date
+  updatedAt: Date
+  userId: string
+}
+
+export interface CreateFeatureInput {
+  title: string
+  description: string
+}
+
+export interface UpdateFeatureInput extends Partial<CreateFeatureInput> {
+  id: string
+}
+```
+
+### Этап 3: Backend разработка (если нужен)
+
+**Последовательность:**
+
+1. **Создай API route** (начни с этого!)
+
+```typescript
+// app/api/features/route.ts
+import { NextRequest, NextResponse } from 'next/server'
+import { z } from 'zod'
+
+const CreateFeatureSchema = z.object({
+  title: z.string().min(3).max(100),
+  description: z.string().min(10).max(500)
+})
+
+export async function GET(request: NextRequest) {
+  try {
+    // 1. Проверь авторизацию
+    const user = await verifyAuth(request)
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+    
+    // 2. Получи данные из БД
+    const features = await prisma.feature.findMany({
+      where: { userId: user.id },
+      orderBy: { createdAt: 'desc' }
+    })
+    
+    // 3. Верни результат
+    return NextResponse.json({ features })
+    
+  } catch (error) {
+    console.error('GET /api/features error:', error)
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    )
+  }
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const user = await verifyAuth(request)
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+    
+    const body = await request.json()
+    const validated = CreateFeatureSchema.parse(body)
+    
+    const feature = await prisma.feature.create({
+      data: {
+        ...validated,
+        userId: user.id
+      }
+    })
+    
+    return NextResponse.json({ feature }, { status: 201 })
+    
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        { error: 'Validation failed', details: error.errors },
+        { status: 400 }
+      )
+    }
+    
+    console.error('POST /api/features error:', error)
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    )
+  }
+}
+```
+
+1. **Протестируй API вручную** (через Postman/Thunder Client)
+
+```bash
+# GET request
+curl http://localhost:3000/api/features \
+  -H "Authorization: Bearer YOUR_TOKEN"
+
+# POST request  
+curl -X POST http://localhost:3000/api/features \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -d '{"title":"Test","description":"Test description"}'
+```
+
+1. **Напиши unit тесты для API** (перед frontend!)
+
+```typescript
+// app/api/features/route.test.ts
+import { describe, it, expect } from 'vitest'
+import { GET, POST } from './route'
+
+describe('Features API', () => {
+  it('GET возвращает список фич', async () => {
+    const request = createMockRequest({ userId: 'test-user' })
+    const response = await GET(request)
+    const data = await response.json()
+    
+    expect(response.status).toBe(200)
+    expect(data.features).toBeInstanceOf(Array)
+  })
+  
+  it('POST создает новую фичу', async () => {
+    const request = createMockRequest({
+      userId: 'test-user',
+      body: { title: 'Test', description: 'Test description' }
+    })
+    const response = await POST(request)
+    const data = await response.json()
+    
+    expect(response.status).toBe(201)
+    expect(data.feature.title).toBe('Test')
+  })
+})
+```
+
+### Этап 4: State management (Zustand store)
+
+```typescript
+// store/featureStore.ts
+import { create } from 'zustand'
+import type { Feature, CreateFeatureInput } from '@/types/feature'
+
+interface FeatureState {
+  features: Feature[]
+  isLoading: boolean
+  error: string | null
+  
+  // Actions
+  fetchFeatures: () => Promise<void>
+  createFeature: (input: CreateFeatureInput) => Promise<Feature>
+  updateFeature: (id: string, input: Partial<CreateFeatureInput>) => Promise<void>
+  deleteFeature: (id: string) => Promise<void>
+}
+
+export const useFeatureStore = create<FeatureState>((set, get) => ({
+  features: [],
+  isLoading: false,
+  error: null,
+  
+  fetchFeatures: async () => {
+    set({ isLoading: true, error: null })
+    
+    try {
+      const response = await fetch('/api/features')
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch features')
+      }
+      
+      const { features } = await response.json()
+      set({ features, isLoading: false })
+      
+    } catch (error) {
+      set({ 
+        error: error instanceof Error ? error.message : 'Unknown error',
+        isLoading: false 
+      })
+    }
+  },
+  
+  createFeature: async (input) => {
+    set({ isLoading: true, error: null })
+    
+    try {
+      const response = await fetch('/api/features', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(input)
+      })
+      
+      if (!response.ok) {
+        throw new Error('Failed to create feature')
+      }
+      
+      const { feature } = await response.json()
+      
+      set((state) => ({
+        features: [feature, ...state.features],
+        isLoading: false
+      }))
+      
+      return feature
+      
+    } catch (error) {
+      set({ 
+        error: error instanceof Error ? error.message : 'Unknown error',
+        isLoading: false 
+      })
+      throw error
+    }
+  },
+  
+  updateFeature: async (id, input) => {
+    try {
+      const response = await fetch(`/api/features/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(input)
+      })
+      
+      if (!response.ok) {
+        throw new Error('Failed to update feature')
+      }
+      
+      const { feature } = await response.json()
+      
+      set((state) => ({
+        features: state.features.map((f) => 
+          f.id === id ? feature : f
+        )
+      }))
+      
+    } catch (error) {
+      set({ error: error instanceof Error ? error.message : 'Unknown error' })
+      throw error
+    }
+  },
+  
+  deleteFeature: async (id) => {
+    try {
+      const response = await fetch(`/api/features/${id}`, {
+        method: 'DELETE'
+      })
+      
+      if (!response.ok) {
+        throw new Error('Failed to delete feature')
+      }
+      
+      set((state) => ({
+        features: state.features.filter((f) => f.id !== id)
+      }))
+      
+    } catch (error) {
+      set({ error: error instanceof Error ? error.message : 'Unknown error' })
+      throw error
+    }
+  }
+}))
+```
+
+### Этап 5: Frontend компоненты
+
+**Порядок разработки:**
+
+1. **Простой UI первым** (без логики)
+2. **Добавь state и handlers**
+3. **Интегрируй со store**
+4. **Добавь loading/error states**
+5. **Полируй UI и анимации**
+
+```typescript
+// components/FeatureName/FeatureName.tsx
+'use client'
+
+import { useEffect } from 'react'
+import { useFeatureStore } from '@/store/featureStore'
+import { FeatureNameForm } from './FeatureNameForm'
+import { FeatureNameList } from './FeatureNameList'
+
+export function FeatureName() {
+  const { features, isLoading, error, fetchFeatures } = useFeatureStore()
+  
+  // Загрузка данных при монтировании
+  useEffect(() => {
+    fetchFeatures()
+  }, [fetchFeatures])
+  
+  // Loading state
+  if (isLoading && features.length === 0) {
+    return (
+      <div className="flex items-center justify-center p-8">
+        <div className="animate-spin h-8 w-8 border-4 border-blue-500 border-t-transparent rounded-full" />
+      </div>
+    )
+  }
+  
+  // Error state
+  if (error) {
+    return (
+      <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+        <p className="text-red-800">Ошибка: {error}</p>
+        <button 
+          onClick={fetchFeatures}
+          className="mt-2 text-sm text-red-600 hover:text-red-800"
+        >
+          Попробовать снова
+        </button>
+      </div>
+    )
+  }
+  
+  // Main content
+  return (
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold">Features</h1>
+        <p className="text-gray-600 mt-2">
+          Manage your features here
+        </p>
+      </div>
+      
+      <FeatureNameForm />
+      <FeatureNameList features={features} />
+    </div>
+  )
+}
+```
+
+```typescript
+// components/FeatureName/FeatureNameForm.tsx
+'use client'
+
+import { useState } from 'react'
+import { useFeatureStore } from '@/store/featureStore'
+import { motion } from 'framer-motion'
+
+export function FeatureNameForm() {
+  const createFeature = useFeatureStore((state) => state.createFeature)
+  const [title, setTitle] = useState('')
+  const [description, setDescription] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    
+    if (!title.trim() || !description.trim()) return
+    
+    setIsSubmitting(true)
+    
+    try {
+      await createFeature({ title, description })
+      
+      // Reset form
+      setTitle('')
+      setDescription('')
+      
+    } catch (error) {
+      console.error('Failed to create feature:', error)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+  
+  return (
+    <motion.form
+      onSubmit={handleSubmit}
+      className="bg-white p-6 rounded-lg shadow-sm border border-gray-200"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+    >
+      <h2 className="text-xl font-semibold mb-4">Create New Feature</h2>
+      
+      <div className="space-y-4">
+        <div>
+          <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
+            Title
+          </label>
+          <input
+            id="title"
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter feature title"
+            required
+            disabled={isSubmitting}
+          />
+        </div>
+        
+        <div>
+          <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+            Description
+          </label>
+          <textarea
+            id="description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+            placeholder="Enter feature description"
+            rows={4}
+            required
+            disabled={isSubmitting}
+          />
+        </div>
+        
+        <button
+          type="submit"
+          disabled={isSubmitting || !title.trim() || !description.trim()}
+          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+        >
+          {isSubmitting ? 'Creating...' : 'Create Feature'}
+        </button>
+      </div>
+    </motion.form>
+  )
+}
+```
+
+### Этап 6: ТестированиеЫ
+
+```typescript
+// components/FeatureName/FeatureName.test.tsx
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { FeatureName } from './FeatureName'
+import { useFeatureStore } from '@/store/featureStore'
+
+// Mock store
+vi.mock('@/store/featureStore')
+
+describe('FeatureName', () => {
+  beforeEach(() => {
+    vi.mocked(useFeatureStore).mockReturnValue({
+      features: [],
+      isLoading: false,
+      error: null,
+      fetchFeatures: vi.fn(),
+      createFeature: vi.fn(),
+      updateFeature: vi.fn(),
+      deleteFeature: vi.fn()
+    })
+  })
+  
+  it('загружает и отображает features', async () => {
+    const mockFeatures = [
+      { id: '1', title: 'Feature 1', description: 'Desc 1', createdAt: new Date(), updatedAt: new Date(), userId: '1' }
+    ]
+    
+    vi.mocked(useFeatureStore).mockReturnValue({
+      features: mockFeatures,
+      isLoading: false,
+      error: null,
+      fetchFeatures: vi.fn(),
+      createFeature: vi.fn(),
+      updateFeature: vi.fn(),
+      deleteFeature: vi.fn()
+    })
+    
+    render(<FeatureName />)
+    
+    expect(screen.getByText('Feature 1')).toBeInTheDocument()
+  })
+  
+  it('показывает loader во время загрузки', () => {
+    vi.mocked(useFeatureStore).mockReturnValue({
+      features: [],
+      isLoading: true,
+      error: null,
+      fetchFeatures: vi.fn(),
+      createFeature: vi.fn(),
+      updateFeature: vi.fn(),
+      deleteFeature: vi.fn()
+    })
+    
+    render(<FeatureName />)
+    
+    expect(screen.getByRole('status')).toBeInTheDocument() // Spinner
+  })
+  
+  it('показывает ошибку при неудаче', () => {
+    vi.mocked(useFeatureStore).mockReturnValue({
+      features: [],
+      isLoading: false,
+      error: 'Failed to load features',
+      fetchFeatures: vi.fn(),
+      createFeature: vi.fn(),
+      updateFeature: vi.fn(),
+      deleteFeature: vi.fn()
+    })
+    
+    render(<FeatureName />)
+    
+    expect(screen.getByText(/failed to load features/i)).toBeInTheDocument()
+  })
+  
+  it('создает новую feature через форму', async () => {
+    const mockCreateFeature = vi.fn()
+    
+    vi.mocked(useFeatureStore).mockReturnValue({
+      features: [],
+      isLoading: false,
+      error: null,
+      fetchFeatures: vi.fn(),
+      createFeature: mockCreateFeature,
+      updateFeature: vi.fn(),
+      deleteFeature: vi.fn()
+    })
+    
+    render(<FeatureName />)
+    
+    // Заполняем форму
+    fireEvent.change(screen.getByLabelText(/title/i), {
+      target: { value: 'New Feature' }
+    })
+    fireEvent.change(screen.getByLabelText(/description/i), {
+      target: { value: 'New feature description' }
+    })
+    
+    // Отправляем
+    fireEvent.click(screen.getByRole('button', { name: /create feature/i }))
+    
+    await waitFor(() => {
+      expect(mockCreateFeature).toHaveBeenCalledWith({
+        title: 'New Feature',
+        description: 'New feature description'
+      })
+    })
+  })
+})

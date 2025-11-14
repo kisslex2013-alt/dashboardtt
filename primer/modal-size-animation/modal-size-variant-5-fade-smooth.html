@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Анимация размера модального окна - Вариант 5: Плавное затухание</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .dark .glass-card {
+      background: rgba(31, 41, 55, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .modal-content {
+      transition: height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .content-wrapper {
+      transition: opacity 0.25s ease-in-out;
+    }
+    
+    .content-wrapper.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+    
+    .content-wrapper.fade-in {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    
+    /* Плавное появление нового контента */
+    .new-content {
+      animation: fadeInUp 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 min-h-screen p-8 transition-colors duration-300">
+  
+  <div class="max-w-4xl mx-auto">
+    
+    <!-- Заголовок -->
+    <div class="glass-card rounded-xl p-6 mb-6">
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Вариант 5: Плавное затухание</h1>
+      <p class="text-gray-600 dark:text-gray-400">Анимация с плавным затуханием старого контента и появлением нового</p>
+    </div>
+
+    <!-- Демо модального окна -->
+    <div class="glass-card rounded-xl p-6 shadow-2xl max-w-2xl mx-auto">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-xl font-bold text-gray-900 dark:text-white">Модальное окно</h2>
+        <button onclick="toggleTheme()" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-lg text-sm">
+          🌓 Тема
+        </button>
+      </div>
+      
+      <!-- Кнопки переключения контента -->
+      <div class="mb-6 flex gap-2">
+        <button onclick="changeContent('small')" class="px-4 py-2 bg-teal-500 text-white rounded-lg text-sm hover:bg-teal-600 transition-colors">
+          Маленький контент
+        </button>
+        <button onclick="changeContent('medium')" class="px-4 py-2 bg-teal-500 text-white rounded-lg text-sm hover:bg-teal-600 transition-colors">
+          Средний контент
+        </button>
+        <button onclick="changeContent('large')" class="px-4 py-2 bg-teal-500 text-white rounded-lg text-sm hover:bg-teal-600 transition-colors">
+          Большой контент
+        </button>
+      </div>
+      
+      <!-- Контент модального окна -->
+      <div id="modal-content" class="modal-content">
+        <div id="content-wrapper" class="content-wrapper fade-in">
+          <div id="content" class="space-y-4">
+            <!-- Контент будет заменен через JavaScript -->
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  
+  <script>
+    let currentContent = 'medium';
+    
+    const contents = {
+      small: `
+        <p class="text-gray-700 dark:text-gray-300">Это маленький контент с минимальным количеством текста.</p>
+        <p class="text-sm text-gray-500 dark:text-gray-400">Всего несколько строк для демонстрации.</p>
+      `,
+      medium: `
+        <p class="text-gray-700 dark:text-gray-300 mb-4">Это средний контент с умеренным количеством информации.</p>
+        <p class="text-gray-700 dark:text-gray-300 mb-4">Здесь несколько абзацев текста для демонстрации анимации изменения размера.</p>
+        <p class="text-gray-700 dark:text-gray-300 mb-4">При переключении между размерами контента окно плавно изменяет свою высоту.</p>
+        <p class="text-sm text-gray-500 dark:text-gray-400">Это обеспечивает комфортное восприятие изменений.</p>
+      `,
+      large: `
+        <p class="text-gray-700 dark:text-gray-300 mb-4">Это большой контент с большим количеством информации.</p>
+        <p class="text-gray-700 dark:text-gray-300 mb-4">Здесь много текста для демонстрации анимации изменения размера модального окна.</p>
+        <p class="text-gray-700 dark:text-gray-300 mb-4">При переключении между размерами контента окно плавно изменяет свою высоту.</p>
+        <p class="text-gray-700 dark:text-gray-300 mb-4">Это обеспечивает комфортное восприятие изменений и плавные переходы.</p>
+        <p class="text-gray-700 dark:text-gray-300 mb-4">Анимация работает через CSS transition с плавным затуханием контента.</p>
+        <p class="text-gray-700 dark:text-gray-300 mb-4">Высота автоматически измеряется и плавно переходит к новому значению.</p>
+        <p class="text-gray-700 dark:text-gray-300 mb-4">Это создает приятный пользовательский опыт при работе с динамическим контентом.</p>
+        <p class="text-sm text-gray-500 dark:text-gray-400">Большой контент демонстрирует работу анимации на максимальном объеме данных.</p>
+      `
+    };
+    
+    function changeContent(size) {
+      if (size === currentContent) return;
+      
+      const contentEl = document.getElementById('content');
+      const modalContent = document.getElementById('modal-content');
+      const wrapper = document.getElementById('content-wrapper');
+      
+      // Получаем текущую высоту
+      const currentHeight = modalContent.scrollHeight;
+      
+      // Устанавливаем фиксированную высоту и начинаем затухание
+      modalContent.style.height = currentHeight + 'px';
+      wrapper.classList.remove('fade-in');
+      wrapper.classList.add('fade-out');
+      
+      // Ждем завершения затухания
+      setTimeout(() => {
+        // Изменяем контент
+        contentEl.innerHTML = contents[size];
+        contentEl.classList.add('new-content');
+        currentContent = size;
+        
+        // Получаем новую высоту
+        const newHeight = contentEl.scrollHeight;
+        
+        // Анимируем переход высоты
+        requestAnimationFrame(() => {
+          modalContent.style.height = newHeight + 'px';
+          
+          // Начинаем появление нового контента
+          setTimeout(() => {
+            wrapper.classList.remove('fade-out');
+            wrapper.classList.add('fade-in');
+            
+            // Убираем класс анимации и возвращаем auto
+            setTimeout(() => {
+              contentEl.classList.remove('new-content');
+              modalContent.style.height = 'auto';
+            }, 350);
+          }, 50);
+        });
+      }, 250);
+    }
+    
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+      localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+    }
+    
+    // Инициализация
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark');
+    }
+    
+    // Устанавливаем начальный контент
+    document.getElementById('content').innerHTML = contents[currentContent];
+  </script>
+  
+</body>
+</html>
+

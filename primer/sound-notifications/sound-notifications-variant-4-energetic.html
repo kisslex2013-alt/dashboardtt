@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вариант 4: Энергичный - Звуки и анимация</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    
+    .glass-card {
+      background: rgba(17, 24, 39, 0.7);
+      backdrop-filter: blur(24px) saturate(200%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .glass-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+      border-color: rgba(249, 115, 22, 0.4);
+    }
+    
+    #faviconPreview {
+      image-rendering: pixelated;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-gray-900 via-orange-950 to-gray-900 p-8">
+  <div class="max-w-6xl mx-auto space-y-6">
+    
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-bold text-white mb-2">Вариант 4: Энергичный</h1>
+      <p class="text-gray-400">Яркие энергичные звуки с частицами - динамичный стиль</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      
+      <div class="glass-card rounded-xl p-6">
+        <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+          <span>🔔</span>
+          Звуковые уведомления
+        </h2>
+        <p class="text-sm text-gray-400 mb-4">
+          Энергичные яркие звуки: alarm, alert, beep
+        </p>
+        
+        <div class="space-y-3">
+          <div>
+            <label class="text-sm font-semibold text-orange-400 mb-2 block">Alarm (тревога)</label>
+            <button onclick="playSound('alarm')" class="w-full px-4 py-2 bg-orange-500/20 hover:bg-orange-500/30 border border-orange-500/30 rounded-lg text-white transition-all">
+              ▶ Проиграть Alarm
+            </button>
+          </div>
+          
+          <div>
+            <label class="text-sm font-semibold text-orange-400 mb-2 block">Alert (предупреждение)</label>
+            <button onclick="playSound('alert')" class="w-full px-4 py-2 bg-orange-500/20 hover:bg-orange-500/30 border border-orange-500/30 rounded-lg text-white transition-all">
+              ▶ Проиграть Alert
+            </button>
+          </div>
+          
+          <div>
+            <label class="text-sm font-semibold text-orange-400 mb-2 block">Beep (сигнал)</label>
+            <button onclick="playSound('beep')" class="w-full px-4 py-2 bg-orange-500/20 hover:bg-orange-500/30 border border-orange-500/30 rounded-lg text-white transition-all">
+              ▶ Проиграть Beep
+            </button>
+          </div>
+        </div>
+        
+        <div class="mt-6 p-4 bg-orange-900/20 rounded-lg border border-orange-500/20">
+          <p class="text-xs text-orange-300 mb-2">Настройки:</p>
+          <ul class="text-xs text-gray-300 space-y-1">
+            <li>• Интервал уведомлений: 30 минут</li>
+            <li>• Громкость: 90%</li>
+            <li>• Стиль: Яркий, динамичный</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="glass-card rounded-xl p-6">
+        <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+          <span>🎨</span>
+          Анимация фавикона
+        </h2>
+        <p class="text-sm text-gray-400 mb-4">
+          Частицы (Particles) - оранжевый и желтый, быстрая скорость
+        </p>
+        
+        <div class="flex items-center justify-center mb-6">
+          <canvas id="faviconPreview" width="64" height="64" class="rounded-lg border-2 border-orange-500/30"></canvas>
+        </div>
+        
+        <div class="space-y-3">
+          <div>
+            <label class="text-sm font-semibold text-orange-400 mb-2 block">Стиль: Particles</label>
+            <p class="text-xs text-gray-400 mb-3">Вращающиеся частицы вокруг центра</p>
+          </div>
+          
+          <div>
+            <label class="text-sm font-semibold text-orange-400 mb-2 block">Цвет: Оранжевый (#f97316) + Желтый (#fbbf24)</label>
+            <div class="flex gap-2 mt-2">
+              <div class="w-8 h-8 rounded bg-[#f97316] border border-gray-600"></div>
+              <div class="w-8 h-8 rounded bg-[#fbbf24] border border-gray-600"></div>
+            </div>
+          </div>
+          
+          <div>
+            <label class="text-sm font-semibold text-orange-400 mb-2 block">Скорость: Fast</label>
+            <p class="text-xs text-gray-400">1000ms на цикл анимации</p>
+          </div>
+        </div>
+        
+        <div class="mt-6 p-4 bg-orange-900/20 rounded-lg border border-orange-500/20">
+          <p class="text-xs text-orange-300 mb-2">Настройки:</p>
+          <ul class="text-xs text-gray-300 space-y-1">
+            <li>• Стиль анимации: Particles</li>
+            <li>• Цвет: #f97316 (оранжевый)</li>
+            <li>• Скорость: Fast (1000ms)</li>
+            <li>• Включено: Да</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="glass-card rounded-xl p-6">
+      <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+        <span>⚙️</span>
+        Демонстрация
+      </h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <button onclick="startTimer()" class="px-6 py-3 bg-orange-500/20 hover:bg-orange-500/30 border border-orange-500/30 rounded-lg text-white font-semibold transition-all">
+          ▶ Запустить таймер
+        </button>
+        <button onclick="pauseTimer()" class="px-6 py-3 bg-yellow-500/20 hover:bg-yellow-500/30 border border-yellow-500/30 rounded-lg text-white font-semibold transition-all">
+          ⏸ Пауза
+        </button>
+        <button onclick="stopTimer()" class="px-6 py-3 bg-red-500/20 hover:bg-red-500/30 border border-red-500/30 rounded-lg text-white font-semibold transition-all">
+          ⏹ Остановить
+        </button>
+      </div>
+      
+      <div class="mt-6 p-4 bg-orange-900/20 rounded-lg border border-orange-500/20">
+        <p class="text-sm text-white font-semibold mb-2">Статус таймера:</p>
+        <p id="timerStatus" class="text-lg text-gray-300">Остановлен</p>
+        <p id="timerTime" class="text-2xl font-bold text-orange-400 mt-2">00:00:00</p>
+        <p class="text-xs text-gray-400 mt-2">Звуковое уведомление каждые 30 минут</p>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let synth = null;
+    let timerInterval = null;
+    let timerSeconds = 0;
+    let faviconInterval = null;
+    let isTimerRunning = false;
+    let isPaused = false;
+    let lastNotificationTime = 0;
+    const notificationInterval = 30 * 60;
+
+    async function initTone() {
+      if (!window.Tone) return;
+      await Tone.start();
+      synth = new Tone.Synth().toDestination();
+      synth.volume.value = Tone.gainToDb(0.9);
+    }
+
+    function playSound(sound) {
+      if (!synth) {
+        initTone().then(() => playSound(sound));
+        return;
+      }
+      
+      try {
+        switch (sound) {
+          case 'alarm':
+            synth.triggerAttackRelease("A4", "16n", Tone.now());
+            synth.triggerAttackRelease("A4", "16n", Tone.now() + 0.2);
+            synth.triggerAttackRelease("A4", "16n", Tone.now() + 0.4);
+            break;
+          case 'alert':
+            synth.triggerAttackRelease("G5", "16n", Tone.now());
+            synth.triggerAttackRelease("C6", "16n", Tone.now() + 0.1);
+            break;
+          case 'beep':
+            synth.triggerAttackRelease("C5", "8n");
+            break;
+        }
+      } catch (e) {
+        console.error("Could not play sound:", e);
+      }
+    }
+
+    function drawFavicon(isPaused = false, animationValue = 1) {
+      const canvas = document.getElementById('faviconPreview');
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, 64, 64);
+      
+      const color = '#f97316'; // Оранжевый
+      const particleColor = '#fbbf24'; // Желтый
+      
+      if (isPaused) {
+        ctx.fillStyle = '#9ca3af';
+        ctx.beginPath();
+        ctx.arc(32, 32, 28, 0, 2 * Math.PI);
+        ctx.fill();
+      } else {
+        // Основной круг
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(32, 32, 28, 0, 2 * Math.PI);
+        ctx.fill();
+        
+        // Частицы вокруг иконки
+        ctx.fillStyle = '#ffffff';
+        for (let i = 0; i < 6; i++) {
+          const angle = (i / 6) * Math.PI * 2 + animationValue * Math.PI * 2;
+          const particleX = 32 + Math.cos(angle) * 36;
+          const particleY = 32 + Math.sin(angle) * 36;
+          ctx.globalAlpha = 0.8;
+          ctx.beginPath();
+          ctx.arc(particleX, particleY, 4, 0, 2 * Math.PI);
+          ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+      }
+      
+      updateFavicon(canvas.toDataURL('image/png'));
+    }
+
+    function updateFavicon(url) {
+      let link = document.querySelector("link[rel~='icon']");
+      if (!link) {
+        link = document.createElement('link');
+        link.rel = 'icon';
+        document.head.appendChild(link);
+      }
+      link.href = url;
+    }
+
+    function updateTitle() {
+      if (isTimerRunning && !isPaused) {
+        const hours = Math.floor(timerSeconds / 3600);
+        const minutes = Math.floor((timerSeconds % 3600) / 60);
+        const seconds = timerSeconds % 60;
+        document.title = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')} - Работаем`;
+      } else if (isPaused) {
+        const hours = Math.floor(timerSeconds / 3600);
+        const minutes = Math.floor((timerSeconds % 3600) / 60);
+        const seconds = timerSeconds % 60;
+        document.title = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')} - Пауза`;
+      } else {
+        document.title = 'Вариант 4: Энергичный - Звуки и анимация';
+      }
+    }
+
+    function startTimer() {
+      if (isTimerRunning) return;
+      isTimerRunning = true;
+      isPaused = false;
+      lastNotificationTime = 0;
+      document.getElementById('timerStatus').textContent = 'Работаем';
+      
+      timerInterval = setInterval(() => {
+        timerSeconds++;
+        updateTimerDisplay();
+        updateTitle();
+        
+        if (timerSeconds >= lastNotificationTime + notificationInterval) {
+          playSound('alarm');
+          lastNotificationTime = Math.floor(timerSeconds / notificationInterval) * notificationInterval;
+        }
+      }, 1000);
+      
+      const animationSpeed = 1000; // Fast speed
+      faviconInterval = setInterval(() => {
+        const time = Date.now() / animationSpeed;
+        const animationValue = (time * 0.8) % 1;
+        drawFavicon(false, animationValue);
+      }, 50);
+      
+      drawFavicon(false, 0);
+    }
+
+    function pauseTimer() {
+      if (!isTimerRunning) return;
+      isPaused = !isPaused;
+      document.getElementById('timerStatus').textContent = isPaused ? 'На паузе' : 'Работаем';
+      
+      if (isPaused) {
+        clearInterval(timerInterval);
+        clearInterval(faviconInterval);
+        drawFavicon(true);
+      } else {
+        timerInterval = setInterval(() => {
+          timerSeconds++;
+          updateTimerDisplay();
+          updateTitle();
+          
+          if (timerSeconds >= lastNotificationTime + notificationInterval) {
+            playSound('alarm');
+            lastNotificationTime = Math.floor(timerSeconds / notificationInterval) * notificationInterval;
+          }
+        }, 1000);
+        
+        const animationSpeed = 1000;
+        faviconInterval = setInterval(() => {
+          const time = Date.now() / animationSpeed;
+          const animationValue = (time * 0.8) % 1;
+          drawFavicon(false, animationValue);
+        }, 50);
+      }
+      updateTitle();
+    }
+
+    function stopTimer() {
+      isTimerRunning = false;
+      isPaused = false;
+      timerSeconds = 0;
+      lastNotificationTime = 0;
+      
+      clearInterval(timerInterval);
+      clearInterval(faviconInterval);
+      
+      document.getElementById('timerStatus').textContent = 'Остановлен';
+      updateTimerDisplay();
+      updateTitle();
+      drawFavicon(true);
+    }
+
+    function updateTimerDisplay() {
+      const hours = Math.floor(timerSeconds / 3600);
+      const minutes = Math.floor((timerSeconds % 3600) / 60);
+      const seconds = timerSeconds % 60;
+      document.getElementById('timerTime').textContent = 
+        `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }
+
+    initTone();
+    drawFavicon(true);
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Work Schedule Modal - Variant 4: Minimal List</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+    }
+
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(20px);
+    }
+
+    .radio-option {
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .radio-option:hover {
+      background: rgba(0, 0, 0, 0.02);
+    }
+
+    .radio-option input:checked + .radio-label {
+      color: #1f2937;
+      font-weight: 600;
+    }
+
+    .radio-option input:checked ~ .radio-indicator {
+      background: #4b5563;
+      border-color: #4b5563;
+    }
+
+    .radio-indicator {
+      width: 1.25rem;
+      height: 1.25rem;
+      border: 2px solid #d1d5db;
+      border-radius: 50%;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .radio-indicator::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 0.5rem;
+      height: 0.5rem;
+      border-radius: 50%;
+      background: white;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .radio-option input:checked ~ .radio-indicator::after {
+      opacity: 1;
+    }
+
+    input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+  
+  <!-- Modal -->
+  <div class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
+    
+    <!-- Modal Content -->
+    <div class="glass-effect p-8 rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col">
+      
+      <!-- Header -->
+      <div class="flex justify-between items-center mb-6 pb-4 border-b border-gray-200">
+        <div>
+          <h2 class="text-2xl font-bold text-gray-900">Рабочий график</h2>
+          <p class="text-sm text-gray-500 mt-1">Выберите подходящий режим работы</p>
+        </div>
+        <button class="p-2 rounded-lg hover:bg-gray-100 transition-colors text-gray-600">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Content -->
+      <div class="flex-1 overflow-y-auto pr-2">
+        
+        <!-- Radio Options List -->
+        <div class="space-y-3">
+          
+          <!-- Option 1: 5/2 -->
+          <label class="radio-option block p-4 border border-gray-200 rounded-lg">
+            <div class="flex items-start gap-4">
+              <input type="radio" name="schedule" value="5/2" checked />
+              <div class="radio-indicator mt-1 flex-shrink-0"></div>
+              
+              <div class="flex-1">
+                <div class="flex items-start justify-between mb-2">
+                  <div>
+                    <h4 class="radio-label text-base font-medium text-gray-900 transition-all">Стандартный график 5/2</h4>
+                    <p class="text-sm text-gray-600 mt-1">Пятидневная рабочая неделя с двумя выходными</p>
+                  </div>
+                  <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded font-medium ml-2">Популярный</span>
+                </div>
+                
+                <div class="bg-gray-50 rounded p-3 space-y-2">
+                  <div class="flex items-center justify-between text-sm">
+                    <span class="text-gray-600">Рабочие дни:</span>
+                    <span class="font-medium text-gray-900">Понедельник - Пятница</span>
+                  </div>
+                  <div class="flex items-center justify-between text-sm">
+                    <span class="text-gray-600">Выходные:</span>
+                    <span class="font-medium text-gray-900">Суббота, Воскресенье</span>
+                  </div>
+                  <div class="flex items-center justify-between text-sm">
+                    <span class="text-gray-600">В этом месяце:</span>
+                    <span class="font-semibold text-blue-600">23 рабочих дня</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </label>
+
+          <!-- Option 2: 2/2 -->
+          <label class="radio-option block p-4 border border-gray-200 rounded-lg">
+            <div class="flex items-start gap-4">
+              <input type="radio" name="schedule" value="2/2" />
+              <div class="radio-indicator mt-1 flex-shrink-0"></div>
+              
+              <div class="flex-1">
+                <div class="flex items-start justify-between mb-2">
+                  <div>
+                    <h4 class="radio-label text-base font-medium text-gray-700 transition-all">Сменный график 2/2</h4>
+                    <p class="text-sm text-gray-600 mt-1">Два рабочих дня, затем два выходных</p>
+                  </div>
+                  <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded font-medium ml-2">Сменный</span>
+                </div>
+                
+                <div class="bg-gray-50 rounded p-3 space-y-2">
+                  <div class="flex items-center justify-between text-sm">
+                    <span class="text-gray-600">Цикл:</span>
+                    <span class="font-medium text-gray-900">4 дня (2 работы + 2 отдыха)</span>
+                  </div>
+                  <div class="flex items-center justify-between text-sm">
+                    <span class="text-gray-600">Подходит для:</span>
+                    <span class="font-medium text-gray-900">Охрана, дежурства</span>
+                  </div>
+                  <div class="flex items-center justify-between text-sm">
+                    <span class="text-gray-600">В этом месяце:</span>
+                    <span class="font-semibold text-purple-600">15 рабочих дней</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </label>
+
+          <!-- Option 3: 3/3 -->
+          <label class="radio-option block p-4 border border-gray-200 rounded-lg">
+            <div class="flex items-start gap-4">
+              <input type="radio" name="schedule" value="3/3" />
+              <div class="radio-indicator mt-1 flex-shrink-0"></div>
+              
+              <div class="flex-1">
+                <div class="flex items-start justify-between mb-2">
+                  <div>
+                    <h4 class="radio-label text-base font-medium text-gray-700 transition-all">Сменный график 3/3</h4>
+                    <p class="text-sm text-gray-600 mt-1">Три рабочих дня, затем три выходных</p>
+                  </div>
+                  <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded font-medium ml-2">Сменный</span>
+                </div>
+                
+                <div class="bg-gray-50 rounded p-3 space-y-2">
+                  <div class="flex items-center justify-between text-sm">
+                    <span class="text-gray-600">Цикл:</span>
+                    <span class="font-medium text-gray-900">6 дней (3 работы + 3 отдыха)</span>
+                  </div>
+                  <div class="flex items-center justify-between text-sm">
+                    <span class="text-gray-600">Подходит для:</span>
+                    <span class="font-medium text-gray-900">Производство, вахты</span>
+                  </div>
+                  <div class="flex items-center justify-between text-sm">
+                    <span class="text-gray-600">В этом месяце:</span>
+                    <span class="font-semibold text-orange-600">15 рабочих дней</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </label>
+
+          <!-- Option 4: 5/5 -->
+          <label class="radio-option block p-4 border border-gray-200 rounded-lg">
+            <div class="flex items-start gap-4">
+              <input type="radio" name="schedule" value="5/5" />
+              <div class="radio-indicator mt-1 flex-shrink-0"></div>
+              
+              <div class="flex-1">
+                <div class="flex items-start justify-between mb-2">
+                  <div>
+                    <h4 class="radio-label text-base font-medium text-gray-700 transition-all">Интенсивный график 5/5</h4>
+                    <p class="text-sm text-gray-600 mt-1">Пять рабочих дней, затем пять выходных</p>
+                  </div>
+                  <span class="px-2 py-1 bg-red-100 text-red-700 text-xs rounded font-medium ml-2">Интенсивный</span>
+                </div>
+                
+                <div class="bg-gray-50 rounded p-3 space-y-2">
+                  <div class="flex items-center justify-between text-sm">
+                    <span class="text-gray-600">Цикл:</span>
+                    <span class="font-medium text-gray-900">10 дней (5 работы + 5 отдыха)</span>
+                  </div>
+                  <div class="flex items-center justify-between text-sm">
+                    <span class="text-gray-600">Подходит для:</span>
+                    <span class="font-medium text-gray-900">Вахтовый метод</span>
+                  </div>
+                  <div class="flex items-center justify-between text-sm">
+                    <span class="text-gray-600">В этом месяце:</span>
+                    <span class="font-semibold text-red-600">15 рабочих дней</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </label>
+
+          <!-- Option 5: Custom -->
+          <label class="radio-option block p-4 border border-gray-200 rounded-lg">
+            <div class="flex items-start gap-4">
+              <input type="radio" name="schedule" value="custom" />
+              <div class="radio-indicator mt-1 flex-shrink-0"></div>
+              
+              <div class="flex-1">
+                <div class="flex items-start justify-between mb-2">
+                  <div>
+                    <h4 class="radio-label text-base font-medium text-gray-700 transition-all">Индивидуальный график</h4>
+                    <p class="text-sm text-gray-600 mt-1">Настройте рабочие дни вручную для каждого месяца</p>
+                  </div>
+                  <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded font-medium ml-2">Гибкий</span>
+                </div>
+                
+                <div class="bg-gray-50 rounded p-3 space-y-2">
+                  <div class="flex items-center justify-between text-sm">
+                    <span class="text-gray-600">Возможности:</span>
+                    <span class="font-medium text-gray-900">Выбор каждого дня</span>
+                  </div>
+                  <div class="flex items-center justify-between text-sm">
+                    <span class="text-gray-600">Подходит для:</span>
+                    <span class="font-medium text-gray-900">Фриланс, гибкий график</span>
+                  </div>
+                  <div class="flex items-center justify-between text-sm">
+                    <span class="text-gray-600">Настроено:</span>
+                    <span class="font-semibold text-green-600">20 рабочих дней</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </label>
+
+        </div>
+
+        <!-- Settings Section -->
+        <div class="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+          <h4 class="font-semibold text-gray-900 mb-4">Дополнительные настройки</h4>
+          
+          <div class="space-y-4">
+            <!-- Daily Plan -->
+            <div class="flex items-center justify-between">
+              <label class="text-sm font-medium text-gray-700">Дневной план заработка:</label>
+              <div class="flex items-center gap-2">
+                <input 
+                  type="number" 
+                  value="6000" 
+                  class="w-28 px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+                />
+                <span class="text-sm text-gray-600">₽</span>
+              </div>
+            </div>
+
+            <!-- Week Start -->
+            <div class="flex items-center justify-between">
+              <label class="text-sm font-medium text-gray-700">Начало рабочей недели:</label>
+              <select class="px-3 py-1.5 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-gray-500 focus:border-transparent">
+                <option value="1">Понедельник</option>
+                <option value="2">Вторник</option>
+                <option value="3">Среда</option>
+                <option value="4">Четверг</option>
+                <option value="5">Пятница</option>
+                <option value="6">Суббота</option>
+                <option value="7">Воскресенье</option>
+              </select>
+            </div>
+
+            <!-- Monthly Calculation -->
+            <div class="pt-3 border-t border-gray-200">
+              <div class="flex items-center justify-between">
+                <span class="text-sm text-gray-600">Расчетный план на месяц:</span>
+                <span class="text-lg font-bold text-gray-900">138 000 ₽</span>
+              </div>
+              <div class="text-xs text-gray-500 text-right mt-1">
+                6 000 ₽ × 23 рабочих дня
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex gap-3 mt-6 pt-6 border-t border-gray-200">
+        <button class="px-6 py-2.5 bg-gray-200 hover:bg-gray-300 rounded-lg font-medium text-gray-800 transition-colors">
+          Отмена
+        </button>
+        <button class="flex-1 px-6 py-2.5 bg-gray-700 hover:bg-gray-800 text-white rounded-lg font-medium transition-colors">
+          Сохранить настройки
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>
+

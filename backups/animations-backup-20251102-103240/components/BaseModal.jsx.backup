@@ -1,0 +1,140 @@
+import PropTypes from 'prop-types';
+import { Dialog } from '@headlessui/react';
+import { X } from 'lucide-react';
+import { useEffect } from 'react';
+
+/**
+ * 🎨 Базовый компонент модального окна
+ * 
+ * Устраняет дублирование кода во всех модальных окнах.
+ * Предоставляет единообразную структуру и поведение.
+ * 
+ * @param {boolean} isOpen - Открыто ли модальное окно
+ * @param {function} onClose - Функция закрытия модального окна
+ * @param {string} title - Заголовок модального окна
+ * @param {string} subtitle - Подзаголовок (опционально)
+ * @param {React.ReactNode} children - Контент модального окна
+ * @param {string} size - Размер модального окна: 'small' | 'medium' | 'large' | 'full'
+ * @param {boolean} showCloseButton - Показывать ли кнопку закрытия (по умолчанию true)
+ * @param {boolean} closeOnOverlayClick - Закрывать ли при клике на overlay (по умолчанию true)
+ * @param {string} className - Дополнительные классы для панели
+ * @param {React.ReactNode} footer - Футер модального окна (опционально)
+ */
+
+const sizeClasses = {
+  small: 'max-w-md',
+  medium: 'max-w-lg',
+  large: 'max-w-2xl',
+  full: 'max-w-4xl',
+};
+
+export function BaseModal({
+  isOpen,
+  onClose,
+  title,
+  subtitle,
+  children,
+  size = 'medium',
+  showCloseButton = true,
+  closeOnOverlayClick = true,
+  className = '',
+  footer,
+}) {
+  // Закрытие по Escape (обрабатывается Dialog автоматически)
+  useEffect(() => {
+    if (!isOpen) return;
+    
+    const handleEscape = (e) => {
+      if (e.key === 'Escape' && closeOnOverlayClick) {
+        onClose();
+      }
+    };
+    
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [isOpen, onClose, closeOnOverlayClick]);
+
+  return (
+    <Dialog 
+      open={isOpen} 
+      onClose={closeOnOverlayClick ? onClose : () => {}} 
+      className="relative z-50"
+    >
+      {/* Overlay с backdrop blur */}
+      <div 
+        className="fixed inset-0 bg-black/30 backdrop-blur-sm" 
+        style={{ pointerEvents: isOpen ? 'auto' : 'none' }}
+        aria-hidden="true"
+        onClick={closeOnOverlayClick ? onClose : undefined}
+      />
+
+      {/* Центрирование */}
+      <div className="fixed inset-0 flex items-center justify-center p-4 overflow-y-auto">
+        <Dialog.Panel 
+          className={`
+            glass-effect rounded-xl p-6 w-full shadow-2xl 
+            animate-slide-in max-h-[90vh] overflow-y-auto
+            ${sizeClasses[size]}
+            ${className}
+          `}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Заголовок */}
+          {(title || showCloseButton) && (
+            <div className={`flex items-start justify-between ${subtitle ? 'mb-2' : 'mb-6'}`}>
+              {title && (
+                <div className="flex-1 pr-4">
+                  <Dialog.Title className="text-2xl font-bold text-gray-900 dark:text-white">
+                    {title}
+                  </Dialog.Title>
+                  {subtitle && (
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 mb-0">
+                      {subtitle}
+                    </p>
+                  )}
+                </div>
+              )}
+              
+              {showCloseButton && (
+                <button
+                  onClick={onClose}
+                  className="glass-button p-1 rounded-lg flex-shrink-0 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  aria-label="Закрыть модальное окно"
+                  title="Закрыть (Escape)"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              )}
+            </div>
+          )}
+
+          {/* Контент */}
+          <div className="modal-content">
+            {children}
+          </div>
+
+          {/* Футер (опционально) */}
+          {footer && (
+            <div className="mt-0 pt-4 border-t border-gray-200 dark:border-gray-700">
+              {footer}
+            </div>
+          )}
+        </Dialog.Panel>
+      </div>
+    </Dialog>
+  );
+}
+
+BaseModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  subtitle: PropTypes.string,
+  children: PropTypes.node.isRequired,
+  size: PropTypes.oneOf(['small', 'medium', 'large', 'full']),
+  showCloseButton: PropTypes.bool,
+  closeOnOverlayClick: PropTypes.bool,
+  className: PropTypes.string,
+  footer: PropTypes.node
+};
+

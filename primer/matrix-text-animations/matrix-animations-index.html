@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Матричные анимации текста - Примеры</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    .dark .glass-effect {
+      background: rgba(31, 41, 55, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+  </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 min-h-screen p-8 transition-colors duration-300">
+  
+  <div class="max-w-7xl mx-auto">
+    
+    <!-- Заголовок -->
+    <div class="glass-effect rounded-xl p-6 mb-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+            Матричные анимации текста
+          </h1>
+          <p class="text-gray-600 dark:text-gray-400">
+            5 визуальных примеров различных стилей анимации текста в стиле матрицы
+          </p>
+        </div>
+        <button 
+          onclick="document.body.classList.toggle('dark'); localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');"
+          class="glass-effect px-4 py-2 rounded-lg text-sm font-semibold hover:scale-105 transition-transform"
+        >
+          🌙 Переключить тему
+        </button>
+      </div>
+    </div>
+
+    <!-- Сетка примеров -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      
+      <!-- Вариант 1: Базовый -->
+      <a href="matrix-animation-variant-1-basic.html" class="glass-effect rounded-xl p-6 hover:scale-105 transition-transform">
+        <div class="text-4xl mb-4">✨</div>
+        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Вариант 1: Базовый</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+          Буквы появляются последовательно слева направо с небольшой задержкой
+        </p>
+        <div class="text-xs text-gray-500 dark:text-gray-500">Последовательное появление</div>
+      </a>
+
+      <!-- Вариант 2: Случайный порядок -->
+      <a href="matrix-animation-variant-2-random.html" class="glass-effect rounded-xl p-6 hover:scale-105 transition-transform">
+        <div class="text-4xl mb-4">🎲</div>
+        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Вариант 2: Случайный</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+          Буквы появляются в случайном порядке для более динамичного эффекта
+        </p>
+        <div class="text-xs text-gray-500 dark:text-gray-500">Хаотичное появление</div>
+      </a>
+
+      <!-- Вариант 3: Волна -->
+      <a href="matrix-animation-variant-3-wave.html" class="glass-effect rounded-xl p-6 hover:scale-105 transition-transform">
+        <div class="text-4xl mb-4">🌊</div>
+        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Вариант 3: Волна</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+          Буквы появляются волной - сверху вниз или снизу вверх
+        </p>
+        <div class="text-xs text-gray-500 dark:text-gray-500">Волновой эффект</div>
+      </a>
+
+      <!-- Вариант 4: Мерцание -->
+      <a href="matrix-animation-variant-4-flicker.html" class="glass-effect rounded-xl p-6 hover:scale-105 transition-transform">
+        <div class="text-4xl mb-4">⚡</div>
+        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Вариант 4: Мерцание</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+          Буквы мерцают при появлении с эффектом свечения
+        </p>
+        <div class="text-xs text-gray-500 dark:text-gray-500">Эффект мерцания</div>
+      </a>
+
+      <!-- Вариант 5: Падение -->
+      <a href="matrix-animation-variant-5-drop.html" class="glass-effect rounded-xl p-6 hover:scale-105 transition-transform">
+        <div class="text-4xl mb-4">💫</div>
+        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Вариант 5: Падение</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+          Буквы падают сверху с эффектом гравитации и отскока
+        </p>
+        <div class="text-xs text-gray-500 dark:text-gray-500">Эффект падения</div>
+      </a>
+
+    </div>
+
+  </div>
+
+  <script>
+    // Загрузка темы из localStorage
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark');
+    }
+  </script>
+
+</body>
+</html>
+

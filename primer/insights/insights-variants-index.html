@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Варианты InsightsPanel - Превью</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+    iframe {
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      background: white;
+    }
+    .variant-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-gray-900 to-gray-800 min-h-screen p-8">
+  
+  <div class="max-w-7xl mx-auto">
+    <!-- Заголовок -->
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-white mb-3">🧠 Варианты дизайна InsightsPanel</h1>
+      <p class="text-gray-300 text-lg">Выберите понравившийся вариант для панели автоматических инсайтов</p>
+    </div>
+    
+    <!-- Сетка вариантов -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+      
+      <!-- Вариант 1 -->
+      <div class="glass-effect rounded-2xl p-6 variant-card transition-all duration-300">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h2 class="text-xl font-bold text-gray-800">Вариант 1 ⭐</h2>
+            <p class="text-sm text-gray-600">Текущий (Градиентные карточки)</p>
+          </div>
+          <a href="insights-variant-1-current.html" target="_blank" 
+             class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-sm font-semibold">
+            Открыть →
+          </a>
+        </div>
+        <iframe src="insights-variant-1-current.html" class="w-full h-80"></iframe>
+        <div class="mt-4 flex flex-wrap gap-2">
+          <span class="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs font-medium">⭐ Текущий</span>
+          <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-medium">Градиенты</span>
+          <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">5 колонок</span>
+        </div>
+      </div>
+      
+      <!-- Вариант 2 -->
+      <div class="glass-effect rounded-2xl p-6 variant-card transition-all duration-300">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h2 class="text-xl font-bold text-gray-800">Вариант 2</h2>
+            <p class="text-sm text-gray-600">Вертикальные карточки</p>
+          </div>
+          <a href="insights-variant-2-vertical.html" target="_blank" 
+             class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-sm font-semibold">
+            Открыть →
+          </a>
+        </div>
+        <iframe src="insights-variant-2-vertical.html" class="w-full h-80"></iframe>
+        <div class="mt-4 flex flex-wrap gap-2">
+          <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">Иконки слева</span>
+          <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">Вертикальные</span>
+          <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-medium">Чистый дизайн</span>
+        </div>
+      </div>
+      
+      <!-- Вариант 3 -->
+      <div class="glass-effect rounded-2xl p-6 variant-card transition-all duration-300">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h2 class="text-xl font-bold text-gray-800">Вариант 3</h2>
+            <p class="text-sm text-gray-600">Табличный стиль</p>
+          </div>
+          <a href="insights-variant-3-table.html" target="_blank" 
+             class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-sm font-semibold">
+            Открыть →
+          </a>
+        </div>
+        <iframe src="insights-variant-3-table.html" class="w-full h-80"></iframe>
+        <div class="mt-4 flex flex-wrap gap-2">
+          <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">Структурированный</span>
+          <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">Разделители</span>
+          <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-medium">Компактный</span>
+        </div>
+      </div>
+      
+      <!-- Вариант 4 -->
+      <div class="glass-effect rounded-2xl p-6 variant-card transition-all duration-300">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h2 class="text-xl font-bold text-gray-800">Вариант 4</h2>
+            <p class="text-sm text-gray-600">Минималистичные плашки</p>
+          </div>
+          <a href="insights-variant-4-minimal.html" target="_blank" 
+             class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-sm font-semibold">
+            Открыть →
+          </a>
+        </div>
+        <iframe src="insights-variant-4-minimal.html" class="w-full h-80"></iframe>
+        <div class="mt-4 flex flex-wrap gap-2">
+          <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">Цветные акценты</span>
+          <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">Минимализм</span>
+          <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-medium">Легкий</span>
+        </div>
+      </div>
+      
+    </div>
+    
+    <!-- Вариант 5 - Полная ширина -->
+    <div class="glass-effect rounded-2xl p-6 variant-card transition-all duration-300">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h2 class="text-2xl font-bold text-gray-800">Вариант 5</h2>
+          <p class="text-gray-600">Компактный список с эмодзи</p>
+        </div>
+        <a href="insights-variant-5-compact-list.html" target="_blank" 
+           class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-sm font-semibold">
+          Открыть →
+        </a>
+      </div>
+      <iframe src="insights-variant-5-compact-list.html" class="w-full h-96"></iframe>
+      <div class="mt-4 flex flex-wrap gap-2">
+        <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">Очень компактный</span>
+        <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">Эмодзи</span>
+        <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-medium">Быстрое сканирование</span>
+      </div>
+    </div>
+    
+    <!-- Сравнительная таблица -->
+    <div class="glass-effect rounded-2xl p-6 mt-8">
+      <h2 class="text-2xl font-bold text-gray-800 mb-4">📊 Сравнение вариантов</h2>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-gray-300">
+              <th class="text-left py-3 px-4 font-semibold text-gray-700">Вариант</th>
+              <th class="text-left py-3 px-4 font-semibold text-gray-700">Визуальность</th>
+              <th class="text-left py-3 px-4 font-semibold text-gray-700">Компактность</th>
+              <th class="text-left py-3 px-4 font-semibold text-gray-700">Особенности</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-gray-200 hover:bg-yellow-50 bg-yellow-50/50">
+              <td class="py-3 px-4 font-bold">1. Текущий ⭐</td>
+              <td class="py-3 px-4">⭐⭐⭐⭐⭐</td>
+              <td class="py-3 px-4">⭐⭐⭐</td>
+              <td class="py-3 px-4">Градиенты, большие иконки, 5 колонок</td>
+            </tr>
+            <tr class="border-b border-gray-200 hover:bg-gray-50">
+              <td class="py-3 px-4 font-medium">2. Вертикальные</td>
+              <td class="py-3 px-4">⭐⭐⭐⭐</td>
+              <td class="py-3 px-4">⭐⭐⭐⭐</td>
+              <td class="py-3 px-4">Иконки слева, вертикальное выравнивание</td>
+            </tr>
+            <tr class="border-b border-gray-200 hover:bg-gray-50">
+              <td class="py-3 px-4 font-medium">3. Таблица</td>
+              <td class="py-3 px-4">⭐⭐⭐</td>
+              <td class="py-3 px-4">⭐⭐⭐⭐⭐</td>
+              <td class="py-3 px-4">Структурированный, разделители</td>
+            </tr>
+            <tr class="border-b border-gray-200 hover:bg-gray-50">
+              <td class="py-3 px-4 font-medium">4. Минимал</td>
+              <td class="py-3 px-4">⭐⭐⭐⭐</td>
+              <td class="py-3 px-4">⭐⭐⭐⭐</td>
+              <td class="py-3 px-4">Цветные акценты, чистый дизайн</td>
+            </tr>
+            <tr class="hover:bg-gray-50">
+              <td class="py-3 px-4 font-medium">5. Список</td>
+              <td class="py-3 px-4">⭐⭐</td>
+              <td class="py-3 px-4">⭐⭐⭐⭐⭐</td>
+              <td class="py-3 px-4">Самый компактный, эмодзи, быстрое сканирование</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+    <!-- Инструкции -->
+    <div class="glass-effect rounded-2xl p-6 mt-8">
+      <h2 class="text-xl font-bold text-gray-800 mb-3">💡 Как выбрать?</h2>
+      <ul class="space-y-2 text-gray-700">
+        <li class="flex items-start gap-2">
+          <span class="text-blue-500 font-bold">1.</span>
+          <span>Откройте каждый вариант в полном окне (кнопка "Открыть →")</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-blue-500 font-bold">2.</span>
+          <span>Оцените визуальную привлекательность и компактность</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-blue-500 font-bold">3.</span>
+          <span>Подумайте, как часто вы будете смотреть на инсайты</span>
+        </li>
+        <li class="flex items-start gap-2">
+          <span class="text-blue-500 font-bold">4.</span>
+          <span>Выберите понравившийся вариант и сообщите номер</span>
+        </li>
+      </ul>
+      <div class="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+        <p class="text-sm text-blue-800">
+          <strong>💡 Рекомендация:</strong> Вариант 1 (Текущий) — самый визуально привлекательный с градиентами и большими иконками. Если нужна максимальная компактность — выбирайте Вариант 3 или 5.
+        </p>
+      </div>
+    </div>
+    
+  </div>
+  
+</body>
+</html>
+

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вариант 4: Инлайн</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .toggle-btn {
+      transition: all 0.2s ease;
+    }
+    
+    .favicon-demo {
+      transition: all 0.3s ease;
+    }
+    
+    .favicon-demo:hover .icon {
+      animation: pulse 1.8s ease-in-out infinite;
+    }
+    
+    .favicon-demo:hover .icon.blink {
+      animation: blink 1.2s ease-in-out infinite;
+    }
+    
+    .favicon-demo:hover .icon.rotate {
+      animation: rotate 2.5s linear infinite;
+    }
+    
+    .favicon-demo:hover .icon.breathe {
+      animation: breathe 3.5s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.18); opacity: 0.75; }
+    }
+    
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.35; }
+    }
+    
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    @keyframes breathe {
+      0%, 100% { transform: scale(1); opacity: 0.85; }
+      50% { transform: scale(1.12); opacity: 1; }
+    }
+  </style>
+</head>
+<body class="bg-gray-950 min-h-screen p-8">
+  <div class="max-w-lg mx-auto">
+    
+    <div class="glass-effect rounded-lg p-5 w-full">
+      
+      <h2 class="text-lg font-bold text-white mb-5">Звуки и анимация</h2>
+      
+      <!-- Инлайн блоки -->
+      <div class="space-y-4">
+        
+        <!-- Звуки -->
+        <div class="flex items-center justify-between py-3 border-b border-gray-800">
+          <div class="flex-1">
+            <div class="text-sm font-semibold text-white mb-1">Звуки</div>
+            <div class="flex gap-2">
+              <select class="px-2 py-1 bg-gray-900 border border-gray-800 rounded text-white text-xs">
+                <option>30 мин</option>
+                <option>1 час</option>
+              </select>
+              <button class="px-3 py-1 bg-blue-500/20 border border-blue-500 rounded text-blue-300 text-xs">
+                Chime
+              </button>
+              <button class="px-3 py-1 bg-gray-900 border border-gray-800 rounded text-gray-400 text-xs hover:border-blue-500">
+                Alert
+              </button>
+            </div>
+          </div>
+          <button class="toggle-btn w-11 h-6 bg-blue-500 rounded-full ml-4">
+            <span class="block w-5 h-5 bg-white rounded-full ml-6"></span>
+          </button>
+        </div>
+        
+        <!-- Анимация -->
+        <div class="flex items-center justify-between py-3 border-b border-gray-800">
+          <div class="flex-1">
+            <div class="text-sm font-semibold text-white mb-2">Анимация</div>
+            <div class="flex items-center gap-3">
+              <div class="flex gap-2">
+                <div class="favicon-demo cursor-pointer p-2 rounded border-2 border-blue-500 bg-blue-500/10">
+                  <div class="icon w-7 h-7 rounded bg-blue-500"></div>
+                  <div class="text-[9px] text-white mt-1 text-center">Pulse</div>
+                </div>
+                <div class="favicon-demo cursor-pointer p-2 rounded border border-gray-800 hover:border-blue-500">
+                  <div class="icon blink w-7 h-7 rounded bg-green-500"></div>
+                  <div class="text-[9px] text-gray-400 mt-1 text-center">Blink</div>
+                </div>
+                <div class="favicon-demo cursor-pointer p-2 rounded border border-gray-800 hover:border-blue-500">
+                  <div class="icon rotate w-7 h-7 rounded bg-purple-500"></div>
+                  <div class="text-[9px] text-gray-400 mt-1 text-center">Rotate</div>
+                </div>
+                <div class="favicon-demo cursor-pointer p-2 rounded border border-gray-800 hover:border-blue-500">
+                  <div class="icon breathe w-7 h-7 rounded bg-orange-500"></div>
+                  <div class="text-[9px] text-gray-400 mt-1 text-center">Breathe</div>
+                </div>
+              </div>
+              <div class="flex gap-1">
+                <button class="w-6 h-6 rounded bg-blue-500 border-2 border-blue-500"></button>
+                <button class="w-6 h-6 rounded bg-green-500 border border-gray-800"></button>
+                <input type="color" value="#3b82f6" class="w-6 h-6 rounded border border-gray-800 cursor-pointer">
+              </div>
+            </div>
+          </div>
+          <button class="toggle-btn w-11 h-6 bg-blue-500 rounded-full ml-4">
+            <span class="block w-5 h-5 bg-white rounded-full ml-6"></span>
+          </button>
+        </div>
+        
+      </div>
+      
+      <div class="flex gap-2 mt-5">
+        <button class="flex-1 px-4 py-2 border border-gray-800 rounded text-gray-400 text-sm hover:bg-gray-900">
+          Отмена
+        </button>
+        <button class="flex-1 px-4 py-2 bg-blue-500 rounded text-white text-sm font-semibold hover:bg-blue-600">
+          Сохранить
+        </button>
+      </div>
+      
+    </div>
+    
+  </div>
+</body>
+</html>
+

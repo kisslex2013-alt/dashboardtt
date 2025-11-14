@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ЯНГ - Главная</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #f1f5f9;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .page-transitioning {
+      animation: fadeOut 0.3s ease-in-out forwards;
+    }
+    
+    @keyframes fadeOut {
+      from {
+        opacity: 1;
+      }
+      to {
+        opacity: 0;
+      }
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .card {
+      animation: fadeIn 0.5s ease-out;
+    }
+    
+    .nav-button {
+      background: rgba(239, 68, 68, 0.9);
+      backdrop-filter: blur(8px);
+      border: 2px solid rgba(239, 68, 68, 0.8);
+      box-shadow: 0 0 20px rgba(239, 68, 68, 0.6),
+                  0 0 40px rgba(239, 68, 68, 0.4),
+                  inset 0 0 10px rgba(239, 68, 68, 0.3);
+      animation: redPulseGlow 2s ease-in-out infinite;
+      transition: all 0.3s ease;
+    }
+    
+    @keyframes redPulseGlow {
+      0%, 100% {
+        box-shadow: 0 0 20px rgba(239, 68, 68, 0.6),
+                    0 0 40px rgba(239, 68, 68, 0.4),
+                    0 0 60px rgba(239, 68, 68, 0.3),
+                    inset 0 0 10px rgba(239, 68, 68, 0.3);
+        transform: scale(1);
+      }
+      50% {
+        box-shadow: 0 0 30px rgba(239, 68, 68, 0.8),
+                    0 0 60px rgba(239, 68, 68, 0.6),
+                    0 0 90px rgba(239, 68, 68, 0.4),
+                    inset 0 0 15px rgba(239, 68, 68, 0.4);
+        transform: scale(1.05);
+      }
+    }
+    
+    .nav-button:hover {
+      background: rgba(220, 38, 38, 1);
+      border-color: rgba(220, 38, 38, 1);
+      transform: translateY(-2px) scale(1.1);
+      box-shadow: 0 0 40px rgba(239, 68, 68, 1),
+                  0 0 80px rgba(239, 68, 68, 0.8),
+                  0 0 120px rgba(239, 68, 68, 0.6),
+                  inset 0 0 20px rgba(239, 68, 68, 0.5);
+      animation: none;
+    }
+    
+    .nav-button svg {
+      color: #ffffff;
+      filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.8));
+      animation: iconPulse 1.5s ease-in-out infinite;
+    }
+    
+    @keyframes iconPulse {
+      0%, 100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.8));
+      }
+      50% {
+        transform: scale(1.1);
+        filter: drop-shadow(0 0 8px rgba(255, 255, 255, 1));
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container mx-auto px-6 py-12">
+    <div class="max-w-4xl mx-auto">
+      <div class="text-center mb-12">
+        <h1 class="text-5xl font-bold text-slate-100 mb-4">ЯНГ</h1>
+        <p class="text-xl text-slate-400">Платформа управления заданиями и начислениями</p>
+      </div>
+      
+      <div class="grid md:grid-cols-2 gap-8">
+        <!-- Задания -->
+        <div class="card bg-slate-800/80 backdrop-blur-lg border border-slate-700 rounded-xl p-8 hover:border-slate-600 transition-all">
+          <div class="flex items-center gap-4 mb-4">
+            <div class="p-3 bg-blue-500/20 rounded-lg">
+              <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+              </svg>
+            </div>
+            <h2 class="text-2xl font-bold text-slate-100">Задания</h2>
+          </div>
+          <p class="text-slate-400 mb-6">
+            Управление заданиями, фильтрация, избранное и отслеживание прогресса
+          </p>
+          <button onclick="navigateToTasks()" class="nav-button w-full px-6 py-4 rounded-lg font-semibold text-white flex items-center justify-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+            Перейти к заданиям
+          </button>
+        </div>
+        
+        <!-- Начисления -->
+        <div class="card bg-slate-800/80 backdrop-blur-lg border border-slate-700 rounded-xl p-8 hover:border-slate-600 transition-all">
+          <div class="flex items-center gap-4 mb-4">
+            <div class="p-3 bg-green-500/20 rounded-lg">
+              <svg class="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <h2 class="text-2xl font-bold text-slate-100">Начисления</h2>
+          </div>
+          <p class="text-slate-400 mb-6">
+            Просмотр начислений, история и календарь заработка
+          </p>
+          <button onclick="navigateToAccruals()" class="nav-button w-full px-6 py-4 rounded-lg font-semibold text-white flex items-center justify-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+            Перейти к начислениям
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    function navigateToTasks() {
+      document.body.classList.add('page-transitioning');
+      setTimeout(() => {
+        window.location.href = 'tasks-page.html';
+      }, 300);
+    }
+    
+    function navigateToAccruals() {
+      document.body.classList.add('page-transitioning');
+      setTimeout(() => {
+        window.location.href = 'accruals-page.html';
+      }, 300);
+    }
+    
+    // Add page load animation
+    window.addEventListener('load', () => {
+      document.body.style.opacity = '0';
+      document.body.style.transition = 'opacity 0.3s ease-in-out';
+      setTimeout(() => {
+        document.body.style.opacity = '1';
+      }, 50);
+    });
+  </script>
+</body>
+</html>
+

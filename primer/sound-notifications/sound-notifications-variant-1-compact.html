@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вариант 1: Компактный</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(16px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .favicon-preview {
+      width: 32px;
+      height: 32px;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+    
+    .favicon-preview:hover {
+      transform: scale(1.2);
+    }
+    
+    /* Анимации фавикона только при наведении */
+    .favicon-preview:hover .pulse-anim {
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    .favicon-preview:hover .blink-anim {
+      animation: blink 1s ease-in-out infinite;
+    }
+    
+    .favicon-preview:hover .rotate-anim {
+      animation: rotate 2s linear infinite;
+    }
+    
+    .favicon-preview:hover .wave-anim {
+      animation: wave 2s ease-in-out infinite;
+    }
+    
+    .favicon-preview:hover .breathe-anim {
+      animation: breathe 3s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.2); opacity: 0.7; }
+    }
+    
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    @keyframes wave {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.3); }
+    }
+    
+    @keyframes breathe {
+      0%, 100% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.1); opacity: 1; }
+    }
+  </style>
+</head>
+<body class="bg-gray-900 min-h-screen p-8">
+  <div class="max-w-2xl mx-auto">
+    
+    <!-- Модальное окно -->
+    <div class="glass-effect rounded-xl p-6 w-full shadow-2xl max-h-[90vh] overflow-y-auto">
+      
+      <!-- Заголовок -->
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-xl font-bold text-white flex items-center gap-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+          </svg>
+          Звуки и анимация
+        </h2>
+        <button class="text-gray-400 hover:text-white transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      
+      <!-- Звуковые уведомления -->
+      <div class="space-y-4 mb-6">
+        <div class="flex items-center justify-between">
+          <label class="text-sm font-semibold text-white">Звуковые уведомления</label>
+          <button class="relative w-11 h-6 bg-blue-500 rounded-full transition-colors">
+            <span class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transform translate-x-5 transition-transform"></span>
+          </button>
+        </div>
+        
+        <!-- Интервал -->
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 mb-2">Интервал</label>
+          <select class="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            <option>15 минут</option>
+            <option selected>30 минут</option>
+            <option>45 минут</option>
+            <option>1 час</option>
+          </select>
+        </div>
+        
+        <!-- Тип звука -->
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 mb-2">Тип звука</label>
+          <div class="grid grid-cols-3 gap-2">
+            <button class="p-2 rounded-lg border-2 border-blue-500 bg-blue-500/10 text-white text-xs font-semibold transition-all hover:scale-105">
+              Chime
+            </button>
+            <button class="p-2 rounded-lg border-2 border-gray-700 hover:border-blue-500 text-gray-300 text-xs transition-all hover:scale-105">
+              Alert
+            </button>
+            <button class="p-2 rounded-lg border-2 border-gray-700 hover:border-blue-500 text-gray-300 text-xs transition-all hover:scale-105">
+              Phone
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Анимация фавикона -->
+      <div class="space-y-4">
+        <div class="flex items-center justify-between">
+          <label class="text-sm font-semibold text-white">Анимация фавикона</label>
+          <button class="relative w-11 h-6 bg-blue-500 rounded-full transition-colors">
+            <span class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transform translate-x-5 transition-transform"></span>
+          </button>
+        </div>
+        
+        <!-- Стиль анимации (только при наведении) -->
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 mb-2">Стиль</label>
+          <div class="grid grid-cols-4 gap-2">
+            <div class="favicon-preview cursor-pointer p-2 rounded-lg border-2 border-blue-500 bg-blue-500/10">
+              <div class="pulse-anim w-8 h-8 rounded bg-blue-500"></div>
+              <div class="text-[10px] text-white mt-1 text-center">Pulse</div>
+            </div>
+            <div class="favicon-preview cursor-pointer p-2 rounded-lg border-2 border-gray-700 hover:border-blue-500">
+              <div class="blink-anim w-8 h-8 rounded bg-green-500"></div>
+              <div class="text-[10px] text-gray-300 mt-1 text-center">Blink</div>
+            </div>
+            <div class="favicon-preview cursor-pointer p-2 rounded-lg border-2 border-gray-700 hover:border-blue-500">
+              <div class="rotate-anim w-8 h-8 rounded bg-purple-500"></div>
+              <div class="text-[10px] text-gray-300 mt-1 text-center">Rotate</div>
+            </div>
+            <div class="favicon-preview cursor-pointer p-2 rounded-lg border-2 border-gray-700 hover:border-blue-500">
+              <div class="breathe-anim w-8 h-8 rounded bg-orange-500"></div>
+              <div class="text-[10px] text-gray-300 mt-1 text-center">Breathe</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Цвет -->
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 mb-2">Цвет</label>
+          <div class="flex gap-2">
+            <button class="w-8 h-8 rounded-lg bg-blue-500 border-2 border-blue-500 ring-1 ring-blue-500/50"></button>
+            <button class="w-8 h-8 rounded-lg bg-green-500 border-2 border-gray-700 hover:border-blue-500"></button>
+            <button class="w-8 h-8 rounded-lg bg-orange-500 border-2 border-gray-700 hover:border-blue-500"></button>
+            <button class="w-8 h-8 rounded-lg bg-purple-500 border-2 border-gray-700 hover:border-blue-500"></button>
+            <input type="color" value="#3b82f6" class="w-8 h-8 rounded-lg border-2 border-gray-700 cursor-pointer">
+          </div>
+        </div>
+      </div>
+      
+      <!-- Кнопки -->
+      <div class="flex gap-3 mt-6 pt-6 border-t border-gray-700">
+        <button class="flex-1 px-4 py-2 border border-gray-700 rounded-lg text-gray-300 hover:bg-gray-800 transition-colors font-semibold">
+          Отмена
+        </button>
+        <button class="flex-1 px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-lg text-white font-semibold transition-colors">
+          Сохранить
+        </button>
+      </div>
+      
+    </div>
+    
+  </div>
+</body>
+</html>
+

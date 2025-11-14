@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>История изменений - Вариант 4: Дашборд-стиль</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .dark .glass-card {
+      background: rgba(31, 41, 55, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+  </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 min-h-screen p-8 transition-colors duration-300">
+  
+  <div class="max-w-6xl mx-auto">
+    
+    <!-- Заголовок -->
+    <div class="glass-card rounded-xl p-6 mb-6">
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Вариант 4: Дашборд-стиль</h1>
+      <p class="text-gray-600 dark:text-gray-400">Цветные блоки по категориям, визуальное представление изменений</p>
+    </div>
+
+    <!-- История изменений -->
+    <div class="space-y-6">
+      
+      <!-- Версия 1.1.0 -->
+      <div class="glass-card rounded-xl p-6 border border-gray-200/50 dark:border-gray-700/50">
+        
+        <!-- Заголовок версии -->
+        <div class="flex items-center justify-between mb-6 pb-4 border-b border-gray-200/50 dark:border-gray-700/50">
+          <div class="flex items-center gap-4">
+            <div class="px-4 py-2 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-lg font-bold text-lg">
+              v1.1.0
+            </div>
+            <div>
+              <h3 class="font-bold text-gray-900 dark:text-white text-lg mb-1">
+                Гибкая система настройки выплат
+              </h3>
+              <p class="text-sm text-gray-500 dark:text-gray-400">
+                05.11.2024 • 12 изменений
+              </p>
+            </div>
+          </div>
+          <button onclick="toggleVersion('v1-1-0')" class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors">
+            <svg id="chevron-v1-1-0" class="w-6 h-6 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+        </div>
+        
+        <!-- Контент версии -->
+        <div id="content-v1-1-0" class="hidden">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            
+            <!-- Категория: Новые возможности -->
+            <div class="bg-gradient-to-br from-blue-500/20 to-blue-600/10 rounded-xl p-5 border-2 border-blue-300/50 dark:border-blue-600/30">
+              <div class="flex items-center justify-between mb-4">
+                <h4 class="text-sm font-bold text-blue-700 dark:text-blue-300 uppercase tracking-wide flex items-center gap-2">
+                  <span class="text-xl">✨</span>
+                  <span>Новые возможности</span>
+                </h4>
+                <span class="px-2 py-1 bg-blue-500/30 dark:bg-blue-600/30 text-blue-800 dark:text-blue-200 text-xs font-bold rounded">
+                  5
+                </span>
+              </div>
+              <ul class="space-y-2 text-sm text-gray-700 dark:text-gray-200">
+                <li class="flex items-start gap-2">
+                  <span class="text-blue-500 mt-1">▸</span>
+                  <span>Гибкая система настройки дат выплат</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-blue-500 mt-1">▸</span>
+                  <span>Цветные заголовки для карточек</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-blue-500 mt-1">▸</span>
+                  <span>Аккордеоны для истории и планов</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-blue-500 mt-1">▸</span>
+                  <span>Анимация мерцания для текста</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-blue-500 mt-1">▸</span>
+                  <span>Улучшенные графики</span>
+                </li>
+              </ul>
+            </div>
+            
+            <!-- Категория: Улучшения интерфейса -->
+            <div class="bg-gradient-to-br from-purple-500/20 to-purple-600/10 rounded-xl p-5 border-2 border-purple-300/50 dark:border-purple-600/30">
+              <div class="flex items-center justify-between mb-4">
+                <h4 class="text-sm font-bold text-purple-700 dark:text-purple-300 uppercase tracking-wide flex items-center gap-2">
+                  <span class="text-xl">🎨</span>
+                  <span>Улучшения интерфейса</span>
+                </h4>
+                <span class="px-2 py-1 bg-purple-500/30 dark:bg-purple-600/30 text-purple-800 dark:text-purple-200 text-xs font-bold rounded">
+                  4
+                </span>
+              </div>
+              <ul class="space-y-2 text-sm text-gray-700 dark:text-gray-200">
+                <li class="flex items-start gap-2">
+                  <span class="text-purple-500 mt-1">▸</span>
+                  <span>Мягкая подсветка карточек</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-purple-500 mt-1">▸</span>
+                  <span>Цветные границы</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-purple-500 mt-1">▸</span>
+                  <span>Улучшенная видимость текста</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-purple-500 mt-1">▸</span>
+                  <span>Hover-эффекты</span>
+                </li>
+              </ul>
+            </div>
+            
+            <!-- Категория: Исправления ошибок -->
+            <div class="bg-gradient-to-br from-red-500/20 to-red-600/10 rounded-xl p-5 border-2 border-red-300/50 dark:border-red-600/30">
+              <div class="flex items-center justify-between mb-4">
+                <h4 class="text-sm font-bold text-red-700 dark:text-red-300 uppercase tracking-wide flex items-center gap-2">
+                  <span class="text-xl">🐛</span>
+                  <span>Исправления ошибок</span>
+                </h4>
+                <span class="px-2 py-1 bg-red-500/30 dark:bg-red-600/30 text-red-800 dark:text-red-200 text-xs font-bold rounded">
+                  2
+                </span>
+              </div>
+              <ul class="space-y-2 text-sm text-gray-700 dark:text-gray-200">
+                <li class="flex items-start gap-2">
+                  <span class="text-red-500 mt-1">▸</span>
+                  <span>Дублирующийся скроллбар</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-red-500 mt-1">▸</span>
+                  <span>Импорт Area в HourAnalysisChart</span>
+                </li>
+              </ul>
+            </div>
+            
+            <!-- Категория: Технические улучшения -->
+            <div class="bg-gradient-to-br from-teal-500/20 to-teal-600/10 rounded-xl p-5 border-2 border-teal-300/50 dark:border-teal-600/30">
+              <div class="flex items-center justify-between mb-4">
+                <h4 class="text-sm font-bold text-teal-700 dark:text-teal-300 uppercase tracking-wide flex items-center gap-2">
+                  <span class="text-xl">⚙️</span>
+                  <span>Технические улучшения</span>
+                </h4>
+                <span class="px-2 py-1 bg-teal-500/30 dark:bg-teal-600/30 text-teal-800 dark:text-teal-200 text-xs font-bold rounded">
+                  1
+                </span>
+              </div>
+              <ul class="space-y-2 text-sm text-gray-700 dark:text-gray-200">
+                <li class="flex items-start gap-2">
+                  <span class="text-teal-500 mt-1">▸</span>
+                  <span>Оптимизация IndexedDB</span>
+                </li>
+              </ul>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      
+      <!-- Версия 1.0.0 -->
+      <div class="glass-card rounded-xl p-6 border border-gray-200/50 dark:border-gray-700/50">
+        
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-4">
+            <div class="px-4 py-2 bg-gradient-to-br from-gray-500 to-gray-600 text-white rounded-lg font-bold text-lg">
+              v1.0.0
+            </div>
+            <div>
+              <h3 class="font-bold text-gray-900 dark:text-white text-lg mb-1">
+                Первый релиз приложения
+              </h3>
+              <p class="text-sm text-gray-500 dark:text-gray-400">
+                01.10.2024 • 8 изменений
+              </p>
+            </div>
+          </div>
+          <button onclick="toggleVersion('v1-0-0')" class="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300 transition-colors">
+            <svg id="chevron-v1-0-0" class="w-6 h-6 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+        </div>
+        
+        <div id="content-v1-0-0" class="hidden mt-6 pt-6 border-t border-gray-200/50 dark:border-gray-700/50">
+          <p class="text-sm text-gray-600 dark:text-gray-400 text-center py-4">Первая версия приложения с базовым функционалом</p>
+        </div>
+      </div>
+      
+    </div>
+    
+  </div>
+  
+  <script>
+    function toggleVersion(version) {
+      const content = document.getElementById(`content-${version}`);
+      const chevron = document.getElementById(`chevron-${version}`);
+      
+      if (content.classList.contains('hidden')) {
+        content.classList.remove('hidden');
+        chevron.style.transform = 'rotate(180deg)';
+      } else {
+        content.classList.add('hidden');
+        chevron.style.transform = 'rotate(0deg)';
+      }
+    }
+    
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+      localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+    }
+    
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark');
+    }
+  </script>
+  
+</body>
+</html>
+

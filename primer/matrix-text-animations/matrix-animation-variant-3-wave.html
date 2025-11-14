@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Матричная анимация - Вариант 3: Волна</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/framer-motion@11.0.0/dist/framer-motion.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    .dark .glass-effect {
+      background: rgba(31, 41, 55, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+  </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 min-h-screen p-8 transition-colors duration-300">
+  
+  <div class="max-w-4xl mx-auto">
+    
+    <!-- Заголовок -->
+    <div class="glass-effect rounded-xl p-6 mb-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+            Вариант 3: Волна
+          </h1>
+          <p class="text-gray-600 dark:text-gray-400">
+            Буквы появляются волной - сверху вниз или снизу вверх
+          </p>
+        </div>
+        <div class="flex gap-2">
+          <button 
+            onclick="restartAnimation()"
+            class="glass-effect px-4 py-2 rounded-lg text-sm font-semibold hover:scale-105 transition-transform"
+          >
+            🔄 Повторить
+          </button>
+          <button 
+            onclick="document.body.classList.toggle('dark'); localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');"
+            class="glass-effect px-4 py-2 rounded-lg text-sm font-semibold hover:scale-105 transition-transform"
+          >
+            🌙 Тема
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Примеры -->
+    <div class="space-y-6">
+      
+      <!-- Пример 1: Волна сверху вниз -->
+      <div class="glass-effect rounded-xl p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Пример 1: Волна сверху вниз</h3>
+        <div class="text-4xl font-bold text-blue-600 dark:text-blue-400" id="example1">
+          <span class="matrix-text" data-text="растёт" data-direction="down"></span>
+        </div>
+      </div>
+
+      <!-- Пример 2: Волна снизу вверх -->
+      <div class="glass-effect rounded-xl p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Пример 2: Волна снизу вверх</h3>
+        <div class="text-2xl font-bold text-green-600 dark:text-green-400" id="example2">
+          <span class="matrix-text" data-text="Ваш заработок растёт" data-direction="up"></span>
+        </div>
+      </div>
+
+      <!-- Пример 3: Двойная волна -->
+      <div class="glass-effect rounded-xl p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Пример 3: Двойная волна (от центра)</h3>
+        <div class="text-xl font-bold text-purple-600 dark:text-purple-400" id="example3">
+          <span class="matrix-text" data-text="Тренд заработка показывает положительную динамику" data-direction="center"></span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    // Загрузка темы
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark');
+    }
+
+    // Функция для создания волновой анимации
+    function createMatrixAnimation(container, text, delay = 0, letterDelay = 0.03, direction = 'down') {
+      const letters = text.split('');
+      container.innerHTML = '';
+      
+      letters.forEach((letter, index) => {
+        const span = document.createElement('span');
+        span.textContent = letter === ' ' ? '\u00A0' : letter;
+        span.style.display = 'inline-block';
+        span.style.opacity = '0';
+        
+        // Вычисляем задержку в зависимости от направления волны
+        let waveDelay = 0;
+        if (direction === 'down') {
+          // Волна сверху вниз - используем синусоиду
+          waveDelay = Math.sin((index / letters.length) * Math.PI * 2) * 0.3 + 0.3;
+        } else if (direction === 'up') {
+          // Волна снизу вверх - обратная синусоида
+          waveDelay = Math.sin((index / letters.length) * Math.PI * 2 + Math.PI) * 0.3 + 0.3;
+        } else if (direction === 'center') {
+          // Двойная волна от центра
+          const centerIndex = letters.length / 2;
+          waveDelay = Math.abs(index - centerIndex) / letters.length * 0.6;
+        }
+        
+        // Начальное положение в зависимости от направления
+        if (direction === 'down') {
+          span.style.transform = 'translateY(-20px)';
+        } else if (direction === 'up') {
+          span.style.transform = 'translateY(20px)';
+        } else {
+          span.style.transform = 'translateY(0) scale(0.5)';
+        }
+        
+        container.appendChild(span);
+
+        // Анимация
+        setTimeout(() => {
+          span.style.transition = 'all 0.4s ease-out';
+          span.style.opacity = '1';
+          span.style.transform = 'translateY(0) scale(1)';
+        }, (delay * 1000) + (waveDelay * 1000));
+      });
+    }
+
+    // Функция для перезапуска анимации
+    function restartAnimation() {
+      document.querySelectorAll('.matrix-text').forEach(el => {
+        const text = el.getAttribute('data-text');
+        const direction = el.getAttribute('data-direction') || 'down';
+        const container = el;
+        createMatrixAnimation(container, text, 0.1, 0.03, direction);
+      });
+    }
+
+    // Инициализация анимаций
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        document.querySelectorAll('.matrix-text').forEach(el => {
+          const text = el.getAttribute('data-text');
+          const direction = el.getAttribute('data-direction') || 'down';
+          const container = el;
+          createMatrixAnimation(container, text, 0.1, 0.03, direction);
+        });
+      }, 300);
+    });
+  </script>
+
+</body>
+</html>
+

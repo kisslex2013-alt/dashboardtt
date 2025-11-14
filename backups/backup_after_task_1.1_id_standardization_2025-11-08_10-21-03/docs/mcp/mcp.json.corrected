@@ -1,0 +1,142 @@
+{
+  "$schema": "https://modelcontextprotocol.io/schema/mcp.json",
+  "mcpServers": {
+    "web-search": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-brave-search"
+      ],
+      "env": {
+        "BRAVE_API_KEY": "YOUR_BRAVE_API_KEY_HERE"
+      },
+      "description": "Поиск актуальной информации в интернете. Полезно для решения проблем, поиска примеров кода, Stack Overflow решений. Используй через @web-search",
+      "enabled": false,
+      "priority": "medium",
+      "notes": [
+        "Получи бесплатный API ключ на: https://brave.com/search/api/",
+        "После получения ключа замени YOUR_BRAVE_API_KEY_HERE на свой ключ",
+        "Затем измени 'enabled': false на 'enabled': true"
+      ]
+    },
+    "github": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "env": {
+        "GITHUB_TOKEN": "YOUR_GITHUB_TOKEN_HERE"
+      },
+      "description": "Поиск примеров кода в GitHub репозиториях, просмотр issues, pull requests. Отлично для поиска решений и примеров использования библиотек. Используй через @github",
+      "enabled": false,
+      "priority": "medium",
+      "notes": [
+        "Создай Personal Access Token: https://github.com/settings/tokens",
+        "Выбери scope: public_repo (для публичных репозиториев)",
+        "Замени YOUR_GITHUB_TOKEN_HERE на свой токен",
+        "Измени 'enabled': false на 'enabled': true"
+      ]
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "H:/Backup/Zero-Coding/Cursor AI/TTM_module/time-tracker"
+      ],
+      "description": "Доступ к файлам проекта. Полезно для шаблонов компонентов, сниппетов. Используй через @filesystem",
+      "enabled": false,
+      "priority": "low",
+      "notes": [
+        "Путь указан для текущего проекта",
+        "Измени 'enabled': false на 'enabled': true если нужен доступ к файлам вне проекта"
+      ]
+    },
+    "sequential-thinking": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ],
+      "description": "Расширенное пошаговое мышление для решения сложных задач. AI будет показывать процесс рассуждения при решении проблем. Полезно для отладки и понимания логики.",
+      "enabled": true,
+      "priority": "high"
+    },
+    "memory": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ],
+      "description": "Долговременная память для AI. Cursor будет помнить твои предпочтения, стиль кода, и контекст проекта между сессиями.",
+      "enabled": true,
+      "priority": "high"
+    },
+    "git": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@cyanheads/git-mcp-server"
+      ],
+      "env": {
+        "GIT_REPOSITORY_PATH": "H:/Backup/Zero-Coding/Cursor AI/TTM_module/time-tracker"
+      },
+      "description": "Git операции для проекта. AI может просматривать историю изменений, анализировать код, помогать с коммитами. Использует альтернативный пакет @cyanheads/git-mcp-server",
+      "enabled": false,
+      "priority": "medium",
+      "notes": [
+        "Путь указан для текущего проекта",
+        "Измени 'enabled': false на 'enabled': true если нужна работа с Git через AI",
+        "Используется альтернативный пакет @cyanheads/git-mcp-server вместо несуществующего @modelcontextprotocol/server-git"
+      ]
+    }
+  },
+  "settings": {
+    "autoStart": true,
+    "showNotifications": true,
+    "retryOnError": true,
+    "maxRetries": 3,
+    "timeout": 30000
+  },
+  "comments": {
+    "usage": {
+      "description": "Как использовать MCP серверы в Cursor",
+      "examples": [
+        {
+          "command": "@web-search",
+          "description": "Поиск в интернете",
+          "example": "@web-search React useEffect cleanup pattern"
+        },
+        {
+          "command": "@github",
+          "description": "Поиск примеров на GitHub",
+          "example": "@github примеры использования Recharts LineChart"
+        }
+      ]
+    },
+    "priorities": {
+      "high": "Серверы с высоким приоритетом включены по умолчанию и очень полезны для zero-coder",
+      "medium": "Серверы со средним приоритетом требуют API ключи, но очень полезны после настройки",
+      "low": "Серверы с низким приоритетом опциональны, включай по необходимости"
+    },
+    "removed_servers": {
+      "docs-search": {
+        "reason": "Пакет @modelcontextprotocol/server-docs не существует в npm registry (404 Not Found)",
+        "alternative": "Используйте встроенные возможности Cursor для поиска в документации или web-search с API ключом"
+      }
+    },
+    "recommendations_for_zero_coder": {
+      "must_have": [
+        "sequential-thinking - показывает как AI думает, помогает понять логику",
+        "memory - запоминает твой стиль, очень удобно"
+      ],
+      "nice_to_have": [
+        "web-search - для поиска решений проблем (нужен API ключ)",
+        "github - для примеров кода (нужен токен)",
+        "git - для работы с Git через AI (использует @cyanheads/git-mcp-server)"
+      ]
+    }
+  }
+}
+

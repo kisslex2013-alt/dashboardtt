@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>История изменений - Вариант 1: Аккордеон с мягкой подсветкой</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .dark .glass-card {
+      background: rgba(31, 41, 55, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 5px rgba(59, 130, 246, 0.3); }
+      50% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.5); }
+    }
+    .glow-blue { animation: glow 3s ease-in-out infinite; }
+  </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 min-h-screen p-8 transition-colors duration-300">
+  
+  <div class="max-w-4xl mx-auto">
+    
+    <!-- Заголовок -->
+    <div class="glass-card rounded-xl p-6 mb-6">
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Вариант 1: Аккордеон с мягкой подсветкой</h1>
+      <p class="text-gray-600 dark:text-gray-400">Текущий стиль с аккордеонами версий и категорий, мягкие градиенты</p>
+    </div>
+
+    <!-- История изменений -->
+    <div class="space-y-4">
+      
+      <!-- Версия 1.1.0 -->
+      <div class="glass-card relative rounded-xl p-0 overflow-hidden bg-gradient-to-br from-blue-500/30 to-gray-900/10 dark:from-blue-500/10 dark:to-gray-900/10 border border-transparent hover:border-blue-500/40 dark:hover:border-blue-400/40 hover:shadow-lg hover:shadow-blue-500/10 transition-all duration-300" style="border-color: rgba(59, 130, 246, 0.3);">
+        
+        <!-- Заголовок версии -->
+        <button onclick="toggleVersion('v1-1-0')" class="w-full px-4 py-3 flex items-center justify-between hover:bg-blue-500/10 dark:hover:bg-blue-500/5 transition-colors">
+          <div class="flex items-center gap-3 flex-1">
+            <div class="flex flex-col gap-1.5 flex-shrink-0">
+              <span class="px-2.5 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs font-semibold rounded whitespace-nowrap">
+                v1.1.0
+              </span>
+              <span class="px-2.5 py-1 bg-gray-100 dark:bg-gray-700/30 text-gray-700 dark:text-gray-300 text-xs font-semibold rounded whitespace-nowrap">
+                05.11.2024
+              </span>
+            </div>
+            <div class="flex-1">
+              <h4 class="font-semibold text-gray-900 dark:text-white text-sm leading-tight text-left">
+                Гибкая система настройки выплат и улучшения интерфейса
+              </h4>
+            </div>
+            <span class="text-xs text-gray-500 dark:text-gray-400">
+              (12 изменений)
+            </span>
+          </div>
+          <svg id="chevron-v1-1-0" class="w-4 h-4 text-blue-600 dark:text-blue-400 ml-2 flex-shrink-0 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </button>
+        
+        <!-- Контент версии -->
+        <div id="content-v1-1-0" class="hidden px-4 pb-4 space-y-3 border-t border-blue-200/50 dark:border-blue-700/50 pt-3">
+          
+          <!-- Категория: Новые возможности -->
+          <div class="glass-card rounded-lg overflow-hidden bg-gradient-to-br from-blue-500/30 to-gray-900/10 dark:from-blue-500/10 dark:to-gray-900/10 border border-blue-200/50 dark:border-blue-700/50 transition-all duration-300">
+            <button onclick="toggleCategory('v1-1-0', 'new')" class="w-full px-3 py-2 flex items-center justify-between hover:bg-blue-500/10 dark:hover:bg-blue-500/5 transition-colors">
+              <h5 class="text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wide">
+                Новые возможности (5)
+              </h5>
+              <svg id="chevron-v1-1-0-new" class="w-3 h-3 text-blue-600 dark:text-blue-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </button>
+            <div id="content-v1-1-0-new" class="hidden p-3 space-y-2">
+              <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                <li class="flex items-start gap-3">
+                  <span class="text-base flex-shrink-0 mt-0.5">✨</span>
+                  <span class="flex-1 leading-relaxed text-left">Гибкая система настройки дат выплат с возможностью множественных периодов</span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="text-base flex-shrink-0 mt-0.5">🎨</span>
+                  <span class="flex-1 leading-relaxed text-left">Цветные заголовки для карточек статистики</span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="text-base flex-shrink-0 mt-0.5">🎯</span>
+                  <span class="flex-1 leading-relaxed text-left">Аккордеоны для истории изменений и планов развития</span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="text-base flex-shrink-0 mt-0.5">💫</span>
+                  <span class="flex-1 leading-relaxed text-left">Анимация мерцания для текста в карточках инсайтов</span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="text-base flex-shrink-0 mt-0.5">📊</span>
+                  <span class="flex-1 leading-relaxed text-left">Улучшенные графики с объединением функционала</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          
+          <!-- Категория: Улучшения интерфейса -->
+          <div class="glass-card rounded-lg overflow-hidden bg-gradient-to-br from-purple-500/30 to-gray-900/10 dark:from-purple-500/10 dark:to-gray-900/10 border border-purple-200/50 dark:border-purple-700/50 transition-all duration-300">
+            <button onclick="toggleCategory('v1-1-0', 'ui')" class="w-full px-3 py-2 flex items-center justify-between hover:bg-purple-500/10 dark:hover:bg-purple-500/5 transition-colors">
+              <h5 class="text-xs font-semibold text-purple-600 dark:text-purple-400 uppercase tracking-wide">
+                Улучшения интерфейса (4)
+              </h5>
+              <svg id="chevron-v1-1-0-ui" class="w-3 h-3 text-purple-600 dark:text-purple-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </button>
+            <div id="content-v1-1-0-ui" class="hidden p-3 space-y-2">
+              <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                <li class="flex items-start gap-3">
+                  <span class="text-base flex-shrink-0 mt-0.5">🎨</span>
+                  <span class="flex-1 leading-relaxed text-left">Мягкая подсветка карточек при наведении</span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="text-base flex-shrink-0 mt-0.5">✨</span>
+                  <span class="flex-1 leading-relaxed text-left">Цветные границы для всех карточек статистики</span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="text-base flex-shrink-0 mt-0.5">💡</span>
+                  <span class="flex-1 leading-relaxed text-left">Улучшенная видимость текста "План: X ₽"</span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="text-base flex-shrink-0 mt-0.5">🖱️</span>
+                  <span class="flex-1 leading-relaxed text-left">Hover-эффекты для иконок и выделенного текста</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          
+          <!-- Категория: Исправления ошибок -->
+          <div class="glass-card rounded-lg overflow-hidden bg-gradient-to-br from-red-500/30 to-gray-900/10 dark:from-red-500/10 dark:to-gray-900/10 border border-red-200/50 dark:border-red-700/50 transition-all duration-300">
+            <button onclick="toggleCategory('v1-1-0', 'fixes')" class="w-full px-3 py-2 flex items-center justify-between hover:bg-red-500/10 dark:hover:bg-red-500/5 transition-colors">
+              <h5 class="text-xs font-semibold text-red-600 dark:text-red-400 uppercase tracking-wide">
+                Исправления ошибок (2)
+              </h5>
+              <svg id="chevron-v1-1-0-fixes" class="w-3 h-3 text-red-600 dark:text-red-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </button>
+            <div id="content-v1-1-0-fixes" class="hidden p-3 space-y-2">
+              <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                <li class="flex items-start gap-3">
+                  <span class="text-base flex-shrink-0 mt-0.5">🐛</span>
+                  <span class="flex-1 leading-relaxed text-left">Исправлена ошибка с дублирующимся скроллбаром в модальных окнах</span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="text-base flex-shrink-0 mt-0.5">🔧</span>
+                  <span class="flex-1 leading-relaxed text-left">Исправлена проблема с импортом Area в HourAnalysisChart</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          
+          <!-- Категория: Технические улучшения -->
+          <div class="glass-card rounded-lg overflow-hidden bg-gradient-to-br from-teal-500/30 to-gray-900/10 dark:from-teal-500/10 dark:to-gray-900/10 border border-teal-200/50 dark:border-teal-700/50 transition-all duration-300">
+            <button onclick="toggleCategory('v1-1-0', 'tech')" class="w-full px-3 py-2 flex items-center justify-between hover:bg-teal-500/10 dark:hover:bg-teal-500/5 transition-colors">
+              <h5 class="text-xs font-semibold text-teal-600 dark:text-teal-400 uppercase tracking-wide">
+                Технические улучшения (1)
+              </h5>
+              <svg id="chevron-v1-1-0-tech" class="w-3 h-3 text-teal-600 dark:text-teal-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </button>
+            <div id="content-v1-1-0-tech" class="hidden p-3 space-y-2">
+              <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                <li class="flex items-start gap-3">
+                  <span class="text-base flex-shrink-0 mt-0.5">⚙️</span>
+                  <span class="flex-1 leading-relaxed text-left">Оптимизирована работа с IndexedDB для бекапов</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+      
+      <!-- Версия 1.0.0 -->
+      <div class="glass-card relative rounded-xl p-0 overflow-hidden bg-gradient-to-br from-blue-500/30 to-gray-900/10 dark:from-blue-500/10 dark:to-gray-900/10 border border-transparent hover:border-blue-500/40 dark:hover:border-blue-400/40 hover:shadow-lg hover:shadow-blue-500/10 transition-all duration-300" style="border-color: rgba(59, 130, 246, 0.3);">
+        
+        <button onclick="toggleVersion('v1-0-0')" class="w-full px-4 py-3 flex items-center justify-between hover:bg-blue-500/10 dark:hover:bg-blue-500/5 transition-colors">
+          <div class="flex items-center gap-3 flex-1">
+            <div class="flex flex-col gap-1.5 flex-shrink-0">
+              <span class="px-2.5 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs font-semibold rounded whitespace-nowrap">
+                v1.0.0
+              </span>
+              <span class="px-2.5 py-1 bg-gray-100 dark:bg-gray-700/30 text-gray-700 dark:text-gray-300 text-xs font-semibold rounded whitespace-nowrap">
+                01.10.2024
+              </span>
+            </div>
+            <div class="flex-1">
+              <h4 class="font-semibold text-gray-900 dark:text-white text-sm leading-tight text-left">
+                Первый релиз приложения
+              </h4>
+            </div>
+            <span class="text-xs text-gray-500 dark:text-gray-400">
+              (8 изменений)
+            </span>
+          </div>
+          <svg id="chevron-v1-0-0" class="w-4 h-4 text-blue-600 dark:text-blue-400 ml-2 flex-shrink-0 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </button>
+        
+        <div id="content-v1-0-0" class="hidden px-4 pb-4 space-y-3 border-t border-blue-200/50 dark:border-blue-700/50 pt-3">
+          <p class="text-sm text-gray-600 dark:text-gray-400 text-center py-4">Первая версия приложения с базовым функционалом</p>
+        </div>
+      </div>
+      
+    </div>
+    
+  </div>
+  
+  <script>
+    function toggleVersion(version) {
+      const content = document.getElementById(`content-${version}`);
+      const chevron = document.getElementById(`chevron-${version}`);
+      
+      if (content.classList.contains('hidden')) {
+        content.classList.remove('hidden');
+        chevron.style.transform = 'rotate(180deg)';
+      } else {
+        content.classList.add('hidden');
+        chevron.style.transform = 'rotate(0deg)';
+      }
+    }
+    
+    function toggleCategory(version, category) {
+      const content = document.getElementById(`content-${version}-${category}`);
+      const chevron = document.getElementById(`chevron-${version}-${category}`);
+      
+      if (content.classList.contains('hidden')) {
+        content.classList.remove('hidden');
+        chevron.style.transform = 'rotate(180deg)';
+      } else {
+        content.classList.add('hidden');
+        chevron.style.transform = 'rotate(0deg)';
+      }
+    }
+    
+    // Переключение темы
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+      localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+    }
+    
+    // Загрузка темы при загрузке страницы
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark');
+    }
+  </script>
+  
+</body>
+</html>
+

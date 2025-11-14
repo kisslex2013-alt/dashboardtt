@@ -1,0 +1,557 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Концепты Редизайна</title>
+    <!-- Подключение Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Подключение шрифта Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Базовый стиль */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Стиль для активной вкладки */
+        .tab-active {
+            border-bottom-color: #3b82f6; /* blue-500 */
+            color: #3b82f6;
+            font-weight: 600;
+        }
+        /* Плавный переход для скрытия/показа */
+        .concept-pane {
+            display: none;
+            transition: opacity 0.3s ease;
+        }
+        .concept-pane.active {
+            display: block;
+            opacity: 1;
+        }
+        /* Для кастомной прокрутки фильтров */
+        .filter-scroll::-webkit-scrollbar {
+            height: 4px;
+        }
+        .filter-scroll::-webkit-scrollbar-thumb {
+            background-color: #4b5563; /* gray-600 */
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Навигация по концептам -->
+    <div class="bg-white shadow-md">
+        <nav class="flex flex-wrap justify-center -mb-px" id="tabs-nav">
+            <button data-target="concept1" class="tab-button tab-active whitespace-nowrap py-4 px-6 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                1. Сводный Дашборд
+            </button>
+            <button data-target="concept2" class="tab-button whitespace-nowrap py-4 px-6 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                2. Задания (Компактно)
+            </button>
+            <button data-target="concept3" class="tab-button whitespace-nowrap py-4 px-6 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                3. Финансы (Интерактивно)
+            </button>
+            <button data-target="concept4" class="tab-button whitespace-nowrap py-4 px-6 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                4. Профиль (Новые Навыки)
+            </button>
+            <button data-target="concept5" class="tab-button whitespace-nowrap py-4 px-6 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                5. Светлая Тема (Легкость)
+            </button>
+        </nav>
+    </div>
+
+    <!-- Контейнер для контента концептов -->
+    <div id="concepts-container" class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+
+        <!-- ===== КОНЦЕПТ 1: Сводный Дашборд ===== -->
+        <!-- Фокус: Информативность. Объединение ключевой информации со всех экранов на одной странице. -->
+        <div id="concept1" class="concept-pane active">
+            <h1 class="text-3xl font-bold text-gray-900 px-4 sm:px-0 mb-6">Привет, Алексей!</h1>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                <!-- Карточка "Норма" -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-3">Ваша норма</h2>
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-sm font-medium text-gray-500">3a 10.11.2025 – 16.11.2025</span>
+                        <span class="text-sm font-bold text-green-600">96%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-3 mb-3">
+                        <div class="bg-green-500 h-3 rounded-full" style="width: 96%"></div>
+                    </div>
+                    <p class="text-xs text-gray-400">Сегодня: <span class="font-medium text-gray-600">0.005</span></p>
+                </div>
+
+                <!-- Карточка "Финансы (сводка)" -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-3">Финансы</h2>
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-sm text-gray-500">На проверке</p>
+                            <p class="text-2xl font-bold text-gray-900">$12.50</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">Доступно</p>
+                            <p class="text-2xl font-bold text-green-600">$1320.00</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Карточка "Бенефиты" -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-3">Бенефиты</h2>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-1 rounded-full">Промокоды</span>
+                        <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-1 rounded-full">Телемедицина</span>
+                        <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-1 rounded-full">Зарплатные карты</span>
+                        <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-1 rounded-full">Реферальная программа</span>
+                    </div>
+                </div>
+
+                <!-- Карточка "Быстрые задания" (на 2 колонки) -->
+                <div class="bg-white rounded-xl shadow-lg p-6 md:col-span-2">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-3">Рекомендуемые задания</h2>
+                    <ul class="divide-y divide-gray-200">
+                        <li class="py-3 flex justify-between items-center">
+                            <div>
+                                <p class="text-base font-medium text-gray-900">Выбор лучшего ответа на интракты</p>
+                                <p class="text-sm text-gray-500">Экзамен · $0.10 за задание</p>
+                            </div>
+                            <button class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700">Начать</button>
+                        </li>
+                        <li class="py-3 flex justify-between items-center">
+                            <div>
+                                <p class="text-base font-medium text-gray-900">Оценка релевантности веб-страниц</p>
+                                <p class="text-sm text-gray-500">Тренировка · $0.05 за задание</p>
+                            </div>
+                            <button class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700">Приступить</button>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Карточка "Навыки (сводка)" -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-3">Ключевые навыки</h2>
+                    <div class="space-y-3">
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm font-medium text-gray-700">Качество картинок</span>
+                                <span class="text-sm font-medium text-gray-500">95%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2"><div class="bg-blue-500 h-2 rounded-full" style="width: 95%"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm font-medium text-gray-700">Общее качество</span>
+                                <span class="text-sm font-medium text-gray-500">88%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2"><div class="bg-blue-500 h-2 rounded-full" style="width: 88%"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm font-medium text-gray-700">Релевантность 2.0</span>
+                                <span class="text-sm font-medium text-gray-500">76%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2"><div class="bg-blue-500 h-2 rounded-full" style="width: 76%"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ===== КОНЦЕПТ 2: Задания (Компактно) ===== -->
+        <!-- Фокус: Компактность и доступность. Фильтры вынесены в горизонтальную прокрутку, карточки заданий уменьшены. -->
+        <div id="concept2" class="concept-pane bg-gray-900 text-white rounded-xl shadow-lg p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h1 class="text-3xl font-bold">Задания</h1>
+                <div class="flex gap-2">
+                    <span class="text-sm text-gray-400">Сортировка:</span>
+                    <select class="bg-gray-800 border border-gray-700 rounded-md px-2 py-1 text-sm">
+                        <option>Цена по убыванию</option>
+                        <option>Цена по возрастанию</option>
+                        <option>Новые</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Горизонтальные фильтры -->
+            <div class="mb-6">
+                <h3 class="text-sm font-medium text-gray-400 mb-2">Фильтры</h3>
+                <div class="flex space-x-2 overflow-x-auto pb-2 filter-scroll">
+                    <button class="bg-blue-600 text-white whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-medium">Все (7)</button>
+                    <button class="bg-gray-700 text-gray-300 hover:bg-gray-600 whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-medium">С обучением (4)</button>
+                    <button class="bg-gray-700 text-gray-300 hover:bg-gray-600 whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-medium">С отложенной приемкой (0)</button>
+                    <button class="bg-gray-700 text-gray-300 hover:bg-gray-600 whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-medium">18+ (2)</button>
+                    <button class="bg-gray-700 text-gray-300 hover:bg-gray-600 whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-medium">Янг.Картинки (1)</button>
+                    <button class="bg-gray-700 text-gray-300 hover:bg-gray-600 whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-medium">Янг.ИнструктоБа (2)</button>
+                    <button class="bg-gray-700 text-gray-300 hover:bg-gray-600 whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-medium">Янг.Комп.Зрение (4)</button>
+                </div>
+            </div>
+
+            <!-- Компактный список заданий -->
+            <div class="space-y-4">
+                <!-- Карточка задания 1 -->
+                <div class="bg-gray-800 rounded-lg p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded">ЭКЗАМЕН</span>
+                            <h2 class="text-lg font-semibold">Выбор лучшего ответа на интракты [Полезность]</h2>
+                        </div>
+                        <p class="text-sm text-gray-400 mb-2">Вам предстоит оценить качество веб страниц. Необходимо определить какую информа...</p>
+                        <a href="#" class="text-sm text-blue-400 hover:underline">Инструкция · Детали</a>
+                    </div>
+                    <div class="flex-shrink-0 text-left sm:text-right">
+                        <p class="text-lg font-bold text-green-400 mb-2">$0.10 <span class="text-sm text-gray-400 font-normal">/ задание</span></p>
+                        <button class="w-full sm:w-auto bg-blue-600 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-blue-700">Начать экзамен</button>
+                    </div>
+                </div>
+                <!-- Карточка задания 2 -->
+                <div class="bg-gray-800 rounded-lg p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="bg-green-500 text-white text-xs font-bold px-2 py-0.5 rounded">ТРЕНИРОВКА</span>
+                            <h2 class="text-lg font-semibold">Редактирование изображений</h2>
+                        </div>
+                        <p class="text-sm text-gray-400 mb-2">Вам дается диалог пользователя с моделью, которая может редактировать...</p>
+                        <a href="#" class="text-sm text-blue-400 hover:underline">Инструкция · Детали</a>
+                    </div>
+                    <div class="flex-shrink-0 text-left sm:text-right">
+                        <p class="text-lg font-bold text-gray-400 mb-2">Обучение</p>
+                        <button class="w-full sm:w-auto bg-gray-600 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-gray-700">Начать тренировку</button>
+                    </div>
+                </div>
+                <!-- Карточка задания 3 -->
+                <div class="bg-gray-800 rounded-lg p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-1">
+                            <h2 class="text-lg font-semibold">Оценка релевантности веб-страниц v2</h2>
+                        </div>
+                        <p class="text-sm text-gray-400 mb-2">В этом задании вам предстоит оценить качество веб страниц. Необходимо...</p>
+                        <a href="#" class="text-sm text-blue-400 hover:underline">Инструкция · Детали</a>
+                    </div>
+                    <div class="flex-shrink-0 text-left sm:text-right">
+                        <p class="text-lg font-bold text-green-400 mb-2">$0.05 <span class="text-sm text-gray-400 font-normal">/ задание</span></p>
+                        <button class="w-full sm:w-auto bg-blue-600 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-blue-700">Приступить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== КОНЦЕПТ 3: Финансы (Интерактивно) ===== -->
+        <!-- Фокус: Информативность. Ключевые метрики вынесены наверх, добавлен интерактивный календарь. -->
+        <div id="concept3" class="concept-pane">
+            <h1 class="text-3xl font-bold text-gray-900 mb-6">Начисления</h1>
+            
+            <!-- Ключевые метрики -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <p class="text-sm font-medium text-gray-500 mb-1">На проверке</p>
+                    <p class="text-4xl font-bold text-blue-600">$12.50</p>
+                    <p class="text-xs text-gray-400 mt-2">Будет зачислено ~ 15.11</p>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <p class="text-sm font-medium text-gray-500 mb-1">Всего за Ноябрь</p>
+                    <p class="text-4xl font-bold text-green-600">$125.00</p>
+                    <p class="text-xs text-gray-400 mt-2">Обновлено: сегодня</p>
+                </div>
+            </div>
+
+            <!-- Таблица + Календарь -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Левая колонка: Таблица начислений -->
+                <div class="lg:col-span-2 bg-white rounded-xl shadow-lg p-6">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-4">История операций</h2>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm">
+                            <thead class="border-b border-gray-200 text-gray-500">
+                                <tr>
+                                    <th class="py-3 pr-3">Период расчета</th>
+                                    <th class="py-3 px-3">Период выплаты</th>
+                                    <th class="py-3 px-3">Задания</th>
+                                    <th class="py-3 px-3">Бонус</th>
+                                    <th class="py-3 pl-3">Итого</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <tr>
+                                    <td class="py-3 pr-3 font-medium">01.11 – 15.11</td>
+                                    <td class="py-3 px-3">25.11</td>
+                                    <td class="py-3 px-3">956 / – / –</td>
+                                    <td class="py-3 px-3 text-green-600">+ $0.00</td>
+                                    <td class="py-3 pl-3 font-bold">$ (на проверке)</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 pr-3 font-medium">16.10 – 31.10</td>
+                                    <td class="py-3 px-3">10.11</td>
+                                    <td class="py-3 px-3">1621 / – / –</td>
+                                    <td class="py-3 px-3 text-green-600">+ $1.25</td>
+                                    <td class="py-3 pl-3 font-bold">$125.00</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 pr-3 font-medium">01.10 – 15.10</td>
+                                    <td class="py-3 px-3">24.10</td>
+                                    <td class="py-3 px-3">1997 / – / –</td>
+                                    <td class="py-3 px-3 text-green-600">+ $0.00</td>
+                                    <td class="py-3 pl-3 font-bold">$210.50</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Правая колонка: Календарь активности -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-4">Активность (Ноябрь 2025)</h2>
+                    <div class="grid grid-cols-7 gap-1 text-center text-xs text-gray-500 mb-2">
+                        <span>Пн</span><span>Вт</span><span>Ср</span><span>Чт</span><span>Пт</span><span>Сб</span><span>Вс</span>
+                    </div>
+                    <div class="grid grid-cols-7 gap-1">
+                        <!-- Пустые ячейки для начала месяца -->
+                        <div class="pb-full"></div><div class="pb-full"></div><div class="pb-full"></div><div class="pb-full"></div><div class="pb-full"></div>
+                        <!-- Дни -->
+                        <div class="h-10 flex items-center justify-center bg-green-100 rounded-md text-sm font-medium">1</div>
+                        <div class="h-10 flex items-center justify-center bg-green-200 rounded-md text-sm font-medium">2</div>
+                        <div class="h-10 flex items-center justify-center bg-green-100 rounded-md text-sm font-medium">3</div>
+                        <div class="h-10 flex items-center justify-center bg-green-300 rounded-md text-sm font-medium">4</div>
+                        <div class="h-10 flex items-center justify-center bg-green-200 rounded-md text-sm font-medium">5</div>
+                        <div class="h-10 flex items-center justify-center bg-green-100 rounded-md text-sm font-medium">6</div>
+                        <div class="h-10 flex items-center justify-center bg-green-200 rounded-md text-sm font-medium">7</div>
+                        <div class="h-10 flex items-center justify-center bg-gray-100 rounded-md text-sm font-medium">8</div>
+                        <div class="h-10 flex items-center justify-center bg-green-400 rounded-md text-sm font-medium">9</div>
+                        <div class="h-10 flex items-center justify-center bg-green-200 rounded-md text-sm font-medium">10</div>
+                        <div class="h-10 flex items-center justify-center bg-green-100 rounded-md text-sm font-medium">11</div>
+                        <div class="h-10 flex items-center justify-center bg-green-300 rounded-md text-sm font-medium">12</div>
+                        <div class="h-10 flex items-center justify-center bg-blue-500 text-white rounded-full text-sm font-bold ring-2 ring-blue-300">13</div> <!-- Сегодня -->
+                        <div class="h-10 flex items-center justify-center bg-gray-100 rounded-md text-sm font-medium">14</div>
+                        <div class="h-10 flex items-center justify-center bg-gray-100 rounded-md text-sm font-medium">15</div>
+                        <div class="h-10 flex items-center justify-center bg-gray-100 rounded-md text-sm font-medium">16</div>
+                        <!-- ... и т.д. -->
+                    </div>
+                    <p class="text-xs text-gray-400 mt-3">* Насыщенность цвета = объем выполненных заданий</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== КОНЦЕПТ 4: Профиль (Новые Навыки) ===== -->
+        <!-- Фокус: Понятность. Переработка блока "Навыки" из таблицы в прогресс-бары для ясности. -->
+        <div id="concept4" class="concept-pane">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                <!-- Левая колонка: Профиль и Норма -->
+                <div class="lg:col-span-1 space-y-6">
+                    <!-- Карточка Профиля -->
+                    <div class="bg-white rounded-xl shadow-lg p-6 text-center">
+                        <img class="w-24 h-24 rounded-full mx-auto mb-4" src="https://placehold.co/100x100/E2E8F0/333?text=AС" alt="Алексей Сорокин">
+                        <h1 class="text-2xl font-bold text-gray-900">Алексей Сорокин</h1>
+                        <p class="text-sm text-gray-500 mb-1">@a_sorokin</p>
+                        <p class="text-sm text-gray-500">Воронеж, Россия</p>
+                    </div>
+
+                    <!-- Карточка "Норма" -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h2 class="text-lg font-semibold text-gray-800 mb-3">Ваша норма</h2>
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-sm font-medium text-gray-500">3a 10.11 – 16.11</span>
+                            <span class="text-sm font-bold text-green-600">96%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-3 mb-3">
+                            <div class="bg-green-500 h-3 rounded-full" style="width: 96%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Карточка "Языки" -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h2 class="text-lg font-semibold text-gray-800 mb-3">Языки</h2>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class_="text-base text-gray-700">Русский (Родной)</span>
+                            <span class="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded-full">Тест пройден</span>
+                        </div>
+                        <button class="w-full border-2 border-dashed border-gray-300 text-gray-500 rounded-lg py-2 text-sm hover:bg-gray-50">
+                            + Добавить язык
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Правая колонка: Навыки и Бенефиты -->
+                <div class="lg:col-span-2 space-y-6">
+                    <!-- Карточка "Навыки" (Редизайн) -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h2 class="text-xl font-semibold text-gray-800 mb-5">Навыки</h2>
+                        <div class="space-y-5">
+                            <!-- Навык 1 -->
+                            <div>
+                                <div class="flex justify-between items-baseline mb-1">
+                                    <span class="text-base font-medium text-gray-800">Качество распознавания формул</span>
+                                    <span class="text-sm font-bold text-blue-600">92</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 92%"></div>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-1">Заказчик: Янг.Компьютерное.Зрение</p>
+                            </div>
+                            <!-- Навык 2 -->
+                            <div>
+                                <div class="flex justify-between items-baseline mb-1">
+                                    <span class="text-base font-medium text-gray-800">Качество картинок, Качество</span>
+                                    <span class="text-sm font-bold text-blue-600">85</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 85%"></div>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-1">Заказчик: Янг.Картинки</p>
+                            </div>
+                            <!-- Навык 3 -->
+                            <div>
+                                <div class="flex justify-between items-baseline mb-1">
+                                    <span class="text-base font-medium text-gray-800">Оценка релевантности веб-страниц</span>
+                                    <span class="text-sm font-bold text-blue-600">78</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 78%"></div>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-1">Заказчик: Янг.Картинки</p>
+                            </div>
+                            <!-- Навык 4 -->
+                            <div>
+                                <div class="flex justify-between items-baseline mb-1">
+                                    <span class="text-base font-medium text-gray-800">SbS VLM (сравнение мультимодальных моделей)</span>
+                                    <span class="text-sm font-bold text-gray-500">--</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                    <div class="bg-gray-400 h-2.5 rounded-full" style="width: 0%"></div>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-1">Заказчик: Янг.Компьютерное.Зрение</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Карточка "Бенефиты и Награды" -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-white rounded-xl shadow-lg p-6">
+                            <h2 class="text-lg font-semibold text-gray-800 mb-3">Бенефиты</h2>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-1 rounded-full">Промокоды</span>
+                                <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-1 rounded-full">Телемедицина</span>
+                                <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-1 rounded-full">Зарплатные карты</span>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-lg p-6">
+                            <h2 class="text-lg font-semibold text-gray-800 mb-3">Награды (23)</h2>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center font-bold text-white">N</div>
+                                <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center font-bold text-gray-600">B</div>
+                                <div class="w-10 h-10 bg-orange-400 rounded-full flex items-center justify-center font-bold text-white">A</div>
+                                <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center font-bold text-gray-500">+20</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        
+        <!-- ===== КОНЦЕПТ 5: Светлая Тема (Легкость) ===== -->
+        <!-- Фокус: Легкость и понятность. Та же страница заданий (Концепт 2), но в светлой теме. -->
+        <div id="concept5" class="concept-pane bg-white text-gray-900 rounded-xl shadow-lg p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h1 class="text-3xl font-bold">Задания</h1>
+                <div class="flex gap-2">
+                    <span class="text-sm text-gray-500">Сортировка:</span>
+                    <select class="bg-gray-100 border border-gray-300 rounded-md px-2 py-1 text-sm">
+                        <option>Цена по убыванию</option>
+                        <option>Цена по возрастанию</option>
+                        <option>Новые</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Горизонтальные фильтры (светлая тема) -->
+            <div class="mb-6">
+                <h3 class="text-sm font-medium text-gray-500 mb-2">Фильтры</h3>
+                <div class="flex space-x-2 overflow-x-auto pb-2 filter-scroll" style="--scrollbar-color: #cbd5e1;">
+                    <button class="bg-blue-600 text-white whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-medium">Все (7)</button>
+                    <button class="bg-gray-200 text-gray-700 hover:bg-gray-300 whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-medium">С обучением (4)</button>
+                    <button class="bg-gray-200 text-gray-700 hover:bg-gray-300 whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-medium">С отложенной приемкой (0)</button>
+                    <button class="bg-gray-200 text-gray-700 hover:bg-gray-300 whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-medium">18+ (2)</button>
+                    <button class="bg-gray-200 text-gray-700 hover:bg-gray-300 whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-medium">Янг.Картинки (1)</button>
+                    <button class="bg-gray-200 text-gray-700 hover:bg-gray-300 whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-medium">Янг.ИнструктоБа (2)</button>
+                    <button class="bg-gray-200 text-gray-700 hover:bg-gray-300 whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-medium">Янг.Комп.Зрение (4)</button>
+                </div>
+            </div>
+
+            <!-- Список заданий (светлая тема) -->
+            <div class="space-y-4">
+                <!-- Карточка задания 1 -->
+                <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded">ЭКЗАМЕН</span>
+                            <h2 class="text-lg font-semibold text-gray-900">Выбор лучшего ответа на интракты [Полезность]</h2>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-2">Вам предстоит оценить качество веб страниц. Необходимо определить какую информа...</p>
+                        <a href="#" class="text-sm text-blue-600 hover:underline">Инструкция · Детали</a>
+                    </div>
+                    <div class="flex-shrink-0 text-left sm:text-right">
+                        <p class="text-lg font-bold text-green-600 mb-2">$0.10 <span class="text-sm text-gray-500 font-normal">/ задание</span></p>
+                        <button class="w-full sm:w-auto bg-blue-600 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-blue-700">Начать экзамен</button>
+                    </div>
+                </div>
+                <!-- Карточка задания 2 -->
+                <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="bg-green-500 text-white text-xs font-bold px-2 py-0.5 rounded">ТРЕНИРОВКА</span>
+                            <h2 class="text-lg font-semibold text-gray-900">Редактирование изображений</h2>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-2">Вам дается диалог пользователя с моделью, которая может редактировать...</p>
+                        <a href="#" class="text-sm text-blue-600 hover:underline">Инструкция · Детали</a>
+                    </div>
+                    <div class="flex-shrink-0 text-left sm:text-right">
+                        <p class="text-lg font-bold text-gray-500 mb-2">Обучение</p>
+                        <button class="w-full sm:w-auto bg-gray-600 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-gray-700">Начать тренировку</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabsNav = document.getElementById('tabs-nav');
+            const conceptsContainer = document.getElementById('concepts-container');
+            const tabButtons = tabsNav.querySelectorAll('.tab-button');
+            const conceptPanes = conceptsContainer.querySelectorAll('.concept-pane');
+
+            tabsNav.addEventListener('click', function(e) {
+                const clickedButton = e.target.closest('.tab-button');
+                if (!clickedButton) return;
+
+                const targetId = clickedButton.dataset.target;
+                
+                // Обновление кнопок
+                tabButtons.forEach(button => {
+                    button.classList.remove('tab-active');
+                    if (button === clickedButton) {
+                        button.classList.add('tab-active');
+                    }
+                });
+
+                // Обновление контента
+                conceptPanes.forEach(pane => {
+                    pane.classList.remove('active');
+                    if (pane.id === targetId) {
+                        pane.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Tracker Dashboard - Фокус на данные</title>
+    <meta name="description" content="Современное приложение для учета рабочего времени с мощной аналитикой">
+    <link rel="stylesheet" href="variant-4-data.css">
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <h1 class="header-title">Time Tracker Dashboard</h1>
+            <div class="header-subtitle">Данные в реальном времени</div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">Данные говорят сами за себя</h1>
+                <p class="hero-description">Мощная аналитика и статистика для принятия решений</p>
+            </div>
+            <div class="hero-stats-grid">
+                <div class="stat-card-large">
+                    <div class="stat-icon-large">🕐</div>
+                    <div class="stat-value-large" data-counter="320.5">0</div>
+                    <div class="stat-label-large">Всего часов</div>
+                    <div class="stat-trend">+15% ↗</div>
+                </div>
+                <div class="stat-card-large">
+                    <div class="stat-icon-large">💰</div>
+                    <div class="stat-value-large" data-counter="450000">0</div>
+                    <div class="stat-label-large">₽ Заработано</div>
+                    <div class="stat-trend">+22% ↗</div>
+                </div>
+                <div class="stat-card-large">
+                    <div class="stat-icon-large">📅</div>
+                    <div class="stat-value-large" data-counter="45">0</div>
+                    <div class="stat-label-large">Рабочих дней</div>
+                    <div class="stat-trend">+8% ↗</div>
+                </div>
+                <div class="stat-card-large">
+                    <div class="stat-icon-large">⚡</div>
+                    <div class="stat-value-large" data-counter="1405">0</div>
+                    <div class="stat-label-large">₽/час средняя</div>
+                    <div class="stat-trend">+5% ↗</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Charts Section -->
+    <section class="charts-section">
+        <div class="container">
+            <h2 class="section-title">Детальная аналитика</h2>
+            <div class="charts-grid-large">
+                <!-- Chart 1: Earnings by Weekday -->
+                <div class="chart-card-large">
+                    <h3 class="chart-title-large">Доход по дням недели</h3>
+                    <div class="chart-container-large">
+                        <div class="chart-bars-large">
+                            <div class="chart-bar-large-item" data-value="5874" data-label="Пн">
+                                <div class="chart-bar-large" style="height: 0%;"></div>
+                                <div class="chart-value">5,874 ₽</div>
+                            </div>
+                            <div class="chart-bar-large-item" data-value="4200" data-label="Вт">
+                                <div class="chart-bar-large" style="height: 0%;"></div>
+                                <div class="chart-value">4,200 ₽</div>
+                            </div>
+                            <div class="chart-bar-large-item" data-value="5000" data-label="Ср">
+                                <div class="chart-bar-large" style="height: 0%;"></div>
+                                <div class="chart-value">5,000 ₽</div>
+                            </div>
+                            <div class="chart-bar-large-item" data-value="6800" data-label="Чт">
+                                <div class="chart-bar-large" style="height: 0%;"></div>
+                                <div class="chart-value">6,800 ₽</div>
+                            </div>
+                            <div class="chart-bar-large-item" data-value="8500" data-label="Пт">
+                                <div class="chart-bar-large" style="height: 0%;"></div>
+                                <div class="chart-value">8,500 ₽</div>
+                            </div>
+                            <div class="chart-bar-large-item" data-value="6200" data-label="Сб">
+                                <div class="chart-bar-large" style="height: 0%;"></div>
+                                <div class="chart-value">6,200 ₽</div>
+                            </div>
+                            <div class="chart-bar-large-item" data-value="3500" data-label="Вс">
+                                <div class="chart-bar-large" style="height: 0%;"></div>
+                                <div class="chart-value">3,500 ₽</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chart 2: Category Distribution -->
+                <div class="chart-card-large">
+                    <h3 class="chart-title-large">Распределение по категориям</h3>
+                    <div class="chart-pie-large">
+                        <svg viewBox="0 0 200 200" style="width: 100%; height: 250px;">
+                            <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(0,0,0,0.1)" stroke-width="2" />
+                            <path d="M 100 20 A 80 80 0 0 1 180 100" fill="#3b82f6" />
+                            <path d="M 180 100 A 80 80 0 0 1 100 180" fill="#10b981" />
+                            <path d="M 100 180 A 80 80 0 0 1 20 100" fill="#f59e0b" />
+                            <path d="M 20 100 A 80 80 0 0 1 100 20" fill="#8b5cf6" />
+                            <circle cx="100" cy="100" r="50" fill="white" />
+                            <text x="100" y="105" text-anchor="middle" fill="#1a1a1a" font-size="18" font-weight="bold">100%</text>
+                        </svg>
+                        <div class="pie-legend-large">
+                            <div class="legend-item-large"><span class="legend-color-large" style="background: #3b82f6;"></span> Разработка 40%</div>
+                            <div class="legend-item-large"><span class="legend-color-large" style="background: #10b981;"></span> Дизайн 30%</div>
+                            <div class="legend-item-large"><span class="legend-color-large" style="background: #f59e0b;"></span> Консультации 20%</div>
+                            <div class="legend-item-large"><span class="legend-color-large" style="background: #8b5cf6;"></span> Другое 10%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chart 3: Time Distribution -->
+                <div class="chart-card-large">
+                    <h3 class="chart-title-large">Распределение времени</h3>
+                    <div class="time-distribution">
+                        <div class="time-item">
+                            <div class="time-label">Разработка</div>
+                            <div class="time-bar-container">
+                                <div class="time-bar" style="width: 0%; background: #3b82f6;"></div>
+                                <div class="time-value">35%</div>
+                            </div>
+                        </div>
+                        <div class="time-item">
+                            <div class="time-label">Дизайн</div>
+                            <div class="time-bar-container">
+                                <div class="time-bar" style="width: 0%; background: #10b981;"></div>
+                                <div class="time-value">25%</div>
+                            </div>
+                        </div>
+                        <div class="time-item">
+                            <div class="time-label">Консультации</div>
+                            <div class="time-bar-container">
+                                <div class="time-bar" style="width: 0%; background: #f59e0b;"></div>
+                                <div class="time-value">20%</div>
+                            </div>
+                        </div>
+                        <div class="time-item">
+                            <div class="time-label">Другое</div>
+                            <div class="time-bar-container">
+                                <div class="time-bar" style="width: 0%; background: #8b5cf6;"></div>
+                                <div class="time-value">20%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chart 4: Rate Distribution -->
+                <div class="chart-card-large">
+                    <h3 class="chart-title-large">Распределение ставок</h3>
+                    <div class="rate-distribution">
+                        <div class="rate-item">
+                            <div class="rate-range">500-1000 ₽/ч</div>
+                            <div class="rate-bar-container">
+                                <div class="rate-bar" style="width: 0%; background: #3b82f6;"></div>
+                                <div class="rate-count">8</div>
+                            </div>
+                        </div>
+                        <div class="rate-item">
+                            <div class="rate-range">1000-1500 ₽/ч</div>
+                            <div class="rate-bar-container">
+                                <div class="rate-bar" style="width: 0%; background: #10b981;"></div>
+                                <div class="rate-count">45</div>
+                            </div>
+                        </div>
+                        <div class="rate-item">
+                            <div class="rate-range">1500-2000 ₽/ч</div>
+                            <div class="rate-bar-container">
+                                <div class="rate-bar" style="width: 0%; background: #f59e0b;"></div>
+                                <div class="rate-count">32</div>
+                            </div>
+                        </div>
+                        <div class="rate-item">
+                            <div class="rate-range">2000+ ₽/ч</div>
+                            <div class="rate-bar-container">
+                                <div class="rate-bar" style="width: 0%; background: #8b5cf6;"></div>
+                                <div class="rate-count">12</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Data Table Section -->
+    <section class="data-table-section">
+        <div class="container">
+            <h2 class="section-title">Детальные данные</h2>
+            <div class="data-table">
+                <div class="table-header">
+                    <div class="table-cell">Дата</div>
+                    <div class="table-cell">Часы</div>
+                    <div class="table-cell">Доход</div>
+                    <div class="table-cell">Ставка</div>
+                    <div class="table-cell">Категория</div>
+                </div>
+                <div class="table-row">
+                    <div class="table-cell">09.10.2025</div>
+                    <div class="table-cell">8.0</div>
+                    <div class="table-cell">11,240 ₽</div>
+                    <div class="table-cell">1,405 ₽/ч</div>
+                    <div class="table-cell">Разработка</div>
+                </div>
+                <div class="table-row">
+                    <div class="table-cell">08.10.2025</div>
+                    <div class="table-cell">6.5</div>
+                    <div class="table-cell">9,133 ₽</div>
+                    <div class="table-cell">1,405 ₽/ч</div>
+                    <div class="table-cell">Дизайн</div>
+                </div>
+                <div class="table-row">
+                    <div class="table-cell">07.10.2025</div>
+                    <div class="table-cell">7.2</div>
+                    <div class="table-cell">10,116 ₽</div>
+                    <div class="table-cell">1,405 ₽/ч</div>
+                    <div class="table-cell">Консультации</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <h2 class="cta-title">Начните анализировать свои данные</h2>
+            <a href="#" class="cta-button">Запустить приложение</a>
+        </div>
+    </section>
+
+    <script src="variant-4-data.js"></script>
+</body>
+</html>
+

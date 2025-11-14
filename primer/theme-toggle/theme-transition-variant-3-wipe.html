@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Переход темы - Вариант 3: Wipe (затирание)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    
+    .glass-button {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .glass-button:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+    
+    .glass-button:active {
+      transform: translateY(0) scale(0.95);
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    /* Вариант 3: Wipe (затирание) */
+    .theme-transition-wipe {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+      clip-path: inset(0 100% 0 0);
+      transition: clip-path 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .theme-transition-wipe.active {
+      clip-path: inset(0 0% 0 0);
+    }
+
+    .theme-transition-wipe.dark-to-light {
+      background: linear-gradient(to right, rgba(249, 250, 251, 1) 0%, rgba(219, 234, 254, 1) 100%);
+    }
+
+    .theme-transition-wipe.light-to-dark {
+      background: linear-gradient(to right, rgba(17, 24, 39, 1) 0%, rgba(30, 41, 59, 1) 100%);
+    }
+
+    body {
+      transition: background-color 0.7s ease, color 0.7s ease;
+    }
+
+    * {
+      transition: background-color 0.7s ease, 
+                  color 0.7s ease, 
+                  border-color 0.7s ease,
+                  box-shadow 0.7s ease;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 min-h-screen p-8">
+  <div class="theme-transition-wipe" id="transitionWipe"></div>
+  
+  <div class="max-w-4xl mx-auto space-y-8">
+    
+    <!-- Заголовок -->
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-white mb-4">Вариант 3: Wipe (затирание)</h1>
+      <p class="text-xl text-gray-400">Новая тема "затирает" старую слева направо</p>
+    </div>
+
+    <!-- Демо контент -->
+    <div class="glass-card rounded-xl p-8 space-y-6">
+      <h2 class="text-2xl font-semibold text-white mb-4">Нажмите на кнопку для переключения темы</h2>
+      
+      <div class="flex items-center justify-center gap-4">
+        <button
+          id="themeToggle"
+          aria-label="Переключить тему"
+          class="glass-button p-3 rounded-lg transition-all duration-300 hover:scale-110 active:scale-95"
+        >
+          <i data-lucide="moon" id="themeIcon" class="w-6 h-6 text-white"></i>
+        </button>
+
+        <p class="text-gray-400">Текущая тема: <span id="currentTheme" class="font-semibold text-white">dark</span></p>
+      </div>
+
+      <!-- Демо элементы -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+        <div class="glass-card rounded-lg p-4">
+          <h3 class="text-lg font-semibold text-white mb-2">Карточка 1</h3>
+          <p class="text-gray-300 text-sm">Элемент интерфейса</p>
+        </div>
+        <div class="glass-card rounded-lg p-4">
+          <h3 class="text-lg font-semibold text-white mb-2">Карточка 2</h3>
+          <p class="text-gray-300 text-sm">Элемент интерфейса</p>
+        </div>
+        <div class="glass-card rounded-lg p-4">
+          <h3 class="text-lg font-semibold text-white mb-2">Карточка 3</h3>
+          <p class="text-gray-300 text-sm">Элемент интерфейса</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Описание -->
+    <div class="glass-card rounded-xl p-6">
+      <h3 class="text-xl font-bold text-white mb-4">Особенности перехода:</h3>
+      <ul class="space-y-2 text-gray-300">
+        <li>• Новая тема "затирает" старую слева направо</li>
+        <li>• Используется clip-path для эффекта wipe</li>
+        <li>• Плавное раскрытие новой темы</li>
+        <li>• Градиентный фон для плавности</li>
+        <li>• Длительность: 0.7 секунды</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <script>
+    let currentTheme = 'dark';
+    const themeToggle = document.getElementById('themeToggle');
+    const currentThemeSpan = document.getElementById('currentTheme');
+    const themeIcon = document.getElementById('themeIcon');
+    const transitionWipe = document.getElementById('transitionWipe');
+    
+    lucide.createIcons();
+
+    function setTheme(theme) {
+      currentTheme = theme;
+      document.documentElement.classList.toggle('dark', theme === 'dark');
+      document.documentElement.classList.toggle('light', theme === 'light');
+      
+      if (theme === 'dark') {
+        document.body.className = 'bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 min-h-screen p-8';
+        themeIcon.setAttribute('data-lucide', 'moon');
+      } else {
+        document.body.className = 'bg-gradient-to-br from-gray-100 via-blue-50 to-gray-100 min-h-screen p-8';
+        themeIcon.setAttribute('data-lucide', 'sun');
+      }
+      
+      lucide.createIcons();
+      currentThemeSpan.textContent = theme;
+    }
+
+    themeToggle.addEventListener('click', () => {
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      // Устанавливаем класс для цвета
+      const wipeClass = currentTheme === 'dark' ? 'dark-to-light' : 'light-to-dark';
+      transitionWipe.className = `theme-transition-wipe ${wipeClass}`;
+      
+      // Активируем wipe
+      setTimeout(() => {
+        transitionWipe.classList.add('active');
+      }, 10);
+      
+      // Меняем тему в середине анимации (когда wipe покрыл половину экрана)
+      setTimeout(() => {
+        setTheme(newTheme);
+      }, 350); // Половина времени анимации
+      
+      // Убираем wipe после перехода
+      setTimeout(() => {
+        transitionWipe.classList.remove('active');
+      }, 700);
+    });
+
+    setTheme('dark');
+  </script>
+</body>
+</html>
+

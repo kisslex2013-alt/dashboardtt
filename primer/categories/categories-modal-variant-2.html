@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вариант 2: Табличное представление</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+    .modal-overlay {
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+    }
+  </style>
+</head>
+<body class="bg-gray-100 p-8">
+  
+  <div class="max-w-6xl mx-auto">
+    <h1 class="text-2xl font-bold mb-4 text-gray-800">Вариант 2: Табличное представление</h1>
+    <p class="text-gray-600 mb-6">Категории в виде таблицы с inline редактированием</p>
+    
+    <!-- Модальное окно -->
+    <div class="modal-overlay fixed inset-0 flex items-center justify-center p-4">
+      <div class="glass-effect rounded-2xl w-full max-w-3xl overflow-hidden">
+        
+        <!-- Заголовок -->
+        <div class="bg-gradient-to-r from-blue-50 to-blue-100 px-6 py-4 flex items-center justify-between border-b border-gray-200">
+          <div>
+            <h2 class="text-xl font-bold text-gray-800">Категории работ</h2>
+            <p class="text-xs text-gray-600 mt-1">Управление категориями для учета времени</p>
+          </div>
+          <button class="text-gray-500 hover:text-gray-700 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        
+        <!-- Содержимое -->
+        <div class="p-6">
+          
+          <!-- Кнопка добавления -->
+          <div class="mb-4">
+            <button class="w-full bg-blue-500 text-white px-4 py-3 rounded-lg hover:bg-blue-600 transition-colors font-semibold flex items-center justify-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              Добавить категорию
+            </button>
+          </div>
+          
+          <!-- Таблица категорий -->
+          <div class="overflow-hidden rounded-xl border border-gray-200">
+            <table class="w-full">
+              <thead class="bg-gray-50">
+                <tr class="text-xs text-gray-600 border-b border-gray-200">
+                  <th class="text-left py-3 px-4 font-semibold w-12">Цвет</th>
+                  <th class="text-left py-3 px-4 font-semibold">Название</th>
+                  <th class="text-center py-3 px-4 font-semibold w-32">Использовано</th>
+                  <th class="text-center py-3 px-4 font-semibold w-28">Действия</th>
+                </tr>
+              </thead>
+              <tbody class="bg-white">
+                
+                <!-- Категория 1 -->
+                <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                  <td class="py-3 px-4">
+                    <div class="flex items-center gap-2">
+                      <div class="w-6 h-6 rounded-full" style="background: #3B82F6;"></div>
+                      <input type="color" value="#3B82F6" class="w-0 h-0 invisible">
+                    </div>
+                  </td>
+                  <td class="py-3 px-4">
+                    <span class="font-medium text-gray-800">Разработка</span>
+                  </td>
+                  <td class="py-3 px-4 text-center">
+                    <span class="text-sm text-gray-600">1203 раза</span>
+                  </td>
+                  <td class="py-3 px-4">
+                    <div class="flex items-center justify-center gap-2">
+                      <button class="text-blue-600 hover:text-blue-700 transition-colors p-1.5 hover:bg-blue-50 rounded" title="Редактировать">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                        </svg>
+                      </button>
+                      <button class="text-red-600 hover:text-red-700 transition-colors p-1.5 hover:bg-red-50 rounded" title="Удалить">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="3 6 5 6 21 6"></polyline>
+                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                
+                <!-- Категория 2 -->
+                <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                  <td class="py-3 px-4">
+                    <div class="flex items-center gap-2">
+                      <div class="w-6 h-6 rounded-full" style="background: #10B981;"></div>
+                    </div>
+                  </td>
+                  <td class="py-3 px-4">
+                    <span class="font-medium text-gray-800">Дизайн</span>
+                  </td>
+                  <td class="py-3 px-4 text-center">
+                    <span class="text-sm text-gray-600">487 раз</span>
+                  </td>
+                  <td class="py-3 px-4">
+                    <div class="flex items-center justify-center gap-2">
+                      <button class="text-blue-600 hover:text-blue-700 transition-colors p-1.5 hover:bg-blue-50 rounded" title="Редактировать">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                        </svg>
+                      </button>
+                      <button class="text-red-600 hover:text-red-700 transition-colors p-1.5 hover:bg-red-50 rounded" title="Удалить">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="3 6 5 6 21 6"></polyline>
+                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                
+                <!-- Категория 3 -->
+                <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                  <td class="py-3 px-4">
+                    <div class="flex items-center gap-2">
+                      <div class="w-6 h-6 rounded-full" style="background: #F59E0B;"></div>
+                    </div>
+                  </td>
+                  <td class="py-3 px-4">
+                    <span class="font-medium text-gray-800">Встречи</span>
+                  </td>
+                  <td class="py-3 px-4 text-center">
+                    <span class="text-sm text-gray-600">156 раз</span>
+                  </td>
+                  <td class="py-3 px-4">
+                    <div class="flex items-center justify-center gap-2">
+                      <button class="text-blue-600 hover:text-blue-700 transition-colors p-1.5 hover:bg-blue-50 rounded" title="Редактировать">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                        </svg>
+                      </button>
+                      <button class="text-red-600 hover:text-red-700 transition-colors p-1.5 hover:bg-red-50 rounded" title="Удалить">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="3 6 5 6 21 6"></polyline>
+                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                
+                <!-- Категория 4 -->
+                <tr class="hover:bg-gray-50 transition-colors">
+                  <td class="py-3 px-4">
+                    <div class="flex items-center gap-2">
+                      <div class="w-6 h-6 rounded-full" style="background: #8B5CF6;"></div>
+                    </div>
+                  </td>
+                  <td class="py-3 px-4">
+                    <span class="font-medium text-gray-800">Обучение</span>
+                  </td>
+                  <td class="py-3 px-4 text-center">
+                    <span class="text-sm text-gray-600">92 раза</span>
+                  </td>
+                  <td class="py-3 px-4">
+                    <div class="flex items-center justify-center gap-2">
+                      <button class="text-blue-600 hover:text-blue-700 transition-colors p-1.5 hover:bg-blue-50 rounded" title="Редактировать">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                        </svg>
+                      </button>
+                      <button class="text-red-600 hover:text-red-700 transition-colors p-1.5 hover:bg-red-50 rounded" title="Удалить">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="3 6 5 6 21 6"></polyline>
+                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                
+              </tbody>
+            </table>
+          </div>
+          
+          <!-- Подсказка -->
+          <div class="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+            <p class="text-xs text-blue-800">
+              💡 <strong>Подсказка:</strong> Категории используются для группировки записей времени. Нельзя удалить категорию, которая используется в записях.
+            </p>
+          </div>
+        </div>
+        
+        <!-- Футер -->
+        <div class="bg-gray-50 px-6 py-4 flex justify-end border-t border-gray-200">
+          <button class="px-6 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-colors font-semibold">
+            Закрыть
+          </button>
+        </div>
+        
+      </div>
+    </div>
+    
+  </div>
+  
+</body>
+</html>
+

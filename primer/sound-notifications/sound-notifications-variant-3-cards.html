@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вариант 3: Карточки</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .card {
+      transition: all 0.3s ease;
+    }
+    
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(59, 130, 246, 0.5);
+    }
+    
+    .favicon-box {
+      transition: all 0.3s ease;
+    }
+    
+    .card:hover .favicon-box.pulse {
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    .card:hover .favicon-box.blink {
+      animation: blink 1s ease-in-out infinite;
+    }
+    
+    .card:hover .favicon-box.rotate {
+      animation: rotate 2s linear infinite;
+    }
+    
+    .card:hover .favicon-box.wave {
+      animation: wave 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.2); opacity: 0.7; }
+    }
+    
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.2; }
+    }
+    
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    @keyframes wave {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.25); }
+    }
+  </style>
+</head>
+<body class="bg-gray-900 min-h-screen p-8">
+  <div class="max-w-3xl mx-auto">
+    
+    <div class="glass-effect rounded-xl p-6 w-full">
+      
+      <h2 class="text-xl font-bold text-white mb-6">Звуки и анимация</h2>
+      
+      <!-- Звуки карточкой -->
+      <div class="card glass-effect rounded-lg p-4 mb-4 border-2 border-gray-800">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h3 class="text-sm font-semibold text-white mb-1">Звуковые уведомления</h3>
+            <p class="text-xs text-gray-400">Интервал: 30 минут</p>
+          </div>
+          <button class="w-12 h-6 bg-blue-500 rounded-full">
+            <span class="block w-5 h-5 bg-white rounded-full ml-6"></span>
+          </button>
+        </div>
+        <div class="flex gap-2">
+          <button class="px-4 py-2 bg-blue-500/20 border-2 border-blue-500 rounded-lg text-blue-300 text-xs font-semibold">
+            Chime
+          </button>
+          <button class="px-4 py-2 bg-gray-800 border-2 border-gray-700 rounded-lg text-gray-400 text-xs hover:border-blue-500">
+            Alert
+          </button>
+          <button class="px-4 py-2 bg-gray-800 border-2 border-gray-700 rounded-lg text-gray-400 text-xs hover:border-blue-500">
+            Phone
+          </button>
+        </div>
+      </div>
+      
+      <!-- Анимация карточкой -->
+      <div class="card glass-effect rounded-lg p-4 border-2 border-gray-800">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h3 class="text-sm font-semibold text-white mb-1">Анимация фавикона</h3>
+            <p class="text-xs text-gray-400">Стиль и цвет</p>
+          </div>
+          <button class="w-12 h-6 bg-blue-500 rounded-full">
+            <span class="block w-5 h-5 bg-white rounded-full ml-6"></span>
+          </button>
+        </div>
+        
+        <div class="grid grid-cols-4 gap-3 mb-4">
+          <div class="favicon-box pulse cursor-pointer p-3 rounded-lg border-2 border-blue-500 bg-blue-500/10">
+            <div class="w-8 h-8 rounded bg-blue-500 mx-auto mb-2"></div>
+            <div class="text-xs text-white text-center font-medium">Pulse</div>
+          </div>
+          <div class="favicon-box blink cursor-pointer p-3 rounded-lg border-2 border-gray-700 hover:border-blue-500">
+            <div class="w-8 h-8 rounded bg-green-500 mx-auto mb-2"></div>
+            <div class="text-xs text-gray-300 text-center">Blink</div>
+          </div>
+          <div class="favicon-box rotate cursor-pointer p-3 rounded-lg border-2 border-gray-700 hover:border-blue-500">
+            <div class="w-8 h-8 rounded bg-purple-500 mx-auto mb-2"></div>
+            <div class="text-xs text-gray-300 text-center">Rotate</div>
+          </div>
+          <div class="favicon-box wave cursor-pointer p-3 rounded-lg border-2 border-gray-700 hover:border-blue-500">
+            <div class="w-8 h-8 rounded bg-orange-500 mx-auto mb-2"></div>
+            <div class="text-xs text-gray-300 text-center">Wave</div>
+          </div>
+        </div>
+        
+        <div class="flex items-center gap-2">
+          <span class="text-xs text-gray-400">Цвет:</span>
+          <button class="w-7 h-7 rounded bg-blue-500 border-2 border-blue-500"></button>
+          <button class="w-7 h-7 rounded bg-green-500 border border-gray-700"></button>
+          <button class="w-7 h-7 rounded bg-orange-500 border border-gray-700"></button>
+          <input type="color" value="#3b82f6" class="w-7 h-7 rounded border border-gray-700 cursor-pointer">
+        </div>
+      </div>
+      
+      <div class="flex gap-3 mt-6">
+        <button class="flex-1 px-4 py-2 border border-gray-700 rounded-lg text-gray-300 hover:bg-gray-800 font-medium">
+          Отмена
+        </button>
+        <button class="flex-1 px-4 py-2 bg-blue-500 rounded-lg text-white font-semibold hover:bg-blue-600">
+          Сохранить
+        </button>
+      </div>
+      
+    </div>
+    
+  </div>
+</body>
+</html>
+

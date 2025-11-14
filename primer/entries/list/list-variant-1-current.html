@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>List View - Вариант 1: Текущий (Аккордеон с инсайтами)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 2rem;
+    }
+    
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    
+    details > summary {
+      list-style: none;
+    }
+    
+    details > summary::-webkit-details-marker {
+      display: none;
+    }
+    
+    details[open] .chevron {
+      transform: rotate(180deg);
+    }
+  </style>
+</head>
+<body>
+  <div class="max-w-6xl mx-auto">
+    <h1 class="text-3xl font-bold text-white mb-6">🎨 List View - Вариант 1: Текущий (Аккордеон с инсайтами)</h1>
+    
+    <div class="glass-effect rounded-2xl p-6 mb-8">
+      <h2 class="text-xl font-bold mb-4">📝 Описание</h2>
+      <ul class="space-y-2 text-gray-700">
+        <li><strong>Концепция:</strong> Аккордеон с детальными метриками дня</li>
+        <li><strong>Особенности:</strong>
+          <ul class="ml-6 mt-2 space-y-1">
+            <li>• Раскрывающиеся секции для каждого дня</li>
+            <li>• Дата, статус и инсайты в заголовке</li>
+            <li>• 3 плашки инсайтов (макс. сессия, перерыв, ср. ставка)</li>
+            <li>• Прогресс-бар выполнения плана</li>
+            <li>• Полный список записей при раскрытии</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    
+    <!-- Список записей -->
+    <div class="space-y-4">
+      
+      <!-- День 1: План выполнен -->
+      <details open class="glass-effect rounded-xl overflow-hidden">
+        <summary class="cursor-pointer p-4 hover:bg-gray-50 transition-colors">
+          <div class="flex items-center justify-between gap-4">
+            <!-- Левая часть: Дата и статус -->
+            <div class="flex items-center gap-3 flex-1 min-w-0">
+              <svg class="w-5 h-5 text-gray-500 transition-transform chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
+              <div class="flex items-center gap-2 flex-wrap">
+                <h3 class="text-lg font-semibold">29 Октября 2025 Г. ПН</h3>
+                <div class="flex items-center gap-1 text-sm">
+                  <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                  </svg>
+                  <span class="text-green-600 font-medium">План выполнен</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Центр: Инсайты -->
+            <div class="hidden lg:flex items-center gap-3 flex-shrink-0">
+              <!-- Макс. сессия -->
+              <div class="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 rounded-lg">
+                <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span class="text-sm font-medium text-blue-700">3:17</span>
+              </div>
+              
+              <!-- Макс. перерыв -->
+              <div class="flex items-center gap-1.5 px-3 py-1.5 bg-orange-50 rounded-lg">
+                <svg class="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                </svg>
+                <span class="text-sm font-medium text-orange-700">0:42</span>
+              </div>
+              
+              <!-- Средняя ставка -->
+              <div class="flex items-center gap-1.5 px-3 py-1.5 bg-green-50 rounded-lg">
+                <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span class="text-sm font-medium text-green-700">418 ₽/ч</span>
+              </div>
+            </div>
+            
+            <!-- Правая часть: Итого -->
+            <div class="text-right flex-shrink-0">
+              <p class="text-2xl font-bold text-blue-600">2000 ₽</p>
+            </div>
+          </div>
+        </summary>
+        
+        <!-- Содержимое аккордеона -->
+        <div class="border-t border-gray-200">
+          <!-- Прогресс-бар -->
+          <div class="px-4 py-3 bg-gray-50">
+            <div class="flex items-center justify-between text-xs mb-2">
+              <span class="text-gray-600">План: 6000 ₽</span>
+              <span class="font-bold text-green-600">33%</span>
+            </div>
+            <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+              <div class="h-full bg-gradient-to-r from-red-400 to-red-500 rounded-full" style="width: 33%;"></div>
+            </div>
+          </div>
+          
+          <!-- Записи -->
+          <div class="p-4 space-y-2">
+            <div class="glass-effect rounded-lg p-3 hover:bg-gray-50 transition-colors">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3 flex-1">
+                  <span class="text-sm text-gray-500 font-mono">13:19 - 14:49</span>
+                  <span class="inline-flex items-center gap-1.5 text-sm">
+                    <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                    <span class="font-medium">remix</span>
+                  </span>
+                </div>
+                <div class="text-right">
+                  <p class="font-semibold text-gray-800">1000 ₽</p>
+                  <p class="text-xs text-gray-500">1.50 ч</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="glass-effect rounded-lg p-3 hover:bg-gray-50 transition-colors">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3 flex-1">
+                  <span class="text-sm text-gray-500 font-mono">09:20 - 12:37</span>
+                  <div class="flex items-center gap-2">
+                    <span class="inline-flex items-center gap-1.5 text-sm">
+                      <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                      <span class="font-medium">remix</span>
+                    </span>
+                    <span class="text-xs px-1.5 py-0.5 rounded bg-orange-100 text-orange-700 font-medium">
+                      00:42
+                    </span>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <p class="font-semibold text-gray-800">1000 ₽</p>
+                  <p class="text-xs text-gray-500">3.28 ч</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Итого за день -->
+          <div class="px-4 py-3 border-t border-gray-200 bg-gray-50">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-semibold text-gray-700">ИТОГО ЗА ДЕНЬ:</span>
+              <div class="text-right">
+                <p class="text-xl font-bold text-blue-600">2000 ₽</p>
+                <p class="text-xs text-gray-500">4.78 часов</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>
+      
+      <!-- День 2: На пути к цели -->
+      <details class="glass-effect rounded-xl overflow-hidden">
+        <summary class="cursor-pointer p-4 hover:bg-gray-50 transition-colors">
+          <div class="flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3 flex-1 min-w-0">
+              <svg class="w-5 h-5 text-gray-500 transition-transform chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
+              <div class="flex items-center gap-2 flex-wrap">
+                <h3 class="text-lg font-semibold">28 Октября 2025 Г. ВС</h3>
+                <div class="flex items-center gap-1 text-sm">
+                  <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                  </svg>
+                  <span class="text-yellow-600 font-medium">На пути</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="hidden lg:flex items-center gap-3 flex-shrink-0">
+              <div class="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 rounded-lg">
+                <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span class="text-sm font-medium text-blue-700">3:15</span>
+              </div>
+              <div class="flex items-center gap-1.5 px-3 py-1.5 bg-orange-50 rounded-lg">
+                <svg class="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                </svg>
+                <span class="text-sm font-medium text-orange-700">1:12</span>
+              </div>
+              <div class="flex items-center gap-1.5 px-3 py-1.5 bg-green-50 rounded-lg">
+                <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span class="text-sm font-medium text-green-700">558 ₽/ч</span>
+              </div>
+            </div>
+            
+            <div class="text-right flex-shrink-0">
+              <p class="text-2xl font-bold text-blue-600">3000 ₽</p>
+            </div>
+          </div>
+        </summary>
+      </details>
+      
+    </div>
+    
+    <!-- Примечания -->
+    <div class="glass-effect rounded-2xl p-6 mt-8">
+      <h2 class="text-xl font-bold mb-4">💡 Преимущества варианта</h2>
+      <ul class="space-y-2 text-gray-700">
+        <li>✅ Максимум информации в заголовке - не нужно раскрывать</li>
+        <li>✅ Инсайты дают быструю оценку дня</li>
+        <li>✅ Прогресс-бар показывает выполнение плана</li>
+        <li>✅ Компактность - много дней на одном экране</li>
+        <li>✅ Раскрытие только при необходимости детализации</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>
+

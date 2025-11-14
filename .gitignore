@@ -1,0 +1,54 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Testing
+coverage/
+*.lcov
+
+# Production
+build/
+dist/
+.next/
+out/
+
+# Misc
+.DS_Store
+*.pem
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local env files
+.env
+.env*.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# MCP Configuration (contains secrets - API keys, tokens)
+.cursor/mcp.json
+
+# MCP Memory
+.mcp-memory.json
+
+# Example configs (safe to commit)
+!.cursor/mcp.json.example
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+Thumbs.db
+

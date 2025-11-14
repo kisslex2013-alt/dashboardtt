@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Тема 5 - Minimal White (минималистичная белая)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap');
+    body { font-family: 'IBM Plex Sans', sans-serif; }
+    
+    /* Минималистичная тема */
+    .glass-card {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      transition: all 0.2s ease;
+    }
+    .glass-card:hover {
+      border-color: #d1d5db;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+    .stat-value { 
+      font-weight: 600;
+      letter-spacing: -0.03em;
+    }
+    .accent-line {
+      height: 3px;
+      width: 40px;
+      border-radius: 2px;
+    }
+    
+    /* Темная тема */
+    .dark body {
+      background: #0f172a;
+    }
+    .dark .glass-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    }
+    .dark .glass-card:hover {
+      border-color: #475569;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+    .dark .stat-value {
+      color: #f1f5f9;
+    }
+    .dark h3, .dark h4 {
+      color: #f1f5f9;
+    }
+    .dark .text-xs:not(.text-blue-600):not(.text-teal-600):not(.text-green-600):not(.text-purple-600):not(.text-orange-600):not(.text-yellow-600),
+    .dark .text-sm:not(.text-blue-600):not(.text-teal-600):not(.text-green-600):not(.text-purple-600):not(.text-orange-600):not(.text-yellow-600) {
+      color: #94a3b8;
+    }
+    .dark .bg-gray-100 {
+      background-color: #334155;
+    }
+    .dark .bg-gray-50 {
+      background-color: #1e293b;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 p-8">
+  <div class="max-w-7xl mx-auto space-y-6">
+    
+    <!-- StatisticsDashboard - 6 карточек -->
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 px-6">
+      <div class="glass-card rounded-lg p-4">
+        <div class="accent-line bg-blue-500 mb-3"></div>
+        <p class="text-xs font-medium text-gray-500 mb-1 uppercase tracking-wider">Затрачено</p>
+        <p class="stat-value text-3xl text-gray-900 mb-0.5">155.10</p>
+        <p class="text-xs text-gray-500">часов</p>
+        <div class="mt-2 flex items-center gap-1 text-xs text-green-600 font-medium">
+          <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z"/></svg>
+          <span>12.5%</span>
+        </div>
+      </div>
+
+      <div class="glass-card rounded-lg p-4">
+        <div class="accent-line bg-teal-500 mb-3"></div>
+        <p class="text-xs font-medium text-gray-500 mb-1 uppercase tracking-wider">Перерывы</p>
+        <p class="stat-value text-3xl text-gray-900 mb-0.5">46.60</p>
+        <p class="text-xs text-gray-500">часов</p>
+      </div>
+
+      <div class="glass-card rounded-lg p-4">
+        <div class="accent-line bg-green-500 mb-3"></div>
+        <p class="text-xs font-medium text-gray-500 mb-1 uppercase tracking-wider">Заработано</p>
+        <p class="stat-value text-3xl text-gray-900 mb-0.5">79 245</p>
+        <p class="text-xs text-gray-500">рублей</p>
+        <div class="mt-2 flex items-center gap-1 text-xs text-green-600 font-medium">
+          <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z"/></svg>
+          <span>8.3%</span>
+        </div>
+      </div>
+
+      <div class="glass-card rounded-lg p-4">
+        <div class="accent-line bg-purple-500 mb-3"></div>
+        <p class="text-xs font-medium text-gray-500 mb-1 uppercase tracking-wider">Ставка</p>
+        <p class="stat-value text-3xl text-gray-900 mb-0.5">511</p>
+        <p class="text-xs text-gray-500">₽/час</p>
+      </div>
+
+      <div class="glass-card rounded-lg p-4">
+        <div class="accent-line bg-orange-500 mb-3"></div>
+        <p class="text-xs font-medium text-gray-500 mb-1 uppercase tracking-wider">Рабочих дней</p>
+        <p class="stat-value text-3xl text-gray-900 mb-0.5">28</p>
+        <p class="text-xs text-gray-500">дней</p>
+      </div>
+
+      <div class="glass-card rounded-lg p-4">
+        <div class="accent-line bg-yellow-500 mb-3"></div>
+        <p class="text-xs font-medium text-gray-500 mb-1 uppercase tracking-wider">Выходных</p>
+        <p class="stat-value text-3xl text-gray-900 mb-0.5">3</p>
+        <p class="text-xs text-gray-500">дня</p>
+      </div>
+    </div>
+
+    <!-- PlanFactCompactView - 3 карточки -->
+    <div class="px-6 pb-6">
+      <h3 class="text-xl font-semibold text-gray-900 mb-6">План/факт заработка</h3>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="glass-card rounded-lg p-5">
+          <div class="flex justify-between items-center mb-4">
+            <h4 class="font-semibold text-gray-900">План/факт</h4>
+            <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded font-medium">5/2</span>
+          </div>
+          <div class="space-y-4">
+            <div>
+              <div class="flex justify-between mb-2">
+                <p class="text-sm text-gray-600 font-medium">День</p>
+                <p class="text-lg font-semibold text-gray-900">15 ₽</p>
+              </div>
+              <div class="w-full bg-gray-100 rounded h-1.5">
+                <div class="bg-blue-500 h-1.5 rounded" style="width: 0.25%"></div>
+              </div>
+              <p class="text-xs text-gray-500 text-right mt-1.5">План: 6 000 ₽</p>
+            </div>
+            <div>
+              <div class="flex justify-between mb-2">
+                <p class="text-sm text-gray-600 font-medium">Месяц</p>
+                <p class="text-lg font-semibold text-gray-900">79 245 ₽</p>
+              </div>
+              <div class="w-full bg-gray-100 rounded h-1.5">
+                <div class="bg-purple-500 h-1.5 rounded" style="width: 57%"></div>
+              </div>
+              <p class="text-xs text-gray-500 text-right mt-1.5">План: 138 000 ₽</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-lg p-5">
+          <h4 class="font-semibold text-gray-900 mb-4">Выплаты</h4>
+          <div class="space-y-4">
+            <div>
+              <div class="flex justify-between mb-2">
+                <p class="text-sm text-gray-600 font-medium">1/2 <span class="text-xs text-gray-400">(25.10)</span></p>
+                <p class="text-lg font-semibold text-gray-900">41 400 ₽</p>
+              </div>
+              <div class="w-full bg-gray-100 rounded h-1.5">
+                <div class="bg-green-500 h-1.5 rounded" style="width: 63%"></div>
+              </div>
+              <p class="text-xs text-gray-500 text-right mt-1.5">План: 66 000 ₽</p>
+            </div>
+            <div>
+              <div class="flex justify-between mb-2">
+                <p class="text-sm text-gray-600 font-medium">2/2 <span class="text-xs text-gray-400">(10.11)</span></p>
+                <p class="text-lg font-semibold text-gray-900">37 845 ₽</p>
+              </div>
+              <div class="w-full bg-gray-100 rounded h-1.5">
+                <div class="bg-teal-500 h-1.5 rounded" style="width: 53%"></div>
+              </div>
+              <p class="text-xs text-gray-500 text-right mt-1.5">План: 72 000 ₽</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-lg p-5">
+          <h4 class="font-semibold text-gray-900 mb-4">Общие итоги</h4>
+          <div class="space-y-5">
+            <div class="border-l-3 border-l-4 border-orange-500 pl-4">
+              <p class="text-xs text-gray-500 mb-1">Год</p>
+              <p class="text-2xl font-semibold text-gray-900">892 450 ₽</p>
+            </div>
+            <div class="border-l-3 border-l-4 border-red-500 pl-4">
+              <p class="text-xs text-gray-500 mb-1">За все время</p>
+              <p class="text-2xl font-semibold text-gray-900">2 458 320 ₽</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- InsightsPanel - 5 карточек -->
+    <div class="px-6 pb-6">
+      <h2 class="text-xl font-semibold text-gray-900 mb-4">Инсайты</h2>
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+        <div class="glass-card rounded-lg p-4">
+          <div class="accent-line bg-blue-500 mb-2"></div>
+          <h3 class="font-semibold text-sm mb-1 text-gray-900">Лучший день недели</h3>
+          <p class="text-xs text-gray-600 leading-relaxed">Вы зарабатываете больше всего по <span class="font-semibold text-gray-900">Пн</span> — в среднем <span class="font-semibold text-gray-900">3 866 ₽</span> в день.</p>
+        </div>
+
+        <div class="glass-card rounded-lg p-4">
+          <div class="accent-line bg-purple-500 mb-2"></div>
+          <h3 class="font-semibold text-sm mb-1 text-gray-900">Пик продуктивности</h3>
+          <p class="text-xs text-gray-600 leading-relaxed">Ваша средняя ставка максимальна с <span class="font-semibold text-gray-900">03:00</span> до <span class="font-semibold text-gray-900">04:00</span> — <span class="font-semibold text-gray-900">1000 ₽/ч</span>.</p>
+        </div>
+
+        <div class="glass-card rounded-lg p-4">
+          <div class="accent-line bg-green-500 mb-2"></div>
+          <h3 class="font-semibold text-sm mb-1 text-gray-900">Тренд заработка</h3>
+          <p class="text-xs text-gray-600 leading-relaxed">За последний месяц ваш заработок <span class="font-semibold text-gray-900">растёт</span>.</p>
+        </div>
+
+        <div class="glass-card rounded-lg p-4">
+          <div class="accent-line bg-orange-500 mb-2"></div>
+          <h3 class="font-semibold text-sm mb-1 text-gray-900">Самая длинная сессия</h3>
+          <p class="text-xs text-gray-600 leading-relaxed">Самая продолжительная сессия была <span class="font-semibold text-gray-900">30.10.2024</span> — <span class="font-semibold text-gray-900">8.50 ч</span> (<span class="font-semibold text-gray-900">4 250 ₽</span>).</p>
+        </div>
+
+        <div class="glass-card rounded-lg p-4">
+          <div class="accent-line bg-green-500 mb-2"></div>
+          <h3 class="font-semibold text-sm mb-1 text-gray-900">Аномалия сегодня</h3>
+          <p class="text-xs text-gray-600 leading-relaxed">Сегодня вы заработали <span class="font-semibold text-gray-900">выше</span> среднего на <span class="font-semibold text-gray-900">25%</span> (<span class="font-semibold text-gray-900">15 ₽</span>).</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Обработчик сообщений от родительского окна
+    window.addEventListener('message', (event) => {
+      if (event.data.type === 'theme-change') {
+        if (event.data.theme === 'dark') {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      }
+    });
+  </script>
+</body>
+</html>
+

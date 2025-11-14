@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вариант 4 - Минималистичный (таблицы)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body class="bg-gray-100 p-8">
+  <div class="max-w-7xl mx-auto space-y-6">
+    
+    <!-- StatisticsDashboard - Простая таблица -->
+    <div class="glass-effect rounded-xl p-6">
+      <h3 class="text-lg font-bold mb-4">Статистика за период</h3>
+      <table class="w-full">
+        <thead>
+          <tr class="border-b">
+            <th class="text-left py-2 text-sm font-semibold">Показатель</th>
+            <th class="text-right py-2 text-sm font-semibold">Значение</th>
+            <th class="text-right py-2 text-sm font-semibold">Изменение</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b hover:bg-blue-50 transition">
+            <td class="py-3">
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 bg-blue-500 rounded-full"></span>
+                <span>Затрачено</span>
+              </div>
+            </td>
+            <td class="text-right font-bold">155.10 ч</td>
+            <td class="text-right text-green-600 text-sm">↑ 12.5%</td>
+          </tr>
+          <tr class="border-b hover:bg-teal-50 transition">
+            <td class="py-3">
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 bg-teal-500 rounded-full"></span>
+                <span>Перерывы</span>
+              </div>
+            </td>
+            <td class="text-right font-bold">46.60 ч</td>
+            <td class="text-right text-gray-400 text-sm">—</td>
+          </tr>
+          <tr class="border-b hover:bg-green-50 transition">
+            <td class="py-3">
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                <span>Заработано</span>
+              </div>
+            </td>
+            <td class="text-right font-bold">79 245 ₽</td>
+            <td class="text-right text-green-600 text-sm">↑ 8.3%</td>
+          </tr>
+          <tr class="border-b hover:bg-purple-50 transition">
+            <td class="py-3">
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 bg-purple-500 rounded-full"></span>
+                <span>Ставка</span>
+              </div>
+            </td>
+            <td class="text-right font-bold">511 ₽/ч</td>
+            <td class="text-right text-gray-400 text-sm">—</td>
+          </tr>
+          <tr class="border-b hover:bg-orange-50 transition">
+            <td class="py-3">
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 bg-orange-500 rounded-full"></span>
+                <span>Рабочих дней</span>
+              </div>
+            </td>
+            <td class="text-right font-bold">28 д</td>
+            <td class="text-right text-gray-400 text-sm">—</td>
+          </tr>
+          <tr class="hover:bg-yellow-50 transition">
+            <td class="py-3">
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 bg-yellow-500 rounded-full"></span>
+                <span>Выходных</span>
+              </div>
+            </td>
+            <td class="text-right font-bold">3 д</td>
+            <td class="text-right text-gray-400 text-sm">—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- PlanFactCompactView - Минималистичный -->
+    <div class="glass-effect rounded-xl p-6">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-bold">План/факт</h3>
+        <span class="text-xs text-gray-500">График: Стандартный 5/2</span>
+      </div>
+      <div class="space-y-3">
+        <div>
+          <div class="flex justify-between text-sm mb-1">
+            <span class="text-gray-600">День</span>
+            <span><span class="font-bold">15</span> / <span class="text-gray-500">6 000 ₽</span></span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-1.5">
+            <div class="bg-blue-500 h-1.5 rounded-full" style="width: 0.25%"></div>
+          </div>
+        </div>
+        <div>
+          <div class="flex justify-between text-sm mb-1">
+            <span class="text-gray-600">Месяц</span>
+            <span><span class="font-bold">79 245</span> / <span class="text-gray-500">138 000 ₽</span></span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-1.5">
+            <div class="bg-purple-500 h-1.5 rounded-full" style="width: 57%"></div>
+          </div>
+        </div>
+        <div class="border-t pt-3 mt-3">
+          <div class="flex justify-between text-sm mb-1">
+            <span class="text-gray-600">1/2 месяца <span class="text-xs">(25.10)</span></span>
+            <span><span class="font-bold">41 400</span> / <span class="text-gray-500">66 000 ₽</span></span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-1.5">
+            <div class="bg-green-500 h-1.5 rounded-full" style="width: 63%"></div>
+          </div>
+        </div>
+        <div>
+          <div class="flex justify-between text-sm mb-1">
+            <span class="text-gray-600">2/2 месяца <span class="text-xs">(10.11)</span></span>
+            <span><span class="font-bold">37 845</span> / <span class="text-gray-500">72 000 ₽</span></span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-1.5">
+            <div class="bg-teal-500 h-1.5 rounded-full" style="width: 53%"></div>
+          </div>
+        </div>
+        <div class="border-t pt-3 mt-3 grid grid-cols-2 gap-4">
+          <div>
+            <p class="text-xs text-gray-500">Год</p>
+            <p class="text-2xl font-bold">892 450 ₽</p>
+          </div>
+          <div>
+            <p class="text-xs text-gray-500">За все время</p>
+            <p class="text-2xl font-bold">2.4M ₽</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- InsightsPanel - Список -->
+    <div class="glass-effect rounded-xl p-6">
+      <h3 class="text-lg font-bold mb-4">Инсайты</h3>
+      <div class="divide-y">
+        <div class="py-3 flex justify-between items-center">
+          <div>
+            <p class="font-semibold text-sm">Лучший день недели</p>
+            <p class="text-xs text-gray-600">Понедельник — в среднем 3 866 ₽/день</p>
+          </div>
+          <span class="text-2xl">📅</span>
+        </div>
+        <div class="py-3 flex justify-between items-center">
+          <div>
+            <p class="font-semibold text-sm">Пик продуктивности</p>
+            <p class="text-xs text-gray-600">С 03:00 до 04:00 — 1000 ₽/ч</p>
+          </div>
+          <span class="text-2xl">⏰</span>
+        </div>
+        <div class="py-3 flex justify-between items-center">
+          <div>
+            <p class="font-semibold text-sm">Тренд заработка</p>
+            <p class="text-xs text-gray-600">За последний месяц ваш заработок растёт</p>
+          </div>
+          <span class="text-2xl">📈</span>
+        </div>
+        <div class="py-3 flex justify-between items-center">
+          <div>
+            <p class="font-semibold text-sm">Самая длинная сессия</p>
+            <p class="text-xs text-gray-600">30.10.2024 — 8.50 ч (4 250 ₽)</p>
+          </div>
+          <span class="text-2xl">🏆</span>
+        </div>
+        <div class="py-3 flex justify-between items-center">
+          <div>
+            <p class="font-semibold text-sm">Аномалия сегодня</p>
+            <p class="text-xs text-gray-600">Выше среднего на 25% (15 ₽)</p>
+          </div>
+          <span class="text-2xl">⚡</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
+

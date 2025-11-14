@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grid View - Вариант 1: Компактная карточка</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 2rem;
+    }
+    
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    
+    .glass-effect-dark {
+      background: rgba(30, 41, 59, 0.8);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(71, 85, 105, 0.3);
+    }
+    
+    .progress-bar {
+      height: 4px;
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      transition: width 0.3s ease;
+    }
+  </style>
+</head>
+<body>
+  <div class="max-w-7xl mx-auto">
+    <h1 class="text-3xl font-bold text-white mb-6">🎨 Grid View - Вариант 1: Компактная карточка</h1>
+    
+    <div class="glass-effect rounded-2xl p-6 mb-8">
+      <h2 class="text-xl font-bold mb-4">📝 Описание</h2>
+      <ul class="space-y-2 text-gray-700">
+        <li><strong>Концепция:</strong> Минималистичная карточка с акцентом на данных</li>
+        <li><strong>Особенности:</strong>
+          <ul class="ml-6 mt-2 space-y-1">
+            <li>• Левая цветная полоса по статусу дня (зелёный/жёлтый/красный)</li>
+            <li>• Дата и итоговая сумма в заголовке</li>
+            <li>• Тонкий прогресс-бар под заголовком</li>
+            <li>• Компактный список записей (время, категория, сумма)</li>
+            <li>• Иконки категорий с цветами</li>
+            <li>• Hover-эффект: подъём карточки</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    
+    <!-- Сетка карточек -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      
+      <!-- Карточка 1: План выполнен (зелёная) -->
+      <div class="glass-effect rounded-xl overflow-hidden hover:scale-105 transition-transform duration-300 shadow-lg border-l-4 border-green-500">
+        <div class="p-5">
+          <!-- Заголовок -->
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <h3 class="text-lg font-bold text-gray-800">28 Октября</h3>
+              <p class="text-xs text-gray-500">Понедельник</p>
+            </div>
+            <div class="text-right">
+              <p class="text-2xl font-bold text-green-600">8500 ₽</p>
+              <p class="text-xs text-gray-500">8.5 ч</p>
+            </div>
+          </div>
+          
+          <!-- Прогресс-бар -->
+          <div class="progress-bar mb-4">
+            <div class="progress-fill bg-green-500" style="width: 106%;"></div>
+          </div>
+          
+          <!-- Записи -->
+          <div class="space-y-2">
+            <div class="flex items-center justify-between text-sm">
+              <div class="flex items-center gap-2 flex-1">
+                <span class="text-gray-500">09:00-13:00</span>
+                <span class="inline-flex items-center gap-1 text-blue-600 font-medium">
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5z"/>
+                  </svg>
+                  Дизайн
+                </span>
+              </div>
+              <span class="font-semibold text-gray-800">4000 ₽</span>
+            </div>
+            
+            <div class="flex items-center justify-between text-sm">
+              <div class="flex items-center gap-2 flex-1">
+                <span class="text-gray-500">14:00-18:30</span>
+                <span class="inline-flex items-center gap-1 text-purple-600 font-medium">
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"/>
+                  </svg>
+                  Разработка
+                </span>
+              </div>
+              <span class="font-semibold text-gray-800">4500 ₽</span>
+            </div>
+          </div>
+          
+          <!-- Статус -->
+          <div class="mt-4 pt-3 border-t border-gray-200">
+            <div class="flex items-center justify-between text-xs">
+              <span class="inline-flex items-center gap-1 text-green-600 font-medium">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                </svg>
+                План выполнен (106%)
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Карточка 2: План на пути (жёлтая) -->
+      <div class="glass-effect rounded-xl overflow-hidden hover:scale-105 transition-transform duration-300 shadow-lg border-l-4 border-yellow-500">
+        <div class="p-5">
+          <!-- Заголовок -->
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <h3 class="text-lg font-bold text-gray-800">27 Октября</h3>
+              <p class="text-xs text-gray-500">Воскресенье</p>
+            </div>
+            <div class="text-right">
+              <p class="text-2xl font-bold text-yellow-600">5500 ₽</p>
+              <p class="text-xs text-gray-500">5.5 ч</p>
+            </div>
+          </div>
+          
+          <!-- Прогресс-бар -->
+          <div class="progress-bar mb-4">
+            <div class="progress-fill bg-yellow-500" style="width: 69%;"></div>
+          </div>
+          
+          <!-- Записи -->
+          <div class="space-y-2">
+            <div class="flex items-center justify-between text-sm">
+              <div class="flex items-center gap-2 flex-1">
+                <span class="text-gray-500">10:00-13:00</span>
+                <span class="inline-flex items-center gap-1 text-orange-600 font-medium">
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5z"/>
+                  </svg>
+                  Маркетинг
+                </span>
+              </div>
+              <span class="font-semibold text-gray-800">1800 ₽</span>
+            </div>
+            
+            <div class="flex items-center justify-between text-sm">
+              <div class="flex items-center gap-2 flex-1">
+                <span class="text-gray-500">14:00-16:30</span>
+                <span class="inline-flex items-center gap-1 text-green-600 font-medium">
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
+                    <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5z" clip-rule="evenodd"/>
+                  </svg>
+                  Менеджмент
+                </span>
+              </div>
+              <span class="font-semibold text-gray-800">3700 ₽</span>
+            </div>
+          </div>
+          
+          <!-- Статус -->
+          <div class="mt-4 pt-3 border-t border-gray-200">
+            <div class="flex items-center justify-between text-xs">
+              <span class="inline-flex items-center gap-1 text-yellow-600 font-medium">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                </svg>
+                На пути (69%)
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Карточка 3: План не выполнен (красная) -->
+      <div class="glass-effect rounded-xl overflow-hidden hover:scale-105 transition-transform duration-300 shadow-lg border-l-4 border-red-500">
+        <div class="p-5">
+          <!-- Заголовок -->
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <h3 class="text-lg font-bold text-gray-800">26 Октября</h3>
+              <p class="text-xs text-gray-500">Суббота</p>
+            </div>
+            <div class="text-right">
+              <p class="text-2xl font-bold text-red-600">2000 ₽</p>
+              <p class="text-xs text-gray-500">2.0 ч</p>
+            </div>
+          </div>
+          
+          <!-- Прогресс-бар -->
+          <div class="progress-bar mb-4">
+            <div class="progress-fill bg-red-500" style="width: 25%;"></div>
+          </div>
+          
+          <!-- Записи -->
+          <div class="space-y-2">
+            <div class="flex items-center justify-between text-sm">
+              <div class="flex items-center gap-2 flex-1">
+                <span class="text-gray-500">15:00-17:00</span>
+                <span class="inline-flex items-center gap-1 text-cyan-600 font-medium">
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z"/>
+                    <path d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z"/>
+                  </svg>
+                  Консультации
+                </span>
+              </div>
+              <span class="font-semibold text-gray-800">2000 ₽</span>
+            </div>
+          </div>
+          
+          <!-- Статус -->
+          <div class="mt-4 pt-3 border-t border-gray-200">
+            <div class="flex items-center justify-between text-xs">
+              <span class="inline-flex items-center gap-1 text-red-600 font-medium">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                </svg>
+                План не выполнен (25%)
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+    
+    <!-- Примечания -->
+    <div class="glass-effect rounded-2xl p-6 mt-8">
+      <h2 class="text-xl font-bold mb-4">💡 Преимущества варианта</h2>
+      <ul class="space-y-2 text-gray-700">
+        <li>✅ Компактность - помещается много информации</li>
+        <li>✅ Цветовая индикация статуса через левую границу</li>
+        <li>✅ Быстрое визуальное сканирование</li>
+        <li>✅ Прогресс-бар даёт моментальное понимание выполнения</li>
+        <li>✅ Hover-эффект добавляет интерактивности</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>
+

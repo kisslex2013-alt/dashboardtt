@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вариант 1: Боковое меню слева с табами</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .glass-effect {
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .dark .glass-effect {
+      background: rgba(17, 24, 39, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .glass-card {
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .dark .glass-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .animate-fade-in {
+      animation: fadeIn 0.3s ease-out;
+    }
+    .hover-lift:hover {
+      transform: translateY(-2px);
+      transition: transform 0.2s;
+    }
+  </style>
+</head>
+<body class="bg-gray-900 text-white p-8">
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-2xl font-bold mb-4">Вариант 1: Боковое меню слева с табами</h1>
+    
+    <!-- Модальное окно -->
+    <div class="glass-effect rounded-xl p-6 w-full shadow-2xl max-h-[90vh] flex flex-col animate-fade-in">
+      <!-- Заголовок -->
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl font-bold text-white flex items-center gap-2">
+          <span>🔊</span>
+          Звуки и анимация
+        </h2>
+        <button class="glass-card p-2 rounded-lg hover:bg-gray-700/50 transition-colors">✕</button>
+      </div>
+
+      <!-- Основной контент: боковое меню + контент -->
+      <div class="flex gap-4 flex-1 overflow-hidden">
+        <!-- Боковое меню -->
+        <div class="w-48 flex-shrink-0 space-y-1 overflow-y-auto">
+          <button class="w-full px-4 py-3 rounded-lg text-left transition-all bg-blue-500/10 border-2 border-blue-500 text-blue-400 hover-lift">
+            <div class="flex items-center gap-3">
+              <span class="text-xl">🔊</span>
+              <span class="text-sm font-semibold">Звуки</span>
+            </div>
+          </button>
+
+          <button class="w-full px-4 py-3 rounded-lg text-left transition-all glass-card hover:bg-gray-700/50 text-gray-300 hover-lift">
+            <div class="flex items-center gap-3">
+              <span class="text-xl">⏸️</span>
+              <span class="text-sm font-semibold">Перерывы</span>
+            </div>
+          </button>
+
+          <button class="w-full px-4 py-3 rounded-lg text-left transition-all glass-card hover:bg-gray-700/50 text-gray-300 hover-lift">
+            <div class="flex items-center gap-3">
+              <span class="text-xl">🚨</span>
+              <span class="text-sm font-semibold">Переработка</span>
+            </div>
+          </button>
+
+          <button class="w-full px-4 py-3 rounded-lg text-left transition-all glass-card hover:bg-gray-700/50 text-gray-300 hover-lift">
+            <div class="flex items-center gap-3">
+              <span class="text-xl">🍅</span>
+              <span class="text-sm font-semibold">Pomodoro</span>
+            </div>
+          </button>
+
+          <button class="w-full px-4 py-3 rounded-lg text-left transition-all glass-card hover:bg-gray-700/50 text-gray-300 hover-lift">
+            <div class="flex items-center gap-3">
+              <span class="text-xl">🎨</span>
+              <span class="text-sm font-semibold">Фавикон</span>
+            </div>
+          </button>
+        </div>
+
+        <!-- Контент выбранной секции -->
+        <div class="flex-1 overflow-y-auto">
+          <div class="glass-card rounded-lg p-4 space-y-4">
+            <div class="flex items-center justify-between">
+              <h3 class="text-sm font-bold text-white">Звуковые уведомления</h3>
+              <button class="relative w-11 h-6 rounded-full bg-blue-500">
+                <span class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full translate-x-5"></span>
+              </button>
+            </div>
+            
+            <div class="space-y-3">
+              <div>
+                <label class="text-xs font-semibold text-gray-300 mb-2 block">Интервал</label>
+                <select class="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm">
+                  <option>15 минут</option>
+                  <option>30 минут</option>
+                  <option>45 минут</option>
+                  <option>1 час</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="text-xs font-semibold text-gray-300 mb-2 block">Тип звука</label>
+                <div class="grid grid-cols-3 gap-2">
+                  <button class="p-2 rounded-lg border-2 border-blue-500 bg-blue-500/10 text-white text-xs font-semibold">Мелодия</button>
+                  <button class="p-2 rounded-lg border-2 border-gray-700 hover:border-blue-500 text-gray-300 text-xs">Предупреждение</button>
+                  <button class="p-2 rounded-lg border-2 border-gray-700 hover:border-blue-500 text-gray-300 text-xs">Звонок</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Кнопки действий -->
+      <div class="flex justify-end gap-3 mt-4 pt-4 border-t border-gray-700">
+        <button class="glass-card px-6 py-2 rounded-lg hover:bg-gray-700/50 transition-colors">Отмена</button>
+        <button class="px-6 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white transition-colors">Сохранить</button>
+      </div>
+    </div>
+
+    <div class="mt-4 text-sm text-gray-400">
+      <p><strong>Преимущества:</strong></p>
+      <ul class="list-disc list-inside mt-2 space-y-1">
+        <li>✅ Компактность: видна только одна секция</li>
+        <li>✅ Быстрая навигация между секциями</li>
+        <li>✅ Легко добавить новые секции</li>
+        <li>✅ Соответствует стилистике проекта</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>
+

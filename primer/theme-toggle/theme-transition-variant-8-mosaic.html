@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Переход темы - Вариант 8: Мозаика</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    
+    .glass-button {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .glass-button:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+    
+    .glass-button:active {
+      transform: translateY(0) scale(0.95);
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    /* Вариант 8: Мозаика (Mosaic) */
+    .theme-transition-mosaic {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      grid-template-rows: repeat(10, 1fr);
+      gap: 2px;
+    }
+
+    .mosaic-tile {
+      background: transparent;
+      opacity: 0;
+      transform: scale(0);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .mosaic-tile.active {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .theme-transition-mosaic.dark-to-light .mosaic-tile.active {
+      background: linear-gradient(135deg, rgba(249, 250, 251, 0.9) 0%, rgba(219, 234, 254, 0.9) 100%);
+    }
+
+    .theme-transition-mosaic.light-to-dark .mosaic-tile.active {
+      background: linear-gradient(135deg, rgba(17, 24, 39, 0.9) 0%, rgba(30, 41, 59, 0.9) 100%);
+    }
+
+    body {
+      transition: background-color 1s cubic-bezier(0.4, 0, 0.2, 1), color 1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      transition: background-color 1s cubic-bezier(0.4, 0, 0.2, 1), 
+                  color 1s cubic-bezier(0.4, 0, 0.2, 1), 
+                  border-color 1s cubic-bezier(0.4, 0, 0.2, 1),
+                  box-shadow 1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 min-h-screen p-8">
+  <div class="theme-transition-mosaic" id="transitionMosaic"></div>
+  
+  <div class="max-w-4xl mx-auto space-y-8">
+    
+    <!-- Заголовок -->
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-white mb-4">Вариант 8: Мозаика</h1>
+      <p class="text-xl text-gray-400">Новая тема появляется мозаикой из плиток</p>
+    </div>
+
+    <!-- Демо контент -->
+    <div class="glass-card rounded-xl p-8 space-y-6">
+      <h2 class="text-2xl font-semibold text-white mb-4">Нажмите на кнопку для переключения темы</h2>
+      
+      <div class="flex items-center justify-center gap-4">
+        <button
+          id="themeToggle"
+          aria-label="Переключить тему"
+          class="glass-button p-3 rounded-lg transition-all duration-300 hover:scale-110 active:scale-95"
+        >
+          <i data-lucide="moon" id="themeIcon" class="w-6 h-6 text-white"></i>
+        </button>
+
+        <p class="text-gray-400">Текущая тема: <span id="currentTheme" class="font-semibold text-white">dark</span></p>
+      </div>
+
+      <!-- Демо элементы -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+        <div class="glass-card rounded-lg p-4">
+          <h3 class="text-lg font-semibold text-white mb-2">Карточка 1</h3>
+          <p class="text-gray-300 text-sm">Элемент интерфейса</p>
+        </div>
+        <div class="glass-card rounded-lg p-4">
+          <h3 class="text-lg font-semibold text-white mb-2">Карточка 2</h3>
+          <p class="text-gray-300 text-sm">Элемент интерфейса</p>
+        </div>
+        <div class="glass-card rounded-lg p-4">
+          <h3 class="text-lg font-semibold text-white mb-2">Карточка 3</h3>
+          <p class="text-gray-300 text-sm">Элемент интерфейса</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Описание -->
+    <div class="glass-card rounded-xl p-6">
+      <h3 class="text-xl font-bold text-white mb-4">Особенности перехода:</h3>
+      <ul class="space-y-2 text-gray-300">
+        <li>• Новая тема появляется мозаикой из 100 плиток</li>
+        <li>• Плитки активируются с задержкой</li>
+        <li>• Создает эффект "пикселизации"</li>
+        <li>• Плавное масштабирование каждой плитки</li>
+        <li>• Длительность: 1 секунда</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <script>
+    let currentTheme = 'dark';
+    const themeToggle = document.getElementById('themeToggle');
+    const currentThemeSpan = document.getElementById('currentTheme');
+    const themeIcon = document.getElementById('themeIcon');
+    const transitionMosaic = document.getElementById('transitionMosaic');
+    
+    // Создаем мозаику из 100 плиток (10x10)
+    for (let i = 0; i < 100; i++) {
+      const tile = document.createElement('div');
+      tile.className = 'mosaic-tile';
+      transitionMosaic.appendChild(tile);
+    }
+    
+    lucide.createIcons();
+
+    function setTheme(theme) {
+      currentTheme = theme;
+      document.documentElement.classList.toggle('dark', theme === 'dark');
+      document.documentElement.classList.toggle('light', theme === 'light');
+      
+      if (theme === 'dark') {
+        document.body.className = 'bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 min-h-screen p-8';
+        themeIcon.setAttribute('data-lucide', 'moon');
+      } else {
+        document.body.className = 'bg-gradient-to-br from-gray-100 via-blue-50 to-gray-100 min-h-screen p-8';
+        themeIcon.setAttribute('data-lucide', 'sun');
+      }
+      
+      lucide.createIcons();
+      currentThemeSpan.textContent = theme;
+    }
+
+    themeToggle.addEventListener('click', () => {
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      // Устанавливаем класс для цвета
+      const mosaicClass = currentTheme === 'dark' ? 'dark-to-light' : 'light-to-dark';
+      transitionMosaic.className = `theme-transition-mosaic ${mosaicClass}`;
+      
+      // Сбрасываем все плитки
+      const tiles = transitionMosaic.querySelectorAll('.mosaic-tile');
+      tiles.forEach(tile => tile.classList.remove('active'));
+      
+      // Активируем плитки с задержкой
+      tiles.forEach((tile, index) => {
+        setTimeout(() => {
+          tile.classList.add('active');
+        }, (index * 10) % 1000); // Распределяем активацию на 1 секунду
+      });
+      
+      // Меняем тему в середине анимации
+      setTimeout(() => {
+        setTheme(newTheme);
+      }, 500);
+      
+      // Убираем плитки после перехода
+      setTimeout(() => {
+        tiles.forEach(tile => tile.classList.remove('active'));
+      }, 1000);
+    });
+
+    setTheme('dark');
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,1346 @@
+/* Custom styles for Time Tracker Dashboard */
+
+/* Скрытие scrollbar для горизонтального скролла на мобильных */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE и Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari и Opera */
+}
+
+/* Кастомный scrollbar для виртуализированных списков */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(156, 163, 175) transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgb(156, 163, 175);
+  border-radius: 4px;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgb(75, 85, 99);
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+/* ОПТИМИЗАЦИЯ: Плавная анимация chevron для аккордеонов */
+details[open] .details-chevron {
+  transform: rotate(180deg);
+}
+
+details .details-chevron {
+  transition: transform 0.2s ease;
+}
+
+/* ВИЗУАЛ: Контраст пустых дней календаря */
+/* Пустой день - светлая тема */
+.calendar-day-empty {
+  background: rgba(17, 24, 39, 0.6) !important;
+  border: 1px dashed rgba(156, 163, 175, 0.4) !important;
+}
+
+/* Пустой день - темная тема */
+.dark .calendar-day-empty {
+  background: rgba(17, 24, 39, 0.7) !important;
+  border: 1px dashed rgba(75, 85, 99, 0.5) !important;
+}
+
+/* ВИЗУАЛ: Цветовая индикация выполнения плана */
+/* Красный: меньше 50% плана */
+.calendar-day-danger {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.3) 0%, rgba(220, 38, 38, 0.3) 100%) !important;
+  border: 2px solid rgba(239, 68, 68, 0.6) !important;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
+}
+
+.dark .calendar-day-danger {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.4) 0%, rgba(220, 38, 38, 0.4) 100%) !important;
+  border: 2px solid rgba(239, 68, 68, 0.8) !important;
+  box-shadow: 0 2px 6px rgba(239, 68, 68, 0.4);
+}
+
+/* Желтый: от 50% до 99% плана */
+.calendar-day-warning {
+  background: linear-gradient(135deg, rgba(234, 179, 8, 0.3) 0%, rgba(217, 119, 6, 0.3) 100%) !important;
+  border: 2px solid rgba(234, 179, 8, 0.6) !important;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(234, 179, 8, 0.3);
+}
+
+.dark .calendar-day-warning {
+  background: linear-gradient(135deg, rgba(234, 179, 8, 0.4) 0%, rgba(217, 119, 6, 0.4) 100%) !important;
+  border: 2px solid rgba(234, 179, 8, 0.8) !important;
+  box-shadow: 0 2px 6px rgba(234, 179, 8, 0.4);
+}
+
+/* Зеленый: 100% и более плана */
+.calendar-day-success {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.3) 0%, rgba(16, 185, 129, 0.3) 100%) !important;
+  border: 2px solid rgba(34, 197, 94, 0.6) !important;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(34, 197, 94, 0.3);
+}
+
+.dark .calendar-day-success {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.4) 0%, rgba(16, 185, 129, 0.4) 100%) !important;
+  border: 2px solid rgba(34, 197, 94, 0.8) !important;
+  box-shadow: 0 2px 6px rgba(34, 197, 94, 0.4);
+}
+
+/* Hover эффект для дней с записями */
+.calendar-day-danger:hover,
+.calendar-day-warning:hover,
+.calendar-day-success:hover {
+  transform: scale(1.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.calendar-day-danger:hover {
+  box-shadow: 0 4px 8px rgba(239, 68, 68, 0.4);
+}
+
+.dark .calendar-day-danger:hover {
+  box-shadow: 0 4px 10px rgba(239, 68, 68, 0.5);
+}
+
+.calendar-day-warning:hover {
+  box-shadow: 0 4px 8px rgba(234, 179, 8, 0.4);
+}
+
+.dark .calendar-day-warning:hover {
+  box-shadow: 0 4px 10px rgba(234, 179, 8, 0.5);
+}
+
+.calendar-day-success:hover {
+  box-shadow: 0 4px 8px rgba(34, 197, 94, 0.4);
+}
+
+.dark .calendar-day-success:hover {
+  box-shadow: 0 4px 10px rgba(34, 197, 94, 0.5);
+}
+
+/* Base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  background-color: #f3f4f6;
+  color: #111827;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dark body {
+  background-color: #111827;
+  color: #f9fafb;
+}
+
+/* Glass effects */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  transition: backdrop-filter 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.dark .glass-effect {
+  background: rgba(31, 41, 55, 0.95);
+  border: 1px solid rgba(75, 85, 99, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* Убираем backdrop-filter при hover только для элементов, не являющихся overlay */
+.glass-effect:not([aria-hidden="true"]):hover {
+  backdrop-filter: blur(16px);
+}
+
+/* Card preset using glass-effect visuals */
+.glass-card {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 16px; /* fallback if no Tailwind padding present */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dark .glass-card {
+  background: rgba(17, 24, 39, 0.7);
+  backdrop-filter: blur(24px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Dark Glass hover effects */
+.dark .glass-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(17, 24, 39, 0.8);
+}
+
+/* Glow effects для разных цветов */
+.glow-blue {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+}
+
+.glow-blue:hover {
+  box-shadow: 0 0 25px rgba(59, 130, 246, 0.4), 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.dark .glow-blue:hover {
+  box-shadow: 0 0 30px rgba(59, 130, 246, 0.5), 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
+.glow-teal {
+  box-shadow: 0 0 20px rgba(20, 184, 166, 0.3);
+}
+
+.glow-teal:hover {
+  box-shadow: 0 0 25px rgba(20, 184, 166, 0.4), 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.dark .glow-teal:hover {
+  box-shadow: 0 0 30px rgba(20, 184, 166, 0.5), 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
+.glow-green {
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+}
+
+.glow-green:hover {
+  box-shadow: 0 0 25px rgba(16, 185, 129, 0.4), 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.dark .glow-green:hover {
+  box-shadow: 0 0 30px rgba(16, 185, 129, 0.5), 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
+.glow-purple {
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+}
+
+.glow-purple:hover {
+  box-shadow: 0 0 25px rgba(139, 92, 246, 0.4), 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.dark .glow-purple:hover {
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.5), 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
+.glow-orange {
+  box-shadow: 0 0 20px rgba(249, 115, 22, 0.3);
+}
+
+.glow-orange:hover {
+  box-shadow: 0 0 25px rgba(249, 115, 22, 0.4), 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.dark .glow-orange:hover {
+  box-shadow: 0 0 30px rgba(249, 115, 22, 0.5), 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
+.glow-yellow {
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+}
+
+.glow-yellow:hover {
+  box-shadow: 0 0 25px rgba(251, 191, 36, 0.4), 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.dark .glow-yellow:hover {
+  box-shadow: 0 0 30px rgba(251, 191, 36, 0.5), 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
+.glow-red {
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+}
+
+.glow-red:hover {
+  box-shadow: 0 0 25px rgba(239, 68, 68, 0.4), 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.dark .glow-red:hover {
+  box-shadow: 0 0 30px rgba(239, 68, 68, 0.5), 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
+.glass-button {
+  /* Do not set background-color here to avoid overriding Tailwind bg-* variants */
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border-radius: 8px;
+}
+
+.dark .glass-button {
+  /* Keep transparent background; only adjust border and shadow for dark theme */
+  border: 1px solid rgba(75, 85, 99, 0.3);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.glass-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.dark .glass-button:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* Animations */
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInProgress {
+  0% {
+    width: 0;
+  }
+  50% {
+    width: 100%;
+  }
+  100% {
+    width: var(--progress-width, 0%);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    text-shadow: 0 0 5px currentColor, 0 0 10px currentColor;
+  }
+  50% {
+    text-shadow: 0 0 20px currentColor, 0 0 30px currentColor, 0 0 40px currentColor;
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(59, 130, 246, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.8);
+  }
+}
+
+.animate-slide-in {
+  animation: slideIn 0.3s ease-out;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 2s infinite;
+}
+
+/* Notification styles */
+.notification-success {
+  background-color: #10b981 !important;
+  border-left: 4px solid #059669;
+  color: white !important;
+}
+
+.notification-error {
+  background-color: #ef4444 !important;
+  border-left: 4px solid #dc2626;
+  color: white !important;
+}
+
+.notification-warning {
+  background-color: #f59e0b !important;
+  border-left: 4px solid #d97706;
+  color: white !important;
+}
+
+.notification-info {
+  background-color: #3b82f6 !important;
+  border-left: 4px solid #2563eb;
+  color: white !important;
+}
+
+/* Test notification styles */
+.test-green-notification {
+  background-color: #10b981 !important;
+  color: white !important;
+}
+
+.test-red-notification {
+  background-color: #ef4444 !important;
+  color: white !important;
+}
+
+.test-yellow-notification {
+  background-color: #f59e0b !important;
+  color: white !important;
+}
+
+.test-blue-notification {
+  background-color: #3b82f6 !important;
+  color: white !important;
+}
+
+/* Input error styles */
+.test-red-background {
+  background-color: #fef2f2 !important;
+  border: 2px solid #ef4444 !important;
+}
+
+.dark .test-red-background {
+  background-color: #7f1d1d !important;
+  border: 2px solid #ef4444 !important;
+}
+
+/* Accordion (details/summary) styles */
+details > summary {
+  cursor: pointer;
+  list-style: none;
+}
+
+details > summary::-webkit-details-marker {
+  display: none;
+}
+
+details > summary::-moz-list-bullet {
+  list-style-type: none;
+}
+
+details[open] > summary .details-icon,
+details[open] > summary .chevron-icon {
+  transform: rotate(180deg);
+}
+
+/* Timeline styles */
+.timeline {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-top: 1rem;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px; /* делаем линию заметнее */
+  height: 100%;
+  background: linear-gradient(to bottom, transparent, #4c1d95, transparent);
+  pointer-events: none;
+  z-index: 1; /* линия поверх фона, но под точками и карточками */
+}
+
+.dark .timeline::before {
+  background: linear-gradient(to bottom, transparent, #60a5fa, transparent);
+  z-index: 1;
+}
+
+.timeline-dot {
+  position: absolute;
+  top: 28px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 9999px;
+  background-color: #3b82f6;
+  box-shadow: 0 0 12px 2px rgba(59, 130, 246, 0.5);
+  z-index: 1;
+  border: 2px solid white;
+}
+
+.dark .timeline-dot {
+  background: #60a5fa;
+  border-color: #1f2937;
+  box-shadow: 0 0 12px 2px rgba(96, 165, 250, 0.5);
+}
+
+    /* Новая раскладка таймлайна на CSS Grid: центр = колонка с точкой */
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 1fr 40px 1fr; /* левая карточка | точка | правая карточка */
+      align-items: center; /* центрируем всю строку, чтобы инсайты были посередине относительно main */
+      gap: 1rem;
+      position: relative;
+    }
+
+/* Точка теперь позиционируется через grid, а не абсолютом */
+.timeline-item .timeline-dot {
+  position: static;
+  left: auto;
+  top: auto;
+  transform: none;
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: center;
+  align-self: center; /* точка всегда по центру строки */
+  z-index: 2; /* точка поверх вертикальной линии */
+}
+
+/* Блоки занимают противоположные стороны в шахматном порядке */
+/* В нечетных строках: main слева (col 1), side справа (col 3) */
+.timeline-item:nth-child(odd) .timeline-main {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: center; /* основной блок по центру строки */
+}
+.timeline-item:nth-child(odd) .timeline-side {
+  grid-column: 3;
+  grid-row: 1;
+  align-self: center; /* инсайты по центру строки */
+}
+
+/* В четных строках: main справа (col 3), side слева (col 1) */
+.timeline-item:nth-child(even) .timeline-main {
+  grid-column: 3;
+  grid-row: 1;
+  align-self: center; /* основной блок по центру строки */
+}
+.timeline-item:nth-child(even) .timeline-side {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: center; /* инсайты по центру строки */
+}
+
+/* Ширина карточек внутри колонок */
+.timeline-main, .timeline-side {
+  width: 100%;
+  max-width: 100%;
+}
+
+.timeline-main > .timeline-main-card,
+.timeline-side > .timeline-side-card {
+  width: 100%;
+}
+
+/* Hover эффекты */
+.timeline-main-card {
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.timeline-main-card:hover {
+  box-shadow: 0 0 20px 2px rgba(59, 130, 246, 0.3);
+}
+
+/* Custom scrollbar styles */
+.overflow-y-auto::-webkit-scrollbar,
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-track,
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+
+.dark .overflow-y-auto::-webkit-scrollbar-track,
+.dark .custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb,
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(59, 130, 246, 0.5);
+  border-radius: 4px;
+  transition: background 0.3s;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb:hover,
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(59, 130, 246, 0.8);
+}
+
+.dark .overflow-y-auto::-webkit-scrollbar-thumb,
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(59, 130, 246, 0.6);
+}
+
+.dark .overflow-y-auto::-webkit-scrollbar-thumb:hover,
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(59, 130, 246, 0.9);
+}
+
+/* Debug utilities */
+.debug-border {
+  border: 2px solid red !important;
+}
+
+.debug-bg {
+  background-color: yellow !important;
+}
+
+/* Анимации для кнопок массовых операций */
+@keyframes categoryMorph {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    transform: scale(1.05) rotate(-2deg) skewX(2deg);
+  }
+  50% {
+    transform: scale(1.1) rotate(2deg) skewX(-2deg);
+  }
+  75% {
+    transform: scale(1.05) rotate(-1deg) skewX(1deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.button-bulk-category {
+  transition: all 0.2s ease;
+}
+
+.button-bulk-category:hover {
+  animation: categoryMorph 0.6s ease;
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 6px 16px rgba(34, 197, 94, 0.4);
+}
+
+.button-bulk-category:active {
+  animation: categoryMorph 0.6s ease;
+}
+
+@keyframes exportUpward {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-8px) scale(1.1);
+  }
+  100% {
+    transform: translateY(-4px) scale(1.05);
+  }
+}
+
+.button-bulk-export {
+  transition: all 0.2s ease;
+}
+
+.button-bulk-export:hover {
+  animation: exportUpward 0.5s ease;
+  transform: translateY(-4px) scale(1.08);
+  box-shadow: 0 8px 20px rgba(147, 51, 234, 0.4);
+}
+
+.button-bulk-export:active {
+  animation: exportUpward 0.5s ease;
+}
+
+@keyframes deleteWarning {
+  0% {
+    transform: scale(1);
+  }
+  20% {
+    transform: scale(1.3);
+  }
+  40% {
+    transform: scale(0.9);
+  }
+  60% {
+    transform: scale(1.2);
+  }
+  80% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.button-bulk-delete {
+  transition: all 0.2s ease;
+}
+
+.button-bulk-delete:hover {
+  animation: deleteWarning 0.4s ease;
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4);
+}
+
+.button-bulk-delete:active {
+  animation: deleteWarning 0.4s ease;
+}
+
+/* ===== Стили для расширенного StatisticsDashboard ===== */
+
+/* Карточки статистики с hover-эффектом */
+.timeline-info-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.timeline-info-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.dark .timeline-info-card:hover {
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* Эффект свечения при наведении */
+.hover-glow {
+  transition: all 0.3s ease;
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.4), 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.dark .hover-glow:hover {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.5), 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Большие полупрозрачные иконки */
+.insight-icon {
+  opacity: 0.3;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Дополнительные цветовые акценты для иконок */
+.text-blue-500\/30 {
+  color: rgba(59, 130, 246, 0.3);
+}
+
+.text-green-500\/30 {
+  color: rgba(34, 197, 94, 0.3);
+}
+
+.text-purple-500\/30 {
+  color: rgba(168, 85, 247, 0.3);
+}
+
+.text-orange-500\/30 {
+  color: rgba(249, 115, 22, 0.3);
+}
+
+.text-red-500\/30 {
+  color: rgba(239, 68, 68, 0.3);
+}
+
+.text-teal-500\/30 {
+  color: rgba(20, 184, 166, 0.3);
+}
+
+.text-yellow-500\/30 {
+  color: rgba(234, 179, 8, 0.3);
+}
+
+/* Темная тема - еще более прозрачные иконки */
+.dark .text-blue-500\/5 {
+  color: rgba(59, 130, 246, 0.05);
+}
+
+.dark .text-green-500\/5 {
+  color: rgba(34, 197, 94, 0.05);
+}
+
+.dark .text-purple-500\/5 {
+  color: rgba(168, 85, 247, 0.05);
+}
+
+.dark .text-orange-500\/5 {
+  color: rgba(249, 115, 22, 0.05);
+}
+
+.dark .text-red-500\/5 {
+  color: rgba(239, 68, 68, 0.05);
+}
+
+.dark .text-teal-500\/5 {
+  color: rgba(20, 184, 166, 0.05);
+}
+
+.dark .text-yellow-500\/5 {
+  color: rgba(234, 179, 8, 0.05);
+}
+
+/* ===== Work Schedule Modal - Variant 5: Dashboard - ENHANCED ===== */
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes pulseGlowBlue {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.4), 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(59, 130, 246, 0.6), 0 6px 16px rgba(0, 0, 0, 0.15);
+  }
+}
+
+@keyframes checkmarkAppear {
+  0% {
+    opacity: 0;
+    transform: scale(0) rotate(-180deg);
+  }
+  50% {
+    transform: scale(1.2) rotate(0deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+.dashboard-card {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: slideUp 0.5s ease-out;
+  cursor: pointer;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.dark .dashboard-card:hover {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-card.selected {
+  border: 3px solid #3b82f6;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(37, 99, 235, 0.05) 100%);
+}
+
+.dark .dashboard-card.selected {
+  border: 3px solid #3b82f6;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(37, 99, 235, 0.1) 100%);
+}
+
+.dashboard-card.selected::before {
+  content: '✓';
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 1.75rem;
+  height: 1.75rem;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 1rem;
+  z-index: 10;
+  animation: checkmarkAppear 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Ripple эффект при клике */
+.dashboard-card::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(59, 130, 246, 0.3);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.dashboard-card:active::after {
+  width: 100%;
+  height: 100%;
+  animation: ripple 0.6s ease-out;
+}
+
+.icon-bg {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.stat-bar {
+  height: 0.5rem;
+  border-radius: 0.25rem;
+  background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
+  transition: width 0.5s ease-out;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.375rem;
+}
+
+.day-dot {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.625rem;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.day-work {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+}
+
+.day-off {
+  background: rgba(229, 231, 235, 0.5);
+  color: #9ca3af;
+}
+
+.dark .day-off {
+  background: rgba(75, 85, 99, 0.3);
+  color: #6b7280;
+}
+
+.pulse-ring {
+  animation: pulseGlowBlue 2s infinite ease-in-out;
+}
+
+.dark .pulse-ring {
+  animation: pulseGlowBlue 2s infinite ease-in-out;
+}
+
+/* Адаптивные размеры для мобильных */
+@media (max-width: 640px) {
+  .dashboard-card {
+    animation: slideUp 0.4s ease-out;
+  }
+  
+  .dashboard-card.selected::before {
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 0.875rem;
+  }
+  
+  .day-dot {
+    width: 1.25rem;
+    height: 1.25rem;
+    font-size: 0.5rem;
+  }
+  
+  .icon-bg {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+}
+
+/* Стилизация выпадающих списков для темной темы */
+select option {
+  background-color: white;
+  color: #111827;
+}
+
+.dark select option {
+  background-color: #1f2937;
+  color: #f3f4f6;
+}
+
+/* Подсветка выбранной опции в выпадающем списке */
+select option:checked,
+select option:hover {
+  background-color: #dbeafe;
+}
+
+.dark select option:checked,
+.dark select option:hover {
+  background-color: #1e3a8a;
+  color: #93c5fd;
+}
+
+/* ============================================
+   ВИЗУАЛ: Микроанимации (Microinteractions)
+   ============================================ */
+
+/* 1. Ripple эффект для кнопок (добавлено к существующему .glass-button) */
+.glass-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease-out, height 0.6s ease-out, opacity 0.6s ease-out;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.glass-button:active::before {
+  width: 300px;
+  height: 300px;
+  opacity: 1;
+}
+
+.glass-button > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Ripple для темной темы */
+.dark .glass-button::before {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* 2. Улучшенный hover lift для карточек записей */
+.entry-card,
+details.glass-effect:not([open]) {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.2s ease;
+}
+
+.entry-card:hover,
+details.glass-effect:not([open]):hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.dark .entry-card:hover,
+.dark details.glass-effect:not([open]):hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  border-color: rgba(59, 130, 246, 0.5);
+}
+
+/* 3. Input focus glow эффект */
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+input[type="time"],
+textarea,
+select {
+  transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.3s ease,
+              transform 0.2s ease;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="time"]:focus,
+textarea:focus,
+select:focus {
+  animation: input-focus-glow 0.3s ease;
+  transform: scale(1.01);
+  outline: none;
+}
+
+@keyframes input-focus-glow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+  }
+  50% {
+    box-shadow: 0 0 0 5px rgba(59, 130, 246, 0.2);
+  }
+  100% {
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+  }
+}
+
+/* Для темной темы */
+.dark input[type="text"]:focus,
+.dark input[type="number"]:focus,
+.dark input[type="email"]:focus,
+.dark input[type="password"]:focus,
+.dark input[type="time"]:focus,
+.dark textarea:focus,
+.dark select:focus {
+  animation: input-focus-glow-dark 0.3s ease;
+}
+
+@keyframes input-focus-glow-dark {
+  0% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+  }
+  50% {
+    box-shadow: 0 0 0 5px rgba(59, 130, 246, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+  }
+}
+
+/* 4. Плавная анимация для иконок при hover */
+.icon-hover-scale {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.icon-hover-scale:hover {
+  transform: scale(1.1);
+}
+
+/* 5. Smooth transitions для всех интерактивных элементов */
+a:not([disabled]),
+button:not(:disabled),
+[role="button"]:not([disabled]),
+[tabindex]:not([tabindex="-1"]) {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 6. Микроанимация для чекбоксов и радиокнопок */
+input[type="checkbox"],
+input[type="radio"] {
+  transition: transform 0.15s ease,
+              box-shadow 0.15s ease;
+}
+
+input[type="checkbox"]:hover,
+input[type="radio"]:hover {
+  transform: scale(1.1);
+}
+
+input[type="checkbox"]:active,
+input[type="radio"]:active {
+  transform: scale(0.95);
+}
+
+/* 7. Плавное появление тултипов */
+[data-tooltip],
+[title] {
+  transition: opacity 0.2s ease,
+              transform 0.2s ease;
+}
+
+/* 8. Микроанимация для карточек статистики */
+.stat-card {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.dark .stat-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* 9. Плавная анимация для прогресс-баров */
+progress,
+.progress-bar {
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+              background-color 0.3s ease;
+}
+
+/* 10. Микроанимация для dropdown меню */
+.dropdown-menu,
+[role="menu"] {
+  animation: slideDown 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Таймлайн для истории изменений */
+.changelog-timeline {
+  position: relative;
+}
+
+.changelog-timeline-line {
+  position: absolute;
+  left: 20px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, rgba(59, 130, 246, 0.3), rgba(59, 130, 246, 0.1));
+  z-index: 0;
+}
+
+.changelog-timeline-dot {
+  position: absolute;
+  left: 14px;
+  top: 24px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 3px solid rgba(59, 130, 246, 0.5);
+  background: rgba(59, 130, 246, 0.2);
+  z-index: 10;
+}
+
+.changelog-timeline-dot.gray {
+  border-color: rgba(156, 163, 175, 0.5);
+  background: rgba(156, 163, 175, 0.2);
+}
+
+.changelog-timeline-dot.purple {
+  border-color: rgba(168, 85, 247, 0.5);
+  background: rgba(168, 85, 247, 0.2);
+}
+
+.changelog-timeline-dot.green {
+  border-color: rgba(34, 197, 94, 0.5);
+  background: rgba(34, 197, 94, 0.2);
+}
+
+.changelog-timeline-dot.red {
+  border-color: rgba(239, 68, 68, 0.5);
+  background: rgba(239, 68, 68, 0.2);
+}
+
+.changelog-timeline-dot.teal {
+  border-color: rgba(20, 184, 166, 0.5);
+  background: rgba(20, 184, 166, 0.2);
+}
+
+/* Анимация изменения размера модального окна (Вариант 5: Плавное затухание) */
+/* Вариант 5: Плавное затухание - по primer modal-size-variant-5-fade-smooth.html */
+.modal-content-size-animation {
+  position: relative;
+  /* Плавная анимация изменения height через прямой DOM API */
+  /* Transition применяется через inline style для точного контроля */
+  transition: height 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  overflow: hidden;
+  /* Оптимизация для плавной анимации */
+  will-change: height;
+  /* Гарантируем, что transition применяется */
+  -webkit-transition: height 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.content-wrapper-fade {
+  transition: opacity 0.25s ease-in-out;
+}
+
+.content-wrapper-fade.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.content-wrapper-fade.fade-in {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Плавное появление нового контента - только для прямых дочерних элементов вкладок */
+.content-wrapper-fade.fade-in > div:first-child {
+  animation: fadeInUp 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 11. Плавная анимация для переключателей (toggle switches) */
+.toggle-switch {
+  transition: background-color 0.3s ease,
+              transform 0.2s ease;
+}
+
+.toggle-switch:active {
+  transform: scale(0.95);
+}
+
+/* 12. Микроанимация для табов */
+.tab-button {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tab-button:hover {
+  transform: translateY(-1px);
+}
+
+.tab-button.active {
+  transform: translateY(-2px);
+}

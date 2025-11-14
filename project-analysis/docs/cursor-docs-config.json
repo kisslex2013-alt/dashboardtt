@@ -1,0 +1,86 @@
+{
+  "description": "Конфигурация документации для Cursor IDE - Time Tracker Dashboard",
+  "version": "1.0",
+  "docs": [
+    {
+      "name": "React",
+      "url": "https://react.dev",
+      "description": "Официальная документация React 18+"
+    },
+    {
+      "name": "Zustand",
+      "url": "https://docs.pmnd.rs/zustand",
+      "description": "Документация Zustand - state management"
+    },
+    {
+      "name": "Tailwind CSS",
+      "url": "https://tailwindcss.com/docs",
+      "description": "Официальная документация Tailwind CSS"
+    },
+    {
+      "name": "Vite",
+      "url": "https://vitejs.dev",
+      "description": "Документация Vite - сборщик"
+    },
+    {
+      "name": "Recharts",
+      "url": "https://recharts.org",
+      "description": "Документация Recharts - графики"
+    },
+    {
+      "name": "Tone.js",
+      "url": "https://tonejs.github.io/docs",
+      "description": "Документация Tone.js - аудио"
+    },
+    {
+      "name": "date-fns",
+      "url": "https://date-fns.org",
+      "description": "Документация date-fns - работа с датами"
+    },
+    {
+      "name": "Lucide React",
+      "url": "https://lucide.dev",
+      "description": "Документация Lucide React - иконки"
+    },
+    {
+      "name": "Headless UI",
+      "url": "https://headlessui.com",
+      "description": "Документация Headless UI - UI компоненты"
+    },
+    {
+      "name": "Framer Motion",
+      "url": "https://www.framer.com/motion",
+      "description": "Документация Framer Motion - анимации"
+    },
+    {
+      "name": "React Spring",
+      "url": "https://www.react-spring.dev",
+      "description": "Документация React Spring - анимации"
+    },
+    {
+      "name": "Iconify React",
+      "url": "https://iconify.design/docs/iconify-icon/react/",
+      "description": "Документация Iconify React - иконки"
+    },
+    {
+      "name": "Vitest",
+      "url": "https://vitest.dev",
+      "description": "Документация Vitest - тестирование"
+    },
+    {
+      "name": "ESLint",
+      "url": "https://eslint.org/docs/latest",
+      "description": "Документация ESLint - линтер"
+    },
+    {
+      "name": "PostCSS",
+      "url": "https://postcss.org",
+      "description": "Документация PostCSS"
+    },
+    {
+      "name": "Autoprefixer",
+      "url": "https://github.com/postcss/autoprefixer",
+      "description": "Документация Autoprefixer"
+    }
+  ]
+}

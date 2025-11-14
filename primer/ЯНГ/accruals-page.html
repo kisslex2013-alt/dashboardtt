@@ -1,0 +1,1880 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Начисления - Accruals Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0f172a;
+      color: #f1f5f9;
+    }
+    
+    .table-container {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid rgba(71, 85, 105, 0.3);
+      border-radius: 0.5rem;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .table-container:hover {
+      border-color: rgba(71, 85, 105, 0.5);
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      flex: 1;
+      display: table;
+    }
+    
+    th {
+      background: rgba(15, 23, 42, 0.5);
+      padding: 0.75rem 1rem;
+      text-align: left;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #94a3b8;
+      border-bottom: 1px solid rgba(71, 85, 105, 0.3);
+    }
+    
+    /* Theme toggle button styles */
+    #theme-toggle {
+      background: rgba(30, 41, 59, 0.8);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(71, 85, 105, 0.3);
+      transition: all 0.2s ease;
+    }
+    
+    #theme-toggle:hover {
+      background: rgba(51, 65, 85, 0.9);
+      transform: translateY(-2px) scale(1.02);
+    }
+    
+    .click-shrink:active {
+      transform: scale(0.95);
+    }
+    
+    /* Navigation button with red pulsing glow */
+    #nav-to-tasks-btn,
+    #nav-to-accruals-btn {
+      background: rgba(239, 68, 68, 0.9) !important;
+      backdrop-filter: blur(8px);
+      border: 2px solid rgba(239, 68, 68, 0.8) !important;
+      box-shadow: 0 0 20px rgba(239, 68, 68, 0.6),
+                  0 0 40px rgba(239, 68, 68, 0.4),
+                  inset 0 0 10px rgba(239, 68, 68, 0.3) !important;
+      animation: redPulseGlow 2s ease-in-out infinite;
+      position: relative;
+      z-index: 10;
+    }
+    
+    @keyframes redPulseGlow {
+      0%, 100% {
+        box-shadow: 0 0 20px rgba(239, 68, 68, 0.6),
+                    0 0 40px rgba(239, 68, 68, 0.4),
+                    0 0 60px rgba(239, 68, 68, 0.3),
+                    inset 0 0 10px rgba(239, 68, 68, 0.3);
+        transform: scale(1);
+      }
+      50% {
+        box-shadow: 0 0 30px rgba(239, 68, 68, 0.8),
+                    0 0 60px rgba(239, 68, 68, 0.6),
+                    0 0 90px rgba(239, 68, 68, 0.4),
+                    inset 0 0 15px rgba(239, 68, 68, 0.4);
+        transform: scale(1.05);
+      }
+    }
+    
+    #nav-to-tasks-btn:hover,
+    #nav-to-accruals-btn:hover {
+      background: rgba(220, 38, 38, 1) !important;
+      border-color: rgba(220, 38, 38, 1) !important;
+      transform: translateY(-2px) scale(1.1) !important;
+      box-shadow: 0 0 40px rgba(239, 68, 68, 1),
+                  0 0 80px rgba(239, 68, 68, 0.8),
+                  0 0 120px rgba(239, 68, 68, 0.6),
+                  inset 0 0 20px rgba(239, 68, 68, 0.5) !important;
+      animation: none;
+    }
+    
+    #nav-to-tasks-btn:active,
+    #nav-to-accruals-btn:active {
+      transform: scale(0.95) !important;
+      box-shadow: 0 0 15px rgba(239, 68, 68, 0.8),
+                  inset 0 0 10px rgba(239, 68, 68, 0.4) !important;
+    }
+    
+    #nav-to-tasks-btn svg,
+    #nav-to-accruals-btn svg {
+      color: #ffffff !important;
+      filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.8));
+      animation: iconPulse 1.5s ease-in-out infinite;
+    }
+    
+    @keyframes iconPulse {
+      0%, 100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.8));
+      }
+      50% {
+        transform: scale(1.1);
+        filter: drop-shadow(0 0 8px rgba(255, 255, 255, 1));
+      }
+    }
+    
+    /* Light theme styles for theme-toggle button */
+    body.light #theme-toggle {
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      color: #1e293b;
+    }
+    
+    body.light #theme-toggle:hover {
+      background: rgba(255, 255, 255, 1);
+      border-color: rgba(0, 0, 0, 0.2);
+    }
+    
+    body.light #theme-toggle svg {
+      color: #1e293b !important;
+    }
+    
+    /* Light theme for navigation buttons - keep red glow */
+    body.light #nav-to-tasks-btn,
+    body.light #nav-to-accruals-btn {
+      background: rgba(239, 68, 68, 0.95) !important;
+      border: 2px solid rgba(239, 68, 68, 0.9) !important;
+      box-shadow: 0 0 25px rgba(239, 68, 68, 0.7),
+                  0 0 50px rgba(239, 68, 68, 0.5),
+                  inset 0 0 12px rgba(239, 68, 68, 0.4) !important;
+    }
+    
+    body.light #nav-to-tasks-btn:hover,
+    body.light #nav-to-accruals-btn:hover {
+      background: rgba(220, 38, 38, 1) !important;
+      border-color: rgba(220, 38, 38, 1) !important;
+      box-shadow: 0 0 50px rgba(239, 68, 68, 1),
+                  0 0 100px rgba(239, 68, 68, 0.9),
+                  0 0 150px rgba(239, 68, 68, 0.7),
+                  inset 0 0 25px rgba(239, 68, 68, 0.6) !important;
+    }
+    
+    body.light #nav-to-tasks-btn svg,
+    body.light #nav-to-accruals-btn svg {
+      color: #ffffff !important;
+      filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.9));
+    }
+    
+    /* Page transition animation */
+    @keyframes fadeOut {
+      from {
+        opacity: 1;
+      }
+      to {
+        opacity: 0;
+      }
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+    
+    .page-transitioning {
+      animation: fadeOut 0.3s ease-in-out forwards;
+    }
+    
+    td {
+      padding: 0.875rem 1rem;
+      border-bottom: 1px solid rgba(71, 85, 105, 0.2);
+      font-size: 0.875rem;
+      color: #e2e8f0;
+      transition: background-color 0.2s ease;
+    }
+    
+    tr {
+      transition: background-color 0.2s ease;
+    }
+    
+    tr:hover {
+      background: rgba(71, 85, 105, 0.15);
+    }
+    
+    .norm-header-cell {
+      padding: 0.75rem 1rem !important;
+      border-bottom: 1px solid rgba(71, 85, 105, 0.3) !important;
+      background: rgba(15, 23, 42, 0.5) !important;
+    }
+    
+    .norm-header-cell span {
+      font-size: 0.875rem !important;
+    }
+    
+    .norm-header-cell svg {
+      width: 1rem !important;
+      height: 1rem !important;
+    }
+    
+    .norm-period-cell {
+      padding: 0.5rem 1rem !important;
+      border-bottom: 1px solid rgba(71, 85, 105, 0.2) !important;
+      font-size: 0.75rem !important;
+    }
+    
+    .norm-today-cell {
+      padding: 0.75rem 1rem !important;
+      border-bottom: 1px solid rgba(71, 85, 105, 0.2) !important;
+    }
+    
+    .norm-today-cell .font-bold {
+      font-size: 1.25rem !important;
+    }
+    
+    .norm-today-cell .text-slate-400 {
+      font-size: 0.75rem !important;
+    }
+    
+    .norm-metrics-cell {
+      padding: 0.75rem 1rem !important;
+      border-bottom: 1px solid rgba(71, 85, 105, 0.2) !important;
+    }
+    
+    .norm-stat-cell {
+      padding: 0.75rem 1rem !important;
+      border-bottom: 1px solid rgba(71, 85, 105, 0.2) !important;
+    }
+    
+    .norm-stat-cell:last-child {
+      border-bottom: none !important;
+    }
+    
+    .norm-stat-cell .font-bold {
+      font-size: 1rem !important;
+    }
+    
+    .norm-stat-cell .text-slate-400 {
+      font-size: 0.75rem !important;
+    }
+    
+    .norm-metrics-cell .text-xl {
+      font-size: 1rem !important;
+    }
+    
+    .norm-metrics-cell .text-lg {
+      font-size: 0.875rem !important;
+    }
+    
+    .norm-metrics-cell .text-sm {
+      font-size: 0.75rem !important;
+    }
+    
+    .progress-bar-container {
+      margin-top: 0.75rem;
+    }
+    
+    .progress-bar {
+      width: 100%;
+      position: relative;
+    }
+    
+    .progress-bar-fill {
+      transition: width 0.5s ease;
+      max-width: 100%;
+    }
+    
+    tr:last-child td {
+      border-bottom: none;
+    }
+    
+    .bonus-text {
+      color: #10b981;
+      font-weight: 500;
+    }
+    
+    .history-section {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid rgba(71, 85, 105, 0.3);
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+    }
+    
+    .history-section:hover {
+      border-color: rgba(71, 85, 105, 0.5);
+    }
+    
+    .calendars-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    
+    @media (max-width: 1024px) {
+      .calendars-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .calendar-month {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid rgba(71, 85, 105, 0.3);
+      border-radius: 0.5rem;
+      padding: 1rem;
+      transition: all 0.3s ease;
+      margin-top: 0;
+      position: relative;
+    }
+    
+    .calendar-month:hover {
+      border-color: rgba(71, 85, 105, 0.5);
+    }
+    
+    body.light .calendar-month {
+      background: rgba(241, 245, 249, 0.9);
+      border-color: rgba(203, 213, 225, 0.5);
+    }
+    
+    body.light .calendar-month:hover {
+      border-color: rgba(203, 213, 225, 0.7);
+    }
+    
+    .calendar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+      margin-bottom: 0.75rem;
+    }
+    
+    .calendar-header h3 {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+    
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+    
+    .calendar-day-label {
+      text-align: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #94a3b8;
+      padding: 0.5rem;
+    }
+    
+    .calendar-day {
+      aspect-ratio: 1;
+      border: 1px solid rgba(71, 85, 105, 0.2);
+      border-radius: 0.25rem;
+      padding: 0.5rem;
+      position: relative;
+      min-height: 3rem;
+      background: rgba(15, 23, 42, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+                  background-color 0.3s ease, 
+                  border-color 0.3s ease,
+                  box-shadow 0.3s ease;
+      z-index: 1;
+      cursor: pointer;
+    }
+    
+    .calendar-day.empty {
+      border: none;
+      background: transparent;
+    }
+    
+    .calendar-day.working {
+      background: rgba(34, 197, 94, 0.15);
+      border-color: rgba(34, 197, 94, 0.3);
+      transition: all 0.2s ease;
+    }
+    
+    .calendar-day.working:hover {
+      background: rgba(34, 197, 94, 0.4) !important;
+      border-color: rgba(34, 197, 94, 0.8) !important;
+      transform: scale(1.5) !important;
+      z-index: 100 !important;
+      box-shadow: 0 8px 24px rgba(34, 197, 94, 0.6), 
+                  0 0 0 2px rgba(34, 197, 94, 0.3) !important;
+      border-width: 2px;
+    }
+    
+    .calendar-day.weekend {
+      background: rgba(148, 163, 184, 0.1);
+      border-color: rgba(148, 163, 184, 0.2);
+    }
+    
+    .calendar-day.weekend:hover {
+      background: rgba(148, 163, 184, 0.4) !important;
+      border-color: rgba(148, 163, 184, 0.7) !important;
+      transform: scale(1.5) !important;
+      z-index: 100 !important;
+      box-shadow: 0 8px 24px rgba(148, 163, 184, 0.6),
+                  0 0 0 2px rgba(148, 163, 184, 0.3) !important;
+      border-width: 2px;
+    }
+    
+    .calendar-day:hover:not(.empty):not(.working):not(.weekend) {
+      background: rgba(71, 85, 105, 0.4) !important;
+      border-color: rgba(71, 85, 105, 0.7) !important;
+      transform: scale(1.5) !important;
+      z-index: 100 !important;
+      box-shadow: 0 8px 24px rgba(71, 85, 105, 0.6),
+                  0 0 0 2px rgba(71, 85, 105, 0.3) !important;
+      border-width: 2px;
+    }
+    
+    .calendar-day.today {
+      position: relative;
+    }
+    
+    .calendar-day.today::before {
+      content: '';
+      position: absolute;
+      top: 0.25rem;
+      right: 0.25rem;
+      width: 0.5rem;
+      height: 0.5rem;
+      background: #ef4444;
+      border-radius: 50%;
+    }
+    
+    .day-number {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #cbd5e1;
+      position: absolute;
+      top: 0.25rem;
+      left: 0.25rem;
+      line-height: 1;
+    }
+    
+    .day-amount {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #f1f5f9;
+      line-height: 1.2;
+      text-align: center;
+      width: 100%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    
+    .day-amount.no-data {
+      color: #64748b;
+      font-weight: 400;
+      font-size: 0.625rem;
+    }
+    
+    body.light .day-amount.no-data {
+      color: #94a3b8;
+    }
+    
+    .calendar-legend {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: #94a3b8;
+    }
+    
+    .legend-dot {
+      width: 0.5rem;
+      height: 0.5rem;
+      border-radius: 50%;
+      background: #ef4444;
+    }
+    
+    .legend-bar {
+      width: 1.5rem;
+      height: 0.125rem;
+      background: #22c55e;
+      border-radius: 0.125rem;
+    }
+    
+    .legend-weekend {
+      width: 1.5rem;
+      height: 0.125rem;
+      background: #94a3b8;
+      border-radius: 0.125rem;
+    }
+    
+    .legend-nonworking {
+      width: 1.5rem;
+      height: 0.125rem;
+      background: rgba(71, 85, 105, 0.3);
+      border-radius: 0.125rem;
+    }
+    
+    .accordion-icon {
+      transition: transform 0.2s ease;
+    }
+    
+    .accordion-icon.rotated {
+      transform: rotate(90deg);
+    }
+    
+    .accordion-content {
+      max-height: none;
+      overflow: visible;
+    }
+    
+    .accordion-content.open {
+      max-height: none;
+    }
+    
+    /* Future month placeholder styles */
+    .future-month-placeholder {
+      min-height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 1rem;
+      color: #64748b;
+      font-size: 0.875rem;
+      padding: 2rem;
+      opacity: 0.6;
+      animation: pulse 2s ease-in-out infinite;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: calc(100% - 2rem);
+    }
+    
+    .future-month-placeholder svg {
+      width: 3rem;
+      height: 3rem;
+      opacity: 0.5;
+      animation: rotate 3s linear infinite;
+      color: #94a3b8;
+    }
+    
+    .future-month-placeholder p {
+      color: #94a3b8;
+    }
+    
+    body.light .future-month-placeholder {
+      color: #64748b;
+      opacity: 0.7;
+    }
+    
+    body.light .future-month-placeholder svg {
+      color: #94a3b8;
+    }
+    
+    body.light .future-month-placeholder p {
+      color: #64748b;
+    }
+    
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 0.6;
+      }
+      50% {
+        opacity: 0.8;
+      }
+    }
+    
+    @keyframes rotate {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+    
+    .calendar-header.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .info-link {
+      color: #3b82f6;
+      text-decoration: underline;
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+    
+    .info-link:hover {
+      color: #60a5fa;
+    }
+    
+    .sidebar-section {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(71, 85, 105, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .glass-button {
+      background: rgba(30, 41, 59, 0.8);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(71, 85, 105, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .glass-button:hover {
+      background: rgba(30, 41, 59, 0.95);
+      transform: translateY(-2px);
+    }
+    
+    /* Accordion header hover */
+    .calendar-header:hover {
+      opacity: 0.9;
+    }
+    
+    .calendar-header:hover .accordion-icon {
+      transform: scale(1.1);
+    }
+    
+    /* Calendar day hover enhancements */
+    .calendar-day:not(.empty):hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    .calendar-day.today::before {
+      box-shadow: 0 0 4px rgba(239, 68, 68, 0.6);
+    }
+    
+    /* Button styles matching tasks-page */
+    button {
+      transition: all 0.2s ease;
+    }
+    
+    button:hover {
+      transform: translateY(-1px);
+    }
+    
+    button:active {
+      transform: translateY(0);
+    }
+    
+    /* Light theme support */
+    body.light {
+      background-color: #f8fafc;
+      color: #1e293b;
+    }
+    
+    body.light .table-container {
+      background: rgba(255, 255, 255, 0.9);
+      border-color: rgba(226, 232, 240, 0.8);
+    }
+    
+    body.light .table-container:hover {
+      border-color: rgba(226, 232, 240, 1);
+    }
+    
+    body.light th {
+      background: rgba(241, 245, 249, 0.8);
+      color: #64748b;
+      border-bottom-color: rgba(226, 232, 240, 0.8);
+    }
+    
+    body.light td {
+      color: #334155;
+      border-bottom-color: rgba(226, 232, 240, 0.6);
+    }
+    
+    body.light tr:hover {
+      background: rgba(241, 245, 249, 0.5);
+    }
+    
+    body.light .norm-header-cell {
+      background: rgba(241, 245, 249, 0.8) !important;
+      border-bottom-color: rgba(226, 232, 240, 0.8) !important;
+    }
+    
+    body.light .norm-period-cell,
+    body.light .norm-today-cell,
+    body.light .norm-metrics-cell,
+    body.light .norm-stat-cell {
+      border-bottom-color: rgba(226, 232, 240, 0.6) !important;
+    }
+    
+    body.light .progress-bar {
+      background: rgba(203, 213, 225, 0.5);
+    }
+    
+    body.light .history-section {
+      background: rgba(255, 255, 255, 0.9);
+      border-color: rgba(226, 232, 240, 0.8);
+    }
+    
+    body.light .history-section:hover {
+      border-color: rgba(226, 232, 240, 1);
+    }
+    
+    body.light .calendar-day {
+      background: rgba(241, 245, 249, 0.5);
+      border-color: rgba(226, 232, 240, 0.6);
+    }
+    
+    body.light .calendar-day.working {
+      background: rgba(34, 197, 94, 0.2);
+      border-color: rgba(34, 197, 94, 0.4);
+    }
+    
+    body.light .calendar-day.weekend {
+      background: rgba(203, 213, 225, 0.3);
+      border-color: rgba(203, 213, 225, 0.5);
+    }
+    
+    body.light .day-number {
+      color: #475569;
+    }
+    
+    body.light .day-amount {
+      color: #1e293b;
+    }
+    
+    body.light .text-slate-100 {
+      color: #1e293b;
+    }
+    
+    body.light .text-slate-200 {
+      color: #334155;
+    }
+    
+    body.light .text-slate-300 {
+      color: #475569;
+    }
+    
+    body.light .text-slate-400 {
+      color: #64748b;
+    }
+    
+    body.light h1,
+    body.light h2,
+    body.light h3 {
+      color: #1e293b;
+    }
+    
+    body.light .bg-slate-800 {
+      background: rgba(241, 245, 249, 0.9) !important;
+      border-color: rgba(203, 213, 225, 0.5) !important;
+    }
+    
+    body.light .bg-slate-800:hover {
+      background: rgba(241, 245, 249, 1) !important;
+      border-color: rgba(203, 213, 225, 0.7) !important;
+    }
+    
+    /* Interval Calendar Modal Styles - Based on CustomDatePicker */
+    .glass-effect {
+      background: rgba(31, 41, 55, 0.95);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(75, 85, 99, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+    
+    .glass-button {
+      background: rgba(30, 41, 59, 0.8);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(71, 85, 105, 0.3);
+      transition: all 0.2s ease;
+    }
+    
+    .glass-button:hover {
+      background: rgba(51, 65, 85, 0.9);
+      transform: translateY(-1px);
+    }
+    
+    .transition-normal {
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .hover-lift-scale:hover {
+      transform: translateY(-2px) scale(1.02);
+    }
+    
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes slideOut {
+      from {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      to {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+    }
+    
+    .animate-slide-up {
+      animation: slideUp 0.2s ease-out;
+    }
+    
+    .animate-slide-out {
+      animation: slideOut 0.2s ease-out;
+    }
+    
+    #calendar-days-container button {
+      aspect-ratio: 1;
+      min-width: 2.5rem;
+      min-height: 2.5rem;
+      border-radius: 0.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 0.875rem;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    #calendar-days-container button:not(.disabled):not(.selected):hover {
+      background: rgba(59, 130, 246, 0.2);
+      transform: scale(1.05);
+    }
+    
+    #calendar-days-container button.disabled {
+      color: #64748b;
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+    
+    #calendar-days-container button.other-month {
+      color: #64748b;
+      opacity: 0.5;
+    }
+    
+    #calendar-days-container button.selected {
+      background: #3b82f6;
+      color: white;
+      font-weight: 600;
+    }
+    
+    #calendar-days-container button.in-range {
+      background: rgba(59, 130, 246, 0.3);
+      color: #e2e8f0;
+    }
+    
+    #calendar-days-container button.start-date {
+      background: #3b82f6;
+      color: white;
+      font-weight: 600;
+      border-radius: 0.5rem 0 0 0.5rem;
+    }
+    
+    #calendar-days-container button.end-date {
+      background: #3b82f6;
+      color: white;
+      font-weight: 600;
+      border-radius: 0 0.5rem 0.5rem 0;
+    }
+    
+    #calendar-days-container button.today:not(.selected) {
+      background: rgba(59, 130, 246, 0.2);
+      color: #3b82f6;
+      font-weight: 600;
+    }
+    
+    body.light .glass-effect {
+      background: rgba(255, 255, 255, 0.95);
+      border-color: rgba(226, 232, 240, 0.8);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+    
+    body.light .glass-button {
+      background: rgba(241, 245, 249, 0.9);
+      border-color: rgba(203, 213, 225, 0.5);
+      color: #334155;
+    }
+    
+    body.light .glass-button:hover {
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    body.light #calendar-days-container button:not(.disabled):not(.selected):not(.today):not(.in-range) {
+      color: #1e293b;
+    }
+    
+    body.light #calendar-days-container button:not(.disabled):not(.selected):hover {
+      background: rgba(59, 130, 246, 0.1);
+    }
+    
+    body.light #calendar-days-container button.selected,
+    body.light #calendar-days-container button.start-date,
+    body.light #calendar-days-container button.end-date {
+      background: #2563eb;
+      color: white;
+    }
+    
+    body.light #calendar-days-container button.in-range {
+      background: rgba(37, 99, 235, 0.2);
+      color: #1e293b;
+    }
+    
+    body.light #calendar-days-container button.today:not(.selected) {
+      background: rgba(59, 130, 246, 0.15);
+      color: #2563eb;
+    }
+    
+    /* Smaller calendar modal styles */
+    #calendar-modal-content {
+      font-size: 0.5rem;
+    }
+    
+    #calendar-modal-content h3,
+    #calendar-modal-content label,
+    #calendar-modal-content div,
+    #calendar-modal-content button,
+    #calendar-modal-content .text-sm,
+    #calendar-modal-content .text-xs {
+      font-size: 0.5rem !important;
+    }
+    
+    #calendar-modal-content svg {
+      width: 1.25rem !important;
+      height: 1.25rem !important;
+    }
+    
+    #calendar-modal-content .p-4 {
+      padding: 0.5rem !important;
+    }
+    
+    #calendar-modal-content .p-2 {
+      padding: 0.25rem !important;
+    }
+    
+    #calendar-modal-content .px-3,
+    #calendar-modal-content .px-4 {
+      padding-left: 0.375rem !important;
+      padding-right: 0.375rem !important;
+    }
+    
+    #calendar-modal-content .py-1.5,
+    #calendar-modal-content .py-2 {
+      padding-top: 0.25rem !important;
+      padding-bottom: 0.25rem !important;
+    }
+    
+    #calendar-modal-content .mb-2 {
+      margin-bottom: 0.25rem !important;
+    }
+    
+    #calendar-modal-content .mb-3,
+    #calendar-modal-content .mb-4 {
+      margin-bottom: 0.5rem !important;
+    }
+    
+    #calendar-modal-content .gap-4 {
+      gap: 0.5rem !important;
+    }
+    
+    #calendar-modal-content .gap-3 {
+      gap: 0.375rem !important;
+    }
+  </style>
+</head>
+<body class="dark min-h-screen p-6">
+  <div class="max-w-7xl mx-auto space-y-6">
+    <!-- Header -->
+    <div class="mb-6">
+      <div class="flex items-start justify-between mb-6">
+        <div class="flex items-center gap-4">
+          <h1 class="text-3xl font-bold text-slate-100 mb-4">Начисления</h1>
+          <button id="calculate-interval-btn" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 rounded-lg px-4 py-2 text-sm font-medium transition-colors">
+            Рассчитать за интервал
+          </button>
+        </div>
+        <div class="flex items-center gap-4">
+          <!-- Navigation to Tasks Page -->
+          <button id="nav-to-tasks-btn" class="glass-button p-2 rounded-lg transition-normal hover-lift-scale click-shrink" title="Перейти к заданиям" onclick="navigateToTasks()">
+            <svg class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
+          </button>
+          <!-- Theme Toggle -->
+          <button id="theme-toggle" class="glass-button p-2 rounded-lg transition-normal hover-lift-scale click-shrink" title="Переключить тему">
+            <svg id="theme-icon-sun" class="w-5 h-5 text-slate-300 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+            <svg id="theme-icon-moon" class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tables Row -->
+    <div class="flex gap-6 items-stretch">
+      <!-- Accruals Table -->
+      <div class="table-container" style="flex: 3; min-width: 0;">
+      <table>
+        <thead>
+          <tr>
+            <th>Период расчёта</th>
+            <th>Период выплаты</th>
+            <th>Задания</th>
+            <th>Начислено</th>
+            <th>На проверке</th>
+            <th>Бонус</th>
+            <th>Итого</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>01.11 – 15.11</td>
+            <td>25.11</td>
+            <td>Заглушка заданий</td>
+            <td>xxx</td>
+            <td>0</td>
+            <td>0</td>
+            <td>xxx</td>
+          </tr>
+          <tr>
+            <td>16.10 – 31.10</td>
+            <td>10.11</td>
+            <td>Заглушка заданий</td>
+            <td>xxx</td>
+            <td>0</td>
+            <td class="bonus-text">xxx</td>
+            <td>xxx</td>
+          </tr>
+          <tr>
+            <td>01.10 – 15.10</td>
+            <td>24.10</td>
+            <td>Заглушка заданий</td>
+            <td>xxx</td>
+            <td>0</td>
+            <td>0</td>
+            <td>xxx</td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+
+      <!-- Norm/Progress Block -->
+      <div class="table-container" style="flex: 1; min-width: 0;">
+        <table>
+          <tbody>
+            <tr>
+              <td class="norm-header-cell">
+                <div class="flex items-center gap-2">
+                  <span class="font-semibold text-slate-200">Доход</span>
+                  <svg class="text-slate-400 cursor-help" fill="none" stroke="currentColor" viewBox="0 0 24 24" title="Норма расчитывается в БО. БО — это бюджетно-аналитическая единица за выполненные задания. Ставка БО прописывается в трудовом договоре с учётом индивидуальных условий." style="width: 1rem; height: 1rem;">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="norm-period-cell">
+                <div style="font-size: 0.875rem; font-weight: 600; color: #94a3b8;">за 10.11.2025 — 16.11.2025</div>
+              </td>
+            </tr>
+            <tr>
+              <td class="norm-stat-cell">
+                <div class="flex items-center justify-between gap-2">
+                  <div style="font-size: 0.875rem; font-weight: 600; color: #94a3b8;">На проверке</div>
+                  <div class="font-bold text-slate-100">0,00</div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="norm-today-cell">
+                <div class="flex items-center justify-between gap-2">
+                  <div style="font-size: 0.875rem; font-weight: 600; color: #94a3b8;">Сегодня</div>
+                  <div class="font-bold text-slate-100">xxx</div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="norm-stat-cell">
+                <div class="flex items-center justify-between gap-2">
+                  <div style="font-size: 0.875rem; font-weight: 600; color: #94a3b8;">За всё время</div>
+                  <div class="font-bold text-slate-100">xxx</div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="norm-metrics-cell">
+                <div class="flex items-center justify-between gap-2 mb-3">
+                  <div style="font-size: 0.875rem; font-weight: 600; color: #94a3b8;">Норма xxx%</div>
+                  <div class="flex items-baseline gap-2">
+                    <span class="font-bold text-green-500">xxx</span>
+                    <span class="font-semibold text-green-500">/</span>
+                    <span class="font-semibold text-green-500">xxx</span>
+                  </div>
+                </div>
+                <!-- Progress Bar -->
+                <div class="progress-bar-container">
+                  <div class="progress-bar bg-slate-700 rounded-full h-3 relative overflow-hidden">
+                    <div class="progress-bar-fill bg-green-500 rounded-full h-full transition-all duration-500" style="width: 470%"></div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Interval Calendar Modal -->
+    <div id="interval-calendar-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+      <div id="calendar-modal-content" class="glass-effect rounded-xl border border-gray-300 dark:border-gray-600 shadow-xl p-2 min-w-[160px] max-w-xl w-full mx-4" style="transform: scale(0.5); transform-origin: center;">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <h3 id="calendar-month-year" class="font-semibold text-lg text-slate-200"></h3>
+          </div>
+          <button id="close-calendar-modal" class="p-1 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+            <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        
+        <div class="mb-4">
+          <div class="flex items-center gap-4 mb-2">
+            <div class="flex-1">
+              <label class="text-sm text-slate-400 mb-1 block">От</label>
+              <div id="start-date-display" class="bg-slate-700 border border-slate-600 rounded px-3 py-2 text-slate-200">Выберите дату</div>
+            </div>
+            <div class="flex-1">
+              <label class="text-sm text-slate-400 mb-1 block">До</label>
+              <div id="end-date-display" class="bg-slate-700 border border-slate-600 rounded px-3 py-2 text-slate-200">Выберите дату</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="calendar-modal-container mb-4">
+          <div class="flex items-center justify-between mb-3">
+            <button id="prev-month-btn" class="p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+              <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <button id="today-btn" class="glass-button px-3 py-1.5 rounded-lg text-sm text-slate-200">Сегодня</button>
+            <button id="next-month-btn" class="p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+              <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+          
+          <div class="grid grid-cols-7 gap-1 mb-2">
+            <div class="text-center text-xs font-medium text-gray-500 dark:text-gray-400 py-1">Пн</div>
+            <div class="text-center text-xs font-medium text-gray-500 dark:text-gray-400 py-1">Вт</div>
+            <div class="text-center text-xs font-medium text-gray-500 dark:text-gray-400 py-1">Ср</div>
+            <div class="text-center text-xs font-medium text-gray-500 dark:text-gray-400 py-1">Чт</div>
+            <div class="text-center text-xs font-medium text-gray-500 dark:text-gray-400 py-1">Пт</div>
+            <div class="text-center text-xs font-medium text-gray-500 dark:text-gray-400 py-1">Сб</div>
+            <div class="text-center text-xs font-medium text-gray-500 dark:text-gray-400 py-1">Вс</div>
+          </div>
+          
+          <div id="calendar-days-container" class="grid grid-cols-7 gap-1"></div>
+        </div>
+        
+        <div class="flex items-center justify-end gap-3">
+          <button id="cancel-interval-btn" class="bg-slate-700 hover:bg-slate-600 border border-slate-600 text-slate-300 rounded-lg px-4 py-2 text-sm font-medium transition-colors">
+            Отмена
+          </button>
+          <button id="apply-interval-btn" class="bg-green-600 hover:bg-green-700 text-white rounded-lg px-4 py-2 text-sm font-medium transition-colors">
+            Применить
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- History Section -->
+    <div class="history-section">
+      <div class="flex items-center gap-4 mb-4">
+        <h2 class="text-xl font-semibold text-slate-100 mb-3">История</h2>
+        <p class="text-sm text-slate-400">
+          Дата выполнения задания фиксируется по часовому поясу UTC+0 вне зависимости от того, в каком часовом поясе оно было выполнено. 
+          <span class="info-link">Подробнее</span>
+        </p>
+      </div>
+
+      <!-- Legend -->
+      <div class="calendar-legend mb-4">
+        <div class="legend-item">
+          <div class="legend-dot"></div>
+          <span>Сегодня</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-bar"></div>
+          <span>Рабочий период</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-weekend"></div>
+          <span>Выходные дни</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-nonworking"></div>
+          <span>Нерабочие дни</span>
+        </div>
+      </div>
+
+      <!-- All Months Calendars -->
+      <div id="all-months-container" class="calendars-grid"></div>
+    </div>
+  </div>
+
+  <script>
+    // Month names in Russian
+    const monthNames = [
+      'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
+      'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
+    ];
+    
+    // Days of week labels
+    const dayLabels = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+    
+    // Current date
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth(); // 0-11 (November = 10)
+    const currentYear = currentDate.getFullYear();
+    const currentDay = currentDate.getDate();
+    
+    // Generate random amount between 1500 and 8000
+    function getRandomAmount() {
+      return 'xxx';
+    }
+    
+    // Generate calendar data for a month with 3-on-3-off schedule
+    function generateMonthData(month, year) {
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const data = {};
+      let workingBlock = 0; // Track position in 3-on-3-off cycle
+      let isWorkingPeriod = true; // Start with working period
+      
+      for (let day = 1; day <= daysInMonth; day++) {
+        const date = new Date(year, month, day);
+        const dayOfWeek = date.getDay();
+        const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+        
+        // 3-on-3-off schedule, but sometimes include weekends (30% chance) and non-working days (33% chance)
+        if (isWorkingPeriod) {
+          // During working period, always add data
+          data[day] = getRandomAmount();
+          workingBlock++;
+          
+          // After 3 working days, switch to rest period
+          if (workingBlock >= 3) {
+            isWorkingPeriod = false;
+            workingBlock = 0;
+          }
+        } else {
+          // During rest period, 33% chance to add data to any non-working day
+          if (Math.random() < 0.33) {
+            data[day] = getRandomAmount();
+          }
+          
+          workingBlock++;
+          
+          // After 3 rest days, switch to working period
+          if (workingBlock >= 3) {
+            isWorkingPeriod = true;
+            workingBlock = 0;
+          }
+        }
+      }
+      
+      return data;
+    }
+    
+    // Store data for all months
+    const monthDataCache = {};
+    
+    // Get data for a specific month
+    function getMonthData(month, year) {
+      const key = `${year}-${month}`;
+      if (!monthDataCache[key]) {
+        monthDataCache[key] = generateMonthData(month, year);
+      }
+      return monthDataCache[key];
+    }
+    
+    // Calculate total amount for a month
+    function getMonthTotal(month, year) {
+      return 'Заглушка итого';
+    }
+    
+    // Generate calendar grid for a month
+    function generateCalendarDays(month, year) {
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const adjustedFirstDay = firstDay === 0 ? 6 : firstDay - 1; // Monday = 0
+      
+      let days = [];
+      
+      // Get month data
+      const monthData = getMonthData(month, year);
+      
+      // Empty cells for days before month starts
+      for (let i = 0; i < adjustedFirstDay; i++) {
+        days.push({ empty: true });
+      }
+      
+      // Days of the month
+      for (let day = 1; day <= daysInMonth; day++) {
+        const date = new Date(year, month, day);
+        const dayOfWeek = date.getDay();
+        const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+        const isToday = year === currentYear && month === currentMonth && day === currentDay;
+        
+        // Get amount from generated data
+        const amount = monthData[day] || '';
+        const isWorking = !!amount;
+        
+        days.push({
+          day,
+          amount,
+          isWeekend,
+          isWorking,
+          isToday
+        });
+      }
+      
+      return days;
+    }
+    
+    // Generate calendar HTML for a month
+    function generateMonthCalendar(month, year) {
+      const monthId = monthNames[month].toLowerCase();
+      const isCurrentMonth = month === currentMonth && year === currentYear;
+      // Only consider future if year is greater or month is after current month (not including current month)
+      const isFutureMonth = year > currentYear || (year === currentYear && month > currentMonth);
+      
+      // Always generate days for past and current months, placeholder only for future
+      const days = isFutureMonth ? [] : generateCalendarDays(month, year);
+      
+      let calendarHTML = `
+        <div class="calendar-month">
+          <div class="calendar-header">
+            <div class="flex items-center gap-2">
+              <h3 class="text-lg font-semibold text-slate-200">${monthNames[month]} ${year}</h3>
+            </div>
+            ${!isFutureMonth ? `
+              <div class="text-sm font-semibold text-slate-300">
+                Итого Заглушка
+              </div>
+            ` : ''}
+          </div>
+          <div class="accordion-content open" id="${monthId}-content">
+      `;
+      
+      if (isFutureMonth) {
+        // Future month placeholder
+        calendarHTML += `
+          <div class="future-month-placeholder">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <div class="text-center">
+              <p class="font-medium text-slate-300">Месяц еще не наступил</p>
+              <p class="text-xs mt-1 text-slate-400">Данные будут доступны после начала месяца</p>
+            </div>
+          </div>
+        `;
+      } else {
+        // Calendar grid
+        calendarHTML += '<div class="calendar-grid">';
+        
+        // Day labels
+        dayLabels.forEach(label => {
+          calendarHTML += `<div class="calendar-day-label">${label}</div>`;
+        });
+        
+        // Calendar days
+        days.forEach(dayData => {
+          if (dayData.empty) {
+            calendarHTML += '<div class="calendar-day empty"></div>';
+          } else {
+            const classes = ['calendar-day'];
+            if (dayData.isWorking) classes.push('working');
+            if (dayData.isWeekend) classes.push('weekend');
+            if (dayData.isToday) classes.push('today');
+            
+            calendarHTML += `
+              <div class="${classes.join(' ')}">
+                <div class="day-number">${dayData.day}</div>
+                ${dayData.amount ? `<div class="day-amount">${dayData.amount}</div>` : `<div class="day-amount no-data">Нет данных</div>`}
+              </div>
+            `;
+          }
+        });
+        
+        calendarHTML += '</div>';
+      }
+      
+      calendarHTML += `
+          </div>
+        </div>
+      `;
+      
+      return calendarHTML;
+    }
+    
+    // Generate all months
+    function generateAllMonths() {
+      try {
+        const container = document.getElementById('all-months-container');
+        if (!container) {
+          console.error('Container all-months-container not found!');
+          console.log('Document readyState:', document.readyState);
+          console.log('Document body:', document.body);
+          return false;
+        }
+        
+        let allMonthsHTML = '';
+        
+        // Generate all 12 months in reverse order: December (11) through January (0)
+        // If December hasn't arrived yet, it will show as future month placeholder
+        for (let month = 11; month >= 0; month--) {
+          try {
+            allMonthsHTML += generateMonthCalendar(month, currentYear);
+          } catch (e) {
+            console.error('Error generating month', month, e);
+          }
+        }
+        
+        container.innerHTML = allMonthsHTML;
+        console.log('Generated', 12, 'months successfully (December to January)');
+        return true;
+      } catch (error) {
+        console.error('Error in generateAllMonths:', error);
+        return false;
+      }
+    }
+    
+    // Toggle month accordion
+    function toggleMonth(monthId) {
+      const content = document.getElementById(`${monthId}-content`);
+      const icon = document.getElementById(`${monthId}-icon`);
+      
+      if (!content || !icon) return;
+      
+      if (content.classList.contains('open')) {
+        content.classList.remove('open');
+        icon.classList.remove('rotated');
+      } else {
+        content.classList.add('open');
+        icon.classList.add('rotated');
+      }
+    }
+    
+    // Make toggleMonth available globally first
+    window.toggleMonth = toggleMonth;
+    window.generateAllMonths = generateAllMonths;
+    
+    // Initialize on page load - try multiple methods
+    function initCalendars() {
+      const success = generateAllMonths();
+      if (!success) {
+        console.warn('Initial calendar generation failed, will retry...');
+      }
+    }
+    
+    // Try immediate execution if body exists
+    if (document.body) {
+      initCalendars();
+    }
+    
+    // Wait for DOM to be ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOMContentLoaded fired');
+        initCalendars();
+      });
+    } else {
+      // DOM already loaded
+      console.log('DOM already loaded, initializing...');
+      setTimeout(initCalendars, 0);
+    }
+    
+    // Additional fallbacks with timeouts
+    setTimeout(function() {
+      console.log('Timeout 100ms - retrying calendar generation');
+      initCalendars();
+    }, 100);
+    
+    setTimeout(function() {
+      console.log('Timeout 500ms - retrying calendar generation');
+      initCalendars();
+    }, 500);
+    
+    setTimeout(function() {
+      console.log('Timeout 1000ms - final retry for calendar generation');
+      initCalendars();
+    }, 1000);
+    
+    // Interval Calendar Modal - Based on CustomDatePicker
+    let currentModalMonth = new Date();
+    let selectedStartDate = null;
+    let selectedEndDate = null;
+    let isSelectingStart = true;
+    
+    const MONTH_NAMES = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+    const WEEKDAY_NAMES = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+    
+    function startOfMonth(date) {
+      return new Date(date.getFullYear(), date.getMonth(), 1);
+    }
+    
+    function endOfMonth(date) {
+      return new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    }
+    
+    function addMonths(date, months) {
+      const result = new Date(date);
+      result.setMonth(result.getMonth() + months);
+      return result;
+    }
+    
+    function subMonths(date, months) {
+      return addMonths(date, -months);
+    }
+    
+    function isSameMonth(date1, date2) {
+      return date1.getFullYear() === date2.getFullYear() &&
+             date1.getMonth() === date2.getMonth();
+    }
+    
+    function isSameDay(date1, date2) {
+      return date1.getFullYear() === date2.getFullYear() &&
+             date1.getMonth() === date2.getMonth() &&
+             date1.getDate() === date2.getDate();
+    }
+    
+    function isToday(date) {
+      const today = new Date();
+      return isSameDay(date, today);
+    }
+    
+    function formatDate(date, formatStr) {
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = date.getFullYear();
+      
+      if (formatStr === 'd') return date.getDate();
+      if (formatStr === 'yyyy-MM-dd') return `${year}-${month}-${day}`;
+      return `${day}.${month}.${year}`;
+    }
+    
+    function eachDayOfInterval({ start, end }) {
+      const days = [];
+      const current = new Date(start);
+      while (current <= end) {
+        days.push(new Date(current));
+        current.setDate(current.getDate() + 1);
+      }
+      return days;
+    }
+    
+    function updateCalendarModal() {
+      const monthYearEl = document.getElementById('calendar-month-year');
+      if (monthYearEl) {
+        monthYearEl.textContent = `${MONTH_NAMES[currentModalMonth.getMonth()]} ${currentModalMonth.getFullYear()}`;
+      }
+      
+      const container = document.getElementById('calendar-days-container');
+      if (!container) return;
+      
+      container.innerHTML = '';
+      
+      const monthStart = startOfMonth(currentModalMonth);
+      const monthEnd = endOfMonth(currentModalMonth);
+      const daysInMonth = eachDayOfInterval({ start: monthStart, end: monthEnd });
+      
+      // Добавляем дни предыдущего месяца для заполнения первой недели
+      const firstDayOfWeek = monthStart.getDay() === 0 ? 6 : monthStart.getDay() - 1; // Понедельник = 0
+      const prevMonthDays = [];
+      for (let i = firstDayOfWeek - 1; i >= 0; i--) {
+        const date = new Date(monthStart);
+        date.setDate(date.getDate() - i - 1);
+        prevMonthDays.push(date);
+      }
+      
+      const allDays = [...prevMonthDays, ...daysInMonth];
+      
+      // Добавляем дни следующего месяца для заполнения до 42 дней (6 недель)
+      const remainingDays = 42 - allDays.length;
+      for (let i = 1; i <= remainingDays; i++) {
+        const date = new Date(monthEnd);
+        date.setDate(date.getDate() + i);
+        allDays.push(date);
+      }
+      
+      allDays.forEach((date) => {
+        const isCurrentMonth = isSameMonth(date, currentModalMonth);
+        const isSelectedStart = selectedStartDate && isSameDay(date, selectedStartDate);
+        const isSelectedEnd = selectedEndDate && isSameDay(date, selectedEndDate);
+        const isCurrentDay = isToday(date);
+        const isInRange = selectedStartDate && selectedEndDate && 
+                          date >= selectedStartDate && date <= selectedEndDate &&
+                          !isSelectedStart && !isSelectedEnd;
+        
+        const button = document.createElement('button');
+        button.textContent = formatDate(date, 'd');
+        button.type = 'button';
+        
+        let classes = 'transition-normal hover-lift-scale';
+        if (!isCurrentMonth) {
+          classes += ' text-gray-300 dark:text-gray-600 disabled';
+          button.disabled = true;
+        } else {
+          classes += ' text-gray-700 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-900/30';
+        }
+        
+        if (isSelectedStart) {
+          classes += ' selected start-date bg-blue-500 text-white';
+        } else if (isSelectedEnd) {
+          classes += ' selected end-date bg-blue-500 text-white';
+        } else if (isInRange) {
+          classes += ' in-range';
+        } else if (isCurrentDay && isCurrentMonth) {
+          classes += ' today bg-blue-500/20 text-blue-600 dark:text-blue-400';
+        }
+        
+        button.className = classes;
+        
+        if (isCurrentMonth) {
+          button.addEventListener('click', () => selectDate(date));
+        }
+        
+        container.appendChild(button);
+      });
+    }
+    
+    function selectDate(date) {
+      if (isSelectingStart || !selectedStartDate || date < selectedStartDate) {
+        selectedStartDate = new Date(date);
+        selectedEndDate = null;
+        isSelectingStart = false;
+      } else {
+        selectedEndDate = new Date(date);
+        isSelectingStart = true;
+      }
+      
+      updateDateDisplays();
+      updateCalendarModal();
+    }
+    
+    function updateDateDisplays() {
+      const startDisplay = document.getElementById('start-date-display');
+      const endDisplay = document.getElementById('end-date-display');
+      
+      if (startDisplay) {
+        if (selectedStartDate) {
+          startDisplay.textContent = selectedStartDate.toLocaleDateString('ru-RU');
+        } else {
+          startDisplay.textContent = 'Выберите дату';
+        }
+      }
+      
+      if (endDisplay) {
+        if (selectedEndDate) {
+          endDisplay.textContent = selectedEndDate.toLocaleDateString('ru-RU');
+        } else {
+          endDisplay.textContent = 'Выберите дату';
+        }
+      }
+    }
+    
+    function openCalendarModal() {
+      const modal = document.getElementById('interval-calendar-modal');
+      const content = document.getElementById('calendar-modal-content');
+      if (modal && content) {
+        modal.classList.remove('hidden');
+        content.classList.remove('animate-slide-out');
+        content.classList.add('animate-slide-up');
+        document.body.style.overflow = 'hidden';
+        
+        // Reset selection
+        selectedStartDate = null;
+        selectedEndDate = null;
+        isSelectingStart = true;
+        currentModalMonth = new Date();
+        
+        updateDateDisplays();
+        updateCalendarModal();
+      }
+    }
+    
+    function closeCalendarModal() {
+      const modal = document.getElementById('interval-calendar-modal');
+      const content = document.getElementById('calendar-modal-content');
+      if (modal && content) {
+        content.classList.remove('animate-slide-up');
+        content.classList.add('animate-slide-out');
+        setTimeout(() => {
+          modal.classList.add('hidden');
+          document.body.style.overflow = '';
+        }, 200);
+      }
+    }
+    
+    function applyInterval() {
+      if (selectedStartDate && selectedEndDate) {
+        console.log('Interval selected:', selectedStartDate, 'to', selectedEndDate);
+        alert(`Выбран интервал: ${selectedStartDate.toLocaleDateString('ru-RU')} - ${selectedEndDate.toLocaleDateString('ru-RU')}`);
+        closeCalendarModal();
+      } else {
+        alert('Пожалуйста, выберите начальную и конечную дату');
+      }
+    }
+    
+    function goToToday() {
+      const today = new Date();
+      currentModalMonth = new Date(today);
+      updateCalendarModal();
+    }
+    
+    // Theme toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIconSun = document.getElementById('theme-icon-sun');
+    const themeIconMoon = document.getElementById('theme-icon-moon');
+    const body = document.body;
+    
+    // Check saved theme or default to dark
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    if (savedTheme === 'light') {
+      body.classList.remove('dark');
+      body.classList.add('light');
+      if (themeIconSun) themeIconSun.classList.remove('hidden');
+      if (themeIconMoon) themeIconMoon.classList.add('hidden');
+    }
+    
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        if (body.classList.contains('dark') || !body.classList.contains('light')) {
+          body.classList.remove('dark');
+          body.classList.add('light');
+          localStorage.setItem('theme', 'light');
+          if (themeIconSun) themeIconSun.classList.remove('hidden');
+          if (themeIconMoon) themeIconMoon.classList.add('hidden');
+        } else {
+          body.classList.remove('light');
+          body.classList.add('dark');
+          localStorage.setItem('theme', 'dark');
+          if (themeIconSun) themeIconSun.classList.add('hidden');
+          if (themeIconMoon) themeIconMoon.classList.remove('hidden');
+        }
+      });
+    }
+    
+    // Event listeners
+    document.addEventListener('DOMContentLoaded', function() {
+      const calculateBtn = document.getElementById('calculate-interval-btn');
+      const closeBtn = document.getElementById('close-calendar-modal');
+      const cancelBtn = document.getElementById('cancel-interval-btn');
+      const applyBtn = document.getElementById('apply-interval-btn');
+      const prevMonthBtn = document.getElementById('prev-month-btn');
+      const nextMonthBtn = document.getElementById('next-month-btn');
+      
+      // Calendar functionality disabled
+      // if (calculateBtn) {
+      //   calculateBtn.addEventListener('click', openCalendarModal);
+      // }
+      
+      if (closeBtn) {
+        closeBtn.addEventListener('click', closeCalendarModal);
+      }
+      
+      if (cancelBtn) {
+        cancelBtn.addEventListener('click', closeCalendarModal);
+      }
+      
+      if (applyBtn) {
+        applyBtn.addEventListener('click', applyInterval);
+      }
+      
+      if (prevMonthBtn) {
+        prevMonthBtn.addEventListener('click', () => {
+          currentModalMonth = subMonths(currentModalMonth, 1);
+          updateCalendarModal();
+        });
+      }
+      
+      if (nextMonthBtn) {
+        nextMonthBtn.addEventListener('click', () => {
+          currentModalMonth = addMonths(currentModalMonth, 1);
+          updateCalendarModal();
+        });
+      }
+      
+      const todayBtn = document.getElementById('today-btn');
+      if (todayBtn) {
+        todayBtn.addEventListener('click', goToToday);
+      }
+      
+      // Close on backdrop click
+      const modal = document.getElementById('interval-calendar-modal');
+      if (modal) {
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) {
+            closeCalendarModal();
+          }
+        });
+      }
+    });
+    
+    // Navigation function with animation
+    function navigateToTasks() {
+      document.body.classList.add('page-transitioning');
+      setTimeout(() => {
+        window.location.href = 'tasks-page.html';
+      }, 300);
+    }
+    
+    // Add page load animation
+    window.addEventListener('load', () => {
+      document.body.style.opacity = '0';
+      document.body.style.transition = 'opacity 0.3s ease-in-out';
+      setTimeout(() => {
+        document.body.style.opacity = '1';
+      }, 50);
+    });
+  </script>
+</body>
+</html>
+

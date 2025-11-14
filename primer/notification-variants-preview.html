@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Просмотр вариантов уведомлений - Time Tracker</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <style>
+    /* Glass Effect */
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      transition: backdrop-filter 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+
+    .dark .glass-effect {
+      background: rgba(31, 41, 55, 0.95);
+      border: 1px solid rgba(75, 85, 99, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Glass Button */
+    .glass-button {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .glass-button:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.05);
+    }
+
+    .glass-button:active {
+      transform: scale(0.95);
+    }
+
+    /* Hover effects */
+    .hover-lift-scale:hover {
+      transform: scale(1.05);
+    }
+
+    .click-shrink:active {
+      transform: scale(0.95);
+    }
+
+    /* Animations */
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(100%);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .animate-slide-in-right {
+      animation: slideInRight 300ms ease-out;
+    }
+
+    /* Transition */
+    .transition-normal {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .transition-fast {
+      transition: all 0.15s ease-out;
+    }
+
+    /* Dark mode */
+    .dark {
+      color-scheme: dark;
+    }
+
+    .dark body {
+      background-color: #111827;
+      color: #f9fafb;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 min-h-screen p-8">
+  <div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+        🎨 Просмотр вариантов уведомлений
+      </h1>
+      <p class="text-gray-600 dark:text-gray-400">
+        Выберите один из 5 визуальных вариантов уведомлений в стиле проекта
+      </p>
+    </div>
+
+    <!-- Controls -->
+    <div class="glass-effect p-6 mb-8">
+      <div class="flex items-center gap-4 flex-wrap">
+        <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">
+          Тема:
+        </label>
+        <button
+          id="theme-toggle"
+          class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+        >
+          Переключить тему
+        </button>
+        
+        <label class="text-sm font-semibold text-gray-700 dark:text-gray-300 ml-4">
+          Тип уведомления:
+        </label>
+        <select
+          id="notification-type"
+          class="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+        >
+          <option value="success">Success (Успех)</option>
+          <option value="error">Error (Ошибка)</option>
+          <option value="warning">Warning (Предупреждение)</option>
+          <option value="info">Info (Информация)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Variants Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+      <!-- Variant 1: Glass Effect -->
+      <div class="glass-effect p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-bold text-gray-900 dark:text-white">
+            Вариант 1: Glass Effect ⭐
+          </h2>
+          <button
+            onclick="selectVariant(1)"
+            class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+          >
+            Выбрать
+          </button>
+        </div>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+          Минималистичный стиль с glass-effect и цветным акцентом слева
+        </p>
+        <div id="variant-1-container" class="space-y-2"></div>
+      </div>
+
+      <!-- Variant 2: Bordered -->
+      <div class="glass-effect p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-bold text-gray-900 dark:text-white">
+            Вариант 2: Bordered
+          </h2>
+          <button
+            onclick="selectVariant(2)"
+            class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+          >
+            Выбрать
+          </button>
+        </div>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+          С цветной рамкой со всех сторон и иконкой в контейнере
+        </p>
+        <div id="variant-2-container" class="space-y-2"></div>
+      </div>
+
+      <!-- Variant 3: Gradient -->
+      <div class="glass-effect p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-bold text-gray-900 dark:text-white">
+            Вариант 3: Gradient
+          </h2>
+          <button
+            onclick="selectVariant(3)"
+            class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+          >
+            Выбрать
+          </button>
+        </div>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+          С градиентным фоном и современным дизайном
+        </p>
+        <div id="variant-3-container" class="space-y-2"></div>
+      </div>
+
+      <!-- Variant 4: Compact -->
+      <div class="glass-effect p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-bold text-gray-900 dark:text-white">
+            Вариант 4: Compact
+          </h2>
+          <button
+            onclick="selectVariant(4)"
+            class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+          >
+            Выбрать
+          </button>
+        </div>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+          Компактный стиль с иконкой слева и минимальными отступами
+        </p>
+        <div id="variant-4-container" class="space-y-2"></div>
+      </div>
+
+      <!-- Variant 5: Modern -->
+      <div class="glass-effect p-6 lg:col-span-2">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-bold text-gray-900 dark:text-white">
+            Вариант 5: Modern
+          </h2>
+          <button
+            onclick="selectVariant(5)"
+            class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+          >
+            Выбрать
+          </button>
+        </div>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+          Современный стиль с глубокими тенями и скругленными углами
+        </p>
+        <div id="variant-5-container" class="space-y-2"></div>
+      </div>
+    </div>
+
+    <!-- Selected Variant Info -->
+    <div id="selected-info" class="glass-effect p-6 hidden">
+      <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-2">
+        ✅ Выбранный вариант
+      </h2>
+      <p class="text-gray-600 dark:text-gray-400">
+        Вы выбрали вариант <span id="selected-variant-number" class="font-bold"></span>
+      </p>
+      <p class="text-sm text-gray-500 dark:text-gray-500 mt-2">
+        Чтобы применить этот вариант в проекте, установите <code class="bg-gray-200 dark:bg-gray-800 px-2 py-1 rounded">notifications.variant = <span id="selected-variant-code"></span></code> в настройках
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // Icons mapping
+    const icons = {
+      success: 'CheckCircle2',
+      error: 'AlertCircle',
+      warning: 'AlertTriangle',
+      info: 'Info'
+    };
+
+    // Colors mapping
+    const colors = {
+      success: {
+        bg: 'bg-green-500',
+        bgDark: 'dark:bg-green-600',
+        border: 'border-green-600',
+        borderDark: 'dark:border-green-700',
+        text: 'text-green-50',
+        icon: 'text-green-100',
+        gradient: 'from-green-500 to-green-600',
+        glass: 'bg-green-500/20 dark:bg-green-600/20',
+      },
+      error: {
+        bg: 'bg-red-500',
+        bgDark: 'dark:bg-red-600',
+        border: 'border-red-600',
+        borderDark: 'dark:border-red-700',
+        text: 'text-red-50',
+        icon: 'text-red-100',
+        gradient: 'from-red-500 to-red-600',
+        glass: 'bg-red-500/20 dark:bg-red-600/20',
+      },
+      warning: {
+        bg: 'bg-yellow-500',
+        bgDark: 'dark:bg-yellow-600',
+        border: 'border-yellow-600',
+        borderDark: 'dark:border-yellow-700',
+        text: 'text-yellow-50',
+        icon: 'text-yellow-100',
+        gradient: 'from-yellow-500 to-yellow-600',
+        glass: 'bg-yellow-500/20 dark:bg-yellow-600/20',
+      },
+      info: {
+        bg: 'bg-blue-500',
+        bgDark: 'dark:bg-blue-600',
+        border: 'border-blue-600',
+        borderDark: 'dark:border-blue-700',
+        text: 'text-blue-50',
+        icon: 'text-blue-100',
+        gradient: 'from-blue-500 to-blue-600',
+        glass: 'bg-blue-500/20 dark:bg-blue-600/20',
+      },
+    };
+
+    // Messages
+    const messages = {
+      success: 'Таймер запущен',
+      error: 'Не удалось сохранить запись',
+      warning: 'Проверьте заполнение полей',
+      info: 'Новая версия доступна'
+    };
+
+    // Get current type
+    function getCurrentType() {
+      return document.getElementById('notification-type').value;
+    }
+
+    // Render Variant 1: Glass Effect
+    function renderVariant1(type) {
+      const color = colors[type];
+      const message = messages[type];
+      const iconName = icons[type];
+      
+      return `
+        <div class="glass-effect rounded-xl shadow-xl p-4 mb-2 min-w-[300px] max-w-[400px] border-l-4 ${color.border} ${color.borderDark} animate-slide-in-right">
+          <div class="flex items-start gap-3">
+            <i data-lucide="${iconName}" class="w-5 h-5 ${color.icon} flex-shrink-0 mt-0.5"></i>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-medium ${color.text} dark:text-white">
+                ${message}
+              </p>
+              <div class="mt-3 h-1 bg-white/20 dark:bg-gray-700/30 rounded-full overflow-hidden">
+                <div class="h-full ${color.bg} ${color.bgDark} transition-all duration-100" style="width: 100%"></div>
+              </div>
+            </div>
+            <button class="glass-button p-1 rounded-lg flex-shrink-0 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors hover-lift-scale click-shrink ${color.text} dark:text-white">
+              <i data-lucide="X" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    // Render Variant 2: Bordered
+    function renderVariant2(type) {
+      const color = colors[type];
+      const message = messages[type];
+      const iconName = icons[type];
+      
+      return `
+        <div class="rounded-xl shadow-2xl p-4 mb-2 min-w-[300px] max-w-[400px] border-2 ${color.border} ${color.borderDark} ${color.bg} ${color.bgDark} animate-slide-in-right">
+          <div class="flex items-start gap-3">
+            <div class="p-2 rounded-lg ${color.glass} backdrop-blur-sm">
+              <i data-lucide="${iconName}" class="w-5 h-5 ${color.text} dark:text-white"></i>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-semibold ${color.text} dark:text-white">
+                ${message}
+              </p>
+              <div class="mt-3 h-1.5 bg-white/30 dark:bg-gray-700/50 rounded-full overflow-hidden">
+                <div class="h-full bg-white dark:bg-gray-200 transition-all duration-100" style="width: 100%"></div>
+              </div>
+            </div>
+            <button class="p-1 rounded-lg flex-shrink-0 hover:bg-white/20 dark:hover:bg-gray-700/50 transition-colors hover-lift-scale click-shrink ${color.text} dark:text-white">
+              <i data-lucide="X" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    // Render Variant 3: Gradient
+    function renderVariant3(type) {
+      const color = colors[type];
+      const message = messages[type];
+      const iconName = icons[type];
+      
+      return `
+        <div class="rounded-2xl shadow-2xl p-4 mb-2 min-w-[300px] max-w-[400px] bg-gradient-to-r ${color.gradient} border border-white/20 dark:border-gray-700/30 animate-slide-in-right">
+          <div class="flex items-start gap-3">
+            <div class="p-2 rounded-xl bg-white/20 dark:bg-gray-900/20 backdrop-blur-sm">
+              <i data-lucide="${iconName}" class="w-5 h-5 text-white"></i>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-semibold text-white">
+                ${message}
+              </p>
+              <div class="mt-3 h-1.5 bg-white/30 rounded-full overflow-hidden">
+                <div class="h-full bg-white transition-all duration-100" style="width: 100%"></div>
+              </div>
+            </div>
+            <button class="p-1 rounded-lg flex-shrink-0 hover:bg-white/20 transition-colors hover-lift-scale click-shrink text-white">
+              <i data-lucide="X" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    // Render Variant 4: Compact
+    function renderVariant4(type) {
+      const color = colors[type];
+      const message = messages[type];
+      const iconName = icons[type];
+      
+      return `
+        <div class="glass-effect rounded-lg shadow-lg p-3 mb-2 min-w-[280px] max-w-[380px] border-l-4 ${color.border} ${color.borderDark} animate-slide-in-right">
+          <div class="flex items-center gap-2.5">
+            <i data-lucide="${iconName}" class="w-4 h-4 ${color.icon} dark:text-white flex-shrink-0"></i>
+            <p class="text-xs font-medium flex-1 ${color.text} dark:text-white">
+              ${message}
+            </p>
+            <button class="p-0.5 rounded flex-shrink-0 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-gray-600 dark:text-gray-300">
+              <i data-lucide="X" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+          <div class="mt-2 h-0.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+            <div class="h-full ${color.bg} ${color.bgDark} transition-all duration-100" style="width: 100%"></div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Render Variant 5: Modern
+    function renderVariant5(type) {
+      const color = colors[type];
+      const message = messages[type];
+      const iconName = icons[type];
+      
+      return `
+        <div class="rounded-2xl shadow-2xl p-5 mb-2 min-w-[320px] max-w-[420px] ${color.bg} ${color.bgDark} border border-white/10 dark:border-gray-700/30 backdrop-blur-lg animate-slide-in-right">
+          <div class="flex items-start gap-4">
+            <div class="p-2.5 rounded-xl bg-white/10 dark:bg-gray-900/20 backdrop-blur-sm border border-white/20 dark:border-gray-700/30">
+              <i data-lucide="${iconName}" class="w-6 h-6 text-white"></i>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-semibold text-white leading-relaxed">
+                ${message}
+              </p>
+              <div class="mt-4 h-2 bg-white/20 rounded-full overflow-hidden">
+                <div class="h-full bg-white/80 transition-all duration-100 rounded-full" style="width: 100%"></div>
+              </div>
+            </div>
+            <button class="p-1.5 rounded-lg flex-shrink-0 hover:bg-white/20 transition-all hover-lift-scale click-shrink text-white">
+              <i data-lucide="X" class="w-5 h-5"></i>
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    // Render all variants
+    function renderAllVariants() {
+      const type = getCurrentType();
+      
+      document.getElementById('variant-1-container').innerHTML = renderVariant1(type);
+      document.getElementById('variant-2-container').innerHTML = renderVariant2(type);
+      document.getElementById('variant-3-container').innerHTML = renderVariant3(type);
+      document.getElementById('variant-4-container').innerHTML = renderVariant4(type);
+      document.getElementById('variant-5-container').innerHTML = renderVariant5(type);
+      
+      // Reinitialize Lucide icons
+      lucide.createIcons();
+    }
+
+    // Select variant
+    function selectVariant(variant) {
+      document.getElementById('selected-info').classList.remove('hidden');
+      document.getElementById('selected-variant-number').textContent = variant;
+      document.getElementById('selected-variant-code').textContent = variant;
+      
+      // Highlight selected variant
+      document.querySelectorAll('[id^="variant-"]').forEach(container => {
+        container.closest('.glass-effect').classList.remove('ring-4', 'ring-green-500');
+      });
+      
+      const selectedContainer = document.getElementById(`variant-${variant}-container`);
+      if (selectedContainer) {
+        selectedContainer.closest('.glass-effect').classList.add('ring-4', 'ring-green-500');
+      }
+    }
+
+    // Theme toggle
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark');
+    });
+
+    // Type change
+    document.getElementById('notification-type').addEventListener('change', renderAllVariants);
+
+    // Initialize
+    renderAllVariants();
+    lucide.createIcons();
+  </script>
+</body>
+</html>
+

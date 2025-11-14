@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Work Schedule Modal - Variant 3: Tabs</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    }
+
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.97);
+      backdrop-filter: blur(20px);
+    }
+
+    .tab-button {
+      position: relative;
+      padding: 0.75rem 1.5rem;
+      transition: all 0.3s;
+    }
+
+    .tab-button.active {
+      color: #4f46e5;
+      font-weight: 600;
+    }
+
+    .tab-button.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: #4f46e5;
+      border-radius: 2px 2px 0 0;
+    }
+
+    .template-option {
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .template-option:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .template-option.selected {
+      border: 2px solid #4f46e5;
+      background: rgba(79, 70, 229, 0.05);
+    }
+
+    .step-indicator {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .step-dot {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-center;
+      font-size: 0.875rem;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .step-dot.active {
+      background: #4f46e5;
+      color: white;
+    }
+
+    .step-dot.inactive {
+      background: #e0e7ff;
+      color: #6366f1;
+    }
+
+    .step-line {
+      width: 3rem;
+      height: 2px;
+      background: #e0e7ff;
+    }
+
+    .day-cell {
+      width: 1.75rem;
+      height: 1.75rem;
+      font-size: 0.75rem;
+    }
+
+    .day-work {
+      background: rgba(79, 70, 229, 0.15);
+      border: 1px solid rgba(79, 70, 229, 0.3);
+      color: #4338ca;
+    }
+
+    .day-off {
+      background: rgba(34, 197, 94, 0.15);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      color: #15803d;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+  
+  <!-- Modal -->
+  <div class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
+    
+    <!-- Modal Content -->
+    <div class="glass-effect p-6 rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col">
+      
+      <!-- Header -->
+      <div class="flex justify-between items-center mb-4">
+        <div>
+          <h2 class="text-2xl font-bold text-gray-900">Настройка рабочего графика</h2>
+          <p class="text-sm text-gray-500 mt-1">Выберите удобный график работы</p>
+        </div>
+        <button class="p-2 rounded-full hover:bg-gray-100 transition-colors">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Step Indicator -->
+      <div class="mb-6 flex justify-center">
+        <div class="step-indicator">
+          <div class="step-dot active">1</div>
+          <div class="step-line"></div>
+          <div class="step-dot inactive">2</div>
+          <div class="step-line"></div>
+          <div class="step-dot inactive">3</div>
+        </div>
+      </div>
+
+      <div class="text-center text-sm text-gray-600 mb-4">
+        Шаг 1 из 3: Выбор шаблона
+      </div>
+
+      <!-- Tabs -->
+      <div class="border-b border-gray-200 mb-6">
+        <div class="flex gap-1">
+          <button class="tab-button active">
+            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+            </svg>
+            Шаблоны
+          </button>
+          <button class="tab-button text-gray-500">
+            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/>
+            </svg>
+            Настройки
+          </button>
+          <button class="tab-button text-gray-500">
+            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            Подтверждение
+          </button>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="flex-1 overflow-y-auto pr-4">
+        
+        <!-- Tab 1: Templates -->
+        <div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            
+            <!-- Template 5/2 -->
+            <div class="template-option selected p-5 border-2 rounded-xl">
+              <div class="flex items-start justify-between mb-3">
+                <div>
+                  <h4 class="text-lg font-semibold text-gray-900">Стандартный 5/2</h4>
+                  <p class="text-sm text-gray-600 mt-1">Пятидневная рабочая неделя</p>
+                </div>
+                <span class="px-3 py-1 bg-indigo-100 text-indigo-700 text-xs rounded-full font-medium">Рекомендуем</span>
+              </div>
+              
+              <!-- Calendar Preview -->
+              <div class="bg-gray-50 rounded-lg p-3 mb-3">
+                <div class="grid grid-cols-7 gap-1 mb-2">
+                  <div class="text-xs text-center text-gray-500 font-medium">ПН</div>
+                  <div class="text-xs text-center text-gray-500 font-medium">ВТ</div>
+                  <div class="text-xs text-center text-gray-500 font-medium">СР</div>
+                  <div class="text-xs text-center text-gray-500 font-medium">ЧТ</div>
+                  <div class="text-xs text-center text-gray-500 font-medium">ПТ</div>
+                  <div class="text-xs text-center text-gray-500 font-medium">СБ</div>
+                  <div class="text-xs text-center text-gray-500 font-medium">ВС</div>
+                </div>
+                <div class="grid grid-cols-7 gap-1">
+                  <div class="day-cell day-work rounded flex items-center justify-center font-medium">1</div>
+                  <div class="day-cell day-work rounded flex items-center justify-center font-medium">2</div>
+                  <div class="day-cell day-work rounded flex items-center justify-center font-medium">3</div>
+                  <div class="day-cell day-work rounded flex items-center justify-center font-medium">4</div>
+                  <div class="day-cell day-work rounded flex items-center justify-center font-medium">5</div>
+                  <div class="day-cell day-off rounded flex items-center justify-center font-medium">6</div>
+                  <div class="day-cell day-off rounded flex items-center justify-center font-medium">7</div>
+                </div>
+              </div>
+              
+              <div class="flex items-center justify-between text-sm">
+                <span class="text-gray-600">Рабочих дней в месяце:</span>
+                <span class="font-bold text-indigo-600">23 дня</span>
+              </div>
+            </div>
+
+            <!-- Template 2/2 -->
+            <div class="template-option p-5 border-2 border-gray-200 rounded-xl hover:border-indigo-300">
+              <div class="flex items-start justify-between mb-3">
+                <div>
+                  <h4 class="text-lg font-semibold text-gray-900">Сменный 2/2</h4>
+                  <p class="text-sm text-gray-600 mt-1">Два через два</p>
+                </div>
+                <span class="px-3 py-1 bg-purple-100 text-purple-700 text-xs rounded-full font-medium">Сменный</span>
+              </div>
+              
+              <div class="bg-gray-50 rounded-lg p-3 mb-3">
+                <div class="grid grid-cols-7 gap-1 mb-2">
+                  <div class="text-xs text-center text-gray-500 font-medium">ПН</div>
+                  <div class="text-xs text-center text-gray-500 font-medium">ВТ</div>
+                  <div class="text-xs text-center text-gray-500 font-medium">СР</div>
+                  <div class="text-xs text-center text-gray-500 font-medium">ЧТ</div>
+                  <div class="text-xs text-center text-gray-500 font-medium">ПТ</div>
+                  <div class="text-xs text-center text-gray-500 font-medium">СБ</div>
+                  <div class="text-xs text-center text-gray-500 font-medium">ВС</div>
+                </div>
+                <div class="grid grid-cols-7 gap-1">
+                  <div class="day-cell day-work rounded flex items-center justify-center font-medium">1</div>
+                  <div class="day-cell day-work rounded flex items-center justify-center font-medium">2</div>
+                  <div class="day-cell day-off rounded flex items-center justify-center font-medium">3</div>
+                  <div class="day-cell day-off rounded flex items-center justify-center font-medium">4</div>
+                  <div class="day-cell day-work rounded flex items-center justify-center font-medium">5</div>
+                  <div class="day-cell day-work rounded flex items-center justify-center font-medium">6</div>
+                  <div class="day-cell day-off rounded flex items-center justify-center font-medium">7</div>
+                </div>
+              </div>
+              
+              <div class="flex items-center justify-between text-sm">
+                <span class="text-gray-600">Рабочих дней в месяце:</span>
+                <span class="font-bold text-purple-600">15 дней</span>
+              </div>
+            </div>
+
+            <!-- Template 3/3 -->
+            <div class="template-option p-5 border-2 border-gray-200 rounded-xl hover:border-indigo-300">
+              <div class="flex items-start justify-between mb-3">
+                <div>
+                  <h4 class="text-lg font-semibold text-gray-900">Сменный 3/3</h4>
+                  <p class="text-sm text-gray-600 mt-1">Три через три</p>
+                </div>
+                <span class="px-3 py-1 bg-orange-100 text-orange-700 text-xs rounded-full font-medium">Сменный</span>
+              </div>
+              
+              <div class="bg-gray-50 rounded-lg p-3 mb-3">
+                <div class="grid grid-cols-7 gap-1 mb-2">
+                  <div class="text-xs text-center text-gray-500 font-medium">ПН</div>
+                  <div class="text-xs text-center text-gray-500 font-medium">ВТ</div>
+                  <div class="text-xs text-center text-gray-500 font-medium">СР</div>
+                  <div class="text-xs text-center text-gray-500 font-medium">ЧТ</div>
+                  <div class="text-xs text-center text-gray-500 font-medium">ПТ</div>
+                  <div class="text-xs text-center text-gray-500 font-medium">СБ</div>
+                  <div class="text-xs text-center text-gray-500 font-medium">ВС</div>
+                </div>
+                <div class="grid grid-cols-7 gap-1">
+                  <div class="day-cell day-work rounded flex items-center justify-center font-medium">1</div>
+                  <div class="day-cell day-work rounded flex items-center justify-center font-medium">2</div>
+                  <div class="day-cell day-work rounded flex items-center justify-center font-medium">3</div>
+                  <div class="day-cell day-off rounded flex items-center justify-center font-medium">4</div>
+                  <div class="day-cell day-off rounded flex items-center justify-center font-medium">5</div>
+                  <div class="day-cell day-off rounded flex items-center justify-center font-medium">6</div>
+                  <div class="day-cell day-work rounded flex items-center justify-center font-medium">7</div>
+                </div>
+              </div>
+              
+              <div class="flex items-center justify-between text-sm">
+                <span class="text-gray-600">Рабочих дней в месяце:</span>
+                <span class="font-bold text-orange-600">15 дней</span>
+              </div>
+            </div>
+
+            <!-- Custom Template -->
+            <div class="template-option p-5 border-2 border-gray-200 rounded-xl hover:border-indigo-300">
+              <div class="flex items-start justify-between mb-3">
+                <div>
+                  <h4 class="text-lg font-semibold text-gray-900">Кастомный</h4>
+                  <p class="text-sm text-gray-600 mt-1">Настройте индивидуально</p>
+                </div>
+                <span class="px-3 py-1 bg-green-100 text-green-700 text-xs rounded-full font-medium">Гибкий</span>
+              </div>
+              
+              <div class="bg-gray-50 rounded-lg p-3 mb-3">
+                <div class="text-xs text-center text-gray-600 mb-2">Кликните для настройки</div>
+                <div class="grid grid-cols-7 gap-1">
+                  <button class="day-cell day-work rounded flex items-center justify-center font-medium hover:opacity-70 transition">1</button>
+                  <button class="day-cell day-off rounded flex items-center justify-center font-medium hover:opacity-70 transition">2</button>
+                  <button class="day-cell day-work rounded flex items-center justify-center font-medium hover:opacity-70 transition">3</button>
+                  <button class="day-cell day-work rounded flex items-center justify-center font-medium hover:opacity-70 transition">4</button>
+                  <button class="day-cell day-work rounded flex items-center justify-center font-medium hover:opacity-70 transition">5</button>
+                  <button class="day-cell day-off rounded flex items-center justify-center font-medium hover:opacity-70 transition">6</button>
+                  <button class="day-cell day-off rounded flex items-center justify-center font-medium hover:opacity-70 transition">7</button>
+                </div>
+              </div>
+              
+              <div class="flex items-center justify-between text-sm">
+                <span class="text-gray-600">Рабочих дней в месяце:</span>
+                <span class="font-bold text-green-600">20 дней</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Navigation Buttons -->
+      <div class="flex justify-between items-center mt-6 pt-6 border-t border-gray-200">
+        <button class="px-6 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg font-medium text-gray-800 transition-colors">
+          Назад
+        </button>
+        <div class="flex gap-3">
+          <button class="px-6 py-2 text-gray-600 hover:text-gray-800 font-medium transition-colors">
+            Отмена
+          </button>
+          <button class="px-8 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition-colors shadow-lg shadow-indigo-500/50">
+            Далее →
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>
+

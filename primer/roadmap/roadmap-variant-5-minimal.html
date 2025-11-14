@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Планы развития - Вариант 5: Минималистичный</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .dark .glass-effect {
+      background: rgba(31, 41, 55, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+  </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 min-h-screen p-8 transition-colors duration-300">
+  
+  <div class="max-w-3xl mx-auto">
+    
+    <!-- Заголовок -->
+    <div class="glass-effect rounded-xl p-6 mb-6">
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Вариант 5: Минималистичный</h1>
+      <p class="text-gray-600 dark:text-gray-400">Компактный список без лишних элементов, максимум информации в минимуме места</p>
+    </div>
+
+    <!-- Планы развития -->
+    <div class="space-y-3">
+      
+      <!-- Критичные задачи -->
+      <div class="glass-effect rounded-lg p-4 border border-red-200/50 dark:border-red-700/50 hover:border-red-300 dark:hover:border-red-600 hover:shadow-md transition-all duration-200">
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-red-500"></span>
+            <h3 class="text-sm font-semibold text-red-600 dark:text-red-400">
+              Критичные задачи
+            </h3>
+            <span class="text-xs text-gray-500 dark:text-gray-400">(5)</span>
+          </div>
+          <button onclick="toggleSection('critical')" class="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 transition-colors">
+            <svg id="chevron-critical" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+        </div>
+        
+        <div id="content-critical" class="hidden mt-3 pt-3 border-t border-red-200/50 dark:border-red-700/50 space-y-2">
+          <div class="space-y-1.5">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-xs font-semibold text-green-600 dark:text-green-400">✅ Выполнено (2)</span>
+            </div>
+            <div class="pl-4 space-y-1 text-xs text-gray-600 dark:text-gray-400">
+              <div>• Добавить систему уведомлений</div>
+              <div>• Оптимизировать производительность</div>
+            </div>
+          </div>
+          
+          <div class="space-y-1.5">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-xs font-semibold text-orange-600 dark:text-orange-400">⚠️ В разработке (2)</span>
+            </div>
+            <div class="pl-4 space-y-1 text-xs text-gray-600 dark:text-gray-400">
+              <div>• Добавить экспорт данных</div>
+              <div>• Улучшить мобильную версию</div>
+            </div>
+          </div>
+          
+          <div class="space-y-1.5">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-xs font-semibold text-yellow-600 dark:text-yellow-400">📋 Отложено (1)</span>
+            </div>
+            <div class="pl-4 space-y-1 text-xs text-gray-600 dark:text-gray-400">
+              <div>• Добавить интеграцию с календарем</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Важные задачи -->
+      <div class="glass-effect rounded-lg p-4 border border-orange-200/50 dark:border-orange-700/50 hover:border-orange-300 dark:hover:border-orange-600 hover:shadow-md transition-all duration-200">
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-orange-500"></span>
+            <h3 class="text-sm font-semibold text-orange-600 dark:text-orange-400">
+              Важные задачи
+            </h3>
+            <span class="text-xs text-gray-500 dark:text-gray-400">(4)</span>
+          </div>
+          <button onclick="toggleSection('important')" class="text-orange-600 dark:text-orange-400 hover:text-orange-800 dark:hover:text-orange-300 transition-colors">
+            <svg id="chevron-important" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+        </div>
+        
+        <div id="content-important" class="hidden mt-3 pt-3 border-t border-orange-200/50 dark:border-orange-700/50">
+          <div class="text-center py-2 text-xs text-gray-500 dark:text-gray-400">
+            Содержимое задач...
+          </div>
+        </div>
+      </div>
+      
+      <!-- Желательные задачи -->
+      <div class="glass-effect rounded-lg p-4 border border-green-200/50 dark:border-green-700/50 hover:border-green-300 dark:hover:border-green-600 hover:shadow-md transition-all duration-200">
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-green-500"></span>
+            <h3 class="text-sm font-semibold text-green-600 dark:text-green-400">
+              Желательные задачи
+            </h3>
+            <span class="text-xs text-gray-500 dark:text-gray-400">(3)</span>
+          </div>
+          <button onclick="toggleSection('desirable')" class="text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300 transition-colors">
+            <svg id="chevron-desirable" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+        </div>
+        
+        <div id="content-desirable" class="hidden mt-3 pt-3 border-t border-green-200/50 dark:border-green-700/50">
+          <div class="text-center py-2 text-xs text-gray-500 dark:text-gray-400">
+            Содержимое задач...
+          </div>
+        </div>
+      </div>
+      
+    </div>
+    
+  </div>
+  
+  <script>
+    function toggleSection(section) {
+      const content = document.getElementById(`content-${section}`);
+      const chevron = document.getElementById(`chevron-${section}`);
+      
+      if (content.classList.contains('hidden')) {
+        content.classList.remove('hidden');
+        chevron.style.transform = 'rotate(180deg)';
+      } else {
+        content.classList.add('hidden');
+        chevron.style.transform = 'rotate(0deg)';
+      }
+    }
+    
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+      localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+    }
+    
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark');
+    }
+  </script>
+  
+</body>
+</html>
+

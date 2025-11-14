@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вариант 1: Компактная однострочная</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body class="bg-gray-100 p-8">
+  
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-2xl font-bold mb-4 text-gray-800">Вариант 1: Компактная однострочная</h1>
+    <p class="text-gray-600 mb-6">Все записи в одну строку с разделителями</p>
+    
+    <!-- Пример плашки -->
+    <div class="glass-effect rounded-xl p-4 hover:shadow-lg transition-shadow duration-300">
+      <!-- Заголовок с датой и статусом -->
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center gap-2">
+          <h3 class="text-lg font-semibold text-gray-800">29 Октября 2025 Г. СР</h3>
+          <span class="flex items-center gap-1 text-sm text-green-600">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            План выполнен
+          </span>
+        </div>
+        <span class="text-xl font-bold text-gray-800">14000 ₽</span>
+      </div>
+      
+      <!-- Компактная таблица записей - одна строка на запись -->
+      <div class="space-y-1">
+        <div class="flex items-center justify-between text-sm py-1 px-2 hover:bg-gray-50 rounded transition-colors">
+          <div class="flex items-center gap-3 flex-1">
+            <span class="font-mono text-gray-600">09:00 - 10:00</span>
+            <span class="text-gray-500">•</span>
+            <span class="text-gray-700">Разработка</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="text-gray-500 text-xs">1.00 ч</span>
+            <span class="font-semibold text-blue-600">6000 ₽</span>
+          </div>
+        </div>
+        
+        <div class="flex items-center justify-between text-sm py-1 px-2 hover:bg-gray-50 rounded transition-colors">
+          <div class="flex items-center gap-3 flex-1">
+            <span class="font-mono text-gray-600">09:00 - 10:00</span>
+            <span class="text-gray-500">•</span>
+            <span class="text-gray-700">Разработка</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="text-gray-500 text-xs">1.00 ч</span>
+            <span class="font-semibold text-blue-600">8000 ₽</span>
+          </div>
+        </div>
+        
+        <div class="flex items-center justify-between text-sm py-1 px-2 hover:bg-gray-50 rounded transition-colors">
+          <div class="flex items-center gap-3 flex-1">
+            <span class="font-mono text-gray-600">09:27 - 09:27</span>
+            <span class="text-gray-500">•</span>
+            <span class="text-gray-700">Разработка</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="text-gray-500 text-xs">0.00 ч</span>
+            <span class="font-semibold text-blue-600">0 ₽</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Итого за день -->
+      <div class="mt-3 pt-3 border-t border-gray-200 flex items-center justify-between">
+        <span class="text-sm font-semibold text-gray-700">Итого за день:</span>
+        <div class="flex items-center gap-4">
+          <span class="text-sm text-gray-600">2.00 ч</span>
+          <span class="text-lg font-bold text-gray-800">14000 ₽</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</body>
+</html>
+

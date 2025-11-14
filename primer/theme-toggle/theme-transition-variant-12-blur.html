@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Переход темы - Вариант 12: Эффект размытия</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    
+    .glass-button {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .glass-button:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+    
+    .glass-button:active {
+      transform: translateY(0) scale(0.95);
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    /* Вариант 12: Эффект размытия */
+    .theme-transition-blur {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9998;
+      backdrop-filter: blur(0px);
+      opacity: 0;
+      will-change: backdrop-filter, opacity;
+    }
+
+    @keyframes blur-transition {
+      0% {
+        opacity: 0;
+        backdrop-filter: blur(0px);
+      }
+      30% {
+        opacity: 1;
+        backdrop-filter: blur(20px);
+      }
+      70% {
+        opacity: 1;
+        backdrop-filter: blur(20px);
+      }
+      100% {
+        opacity: 0;
+        backdrop-filter: blur(0px);
+      }
+    }
+
+    .theme-transition-blur.active {
+      animation: blur-transition 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    .theme-transition-overlay-blur {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0;
+      will-change: opacity;
+    }
+
+    @keyframes overlay-fade {
+      0% {
+        opacity: 0;
+      }
+      30% {
+        opacity: 0.8;
+      }
+      70% {
+        opacity: 0.8;
+      }
+      100% {
+        opacity: 0;
+      }
+    }
+
+    .theme-transition-overlay-blur.active {
+      animation: overlay-fade 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    .theme-transition-overlay-blur.dark-to-light {
+      background: linear-gradient(135deg, rgba(249, 250, 251, 0.9) 0%, rgba(219, 234, 254, 0.9) 100%);
+    }
+
+    .theme-transition-overlay-blur.light-to-dark {
+      background: linear-gradient(135deg, rgba(17, 24, 39, 0.9) 0%, rgba(30, 41, 59, 0.9) 100%);
+    }
+
+    body {
+      transition: background-color 1.2s cubic-bezier(0.4, 0, 0.2, 1), color 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      transition: background-color 1.2s cubic-bezier(0.4, 0, 0.2, 1), 
+                  color 1.2s cubic-bezier(0.4, 0, 0.2, 1), 
+                  border-color 1.2s cubic-bezier(0.4, 0, 0.2, 1),
+                  box-shadow 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 min-h-screen p-8">
+  <div class="theme-transition-blur" id="transitionBlur"></div>
+  <div class="theme-transition-overlay-blur" id="transitionOverlayBlur"></div>
+  
+  <div class="max-w-4xl mx-auto space-y-8">
+    
+    <!-- Заголовок -->
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-white mb-4">Вариант 12: Эффект размытия</h1>
+      <p class="text-xl text-gray-400">Интерфейс размывается, меняется тема, затем резкость восстанавливается</p>
+    </div>
+
+    <!-- Демо контент -->
+    <div class="glass-card rounded-xl p-8 space-y-6">
+      <h2 class="text-2xl font-semibold text-white mb-4">Нажмите на кнопку для переключения темы</h2>
+      
+      <div class="flex items-center justify-center gap-4">
+        <button
+          id="themeToggle"
+          aria-label="Переключить тему"
+          class="glass-button p-3 rounded-lg transition-all duration-300 hover:scale-110 active:scale-95"
+        >
+          <i data-lucide="moon" id="themeIcon" class="w-6 h-6 text-white"></i>
+        </button>
+
+        <p class="text-gray-400">Текущая тема: <span id="currentTheme" class="font-semibold text-white">dark</span></p>
+      </div>
+
+      <!-- Демо элементы -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+        <div class="glass-card rounded-lg p-4">
+          <h3 class="text-lg font-semibold text-white mb-2">Карточка 1</h3>
+          <p class="text-gray-300 text-sm">Элемент интерфейса</p>
+        </div>
+        <div class="glass-card rounded-lg p-4">
+          <h3 class="text-lg font-semibold text-white mb-2">Карточка 2</h3>
+          <p class="text-gray-300 text-sm">Элемент интерфейса</p>
+        </div>
+        <div class="glass-card rounded-lg p-4">
+          <h3 class="text-lg font-semibold text-white mb-2">Карточка 3</h3>
+          <p class="text-gray-300 text-sm">Элемент интерфейса</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Описание -->
+    <div class="glass-card rounded-xl p-6">
+      <h3 class="text-xl font-bold text-white mb-4">Особенности перехода:</h3>
+      <ul class="space-y-2 text-gray-300">
+        <li>• Интерфейс плавно размывается</li>
+        <li>• Overlay с новой темой появляется</li>
+        <li>• Тема меняется в середине анимации</li>
+        <li>• Резкость постепенно восстанавливается</li>
+        <li>• Длительность: 1.2 секунды</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <script>
+    let currentTheme = 'dark';
+    let isTransitioning = false;
+    const themeToggle = document.getElementById('themeToggle');
+    const currentThemeSpan = document.getElementById('currentTheme');
+    const themeIcon = document.getElementById('themeIcon');
+    const transitionBlur = document.getElementById('transitionBlur');
+    const transitionOverlayBlur = document.getElementById('transitionOverlayBlur');
+    
+    lucide.createIcons();
+
+    function setTheme(theme) {
+      currentTheme = theme;
+      document.documentElement.classList.toggle('dark', theme === 'dark');
+      document.documentElement.classList.toggle('light', theme === 'light');
+      
+      if (theme === 'dark') {
+        document.body.className = 'bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 min-h-screen p-8';
+        themeIcon.setAttribute('data-lucide', 'moon');
+      } else {
+        document.body.className = 'bg-gradient-to-br from-gray-100 via-blue-50 to-gray-100 min-h-screen p-8';
+        themeIcon.setAttribute('data-lucide', 'sun');
+      }
+      
+      lucide.createIcons();
+      currentThemeSpan.textContent = theme;
+    }
+
+    themeToggle.addEventListener('click', () => {
+      if (isTransitioning) return;
+      isTransitioning = true;
+      
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      // Устанавливаем класс для overlay
+      const overlayClass = currentTheme === 'dark' ? 'dark-to-light' : 'light-to-dark';
+      transitionOverlayBlur.className = `theme-transition-overlay-blur ${overlayClass}`;
+      
+      // Сбрасываем состояние
+      transitionBlur.classList.remove('active');
+      transitionOverlayBlur.classList.remove('active');
+      transitionBlur.style.opacity = '0';
+      transitionOverlayBlur.style.opacity = '0';
+      
+      // Принудительный reflow для сброса анимации
+      void transitionBlur.offsetWidth;
+      void transitionOverlayBlur.offsetWidth;
+      
+      // Убираем inline стили animation перед запуском
+      transitionBlur.style.animation = '';
+      transitionOverlayBlur.style.animation = '';
+      
+      // Активируем анимации
+      requestAnimationFrame(() => {
+        transitionBlur.classList.add('active');
+        transitionOverlayBlur.classList.add('active');
+        
+        // Меняем тему в середине анимации (когда размытие максимальное)
+        setTimeout(() => {
+          setTheme(newTheme);
+        }, 600);
+        
+        // Завершаем переход
+        setTimeout(() => {
+          transitionBlur.classList.remove('active');
+          transitionOverlayBlur.classList.remove('active');
+          transitionBlur.style.animation = '';
+          transitionOverlayBlur.style.animation = '';
+          transitionBlur.style.opacity = '0';
+          transitionOverlayBlur.style.opacity = '0';
+          isTransitioning = false;
+        }, 1200);
+      });
+    });
+
+    setTheme('dark');
+  </script>
+</body>
+</html>
+

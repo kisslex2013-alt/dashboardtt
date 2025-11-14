@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Work Schedule Modal Variants - Showcase</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    
+    .variant-card {
+      transition: all 0.3s ease;
+    }
+    
+    .variant-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .badge-new { background: #dbeafe; color: #1e40af; }
+    .badge-popular { background: #d1fae5; color: #065f46; }
+    .badge-modern { background: #fce7f3; color: #9f1239; }
+    .badge-compact { background: #fef3c7; color: #92400e; }
+    .badge-wizard { background: #e0e7ff; color: #3730a3; }
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-8">
+  
+  <div class="max-w-7xl mx-auto">
+    
+    <!-- Header -->
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+        Work Schedule Modal
+      </h1>
+      <p class="text-lg text-gray-600 dark:text-gray-400 mb-2">
+        Визуальные варианты модального окна настройки рабочего графика
+      </p>
+      <p class="text-sm text-gray-500 dark:text-gray-500">
+        Выберите вариант, который лучше всего подходит для вашего проекта
+      </p>
+    </div>
+
+    <!-- Variants Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      
+      <!-- Variant 1: Reference -->
+      <div class="variant-card bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+        <div class="h-48 bg-gradient-to-br from-blue-500 to-purple-600 p-6 flex items-center justify-center">
+          <div class="text-white text-center">
+            <svg class="w-16 h-16 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+            <h3 class="font-bold text-xl">Reference</h3>
+          </div>
+        </div>
+        <div class="p-6">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="badge badge-popular">Оригинал</span>
+            <span class="badge badge-new">Референс</span>
+          </div>
+          <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Вариант 1: Референс</h4>
+          <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+            Точная копия модального окна из эталонного файла. Включает все шаблоны, календари и настройки.
+          </p>
+          <ul class="text-xs text-gray-500 dark:text-gray-500 space-y-1 mb-4">
+            <li>✓ Сетка 3x2 шаблонов</li>
+            <li>✓ Мини-календари для каждого шаблона</li>
+            <li>✓ Кастомный выбор дней</li>
+            <li>✓ Авторасчет месячного плана</li>
+          </ul>
+          <a 
+            href="work-schedule-variant-1-reference.html" 
+            target="_blank"
+            class="block w-full text-center px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 hover:scale-105"
+          >
+            Открыть вариант →
+          </a>
+        </div>
+      </div>
+
+      <!-- Variant 2: Compact & Cards -->
+      <div class="variant-card bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+        <div class="h-48 bg-gradient-to-br from-amber-500 to-orange-600 p-6 flex items-center justify-center">
+          <div class="text-white text-center">
+            <svg class="w-16 h-16 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+            </svg>
+            <h3 class="font-bold text-xl">Compact</h3>
+          </div>
+        </div>
+        <div class="p-6">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="badge badge-compact">Компактный</span>
+          </div>
+          <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Вариант 2: Компактные карточки</h4>
+          <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+            Минималистичный дизайн с мелкими карточками. Идеально для экранов с ограниченным пространством.
+          </p>
+          <ul class="text-xs text-gray-500 dark:text-gray-500 space-y-1 mb-4">
+            <li>✓ Сетка 4x2 компактных карточек</li>
+            <li>✓ Упрощенные календари</li>
+            <li>✓ Меньше отступов</li>
+            <li>✓ Быстрый выбор</li>
+          </ul>
+          <a 
+            href="work-schedule-variant-2-compact.html" 
+            target="_blank"
+            class="block w-full text-center px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg transition-colors shadow-lg shadow-amber-500/30 hover:shadow-xl hover:shadow-amber-500/40 hover:scale-105"
+          >
+            Открыть вариант →
+          </a>
+        </div>
+      </div>
+
+      <!-- Variant 3: Tabs & Wizard -->
+      <div class="variant-card bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+        <div class="h-48 bg-gradient-to-br from-indigo-500 to-purple-600 p-6 flex items-center justify-center">
+          <div class="text-white text-center">
+            <svg class="w-16 h-16 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+            </svg>
+            <h3 class="font-bold text-xl">Wizard</h3>
+          </div>
+        </div>
+        <div class="p-6">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="badge badge-wizard">Пошаговый</span>
+          </div>
+          <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Вариант 3: Вкладки и шаги</h4>
+          <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+            Организованный интерфейс с вкладками. Разделение на шаги: выбор шаблона → настройки → подтверждение.
+          </p>
+          <ul class="text-xs text-gray-500 dark:text-gray-500 space-y-1 mb-4">
+            <li>✓ 3 вкладки (Шаблоны / Настройки / Кастом)</li>
+            <li>✓ Пошаговая навигация</li>
+            <li>✓ Индикатор прогресса</li>
+            <li>✓ Предпросмотр результата</li>
+          </ul>
+          <a 
+            href="work-schedule-variant-3-tabs.html" 
+            target="_blank"
+            class="block w-full text-center px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg transition-colors shadow-lg shadow-indigo-500/30 hover:shadow-xl hover:shadow-indigo-500/40 hover:scale-105"
+          >
+            Открыть вариант →
+          </a>
+        </div>
+      </div>
+
+      <!-- Variant 4: Minimal List -->
+      <div class="variant-card bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+        <div class="h-48 bg-gradient-to-br from-gray-600 to-gray-800 p-6 flex items-center justify-center">
+          <div class="text-white text-center">
+            <svg class="w-16 h-16 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
+            </svg>
+            <h3 class="font-bold text-xl">Minimal</h3>
+          </div>
+        </div>
+        <div class="p-6">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="badge badge-compact">Минимализм</span>
+          </div>
+          <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Вариант 4: Минималистичный список</h4>
+          <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+            Простой список с радиокнопками. Фокус на текстовом описании и быстром выборе.
+          </p>
+          <ul class="text-xs text-gray-500 dark:text-gray-500 space-y-1 mb-4">
+            <li>✓ Вертикальный список опций</li>
+            <li>✓ Радиокнопки для выбора</li>
+            <li>✓ Развернутое описание каждого графика</li>
+            <li>✓ Минимум графики</li>
+          </ul>
+          <a 
+            href="work-schedule-variant-4-minimal.html" 
+            target="_blank"
+            class="block w-full text-center px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors shadow-lg shadow-gray-600/30 hover:shadow-xl hover:shadow-gray-600/40 hover:scale-105"
+          >
+            Открыть вариант →
+          </a>
+        </div>
+      </div>
+
+      <!-- Variant 5: Modern Dashboard -->
+      <div class="variant-card bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+        <div class="h-48 bg-gradient-to-br from-pink-500 to-rose-600 p-6 flex items-center justify-center">
+          <div class="text-white text-center">
+            <svg class="w-16 h-16 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+            </svg>
+            <h3 class="font-bold text-xl">Dashboard</h3>
+          </div>
+        </div>
+        <div class="p-6">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="badge badge-modern">Современный</span>
+            <span class="badge badge-new">2024</span>
+          </div>
+          <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Вариант 5: Современная панель</h4>
+          <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+            Дизайн в стиле современных дашбордов. Крупные карточки с иконками и аналитикой.
+          </p>
+          <ul class="text-xs text-gray-500 dark:text-gray-500 space-y-1 mb-4">
+            <li>✓ Крупные плитки с иконками</li>
+            <li>✓ Анимированные переходы</li>
+            <li>✓ Интерактивные календари</li>
+            <li>✓ Статистика в реальном времени</li>
+          </ul>
+          <a 
+            href="work-schedule-variant-5-dashboard.html" 
+            target="_blank"
+            class="block w-full text-center px-4 py-2 bg-pink-500 hover:bg-pink-600 text-white rounded-lg transition-colors shadow-lg shadow-pink-500/30 hover:shadow-xl hover:shadow-pink-500/40 hover:scale-105"
+          >
+            Открыть вариант →
+          </a>
+        </div>
+      </div>
+
+      <!-- Info Card -->
+      <div class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-700 rounded-xl shadow-lg overflow-hidden p-6 flex flex-col justify-center">
+        <svg class="w-12 h-12 text-blue-500 dark:text-blue-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Как выбрать?</h4>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+          Каждый вариант сохраняет всю функциональность, но отличается визуальной подачей и UX подходом.
+        </p>
+        <ul class="text-xs text-gray-500 dark:text-gray-500 space-y-2">
+          <li class="flex items-start gap-2">
+            <span class="text-blue-500">→</span>
+            <span><strong>Референс:</strong> для точного соответствия оригиналу</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-amber-500">→</span>
+            <span><strong>Компактный:</strong> для экономии места</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-indigo-500">→</span>
+            <span><strong>Вкладки:</strong> для пошаговой настройки</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-gray-500">→</span>
+            <span><strong>Минимал:</strong> для быстрого выбора</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-pink-500">→</span>
+            <span><strong>Дашборд:</strong> для wow-эффекта</span>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="mt-12 text-center text-sm text-gray-500 dark:text-gray-500">
+      <p>Time Tracker Dashboard - Work Schedule Modal Variants</p>
+      <p class="mt-2">Все варианты полностью функциональны и адаптивны</p>
+    </div>
+
+  </div>
+
+</body>
+</html>
+

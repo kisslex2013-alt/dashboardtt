@@ -1,0 +1,77 @@
+---
+description: Стандарты проекта для команды - загружается для всех задач
+alwaysApply: true
+---
+
+# Project Standards: React 18.2 + Zustand 4.4 + Tailwind 3.4
+
+## Архитектура проекта
+
+- **Frontend**: React 18.2 с TypeScript (строгий режим)
+- **State Management**: Zustand 4.4
+- **Styling**: Tailwind CSS 3.4
+- **Testing**: Vitest + React Testing Library
+- **Framework**: Next.js (если используется)
+
+## Структура проекта
+
+```
+src/
+├── components/     # React компоненты
+│   └── FeatureName/
+│       ├── FeatureName.tsx
+│       ├── FeatureNameForm.tsx
+│       └── FeatureName.test.tsx
+├── store/          # Zustand stores
+│   └── featureStore.ts
+├── api/            # API routes (Next.js)
+│   └── feature/
+│       └── route.ts
+├── hooks/          # Custom React hooks
+├── types/          # TypeScript типы и интерфейсы
+└── lib/            # Утилиты и хелперы
+```
+
+## Стандарты кода
+
+### TypeScript
+- Всегда явные типы, запрет на `any`
+- Используй интерфейсы для props компонентов
+- Строгий режим включен (`strict: true`)
+- Типы экспортируй из `types/` директории
+
+### React
+- Только функциональные компоненты
+- Hooks для state и side effects
+- Мемоизация через `useMemo`/`useCallback` где нужно
+- Компоненты в PascalCase, файлы в PascalCase.tsx
+
+### Zustand
+- Один store на домен/фичу
+- Селекторы для оптимизации ре-рендеров
+- Async actions через async/await
+- Типизация state через интерфейсы
+
+### Tailwind CSS
+- Utility-first подход
+- Компоненты через `className`
+- Кастомные классы только если нужно переиспользование
+- Responsive через префиксы (`sm:`, `md:`, `lg:`)
+
+## Маршрутизация агентов
+
+Когда пользователь запрашивает:
+
+- **Backend/API** → `@agents/backend-agent.mdc`
+- **UI/компоненты** → `@agents/frontend-agent.mdc`
+- **Тесты** → `@agents/testing-agent.mdc`
+- **Workflows** → `@workflows/feature-development.mdc`
+- **Code Review** → `@workflows/code-review.mdc`
+
+## Принципы для zero-кодера
+
+- Давай пошаговые объяснения
+- Генерируй полный рабочий код без пропусков
+- Используй комментарии на русском для сложной логики
+- Проверяй TypeScript типы явно
+- Показывай промежуточные результаты после каждого этапа

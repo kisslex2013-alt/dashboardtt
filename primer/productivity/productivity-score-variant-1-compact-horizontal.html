@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вариант 1: Компактный горизонтальный</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .glass-effect {
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(17, 24, 39, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .glass-card {
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in {
+      animation: fadeIn 0.3s ease-out;
+    }
+  </style>
+</head>
+<body class="bg-gray-900 text-white p-8">
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-2xl font-bold mb-4">Вариант 1: Компактный горизонтальный</h1>
+    
+    <!-- Компактный блок -->
+    <div class="glass-effect rounded-xl p-4 animate-fade-in">
+      <div class="flex items-center gap-4">
+        <!-- Круглый индикатор (меньший размер) -->
+        <div class="flex-shrink-0">
+          <div class="relative w-20 h-20">
+            <svg width="80" height="80" class="transform -rotate-90">
+              <circle cx="40" cy="40" r="32" stroke="currentColor" stroke-width="6" fill="none" class="text-gray-200 dark:text-gray-700" />
+              <circle cx="40" cy="40" r="32" stroke="currentColor" stroke-width="6" fill="none" stroke-dasharray="201" stroke-dashoffset="22" stroke-linecap="round" class="text-green-500" />
+            </svg>
+            <div class="absolute inset-0 flex flex-col items-center justify-center">
+              <div class="text-2xl font-bold text-green-500">89</div>
+              <div class="text-xs text-gray-400">из 100</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Факторы в одну строку -->
+        <div class="flex-1 grid grid-cols-4 gap-3">
+          <div class="space-y-1">
+            <div class="flex items-center justify-between text-xs">
+              <span class="text-gray-400">Цели</span>
+              <span class="font-bold text-yellow-500">29/40</span>
+            </div>
+            <div class="w-full h-1.5 bg-gray-700 rounded-full overflow-hidden">
+              <div class="h-full bg-yellow-500 rounded-full" style="width: 72.5%"></div>
+            </div>
+          </div>
+          <div class="space-y-1">
+            <div class="flex items-center justify-between text-xs">
+              <span class="text-gray-400">Регулярность</span>
+              <span class="font-bold text-green-500">25/25</span>
+            </div>
+            <div class="w-full h-1.5 bg-gray-700 rounded-full overflow-hidden">
+              <div class="h-full bg-green-500 rounded-full" style="width: 100%"></div>
+            </div>
+          </div>
+          <div class="space-y-1">
+            <div class="flex items-center justify-between text-xs">
+              <span class="text-gray-400">Фокус</span>
+              <span class="font-bold text-green-500">20/20</span>
+            </div>
+            <div class="w-full h-1.5 bg-gray-700 rounded-full overflow-hidden">
+              <div class="h-full bg-green-500 rounded-full" style="width: 100%"></div>
+            </div>
+          </div>
+          <div class="space-y-1">
+            <div class="flex items-center justify-between text-xs">
+              <span class="text-gray-400">Перерывы</span>
+              <span class="font-bold text-green-500">15/15</span>
+            </div>
+            <div class="w-full h-1.5 bg-gray-700 rounded-full overflow-hidden">
+              <div class="h-full bg-green-500 rounded-full" style="width: 100%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-4 text-sm text-gray-400">
+      <p><strong>Преимущества:</strong></p>
+      <ul class="list-disc list-inside mt-2 space-y-1">
+        <li>✅ Компактный размер - занимает меньше места</li>
+        <li>✅ Все факторы видны сразу в одну строку</li>
+        <li>✅ Разноцветные прогресс-бары (желтый/зеленый)</li>
+        <li>✅ Меньший круглый индикатор (80px вместо 150px)</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>
+

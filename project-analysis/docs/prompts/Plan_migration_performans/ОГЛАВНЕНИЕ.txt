@@ -1,0 +1,41 @@
+ТРИ СЦЕНАРИЯ ИСПОЛЬЗОВАНИЯ:
+1. БЫСТРЫЙ СТАРТ (2-3 часа):
+bash1. Открой quick-reference.md
+2. Выполни промпты 1-5
+3. Готов базовый прототип!
+2. ОСНОВАТЕЛЬНЫЙ (5-7 дней):
+bash1. Читай react-migration-plan.md
+2. Отмечай migration-checklist.md
+3. При проблемах → troubleshooting.md
+4. Полнофункциональное приложение!
+3. ИДЕАЛЬНЫЙ (10-15 дней):
+bash1. Следуй ВСЕМ этапам из react-migration-plan.md
+2. Используй cursor-pro-tips.md
+3. Оптимизируй через performance-guide.md
+4. Production-ready приложение!
+
+ РЕКОМЕНДАЦИЯ ПО ЧТЕНИЮ:
+Сейчас прочитай (15 минут):
+
+ULTIMATE_GUIDE.md - обзор всего
+START_HERE.md - с чего начать
+
+Перед началом кодинга:
+
+quick-reference.md - быстрая шпаргалка
+component-examples.md - как писать код
+
+Держи открытыми во время работы:
+
+troubleshooting.md - когда что-то не работает
+cursor-pro-tips.md - для качественных промптов
+
+Для долгосрочной работы:
+
+react-migration-plan.md - полный план
+migration-checklist.md - отслеживание прогресса
+
+Перед финализацией:
+
+performance-guide.md - оптимизация
+git-workflow.md - правильное версионирование

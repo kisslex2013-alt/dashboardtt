@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вариант 1: Классический - Звуки и анимация</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    
+    .glass-card {
+      background: rgba(17, 24, 39, 0.7);
+      backdrop-filter: blur(24px) saturate(200%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .glass-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    #faviconPreview {
+      image-rendering: pixelated;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    
+    .pulse-animation {
+      animation: pulse 2s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 p-8">
+  <div class="max-w-6xl mx-auto space-y-6">
+    
+    <!-- Заголовок -->
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-bold text-white mb-2">Вариант 1: Классический</h1>
+      <p class="text-gray-400">Классические звуки с плавной пульсирующей анимацией</p>
+    </div>
+
+    <!-- Основная информация -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      
+      <!-- Звуки -->
+      <div class="glass-card rounded-xl p-6">
+        <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+          <span>🔔</span>
+          Звуковые уведомления
+        </h2>
+        <p class="text-sm text-gray-400 mb-4">
+          Классические мелодичные звуки: chime, bell, notification
+        </p>
+        
+        <div class="space-y-3">
+          <div>
+            <label class="text-sm font-semibold text-blue-400 mb-2 block">Chime (мелодия)</label>
+            <button onclick="playSound('chime')" class="w-full px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/30 rounded-lg text-white transition-all">
+              ▶ Проиграть Chime
+            </button>
+          </div>
+          
+          <div>
+            <label class="text-sm font-semibold text-blue-400 mb-2 block">Bell (колокол)</label>
+            <button onclick="playSound('bell')" class="w-full px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/30 rounded-lg text-white transition-all">
+              ▶ Проиграть Bell
+            </button>
+          </div>
+          
+          <div>
+            <label class="text-sm font-semibold text-blue-400 mb-2 block">Notification (уведомление)</label>
+            <button onclick="playSound('notification')" class="w-full px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/30 rounded-lg text-white transition-all">
+              ▶ Проиграть Notification
+            </button>
+          </div>
+        </div>
+        
+        <div class="mt-6 p-4 bg-gray-800/50 rounded-lg">
+          <p class="text-xs text-gray-400 mb-2">Настройки:</p>
+          <ul class="text-xs text-gray-300 space-y-1">
+            <li>• Интервал уведомлений: 30 минут</li>
+            <li>• Громкость: 80%</li>
+            <li>• Стиль: Мелодичный, спокойный</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Анимация фавикона -->
+      <div class="glass-card rounded-xl p-6">
+        <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+          <span>🎨</span>
+          Анимация фавикона
+        </h2>
+        <p class="text-sm text-gray-400 mb-4">
+          Плавная пульсирующая анимация (Pulse) - зеленый с синим акцентом
+        </p>
+        
+        <!-- Превью фавикона -->
+        <div class="flex items-center justify-center mb-6">
+          <canvas id="faviconPreview" width="64" height="64" class="rounded-lg border-2 border-blue-500/30"></canvas>
+        </div>
+        
+        <div class="space-y-3">
+          <div>
+            <label class="text-sm font-semibold text-green-400 mb-2 block">Стиль: Pulse</label>
+            <p class="text-xs text-gray-400 mb-3">Плавное увеличение и уменьшение радиуса</p>
+          </div>
+          
+          <div>
+            <label class="text-sm font-semibold text-blue-400 mb-2 block">Цвет: Зеленый (#22c55e) + Синий акцент</label>
+            <div class="flex gap-2 mt-2">
+              <div class="w-8 h-8 rounded bg-[#22c55e] border border-gray-600"></div>
+              <div class="w-8 h-8 rounded bg-[#3b82f6] border border-gray-600"></div>
+            </div>
+          </div>
+          
+          <div>
+            <label class="text-sm font-semibold text-blue-400 mb-2 block">Скорость: Normal</label>
+            <p class="text-xs text-gray-400">2000ms на цикл анимации</p>
+          </div>
+        </div>
+        
+        <div class="mt-6 p-4 bg-gray-800/50 rounded-lg">
+          <p class="text-xs text-gray-400 mb-2">Настройки:</p>
+          <ul class="text-xs text-gray-300 space-y-1">
+            <li>• Стиль анимации: Pulse</li>
+            <li>• Цвет: #22c55e (зеленый)</li>
+            <li>• Скорость: Normal (2000ms)</li>
+            <li>• Включено: Да</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Демонстрация работы -->
+    <div class="glass-card rounded-xl p-6">
+      <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+        <span>⚙️</span>
+        Демонстрация
+      </h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <button onclick="startTimer()" class="px-6 py-3 bg-green-500/20 hover:bg-green-500/30 border border-green-500/30 rounded-lg text-white font-semibold transition-all">
+          ▶ Запустить таймер
+        </button>
+        <button onclick="pauseTimer()" class="px-6 py-3 bg-yellow-500/20 hover:bg-yellow-500/30 border border-yellow-500/30 rounded-lg text-white font-semibold transition-all">
+          ⏸ Пауза
+        </button>
+        <button onclick="stopTimer()" class="px-6 py-3 bg-red-500/20 hover:bg-red-500/30 border border-red-500/30 rounded-lg text-white font-semibold transition-all">
+          ⏹ Остановить
+        </button>
+      </div>
+      
+      <div class="mt-6 p-4 bg-gray-800/50 rounded-lg">
+        <p class="text-sm text-white font-semibold mb-2">Статус таймера:</p>
+        <p id="timerStatus" class="text-lg text-gray-300">Остановлен</p>
+        <p id="timerTime" class="text-2xl font-bold text-blue-400 mt-2">00:00:00</p>
+        <p class="text-xs text-gray-400 mt-2">Звуковое уведомление каждые 30 минут</p>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let synth = null;
+    let timerInterval = null;
+    let timerSeconds = 0;
+    let faviconInterval = null;
+    let isTimerRunning = false;
+    let isPaused = false;
+    let lastNotificationTime = 0;
+    const notificationInterval = 30 * 60; // 30 минут в секундах
+
+    // Инициализация Tone.js
+    async function initTone() {
+      if (!window.Tone) {
+        console.warn("Tone.js not loaded");
+        return;
+      }
+      await Tone.start();
+      synth = new Tone.Synth().toDestination();
+      synth.volume.value = Tone.gainToDb(0.8);
+    }
+
+    // Воспроизведение звуков
+    function playSound(sound) {
+      if (!synth) {
+        initTone().then(() => playSound(sound));
+        return;
+      }
+      
+      try {
+        switch (sound) {
+          case 'chime':
+            synth.triggerAttackRelease("E5", "8n", Tone.now());
+            synth.triggerAttackRelease("C5", "8n", Tone.now() + 0.2);
+            break;
+          case 'bell':
+            synth.triggerAttackRelease("C6", "4n", Tone.now());
+            synth.triggerAttackRelease("G5", "4n", Tone.now() + 0.5);
+            break;
+          case 'notification':
+            synth.triggerAttackRelease("F5", "8n", Tone.now());
+            synth.triggerAttackRelease("A5", "8n", Tone.now() + 0.2);
+            break;
+        }
+      } catch (e) {
+        console.error("Could not play sound:", e);
+      }
+    }
+
+    // Рисование фавикона
+    function drawFavicon(isPaused = false, animationValue = 1) {
+      const canvas = document.getElementById('faviconPreview');
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, 64, 64);
+      
+      const color = '#22c55e'; // Зеленый
+      const accentColor = '#3b82f6'; // Синий акцент
+      
+      if (isPaused) {
+        ctx.fillStyle = '#9ca3af';
+        ctx.beginPath();
+        ctx.arc(32, 32, 28, 0, 2 * Math.PI);
+        ctx.fill();
+      } else {
+        // Pulse анимация
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        const radius = 28 * animationValue;
+        ctx.arc(32, 32, Math.max(10, radius), 0, 2 * Math.PI);
+        ctx.fill();
+        
+        // Синий акцент (маленький круг в центре)
+        ctx.fillStyle = accentColor;
+        ctx.beginPath();
+        ctx.arc(32, 32, 8, 0, 2 * Math.PI);
+        ctx.fill();
+      }
+      
+      // Обновление реального фавикона
+      updateFavicon(canvas.toDataURL('image/png'));
+    }
+
+    // Обновление фавикона
+    function updateFavicon(url) {
+      let link = document.querySelector("link[rel~='icon']");
+      if (!link) {
+        link = document.createElement('link');
+        link.rel = 'icon';
+        document.head.appendChild(link);
+      }
+      link.href = url;
+    }
+
+    // Обновление заголовка
+    function updateTitle() {
+      if (isTimerRunning && !isPaused) {
+        const hours = Math.floor(timerSeconds / 3600);
+        const minutes = Math.floor((timerSeconds % 3600) / 60);
+        const seconds = timerSeconds % 60;
+        document.title = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')} - Работаем`;
+      } else if (isPaused) {
+        const hours = Math.floor(timerSeconds / 3600);
+        const minutes = Math.floor((timerSeconds % 3600) / 60);
+        const seconds = timerSeconds % 60;
+        document.title = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')} - Пауза`;
+      } else {
+        document.title = 'Вариант 1: Классический - Звуки и анимация';
+      }
+    }
+
+    // Таймер
+    function startTimer() {
+      if (isTimerRunning) return;
+      isTimerRunning = true;
+      isPaused = false;
+      lastNotificationTime = 0;
+      document.getElementById('timerStatus').textContent = 'Работаем';
+      
+      timerInterval = setInterval(() => {
+        timerSeconds++;
+        updateTimerDisplay();
+        updateTitle();
+        
+        // Проверка на звуковое уведомление (каждые 30 минут)
+        if (timerSeconds >= lastNotificationTime + notificationInterval) {
+          playSound('chime');
+          lastNotificationTime = Math.floor(timerSeconds / notificationInterval) * notificationInterval;
+          console.log('🔔 Звуковое уведомление (30 минут)');
+        }
+      }, 1000);
+      
+      // Анимация фавикона (каждые 50ms)
+      const animationSpeed = 2000; // Normal speed
+      faviconInterval = setInterval(() => {
+        const time = Date.now() / animationSpeed;
+        const animationValue = 0.75 + Math.sin(time * Math.PI * 2) * 0.25;
+        drawFavicon(false, animationValue);
+      }, 50);
+      
+      drawFavicon(false, 1);
+    }
+
+    function pauseTimer() {
+      if (!isTimerRunning) return;
+      isPaused = !isPaused;
+      document.getElementById('timerStatus').textContent = isPaused ? 'На паузе' : 'Работаем';
+      
+      if (isPaused) {
+        clearInterval(timerInterval);
+        clearInterval(faviconInterval);
+        drawFavicon(true);
+      } else {
+        timerInterval = setInterval(() => {
+          timerSeconds++;
+          updateTimerDisplay();
+          updateTitle();
+          
+          if (timerSeconds >= lastNotificationTime + notificationInterval) {
+            playSound('chime');
+            lastNotificationTime = Math.floor(timerSeconds / notificationInterval) * notificationInterval;
+          }
+        }, 1000);
+        
+        const animationSpeed = 2000;
+        faviconInterval = setInterval(() => {
+          const time = Date.now() / animationSpeed;
+          const animationValue = 0.75 + Math.sin(time * Math.PI * 2) * 0.25;
+          drawFavicon(false, animationValue);
+        }, 50);
+      }
+      updateTitle();
+    }
+
+    function stopTimer() {
+      isTimerRunning = false;
+      isPaused = false;
+      timerSeconds = 0;
+      lastNotificationTime = 0;
+      
+      clearInterval(timerInterval);
+      clearInterval(faviconInterval);
+      
+      document.getElementById('timerStatus').textContent = 'Остановлен';
+      updateTimerDisplay();
+      updateTitle();
+      drawFavicon(true);
+    }
+
+    function updateTimerDisplay() {
+      const hours = Math.floor(timerSeconds / 3600);
+      const minutes = Math.floor((timerSeconds % 3600) / 60);
+      const seconds = timerSeconds % 60;
+      document.getElementById('timerTime').textContent = 
+        `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }
+
+    // Инициализация
+    initTone();
+    drawFavicon(true);
+    
+    // Быстрая демонстрация уведомлений (для теста)
+    setTimeout(() => {
+      console.log('Для теста: уведомления будут каждые 30 секунд вместо 30 минут');
+    }, 1000);
+  </script>
+</body>
+</html>
+

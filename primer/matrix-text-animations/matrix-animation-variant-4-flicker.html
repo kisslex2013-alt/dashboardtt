@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Матричная анимация - Вариант 4: Мерцание</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/framer-motion@11.0.0/dist/framer-motion.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    .dark .glass-effect {
+      background: rgba(31, 41, 55, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    @keyframes flicker {
+      0%, 100% { opacity: 1; filter: brightness(1); }
+      50% { opacity: 0.3; filter: brightness(2); }
+    }
+    @keyframes glow {
+      0%, 100% { text-shadow: 0 0 5px currentColor, 0 0 10px currentColor; }
+      50% { text-shadow: 0 0 20px currentColor, 0 0 30px currentColor, 0 0 40px currentColor; }
+    }
+  </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 min-h-screen p-8 transition-colors duration-300">
+  
+  <div class="max-w-4xl mx-auto">
+    
+    <!-- Заголовок -->
+    <div class="glass-effect rounded-xl p-6 mb-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+            Вариант 4: Мерцание
+          </h1>
+          <p class="text-gray-600 dark:text-gray-400">
+            Буквы мерцают при появлении с эффектом свечения
+          </p>
+        </div>
+        <div class="flex gap-2">
+          <button 
+            onclick="restartAnimation()"
+            class="glass-effect px-4 py-2 rounded-lg text-sm font-semibold hover:scale-105 transition-transform"
+          >
+            🔄 Повторить
+          </button>
+          <button 
+            onclick="document.body.classList.toggle('dark'); localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');"
+            class="glass-effect px-4 py-2 rounded-lg text-sm font-semibold hover:scale-105 transition-transform"
+          >
+            🌙 Тема
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Примеры -->
+    <div class="space-y-6">
+      
+      <!-- Пример 1: Мерцание при появлении -->
+      <div class="glass-effect rounded-xl p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Пример 1: Мерцание при появлении</h3>
+        <div class="text-4xl font-bold text-blue-600 dark:text-blue-400" id="example1">
+          <span class="matrix-text" data-text="растёт"></span>
+        </div>
+      </div>
+
+      <!-- Пример 2: Мерцание с свечением -->
+      <div class="glass-effect rounded-xl p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Пример 2: Мерцание с свечением</h3>
+        <div class="text-2xl font-bold text-green-600 dark:text-green-400" id="example2">
+          <span class="matrix-text" data-text="Ваш заработок растёт" data-glow="true"></span>
+        </div>
+      </div>
+
+      <!-- Пример 3: Длительное мерцание -->
+      <div class="glass-effect rounded-xl p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Пример 3: Длительное мерцание</h3>
+        <div class="text-xl font-bold text-purple-600 dark:text-purple-400" id="example3">
+          <span class="matrix-text" data-text="Тренд заработка показывает положительную динамику" data-long="true"></span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    // Загрузка темы
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark');
+    }
+
+    // Функция для создания мерцающей анимации
+    function createMatrixAnimation(container, text, delay = 0, letterDelay = 0.05, hasGlow = false, longFlicker = false) {
+      const letters = text.split('');
+      container.innerHTML = '';
+      
+      letters.forEach((letter, index) => {
+        const span = document.createElement('span');
+        span.textContent = letter === ' ' ? '\u00A0' : letter;
+        span.style.display = 'inline-block';
+        span.style.opacity = '0';
+        span.style.transform = 'translateY(10px) scale(0.8)';
+        
+        if (hasGlow) {
+          span.style.animation = 'glow 0.5s ease-in-out';
+        }
+        
+        container.appendChild(span);
+
+        // Анимация появления с мерцанием
+        setTimeout(() => {
+          const flickerCount = longFlicker ? 5 : 3;
+          let flickerIndex = 0;
+          
+          const flickerInterval = setInterval(() => {
+            if (flickerIndex < flickerCount) {
+              span.style.transition = 'all 0.1s ease-in-out';
+              span.style.opacity = flickerIndex % 2 === 0 ? '0.3' : '1';
+              span.style.filter = flickerIndex % 2 === 0 ? 'brightness(2)' : 'brightness(1)';
+              flickerIndex++;
+            } else {
+              clearInterval(flickerInterval);
+              span.style.transition = 'all 0.3s ease-out';
+              span.style.opacity = '1';
+              span.style.transform = 'translateY(0) scale(1)';
+              span.style.filter = 'brightness(1)';
+              
+              if (hasGlow) {
+                span.style.animation = 'glow 2s ease-in-out infinite';
+              }
+            }
+          }, 100);
+        }, (delay * 1000) + (index * letterDelay * 1000));
+      });
+    }
+
+    // Функция для перезапуска анимации
+    function restartAnimation() {
+      document.querySelectorAll('.matrix-text').forEach(el => {
+        const text = el.getAttribute('data-text');
+        const hasGlow = el.getAttribute('data-glow') === 'true';
+        const longFlicker = el.getAttribute('data-long') === 'true';
+        const container = el;
+        createMatrixAnimation(container, text, 0.1, 0.05, hasGlow, longFlicker);
+      });
+    }
+
+    // Инициализация анимаций
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        document.querySelectorAll('.matrix-text').forEach(el => {
+          const text = el.getAttribute('data-text');
+          const hasGlow = el.getAttribute('data-glow') === 'true';
+          const longFlicker = el.getAttribute('data-long') === 'true';
+          const container = el;
+          createMatrixAnimation(container, text, 0.1, 0.05, hasGlow, longFlicker);
+        });
+      }, 300);
+    });
+  </script>
+
+</body>
+</html>
+

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вариант 3: Компактные карточки</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body class="bg-gray-100 p-8">
+  
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-2xl font-bold mb-4 text-gray-800">Вариант 3: Компактные карточки</h1>
+    <p class="text-gray-600 mb-6">Каждая запись - мини-карточка внутри основной</p>
+    
+    <!-- Пример плашки -->
+    <div class="glass-effect rounded-xl p-4">
+      <!-- Заголовок -->
+      <div class="flex items-center justify-between mb-3 pb-3 border-b border-gray-200">
+        <div class="flex items-center gap-2">
+          <h3 class="text-base font-bold text-gray-800">29 Окт. 2025, СР</h3>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-500"><path d="M20 6 9 17l-5-5"/></svg>
+        </div>
+        <span class="text-xl font-bold text-blue-600">14000 ₽</span>
+      </div>
+      
+      <!-- Сетка мини-карточек -->
+      <div class="grid grid-cols-1 gap-2 mb-3">
+        <!-- Карточка записи 1 -->
+        <div class="flex items-center justify-between bg-gray-50 rounded-lg px-3 py-2 hover:bg-gray-100 transition-colors">
+          <div class="flex items-center gap-3">
+            <div class="flex flex-col">
+              <span class="text-xs font-mono text-gray-500">09:00</span>
+              <span class="text-xs font-mono text-gray-500">10:00</span>
+            </div>
+            <div class="h-10 w-px bg-gray-300"></div>
+            <div class="flex flex-col">
+              <span class="text-sm font-medium text-gray-700">Разработка</span>
+              <span class="text-xs text-gray-500">1 час</span>
+            </div>
+          </div>
+          <span class="text-base font-bold text-blue-600">6000 ₽</span>
+        </div>
+        
+        <!-- Карточка записи 2 -->
+        <div class="flex items-center justify-between bg-gray-50 rounded-lg px-3 py-2 hover:bg-gray-100 transition-colors">
+          <div class="flex items-center gap-3">
+            <div class="flex flex-col">
+              <span class="text-xs font-mono text-gray-500">09:00</span>
+              <span class="text-xs font-mono text-gray-500">10:00</span>
+            </div>
+            <div class="h-10 w-px bg-gray-300"></div>
+            <div class="flex flex-col">
+              <span class="text-sm font-medium text-gray-700">Разработка</span>
+              <span class="text-xs text-gray-500">1 час</span>
+            </div>
+          </div>
+          <span class="text-base font-bold text-blue-600">8000 ₽</span>
+        </div>
+        
+        <!-- Карточка записи 3 -->
+        <div class="flex items-center justify-between bg-gray-50 rounded-lg px-3 py-2 hover:bg-gray-100 transition-colors">
+          <div class="flex items-center gap-3">
+            <div class="flex flex-col">
+              <span class="text-xs font-mono text-gray-500">09:27</span>
+              <span class="text-xs font-mono text-gray-500">09:27</span>
+            </div>
+            <div class="h-10 w-px bg-gray-300"></div>
+            <div class="flex flex-col">
+              <span class="text-sm font-medium text-gray-700">Разработка</span>
+              <span class="text-xs text-gray-500">0 ч</span>
+            </div>
+          </div>
+          <span class="text-base font-bold text-blue-600">0 ₽</span>
+        </div>
+      </div>
+      
+      <!-- Итого -->
+      <div class="flex items-center justify-between pt-2 border-t border-gray-200">
+        <span class="text-sm font-semibold text-gray-600">Всего: 2.00 ч</span>
+        <span class="text-lg font-bold text-gray-800">14000 ₽</span>
+      </div>
+    </div>
+  </div>
+  
+</body>
+</html>
+

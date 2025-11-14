@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вариант 5 - Детальный (с подробной информацией)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body class="bg-gray-100 p-8">
+  <div class="max-w-7xl mx-auto space-y-6">
+    
+    <!-- StatisticsDashboard - Детальные карточки -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="glass-effect rounded-xl p-5">
+        <div class="flex items-center justify-between mb-3">
+          <h4 class="font-bold text-sm text-gray-700">Затрачено</h4>
+          <svg class="w-8 h-8 text-blue-500 opacity-50" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+        </div>
+        <p class="text-4xl font-bold text-blue-600 mb-2">155.10</p>
+        <p class="text-sm text-gray-600 mb-3">часов работы</p>
+        <div class="flex justify-between items-center text-xs">
+          <span class="text-green-600 font-semibold">↑ 12.5%</span>
+          <span class="text-gray-500">vs предыдущий период</span>
+        </div>
+        <div class="mt-3 pt-3 border-t">
+          <div class="flex justify-between text-xs text-gray-600">
+            <span>Мин/день:</span>
+            <span class="font-semibold">5.54 ч</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-effect rounded-xl p-5">
+        <div class="flex items-center justify-between mb-3">
+          <h4 class="font-bold text-sm text-gray-700">Перерывы</h4>
+          <svg class="w-8 h-8 text-teal-500 opacity-50" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+        </div>
+        <p class="text-4xl font-bold text-teal-600 mb-2">46.60</p>
+        <p class="text-sm text-gray-600 mb-3">часов перерывов</p>
+        <div class="mt-3 pt-3 border-t">
+          <div class="flex justify-between text-xs text-gray-600">
+            <span>Средний перерыв:</span>
+            <span class="font-semibold">1.66 ч</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-effect rounded-xl p-5">
+        <div class="flex items-center justify-between mb-3">
+          <h4 class="font-bold text-sm text-gray-700">Заработано</h4>
+          <svg class="w-8 h-8 text-green-500 opacity-50" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.16-1.46-3.27-3.4h1.96c.1 1.05.82 1.87 2.65 1.87 1.96 0 2.4-.98 2.4-1.59 0-.83-.44-1.61-2.67-2.14-2.48-.6-4.18-1.62-4.18-3.67 0-1.72 1.39-2.84 3.11-3.21V4h2.67v1.95c1.86.45 2.79 1.86 2.85 3.39H14.3c-.05-1.11-.64-1.87-2.22-1.87-1.5 0-2.4.68-2.4 1.64 0 .84.65 1.39 2.67 1.91s4.18 1.39 4.18 3.91c-.01 1.83-1.38 2.83-3.12 3.16z"/></svg>
+        </div>
+        <p class="text-4xl font-bold text-green-600 mb-2">79 245 ₽</p>
+        <p class="text-sm text-gray-600 mb-3">общий доход</p>
+        <div class="flex justify-between items-center text-xs">
+          <span class="text-green-600 font-semibold">↑ 8.3%</span>
+          <span class="text-gray-500">vs предыдущий период</span>
+        </div>
+        <div class="mt-3 pt-3 border-t">
+          <div class="flex justify-between text-xs text-gray-600">
+            <span>Средний доход/день:</span>
+            <span class="font-semibold">2 830 ₽</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-effect rounded-xl p-5">
+        <div class="flex items-center justify-between mb-3">
+          <h4 class="font-bold text-sm text-gray-700">Ставка</h4>
+          <svg class="w-8 h-8 text-purple-500 opacity-50" fill="currentColor" viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg>
+        </div>
+        <p class="text-4xl font-bold text-purple-600 mb-2">511 ₽/ч</p>
+        <p class="text-sm text-gray-600 mb-3">средняя ставка</p>
+        <div class="mt-3 pt-3 border-t">
+          <div class="flex justify-between text-xs text-gray-600">
+            <span>Макс. ставка:</span>
+            <span class="font-semibold">1000 ₽/ч</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-effect rounded-xl p-5">
+        <div class="flex items-center justify-between mb-3">
+          <h4 class="font-bold text-sm text-gray-700">Рабочих дней</h4>
+          <svg class="w-8 h-8 text-orange-500 opacity-50" fill="currentColor" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+        </div>
+        <p class="text-4xl font-bold text-orange-600 mb-2">28</p>
+        <p class="text-sm text-gray-600 mb-3">дней работы</p>
+        <div class="mt-3 pt-3 border-t">
+          <div class="flex justify-between text-xs text-gray-600">
+            <span>Из 31 дня месяца:</span>
+            <span class="font-semibold">90%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-effect rounded-xl p-5">
+        <div class="flex items-center justify-between mb-3">
+          <h4 class="font-bold text-sm text-gray-700">Выходных</h4>
+          <svg class="w-8 h-8 text-yellow-500 opacity-50" fill="currentColor" viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>
+        </div>
+        <p class="text-4xl font-bold text-yellow-600 mb-2">3</p>
+        <p class="text-sm text-gray-600 mb-3">дня отдыха</p>
+        <div class="mt-3 pt-3 border-t">
+          <div class="flex justify-between text-xs text-gray-600">
+            <span>Из 31 дня месяца:</span>
+            <span class="font-semibold">10%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PlanFactCompactView - Детальный аккордеон -->
+    <div class="glass-effect rounded-xl p-6">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-xl font-bold">План/факт заработка</h3>
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs rounded-full font-medium">Стандартный 5/2</span>
+          <span class="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">23 раб. дня</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="space-y-4">
+          <div class="p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-sm font-semibold">День</span>
+              <span class="text-xs bg-blue-100 px-2 py-1 rounded">0.25%</span>
+            </div>
+            <div class="flex justify-between items-baseline mb-2">
+              <span class="text-2xl font-bold text-blue-600">15 ₽</span>
+              <span class="text-sm text-gray-500">из 6 000 ₽</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2 mb-1">
+              <div class="bg-blue-500 h-2 rounded-full" style="width: 0.25%"></div>
+            </div>
+            <p class="text-xs text-gray-600">До цели: 5 985 ₽</p>
+          </div>
+
+          <div class="p-4 bg-purple-50 rounded-lg border-l-4 border-purple-500">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-sm font-semibold">Месяц</span>
+              <span class="text-xs bg-purple-100 px-2 py-1 rounded">57%</span>
+            </div>
+            <div class="flex justify-between items-baseline mb-2">
+              <span class="text-2xl font-bold text-purple-600">79 245 ₽</span>
+              <span class="text-sm text-gray-500">из 138 000 ₽</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2 mb-1">
+              <div class="bg-purple-500 h-2 rounded-full" style="width: 57%"></div>
+            </div>
+            <p class="text-xs text-gray-600">До цели: 58 755 ₽</p>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <div class="p-4 bg-green-50 rounded-lg border-l-4 border-green-500">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-sm font-semibold">1/2 месяца</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs bg-green-100 px-2 py-1 rounded">63%</span>
+                <span class="text-xs text-gray-500">выплата 25.10</span>
+              </div>
+            </div>
+            <div class="flex justify-between items-baseline mb-2">
+              <span class="text-2xl font-bold text-green-600">41 400 ₽</span>
+              <span class="text-sm text-gray-500">из 66 000 ₽</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2 mb-1">
+              <div class="bg-green-500 h-2 rounded-full" style="width: 63%"></div>
+            </div>
+            <p class="text-xs text-gray-600">До цели: 24 600 ₽</p>
+          </div>
+
+          <div class="p-4 bg-teal-50 rounded-lg border-l-4 border-teal-500">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-sm font-semibold">2/2 месяца</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs bg-teal-100 px-2 py-1 rounded">53%</span>
+                <span class="text-xs text-gray-500">выплата 10.11</span>
+              </div>
+            </div>
+            <div class="flex justify-between items-baseline mb-2">
+              <span class="text-2xl font-bold text-teal-600">37 845 ₽</span>
+              <span class="text-sm text-gray-500">из 72 000 ₽</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2 mb-1">
+              <div class="bg-teal-500 h-2 rounded-full" style="width: 53%"></div>
+            </div>
+            <p class="text-xs text-gray-600">До цели: 34 155 ₽</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4 mt-6 pt-6 border-t">
+        <div class="p-4 bg-orange-50 rounded-lg border-l-4 border-orange-500">
+          <p class="text-xs text-gray-600 mb-1">Заработано за год</p>
+          <p class="text-3xl font-bold text-orange-600">892 450 ₽</p>
+          <p class="text-xs text-gray-500 mt-2">Средний месяц: 89 245 ₽</p>
+        </div>
+        <div class="p-4 bg-red-50 rounded-lg border-l-4 border-red-500">
+          <p class="text-xs text-gray-600 mb-1">Всего за все время</p>
+          <p class="text-3xl font-bold text-red-600">2 458 320 ₽</p>
+          <p class="text-xs text-gray-500 mt-2">С начала работы</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- InsightsPanel - Детальные карточки -->
+    <div class="glass-effect rounded-xl p-6">
+      <h3 class="text-xl font-bold mb-6">Инсайты и рекомендации</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="p-5 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl border-l-4 border-blue-500">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="text-3xl">📅</span>
+            <h4 class="font-bold">Лучший день недели</h4>
+          </div>
+          <p class="text-sm text-gray-700 mb-2">Вы зарабатываете больше всего по понедельникам</p>
+          <div class="flex items-baseline gap-2 mb-3">
+            <span class="text-3xl font-bold text-blue-600">3 866 ₽</span>
+            <span class="text-sm text-gray-600">в среднем за день</span>
+          </div>
+          <div class="bg-blue-200 rounded p-2">
+            <p class="text-xs text-blue-800"><strong>Совет:</strong> Планируйте важные задачи на понедельник</p>
+          </div>
+        </div>
+
+        <div class="p-5 bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl border-l-4 border-purple-500">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="text-3xl">⏰</span>
+            <h4 class="font-bold">Пик продуктивности</h4>
+          </div>
+          <p class="text-sm text-gray-700 mb-2">Ваша максимальная ставка наблюдается с 03:00 до 04:00</p>
+          <div class="flex items-baseline gap-2 mb-3">
+            <span class="text-3xl font-bold text-purple-600">1000 ₽/ч</span>
+            <span class="text-sm text-gray-600">пиковая ставка</span>
+          </div>
+          <div class="bg-purple-200 rounded p-2">
+            <p class="text-xs text-purple-800"><strong>Совет:</strong> Работайте в это время для максимального дохода</p>
+          </div>
+        </div>
+
+        <div class="p-5 bg-gradient-to-br from-green-50 to-green-100 rounded-xl border-l-4 border-green-500">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="text-3xl">📈</span>
+            <h4 class="font-bold">Тренд заработка</h4>
+          </div>
+          <p class="text-sm text-gray-700 mb-2">За последний месяц ваш заработок растёт</p>
+          <div class="flex items-center gap-2 mb-3">
+            <span class="text-3xl font-bold text-green-600">↑ Рост</span>
+          </div>
+          <div class="bg-green-200 rounded p-2">
+            <p class="text-xs text-green-800"><strong>Отлично:</strong> Продолжайте в том же духе!</p>
+          </div>
+        </div>
+
+        <div class="p-5 bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl border-l-4 border-orange-500">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="text-3xl">🏆</span>
+            <h4 class="font-bold">Самая длинная сессия</h4>
+          </div>
+          <p class="text-sm text-gray-700 mb-2">Ваш рекорд продолжительности работы</p>
+          <div class="flex items-baseline gap-2 mb-1">
+            <span class="text-3xl font-bold text-orange-600">8.50 ч</span>
+          </div>
+          <p class="text-xs text-gray-600 mb-3">30.10.2024 — заработано 4 250 ₽</p>
+          <div class="bg-orange-200 rounded p-2">
+            <p class="text-xs text-orange-800"><strong>Заметка:</strong> Не забывайте делать перерывы</p>
+          </div>
+        </div>
+
+        <div class="p-5 bg-gradient-to-br from-green-50 to-green-100 rounded-xl border-l-4 border-green-500 col-span-full">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="text-3xl">⚡</span>
+            <h4 class="font-bold">Аномалия сегодня</h4>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <p class="text-sm text-gray-700 mb-2">Сегодня вы заработали выше среднего</p>
+              <div class="flex items-baseline gap-2">
+                <span class="text-3xl font-bold text-green-600">+25%</span>
+                <span class="text-sm text-gray-600">(15 ₽)</span>
+              </div>
+            </div>
+            <div class="bg-green-200 rounded p-3 flex items-center">
+              <p class="text-xs text-green-800"><strong>Отличная работа!</strong> Вы превысили средний показатель на четверть. Так держать!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
+

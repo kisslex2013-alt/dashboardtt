@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>List View - Вариант 5: Мини-карточки в сетке</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 2rem;
+    }
+    
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="max-w-7xl mx-auto">
+    <h1 class="text-3xl font-bold text-white mb-6">🎨 List View - Вариант 5: Мини-карточки в сетке</h1>
+    
+    <div class="glass-effect rounded-2xl p-6 mb-8">
+      <h2 class="text-xl font-bold mb-4">📝 Описание</h2>
+      <ul class="space-y-2 text-gray-700">
+        <li><strong>Концепция:</strong> Компактные мини-карточки в двухколоночной сетке</li>
+        <li><strong>Особенности:</strong>
+          <ul class="ml-6 mt-2 space-y-1">
+            <li>• 2 колонки карточек (на больших экранах)</li>
+            <li>• Каждый день - мини-карточка</li>
+            <li>• Компактный заголовок с датой и итогом</li>
+            <li>• Очень плотный список записей</li>
+            <li>• Прогресс-индикатор в углу карточки</li>
+            <li>• Минимальные отступы - много данных</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    
+    <!-- Сетка мини-карточек -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
+      
+      <!-- День 1: План не выполнен -->
+      <div class="glass-effect rounded-lg overflow-hidden hover:shadow-md transition-shadow relative">
+        <!-- Прогресс-индикатор в углу -->
+        <div class="absolute top-2 right-2 w-10 h-10">
+          <svg class="transform -rotate-90" viewBox="0 0 36 36">
+            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(0,0,0,0.1)" stroke-width="2.5"/>
+            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#EF4444" stroke-width="2.5" stroke-dasharray="33, 100"/>
+          </svg>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <span class="text-[9px] font-bold text-red-600">33%</span>
+          </div>
+        </div>
+        
+        <!-- Заголовок -->
+        <div class="bg-gradient-to-r from-red-50 to-white px-3 py-2 border-b border-red-200 border-l-3 border-l-red-500">
+          <div class="flex items-center justify-between pr-12">
+            <div class="flex items-center gap-1.5">
+              <svg class="w-3 h-3 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+              </svg>
+              <span class="font-bold text-sm text-gray-800">29 Окт • ПН</span>
+            </div>
+            <div class="text-right">
+              <p class="text-sm font-bold text-red-600">2000₽</p>
+              <p class="text-[10px] text-gray-500">4.78ч</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Записи -->
+        <div class="p-2">
+          <div class="space-y-1">
+            <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-50 transition-colors">
+              <div class="flex items-center gap-1.5 flex-1 min-w-0">
+                <span class="text-[10px] text-gray-500 font-mono">13:19-14:49</span>
+                <span class="w-1 h-1 rounded-full bg-blue-500 flex-shrink-0"></span>
+                <span class="text-[11px] truncate">remix</span>
+              </div>
+              <span class="text-xs font-semibold text-gray-800 ml-2">1000₽</span>
+            </div>
+            
+            <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-50 transition-colors">
+              <div class="flex items-center gap-1.5 flex-1 min-w-0">
+                <span class="text-[10px] text-gray-500 font-mono">09:20-12:37</span>
+                <span class="w-1 h-1 rounded-full bg-blue-500 flex-shrink-0"></span>
+                <span class="text-[11px] truncate">remix</span>
+                <span class="text-[9px] px-1 py-0.5 rounded bg-orange-100 text-orange-700">42m</span>
+              </div>
+              <span class="text-xs font-semibold text-gray-800 ml-2">1000₽</span>
+            </div>
+          </div>
+          
+          <!-- Инсайты -->
+          <div class="mt-2 pt-2 border-t border-gray-200 flex items-center justify-between text-[10px] text-gray-600">
+            <div class="flex items-center gap-2">
+              <span>🕐 3:17</span>
+              <span>⚠ 0:42</span>
+              <span>💰 418₽</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- День 2: На пути -->
+      <div class="glass-effect rounded-lg overflow-hidden hover:shadow-md transition-shadow relative">
+        <div class="absolute top-2 right-2 w-10 h-10">
+          <svg class="transform -rotate-90" viewBox="0 0 36 36">
+            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(0,0,0,0.1)" stroke-width="2.5"/>
+            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#F59E0B" stroke-width="2.5" stroke-dasharray="50, 100"/>
+          </svg>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <span class="text-[9px] font-bold text-yellow-600">50%</span>
+          </div>
+        </div>
+        
+        <div class="bg-gradient-to-r from-yellow-50 to-white px-3 py-2 border-b border-yellow-200 border-l-3 border-l-yellow-500">
+          <div class="flex items-center justify-between pr-12">
+            <div class="flex items-center gap-1.5">
+              <svg class="w-3 h-3 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+              </svg>
+              <span class="font-bold text-sm text-gray-800">28 Окт • ВС</span>
+            </div>
+            <div class="text-right">
+              <p class="text-sm font-bold text-yellow-600">3000₽</p>
+              <p class="text-[10px] text-gray-500">5.45ч</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="p-2">
+          <div class="space-y-1">
+            <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-50 transition-colors">
+              <div class="flex items-center gap-1.5 flex-1 min-w-0">
+                <span class="text-[10px] text-gray-500 font-mono">14:34-16:28</span>
+                <span class="w-1 h-1 rounded-full bg-purple-500 flex-shrink-0"></span>
+                <span class="text-[11px] truncate">Разработка</span>
+              </div>
+              <span class="text-xs font-semibold text-gray-800 ml-2">1100₽</span>
+            </div>
+            
+            <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-50 transition-colors">
+              <div class="flex items-center gap-1.5 flex-1 min-w-0">
+                <span class="text-[10px] text-gray-500 font-mono">13:49-14:15</span>
+                <span class="w-1 h-1 rounded-full bg-blue-500 flex-shrink-0"></span>
+                <span class="text-[11px] truncate">Дизайн</span>
+                <span class="text-[9px] px-1 py-0.5 rounded bg-orange-100 text-orange-700">19m</span>
+              </div>
+              <span class="text-xs font-semibold text-gray-800 ml-2">300₽</span>
+            </div>
+            
+            <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-50 transition-colors">
+              <div class="flex items-center gap-1.5 flex-1 min-w-0">
+                <span class="text-[10px] text-gray-500 font-mono">09:22-12:37</span>
+                <span class="w-1 h-1 rounded-full bg-orange-500 flex-shrink-0"></span>
+                <span class="text-[11px] truncate">Маркетинг</span>
+                <span class="text-[9px] px-1 py-0.5 rounded bg-orange-100 text-orange-700">1h12m</span>
+              </div>
+              <span class="text-xs font-semibold text-gray-800 ml-2">1600₽</span>
+            </div>
+          </div>
+          
+          <div class="mt-2 pt-2 border-t border-gray-200 flex items-center justify-between text-[10px] text-gray-600">
+            <div class="flex items-center gap-2">
+              <span>🕐 3:15</span>
+              <span>⚠ 1:12</span>
+              <span>💰 558₽</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- День 3: План выполнен -->
+      <div class="glass-effect rounded-lg overflow-hidden hover:shadow-md transition-shadow relative">
+        <div class="absolute top-2 right-2 w-10 h-10">
+          <svg class="transform -rotate-90" viewBox="0 0 36 36">
+            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(0,0,0,0.1)" stroke-width="2.5"/>
+            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#10B981" stroke-width="2.5" stroke-dasharray="100, 100"/>
+          </svg>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <span class="text-[9px] font-bold text-green-600">125%</span>
+          </div>
+        </div>
+        
+        <div class="bg-gradient-to-r from-green-50 to-white px-3 py-2 border-b border-green-200 border-l-3 border-l-green-500">
+          <div class="flex items-center justify-between pr-12">
+            <div class="flex items-center gap-1.5">
+              <svg class="w-3 h-3 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              </svg>
+              <span class="font-bold text-sm text-gray-800">27 Окт • СБ</span>
+            </div>
+            <div class="text-right">
+              <p class="text-sm font-bold text-green-600">7500₽</p>
+              <p class="text-[10px] text-gray-500">7.12ч</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="p-2">
+          <div class="space-y-1">
+            <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-50 transition-colors">
+              <div class="flex items-center gap-1.5 flex-1 min-w-0">
+                <span class="text-[10px] text-gray-500 font-mono">09:36-16:43</span>
+                <span class="w-1 h-1 rounded-full bg-blue-500 flex-shrink-0"></span>
+                <span class="text-[11px] truncate">remix</span>
+              </div>
+              <span class="text-xs font-semibold text-gray-800 ml-2">7500₽</span>
+            </div>
+          </div>
+          
+          <div class="mt-2 pt-2 border-t border-gray-200 flex items-center justify-between text-[10px] text-gray-600">
+            <div class="flex items-center gap-2">
+              <span>🕐 7:12</span>
+              <span>⚠ —</span>
+              <span>💰 1054₽</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- День 4: Пример с одной записью -->
+      <div class="glass-effect rounded-lg overflow-hidden hover:shadow-md transition-shadow relative">
+        <div class="absolute top-2 right-2 w-10 h-10">
+          <svg class="transform -rotate-90" viewBox="0 0 36 36">
+            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(0,0,0,0.1)" stroke-width="2.5"/>
+            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#10B981" stroke-width="2.5" stroke-dasharray="92, 100"/>
+          </svg>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <span class="text-[9px] font-bold text-green-600">92%</span>
+          </div>
+        </div>
+        
+        <div class="bg-gradient-to-r from-green-50 to-white px-3 py-2 border-b border-green-200 border-l-3 border-l-green-500">
+          <div class="flex items-center justify-between pr-12">
+            <div class="flex items-center gap-1.5">
+              <svg class="w-3 h-3 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              </svg>
+              <span class="font-bold text-sm text-gray-800">26 Окт • ПТ</span>
+            </div>
+            <div class="text-right">
+              <p class="text-sm font-bold text-green-600">5500₽</p>
+              <p class="text-[10px] text-gray-500">5.50ч</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="p-2">
+          <div class="space-y-1">
+            <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-50 transition-colors">
+              <div class="flex items-center gap-1.5 flex-1 min-w-0">
+                <span class="text-[10px] text-gray-500 font-mono">10:00-15:30</span>
+                <span class="w-1 h-1 rounded-full bg-purple-500 flex-shrink-0"></span>
+                <span class="text-[11px] truncate">Разработка</span>
+              </div>
+              <span class="text-xs font-semibold text-gray-800 ml-2">5500₽</span>
+            </div>
+          </div>
+          
+          <div class="mt-2 pt-2 border-t border-gray-200 flex items-center justify-between text-[10px] text-gray-600">
+            <div class="flex items-center gap-2">
+              <span>🕐 5:30</span>
+              <span>⚠ —</span>
+              <span>💰 1000₽</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+    
+    <!-- Примечания -->
+    <div class="glass-effect rounded-2xl p-6 mt-8">
+      <h2 class="text-xl font-bold mb-4">💡 Преимущества варианта</h2>
+      <ul class="space-y-2 text-gray-700">
+        <li>✅ Двухколоночная сетка - в 2 раза больше дней на экране</li>
+        <li>✅ Очень компактные карточки - минимум пустого места</li>
+        <li>✅ Круговой прогресс в углу - не занимает место</li>
+        <li>✅ Цветная левая граница - быстрая оценка статуса</li>
+        <li>✅ Плотный список записей - всё на виду</li>
+        <li>✅ Инсайты в футере каждой карточки</li>
+        <li>✅ Hover-эффекты для интерактивности</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>
+

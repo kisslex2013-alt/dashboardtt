@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Планы развития - Вариант 2: Табличный вид</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .dark .glass-effect {
+      background: rgba(31, 41, 55, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    table {
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+    th, td {
+      border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+    }
+    .dark th, .dark td {
+      border-bottom: 1px solid rgba(55, 65, 81, 0.5);
+    }
+  </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 min-h-screen p-8 transition-colors duration-300">
+  
+  <div class="max-w-6xl mx-auto">
+    
+    <!-- Заголовок -->
+    <div class="glass-effect rounded-xl p-6 mb-6">
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Вариант 2: Табличный вид</h1>
+      <p class="text-gray-600 dark:text-gray-400">Структурированная таблица с категориями в колонках</p>
+    </div>
+
+    <!-- Планы развития -->
+    <div class="space-y-6">
+      
+      <!-- Критичные задачи -->
+      <div class="glass-effect rounded-xl p-6 border border-red-200 dark:border-red-700">
+        <div class="flex items-center gap-2 mb-4">
+          <span class="w-2 h-2 rounded-full bg-red-500"></span>
+          <h2 class="text-lg font-bold text-red-600 dark:text-red-400">
+            Критичные задачи (5)
+          </h2>
+        </div>
+        
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr>
+                <th class="text-left py-3 px-4 font-semibold text-green-600 dark:text-green-400 bg-green-50/50 dark:bg-green-900/20 rounded-tl-lg">
+                  ✅ Выполнено (2)
+                </th>
+                <th class="text-left py-3 px-4 font-semibold text-orange-600 dark:text-orange-400 bg-orange-50/50 dark:bg-orange-900/20">
+                  ⚠️ В разработке (2)
+                </th>
+                <th class="text-left py-3 px-4 font-semibold text-yellow-600 dark:text-yellow-400 bg-yellow-50/50 dark:bg-yellow-900/20 rounded-tr-lg">
+                  📋 Отложено (1)
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="py-3 px-4 text-gray-700 dark:text-gray-300 align-top">
+                  <div class="space-y-2">
+                    <div class="glass-effect rounded-lg p-3 border border-green-200 dark:border-green-700">
+                      <h5 class="font-semibold text-gray-900 dark:text-white text-sm mb-1">
+                        Добавить систему уведомлений
+                      </h5>
+                      <p class="text-xs text-gray-600 dark:text-gray-400">Реализовать уведомления о важных событиях</p>
+                    </div>
+                    <div class="glass-effect rounded-lg p-3 border border-green-200 dark:border-green-700">
+                      <h5 class="font-semibold text-gray-900 dark:text-white text-sm mb-1">
+                        Оптимизировать производительность
+                      </h5>
+                      <p class="text-xs text-gray-600 dark:text-gray-400">Улучшить скорость загрузки данных</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-3 px-4 text-gray-700 dark:text-gray-300 align-top">
+                  <div class="space-y-2">
+                    <div class="glass-effect rounded-lg p-3 border border-orange-200 dark:border-orange-700">
+                      <h5 class="font-semibold text-gray-900 dark:text-white text-sm mb-1">
+                        Добавить экспорт данных
+                      </h5>
+                      <p class="text-xs text-gray-600 dark:text-gray-400">Реализовать экспорт в Excel и PDF</p>
+                    </div>
+                    <div class="glass-effect rounded-lg p-3 border border-orange-200 dark:border-orange-700">
+                      <h5 class="font-semibold text-gray-900 dark:text-white text-sm mb-1">
+                        Улучшить мобильную версию
+                      </h5>
+                      <p class="text-xs text-gray-600 dark:text-gray-400">Адаптировать интерфейс для мобильных устройств</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-3 px-4 text-gray-700 dark:text-gray-300 align-top">
+                  <div class="space-y-2">
+                    <div class="glass-effect rounded-lg p-3 border border-yellow-200 dark:border-yellow-700">
+                      <h5 class="font-semibold text-gray-900 dark:text-white text-sm mb-1">
+                        Добавить интеграцию с календарем
+                      </h5>
+                      <p class="text-xs text-gray-600 dark:text-gray-400">Синхронизация с Google Calendar</p>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <!-- Важные задачи -->
+      <div class="glass-effect rounded-xl p-6 border border-orange-200 dark:border-orange-700">
+        <div class="flex items-center gap-2 mb-4">
+          <span class="w-2 h-2 rounded-full bg-orange-500"></span>
+          <h2 class="text-lg font-bold text-orange-600 dark:text-orange-400">
+            Важные задачи (4)
+          </h2>
+        </div>
+        
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr>
+                <th class="text-left py-3 px-4 font-semibold text-green-600 dark:text-green-400 bg-green-50/50 dark:bg-green-900/20 rounded-tl-lg">
+                  ✅ Выполнено (1)
+                </th>
+                <th class="text-left py-3 px-4 font-semibold text-orange-600 dark:text-orange-400 bg-orange-50/50 dark:bg-orange-900/20">
+                  ⚠️ В разработке (2)
+                </th>
+                <th class="text-left py-3 px-4 font-semibold text-yellow-600 dark:text-yellow-400 bg-yellow-50/50 dark:bg-yellow-900/20 rounded-tr-lg">
+                  📋 Отложено (1)
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="py-3 px-4 text-gray-700 dark:text-gray-300 align-top">
+                  <div class="space-y-2">
+                    <div class="glass-effect rounded-lg p-3 border border-green-200 dark:border-green-700">
+                      <h5 class="font-semibold text-gray-900 dark:text-white text-sm mb-1">
+                        Добавить фильтры для записей
+                      </h5>
+                      <p class="text-xs text-gray-600 dark:text-gray-400">Фильтрация по дате, категории и статусу</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-3 px-4 text-gray-700 dark:text-gray-300 align-top">
+                  <div class="space-y-2">
+                    <div class="glass-effect rounded-lg p-3 border border-orange-200 dark:border-orange-700">
+                      <h5 class="font-semibold text-gray-900 dark:text-white text-sm mb-1">
+                        Улучшить дизайн карточек
+                      </h5>
+                      <p class="text-xs text-gray-600 dark:text-gray-400">Обновить стиль карточек статистики</p>
+                    </div>
+                    <div class="glass-effect rounded-lg p-3 border border-orange-200 dark:border-orange-700">
+                      <h5 class="font-semibold text-gray-900 dark:text-white text-sm mb-1">
+                        Добавить поиск по записям
+                      </h5>
+                      <p class="text-xs text-gray-600 dark:text-gray-400">Поиск по описанию и категориям</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-3 px-4 text-gray-700 dark:text-gray-300 align-top">
+                  <div class="space-y-2">
+                    <div class="glass-effect rounded-lg p-3 border border-yellow-200 dark:border-yellow-700">
+                      <h5 class="font-semibold text-gray-900 dark:text-white text-sm mb-1">
+                        Добавить темную тему
+                      </h5>
+                      <p class="text-xs text-gray-600 dark:text-gray-400">Поддержка темной темы интерфейса</p>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+    </div>
+    
+  </div>
+  
+  <script>
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+      localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+    }
+    
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark');
+    }
+  </script>
+  
+</body>
+</html>
+

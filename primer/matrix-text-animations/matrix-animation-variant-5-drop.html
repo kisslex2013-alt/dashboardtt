@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Матричная анимация - Вариант 5: Падение</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/framer-motion@11.0.0/dist/framer-motion.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    .dark .glass-effect {
+      background: rgba(31, 41, 55, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    @keyframes bounce {
+      0% { transform: translateY(-50px) scale(0.5); }
+      60% { transform: translateY(5px) scale(1.1); }
+      80% { transform: translateY(-2px) scale(0.95); }
+      100% { transform: translateY(0) scale(1); }
+    }
+  </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 min-h-screen p-8 transition-colors duration-300">
+  
+  <div class="max-w-4xl mx-auto">
+    
+    <!-- Заголовок -->
+    <div class="glass-effect rounded-xl p-6 mb-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+            Вариант 5: Падение
+          </h1>
+          <p class="text-gray-600 dark:text-gray-400">
+            Буквы падают сверху с эффектом гравитации и отскока
+          </p>
+        </div>
+        <div class="flex gap-2">
+          <button 
+            onclick="restartAnimation()"
+            class="glass-effect px-4 py-2 rounded-lg text-sm font-semibold hover:scale-105 transition-transform"
+          >
+            🔄 Повторить
+          </button>
+          <button 
+            onclick="document.body.classList.toggle('dark'); localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');"
+            class="glass-effect px-4 py-2 rounded-lg text-sm font-semibold hover:scale-105 transition-transform"
+          >
+            🌙 Тема
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Примеры -->
+    <div class="space-y-6">
+      
+      <!-- Пример 1: Падение с отскоком -->
+      <div class="glass-effect rounded-xl p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Пример 1: Падение с отскоком</h3>
+        <div class="text-4xl font-bold text-blue-600 dark:text-blue-400" id="example1">
+          <span class="matrix-text" data-text="растёт"></span>
+        </div>
+      </div>
+
+      <!-- Пример 2: Падение с задержкой -->
+      <div class="glass-effect rounded-xl p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Пример 2: Падение с задержкой</h3>
+        <div class="text-2xl font-bold text-green-600 dark:text-green-400" id="example2">
+          <span class="matrix-text" data-text="Ваш заработок растёт"></span>
+        </div>
+      </div>
+
+      <!-- Пример 3: Каскадное падение -->
+      <div class="glass-effect rounded-xl p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Пример 3: Каскадное падение</h3>
+        <div class="text-xl font-bold text-purple-600 dark:text-purple-400" id="example3">
+          <span class="matrix-text" data-text="Тренд заработка показывает положительную динамику" data-cascade="true"></span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    // Загрузка темы
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark');
+    }
+
+    // Функция для создания анимации падения
+    function createMatrixAnimation(container, text, delay = 0, letterDelay = 0.05, cascade = false) {
+      const letters = text.split('');
+      container.innerHTML = '';
+      
+      letters.forEach((letter, index) => {
+        const span = document.createElement('span');
+        span.textContent = letter === ' ' ? '\u00A0' : letter;
+        span.style.display = 'inline-block';
+        span.style.opacity = '0';
+        
+        // Вычисляем высоту падения (для каскада - случайная)
+        const dropHeight = cascade ? Math.random() * 100 + 50 : 80;
+        const bounceDelay = cascade ? Math.random() * 0.3 : 0;
+        
+        span.style.transform = `translateY(-${dropHeight}px) rotate(${cascade ? Math.random() * 20 - 10 : 0}deg) scale(0.5)`;
+        span.style.opacity = '0';
+        
+        container.appendChild(span);
+
+        // Анимация падения
+        setTimeout(() => {
+          span.style.transition = 'all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+          span.style.opacity = '1';
+          span.style.transform = 'translateY(0) rotate(0deg) scale(1)';
+          
+          // Добавляем небольшой отскок в конце
+          setTimeout(() => {
+            span.style.transition = 'transform 0.2s ease-out';
+            span.style.transform = 'translateY(-3px) scale(1.05)';
+            setTimeout(() => {
+              span.style.transform = 'translateY(0) scale(1)';
+            }, 200);
+          }, 600);
+        }, (delay * 1000) + (index * letterDelay * 1000) + (bounceDelay * 1000));
+      });
+    }
+
+    // Функция для перезапуска анимации
+    function restartAnimation() {
+      document.querySelectorAll('.matrix-text').forEach(el => {
+        const text = el.getAttribute('data-text');
+        const cascade = el.getAttribute('data-cascade') === 'true';
+        const container = el;
+        createMatrixAnimation(container, text, 0.1, 0.05, cascade);
+      });
+    }
+
+    // Инициализация анимаций
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        document.querySelectorAll('.matrix-text').forEach(el => {
+          const text = el.getAttribute('data-text');
+          const cascade = el.getAttribute('data-cascade') === 'true';
+          const container = el;
+          createMatrixAnimation(container, text, 0.1, 0.05, cascade);
+        });
+      }, 300);
+    });
+  </script>
+
+</body>
+</html>
+

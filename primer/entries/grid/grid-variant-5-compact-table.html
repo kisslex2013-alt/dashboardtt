@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grid View - Вариант 5: Компактная таблица</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 2rem;
+    }
+    
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    
+    .status-ribbon {
+      position: absolute;
+      top: 12px;
+      right: -32px;
+      transform: rotate(45deg);
+      width: 120px;
+      text-align: center;
+      padding: 4px 0;
+      font-size: 10px;
+      font-weight: bold;
+      color: white;
+      text-transform: uppercase;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+  <div class="max-w-7xl mx-auto">
+    <h1 class="text-3xl font-bold text-white mb-6">🎨 Grid View - Вариант 5: Компактная таблица</h1>
+    
+    <div class="glass-effect rounded-2xl p-6 mb-8">
+      <h2 class="text-xl font-bold mb-4">📝 Описание</h2>
+      <ul class="space-y-2 text-gray-700">
+        <li><strong>Концепция:</strong> Максимальная информативность в компактном формате</li>
+        <li><strong>Особенности:</strong>
+          <ul class="ml-6 mt-2 space-y-1">
+            <li>• Табличное отображение записей</li>
+            <li>• Цветная лента статуса в углу (ribbon)</li>
+            <li>• Вертикальный прогресс-бар слева</li>
+            <li>• Компактная таблица с чередующимися строками</li>
+            <li>• Футер с итогами и процентом</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    
+    <!-- Сетка карточек -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      
+      <!-- Карточка 1: Успех -->
+      <div class="glass-effect rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-300 relative">
+        <!-- Лента статуса -->
+        <div class="status-ribbon bg-green-500">Выполнено</div>
+        
+        <div class="flex">
+          <!-- Вертикальный прогресс-бар -->
+          <div class="w-2 bg-gray-200">
+            <div class="bg-gradient-to-b from-green-400 to-emerald-600 w-full" style="height: 100%;"></div>
+          </div>
+          
+          <div class="flex-1 p-5">
+            <!-- Заголовок -->
+            <div class="mb-4">
+              <h3 class="text-xl font-bold text-gray-800">28 Октября 2025</h3>
+              <div class="flex items-center justify-between mt-1">
+                <p class="text-sm text-gray-500">Понедельник</p>
+                <span class="text-xs font-bold px-2 py-1 rounded bg-green-100 text-green-700">106%</span>
+              </div>
+            </div>
+            
+            <!-- Таблица записей -->
+            <div class="mb-4">
+              <table class="w-full text-xs">
+                <thead>
+                  <tr class="border-b border-gray-300">
+                    <th class="text-left py-2 text-gray-600 font-semibold">Время</th>
+                    <th class="text-left py-2 text-gray-600 font-semibold">Категория</th>
+                    <th class="text-right py-2 text-gray-600 font-semibold">Сумма</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="bg-blue-50/50 hover:bg-blue-100/50 transition-colors">
+                    <td class="py-2 text-gray-700">09:00-13:00</td>
+                    <td class="py-2">
+                      <span class="inline-flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                        <span class="text-gray-800 font-medium">Дизайн</span>
+                      </span>
+                    </td>
+                    <td class="py-2 text-right font-bold text-gray-800">4000 ₽</td>
+                  </tr>
+                  <tr class="hover:bg-gray-50 transition-colors">
+                    <td class="py-2 text-gray-700">14:00-18:30</td>
+                    <td class="py-2">
+                      <span class="inline-flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full bg-purple-500"></span>
+                        <span class="text-gray-800 font-medium">Разработка</span>
+                      </span>
+                    </td>
+                    <td class="py-2 text-right font-bold text-gray-800">4500 ₽</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            
+            <!-- Итого -->
+            <div class="border-t-2 border-green-300 pt-3">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-[10px] text-gray-500">ИТОГО ЗА ДЕНЬ</p>
+                  <p class="text-sm text-gray-600">8.5 часов работы</p>
+                </div>
+                <p class="text-2xl font-bold text-green-600">8500 ₽</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Карточка 2: В процессе -->
+      <div class="glass-effect rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-300 relative">
+        <!-- Лента статуса -->
+        <div class="status-ribbon bg-yellow-500">На пути</div>
+        
+        <div class="flex">
+          <!-- Вертикальный прогресс-бар -->
+          <div class="w-2 bg-gray-200">
+            <div class="bg-gradient-to-b from-yellow-400 to-amber-600 w-full" style="height: 69%;"></div>
+          </div>
+          
+          <div class="flex-1 p-5">
+            <!-- Заголовок -->
+            <div class="mb-4">
+              <h3 class="text-xl font-bold text-gray-800">27 Октября 2025</h3>
+              <div class="flex items-center justify-between mt-1">
+                <p class="text-sm text-gray-500">Воскресенье</p>
+                <span class="text-xs font-bold px-2 py-1 rounded bg-yellow-100 text-yellow-700">69%</span>
+              </div>
+            </div>
+            
+            <!-- Таблица записей -->
+            <div class="mb-4">
+              <table class="w-full text-xs">
+                <thead>
+                  <tr class="border-b border-gray-300">
+                    <th class="text-left py-2 text-gray-600 font-semibold">Время</th>
+                    <th class="text-left py-2 text-gray-600 font-semibold">Категория</th>
+                    <th class="text-right py-2 text-gray-600 font-semibold">Сумма</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="bg-orange-50/50 hover:bg-orange-100/50 transition-colors">
+                    <td class="py-2 text-gray-700">10:00-13:00</td>
+                    <td class="py-2">
+                      <span class="inline-flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full bg-orange-500"></span>
+                        <span class="text-gray-800 font-medium">Маркетинг</span>
+                      </span>
+                    </td>
+                    <td class="py-2 text-right font-bold text-gray-800">1800 ₽</td>
+                  </tr>
+                  <tr class="hover:bg-gray-50 transition-colors">
+                    <td class="py-2 text-gray-700">14:00-16:30</td>
+                    <td class="py-2">
+                      <span class="inline-flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                        <span class="text-gray-800 font-medium">Менеджмент</span>
+                      </span>
+                    </td>
+                    <td class="py-2 text-right font-bold text-gray-800">3700 ₽</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            
+            <!-- Итого -->
+            <div class="border-t-2 border-yellow-300 pt-3">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-[10px] text-gray-500">ИТОГО ЗА ДЕНЬ</p>
+                  <p class="text-sm text-gray-600">5.5 часов работы</p>
+                </div>
+                <p class="text-2xl font-bold text-yellow-600">5500 ₽</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Карточка 3: Не выполнено -->
+      <div class="glass-effect rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-300 relative">
+        <!-- Лента статуса -->
+        <div class="status-ribbon bg-red-500">Неудача</div>
+        
+        <div class="flex">
+          <!-- Вертикальный прогресс-бар -->
+          <div class="w-2 bg-gray-200">
+            <div class="bg-gradient-to-b from-red-400 to-rose-600 w-full" style="height: 25%;"></div>
+          </div>
+          
+          <div class="flex-1 p-5">
+            <!-- Заголовок -->
+            <div class="mb-4">
+              <h3 class="text-xl font-bold text-gray-800">26 Октября 2025</h3>
+              <div class="flex items-center justify-between mt-1">
+                <p class="text-sm text-gray-500">Суббота</p>
+                <span class="text-xs font-bold px-2 py-1 rounded bg-red-100 text-red-700">25%</span>
+              </div>
+            </div>
+            
+            <!-- Таблица записей -->
+            <div class="mb-4">
+              <table class="w-full text-xs">
+                <thead>
+                  <tr class="border-b border-gray-300">
+                    <th class="text-left py-2 text-gray-600 font-semibold">Время</th>
+                    <th class="text-left py-2 text-gray-600 font-semibold">Категория</th>
+                    <th class="text-right py-2 text-gray-600 font-semibold">Сумма</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="bg-cyan-50/50 hover:bg-cyan-100/50 transition-colors">
+                    <td class="py-2 text-gray-700">15:00-17:00</td>
+                    <td class="py-2">
+                      <span class="inline-flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full bg-cyan-500"></span>
+                        <span class="text-gray-800 font-medium">Консультации</span>
+                      </span>
+                    </td>
+                    <td class="py-2 text-right font-bold text-gray-800">2000 ₽</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            
+            <!-- Итого -->
+            <div class="border-t-2 border-red-300 pt-3">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-[10px] text-gray-500">ИТОГО ЗА ДЕНЬ</p>
+                  <p class="text-sm text-gray-600">2.0 часа работы</p>
+                </div>
+                <p class="text-2xl font-bold text-red-600">2000 ₽</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+    
+    <!-- Примечания -->
+    <div class="glass-effect rounded-2xl p-6 mt-8">
+      <h2 class="text-xl font-bold mb-4">💡 Преимущества варианта</h2>
+      <ul class="space-y-2 text-gray-700">
+        <li>✅ Компактное табличное представление - много данных в малом пространстве</li>
+        <li>✅ Цветная лента (ribbon) в углу - яркий визуальный маркер</li>
+        <li>✅ Вертикальный прогресс-бар - моментальная оценка</li>
+        <li>✅ Чередующиеся строки - легкое чтение таблицы</li>
+        <li>✅ Процент выполнения в бейдже справа от даты</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>
+

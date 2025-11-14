@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вариант 5: Компактный список с expand/collapse</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .glass-effect {
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(17, 24, 39, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .glass-card {
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .animate-fade-in {
+      animation: fadeIn 0.3s ease-out;
+    }
+    .toggle-switch-sm {
+      width: 2.5rem;
+      height: 1.25rem;
+    }
+    .toggle-switch-sm span {
+      width: 1rem;
+      height: 1rem;
+    }
+  </style>
+</head>
+<body class="bg-gray-900 text-white p-8">
+  <div class="max-w-2xl mx-auto">
+    <h1 class="text-2xl font-bold mb-4">Вариант 5: Компактный список с expand/collapse</h1>
+    
+    <!-- Модальное окно -->
+    <div class="glass-effect rounded-xl p-6 w-full shadow-2xl max-h-[90vh] flex flex-col animate-fade-in">
+      <!-- Заголовок -->
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl font-bold text-white flex items-center gap-2">
+          <span>🔊</span>
+          Звуки и анимация
+        </h2>
+        <button class="glass-card p-2 rounded-lg hover:bg-gray-700/50 transition-colors">✕</button>
+      </div>
+
+      <!-- Компактный список -->
+      <div class="space-y-1 overflow-y-auto flex-1">
+        <!-- Строка: Звуковые уведомления (развернута) -->
+        <div class="glass-card rounded-lg overflow-hidden">
+          <div class="px-4 py-2.5 flex items-center justify-between hover:bg-gray-700/50 transition-colors">
+            <div class="flex items-center gap-3 flex-1">
+              <span class="text-xl">🔊</span>
+              <div class="flex-1">
+                <div class="text-sm font-semibold">Звуковые уведомления</div>
+                <div class="text-xs text-gray-400 mt-0.5">Интервал: 30 мин | Звук: Мелодия</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <button class="relative toggle-switch-sm rounded-full bg-blue-500">
+                <span class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full translate-x-5"></span>
+              </button>
+              <button class="text-gray-400 hover:text-gray-300 transition-colors">▼</button>
+            </div>
+          </div>
+          <div class="px-4 pb-3 pt-2 border-t border-gray-700 space-y-3">
+            <div>
+              <label class="text-xs font-semibold text-gray-300 mb-2 block">Интервал</label>
+              <select class="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm">
+                <option>30 минут</option>
+                <option>1 час</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Строка: Напоминания о перерывах (свернута) -->
+        <div class="glass-card rounded-lg overflow-hidden">
+          <div class="px-4 py-2.5 flex items-center justify-between hover:bg-gray-700/50 transition-colors">
+            <div class="flex items-center gap-3 flex-1">
+              <span class="text-xl">⏸️</span>
+              <div class="flex-1">
+                <div class="text-sm font-semibold">Напоминания о перерывах</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <button class="relative toggle-switch-sm rounded-full bg-blue-500">
+                <span class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full translate-x-5"></span>
+              </button>
+              <button class="text-gray-400 hover:text-gray-300 transition-colors">▶</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Строка: Предупреждения о переработке (свернута) -->
+        <div class="glass-card rounded-lg overflow-hidden">
+          <div class="px-4 py-2.5 flex items-center justify-between hover:bg-gray-700/50 transition-colors">
+            <div class="flex items-center gap-3 flex-1">
+              <span class="text-xl">🚨</span>
+              <div class="flex-1">
+                <div class="text-sm font-semibold">Предупреждения о переработке</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <button class="relative toggle-switch-sm rounded-full bg-blue-500">
+                <span class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full translate-x-5"></span>
+              </button>
+              <button class="text-gray-400 hover:text-gray-300 transition-colors">▶</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Строка: Pomodoro (свернута) -->
+        <div class="glass-card rounded-lg overflow-hidden">
+          <div class="px-4 py-2.5 flex items-center justify-between hover:bg-gray-700/50 transition-colors">
+            <div class="flex items-center gap-3 flex-1">
+              <span class="text-xl">🍅</span>
+              <div class="flex-1">
+                <div class="text-sm font-semibold">Pomodoro таймер</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <button class="relative toggle-switch-sm rounded-full bg-gray-600">
+                <span class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full"></span>
+              </button>
+              <button class="text-gray-400 hover:text-gray-300 transition-colors">▶</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Строка: Анимация фавикона (развернута) -->
+        <div class="glass-card rounded-lg overflow-hidden">
+          <div class="px-4 py-2.5 flex items-center justify-between hover:bg-gray-700/50 transition-colors">
+            <div class="flex items-center gap-3 flex-1">
+              <span class="text-xl">🎨</span>
+              <div class="flex-1">
+                <div class="text-sm font-semibold">Анимация фавикона</div>
+                <div class="text-xs text-gray-400 mt-0.5">Стиль: Пульсация | Цвет: Синий | Скорость: Обычно</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <button class="relative toggle-switch-sm rounded-full bg-blue-500">
+                <span class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full translate-x-5"></span>
+              </button>
+              <button class="text-gray-400 hover:text-gray-300 transition-colors">▼</button>
+            </div>
+          </div>
+          <div class="px-4 pb-3 pt-2 border-t border-gray-700 space-y-3">
+            <div>
+              <label class="text-xs font-semibold text-gray-300 mb-2 block">Стиль</label>
+              <div class="grid grid-cols-4 gap-2">
+                <button class="p-2 rounded-lg border-2 border-blue-500 bg-blue-500/10 text-white text-xs">Пульсация</button>
+                <button class="p-2 rounded-lg border-2 border-gray-700 hover:border-blue-500 text-gray-300 text-xs">Мигание</button>
+                <button class="p-2 rounded-lg border-2 border-gray-700 hover:border-blue-500 text-gray-300 text-xs">Вращение</button>
+                <button class="p-2 rounded-lg border-2 border-gray-700 hover:border-blue-500 text-gray-300 text-xs">Дыхание</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Кнопки действий -->
+      <div class="flex justify-end gap-3 mt-4 pt-4 border-t border-gray-700">
+        <button class="glass-card px-6 py-2 rounded-lg hover:bg-gray-700/50 transition-colors">Отмена</button>
+        <button class="px-6 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white transition-colors">Сохранить</button>
+      </div>
+    </div>
+
+    <div class="mt-4 text-sm text-gray-400">
+      <p><strong>Преимущества:</strong></p>
+      <ul class="list-disc list-inside mt-2 space-y-1">
+        <li>✅ Максимальная компактность: все видно в одном окне</li>
+        <li>✅ Быстрый доступ: основные настройки видны сразу</li>
+        <li>✅ Детализация: можно развернуть для детальных настроек</li>
+        <li>✅ Минималистичный дизайн</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>
+

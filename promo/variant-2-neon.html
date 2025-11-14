@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Tracker Dashboard - Неоновый стиль</title>
+    <meta name="description" content="Современное приложение для учета рабочего времени с мощной аналитикой">
+    <link rel="stylesheet" href="variant-2-neon.css">
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <h1 class="header-title">Time Tracker Dashboard</h1>
+            <div class="header-glow"></div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg">
+            <div class="neon-circle circle-1"></div>
+            <div class="neon-circle circle-2"></div>
+            <div class="neon-circle circle-3"></div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">
+                    <span class="neon-text">Контролируйте</span>
+                    <br>
+                    <span class="neon-text-alt">каждую минуту</span>
+                </h1>
+                <p class="hero-description">Мощный инструмент для учета рабочего времени с яркой визуализацией</p>
+                <div class="hero-stats">
+                    <div class="stat-box neon-box">
+                        <div class="stat-value neon-number" data-counter="320">0</div>
+                        <div class="stat-label">Часов</div>
+                    </div>
+                    <div class="stat-box neon-box">
+                        <div class="stat-value neon-number" data-counter="450000">0</div>
+                        <div class="stat-label">₽ Заработано</div>
+                    </div>
+                    <div class="stat-box neon-box">
+                        <div class="stat-value neon-number" data-counter="45">0</div>
+                        <div class="stat-label">Дней</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="neon-card">
+                    <div class="neon-card-border"></div>
+                    <div class="neon-timer">
+                        <div class="timer-circle">
+                            <svg viewBox="0 0 200 200">
+                                <circle cx="100" cy="100" r="90" fill="none" stroke="rgba(0, 255, 255, 0.1)" stroke-width="8" />
+                                <circle class="timer-progress" cx="100" cy="100" r="90" fill="none" stroke="#00ffff" stroke-width="8" 
+                                    stroke-dasharray="565" stroke-dashoffset="565" 
+                                    style="transform: rotate(-90deg); transform-origin: 100px 100px;" />
+                            </svg>
+                            <div class="timer-text" id="neon-timer">00:00:00</div>
+                        </div>
+                    </div>
+                    <div class="neon-controls">
+                        <button class="neon-btn" id="neon-play">▶</button>
+                        <button class="neon-btn" id="neon-stop">■</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title neon-text">Ключевые возможности</h2>
+            <div class="features-grid">
+                <div class="feature-card neon-card">
+                    <div class="feature-icon neon-icon">⏱️</div>
+                    <h3 class="feature-title">Таймер</h3>
+                    <p class="feature-description">Точный учет времени</p>
+                </div>
+                <div class="feature-card neon-card">
+                    <div class="feature-icon neon-icon">📊</div>
+                    <h3 class="feature-title">Аналитика</h3>
+                    <p class="feature-description">12+ графиков</p>
+                </div>
+                <div class="feature-card neon-card">
+                    <div class="feature-icon neon-icon">📈</div>
+                    <h3 class="feature-title">Статистика</h3>
+                    <p class="feature-description">Детальные показатели</p>
+                </div>
+                <div class="feature-card neon-card">
+                    <div class="feature-icon neon-icon">👁️</div>
+                    <h3 class="feature-title">Виды</h3>
+                    <p class="feature-description">Три формата</p>
+                </div>
+                <div class="feature-card neon-card">
+                    <div class="feature-icon neon-icon">💾</div>
+                    <h3 class="feature-title">Экспорт</h3>
+                    <p class="feature-description">JSON, Excel, PDF</p>
+                </div>
+                <div class="feature-card neon-card">
+                    <div class="feature-icon neon-icon">↩️</div>
+                    <h3 class="feature-title">История</h3>
+                    <p class="feature-description">Undo/Redo</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Charts Section -->
+    <section class="charts">
+        <div class="container">
+            <h2 class="section-title neon-text">Визуализация данных</h2>
+            <div class="charts-grid">
+                <div class="chart-card neon-card">
+                    <h3 class="chart-title">Доход по дням недели</h3>
+                    <div class="neon-chart">
+                        <div class="neon-bar" data-value="5874" style="height: 0%;"></div>
+                        <div class="neon-bar" data-value="4200" style="height: 0%;"></div>
+                        <div class="neon-bar" data-value="5000" style="height: 0%;"></div>
+                        <div class="neon-bar" data-value="6800" style="height: 0%;"></div>
+                        <div class="neon-bar" data-value="8500" style="height: 0%;"></div>
+                        <div class="neon-bar" data-value="6200" style="height: 0%;"></div>
+                        <div class="neon-bar" data-value="3500" style="height: 0%;"></div>
+                    </div>
+                    <div class="chart-labels">
+                        <span>Пн</span><span>Вт</span><span>Ср</span><span>Чт</span><span>Пт</span><span>Сб</span><span>Вс</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <h2 class="cta-title neon-text">Начните отслеживать время</h2>
+            <a href="#" class="neon-button">Запустить приложение</a>
+        </div>
+    </section>
+
+    <script src="variant-2-neon.js"></script>
+</body>
+</html>
+

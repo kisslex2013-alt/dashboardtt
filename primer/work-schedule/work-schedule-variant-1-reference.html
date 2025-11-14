@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Work Schedule Modal - Variant 1: Reference</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Глобальные стили */
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .dark .glass-effect {
+      background: rgba(17, 24, 39, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .workday-indicator {
+      background: rgba(59, 130, 246, 0.2);
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      color: #1e40af;
+    }
+
+    .dark .workday-indicator {
+      background: rgba(59, 130, 246, 0.3);
+      border: 1px solid rgba(59, 130, 246, 0.5);
+      color: #93c5fd;
+    }
+
+    .glass-button-green {
+      background: rgba(16, 185, 129, 0.2);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #047857;
+    }
+
+    .dark .glass-button-green {
+      background: rgba(16, 185, 129, 0.3);
+      border: 1px solid rgba(16, 185, 129, 0.5);
+      color: #6ee7b7;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 4px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 4px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: rgba(0, 0, 0, 0.5);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+  
+  <!-- Modal Overlay -->
+  <div class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
+    
+    <!-- Modal Content -->
+    <div class="glass-effect p-8 rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col">
+      
+      <!-- Header -->
+      <div class="flex justify-between items-center mb-4">
+        <div>
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Настройка рабочего графика</h2>
+          <div class="mt-1 flex items-center gap-2">
+            <span class="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs rounded-full">Кастомный режим</span>
+            <span class="text-xs text-gray-500 dark:text-gray-400">20 рабочих дней</span>
+          </div>
+        </div>
+        <button class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-gray-600 dark:text-white">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Content -->
+      <div class="flex-1 overflow-y-auto custom-scrollbar pr-4">
+        <div class="space-y-4">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Выберите шаблон рабочего графика на 
+            <span class="text-blue-600 dark:text-blue-400 uppercase">Январь</span>
+          </h3>
+
+          <!-- Templates Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            
+            <!-- Template 5/2 -->
+            <div class="p-4 border-2 border-blue-500 bg-blue-50 dark:bg-blue-900/20 rounded-lg cursor-pointer">
+              <div class="flex items-center justify-between mb-3">
+                <h4 class="font-medium text-gray-900 dark:text-white">Стандартный 5/2</h4>
+                <span class="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs rounded-full">Популярный</span>
+              </div>
+              <!-- Calendar -->
+              <div class="mb-3">
+                <div class="grid grid-cols-7 gap-1 text-xs">
+                  <div class="w-6 h-6 rounded flex items-center justify-center font-medium workday-indicator">1</div>
+                  <div class="w-6 h-6 rounded flex items-center justify-center font-medium workday-indicator">2</div>
+                  <div class="w-6 h-6 rounded flex items-center justify-center font-medium workday-indicator">3</div>
+                  <div class="w-6 h-6 rounded flex items-center justify-center font-medium workday-indicator">4</div>
+                  <div class="w-6 h-6 rounded flex items-center justify-center font-medium workday-indicator">5</div>
+                  <div class="w-6 h-6 rounded flex items-center justify-center font-medium glass-button-green">6</div>
+                  <div class="w-6 h-6 rounded flex items-center justify-center font-medium glass-button-green">7</div>
+                </div>
+              </div>
+              <p class="text-sm text-gray-600 dark:text-gray-400">23 рабочих дня в месяце</p>
+            </div>
+
+            <!-- Template 2/2 -->
+            <div class="p-4 border border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-400 rounded-lg cursor-pointer transition-colors">
+              <div class="flex items-center justify-between mb-3">
+                <h4 class="font-medium text-gray-900 dark:text-white">Сменный 2/2</h4>
+                <span class="px-2 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 text-xs rounded-full">Сменный</span>
+              </div>
+              <div class="mb-3">
+                <div class="grid grid-cols-7 gap-1 text-xs">
+                  <div class="w-6 h-6 rounded flex items-center justify-center font-medium workday-indicator">1</div>
+                  <div class="w-6 h-6 rounded flex items-center justify-center font-medium workday-indicator">2</div>
+                  <div class="w-6 h-6 rounded flex items-center justify-center font-medium glass-button-green">3</div>
+                  <div class="w-6 h-6 rounded flex items-center justify-center font-medium glass-button-green">4</div>
+                  <div class="w-6 h-6 rounded flex items-center justify-center font-medium workday-indicator">5</div>
+                  <div class="w-6 h-6 rounded flex items-center justify-center font-medium workday-indicator">6</div>
+                  <div class="w-6 h-6 rounded flex items-center justify-center font-medium glass-button-green">7</div>
+                </div>
+              </div>
+              <p class="text-sm text-gray-600 dark:text-gray-400">15 рабочих дней в месяце</p>
+            </div>
+
+            <!-- Template 3/3 -->
+            <div class="p-4 border border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-400 rounded-lg cursor-pointer transition-colors">
+              <div class="flex items-center justify-between mb-3">
+                <h4 class="font-medium text-gray-900 dark:text-white">Сменный 3/3</h4>
+                <span class="px-2 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 text-xs rounded-full">Сменный</span>
+              </div>
+              <div class="mb-3">
+                <div class="grid grid-cols-7 gap-1 text-xs">
+                  <div class="w-6 h-6 rounded flex items-center justify-center font-medium workday-indicator">1</div>
+                  <div class="w-6 h-6 rounded flex items-center justify-center font-medium workday-indicator">2</div>
+                  <div class="w-6 h-6 rounded flex items-center justify-center font-medium workday-indicator">3</div>
+                  <div class="w-6 h-6 rounded flex items-center justify-center font-medium glass-button-green">4</div>
+                  <div class="w-6 h-6 rounded flex items-center justify-center font-medium glass-button-green">5</div>
+                  <div class="w-6 h-6 rounded flex items-center justify-center font-medium glass-button-green">6</div>
+                  <div class="w-6 h-6 rounded flex items-center justify-center font-medium workday-indicator">7</div>
+                </div>
+              </div>
+              <p class="text-sm text-gray-600 dark:text-gray-400">15 рабочих дней в месяце</p>
+            </div>
+
+            <!-- Template 5/5 -->
+            <div class="p-4 border border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-400 rounded-lg cursor-pointer transition-colors">
+              <div class="flex items-center justify-between mb-3">
+                <h4 class="font-medium text-gray-900 dark:text-white">Сменный 5/5</h4>
+                <span class="px-2 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 text-xs rounded-full">Интенсивный</span>
+              </div>
+              <div class="mb-3">
+                <div class="grid grid-cols-7 gap-1 text-xs">
+                  <div class="w-6 h-6 rounded flex items-center justify-center font-medium workday-indicator">1</div>
+                  <div class="w-6 h-6 rounded flex items-center justify-center font-medium workday-indicator">2</div>
+                  <div class="w-6 h-6 rounded flex items-center justify-center font-medium workday-indicator">3</div>
+                  <div class="w-6 h-6 rounded flex items-center justify-center font-medium workday-indicator">4</div>
+                  <div class="w-6 h-6 rounded flex items-center justify-center font-medium workday-indicator">5</div>
+                  <div class="w-6 h-6 rounded flex items-center justify-center font-medium glass-button-green">6</div>
+                  <div class="w-6 h-6 rounded flex items-center justify-center font-medium glass-button-green">7</div>
+                </div>
+              </div>
+              <p class="text-sm text-gray-600 dark:text-gray-400">15 рабочих дней в месяце</p>
+            </div>
+
+            <!-- Custom Template -->
+            <div class="p-4 border border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-400 rounded-lg cursor-pointer transition-colors">
+              <div class="flex items-center justify-between mb-3">
+                <h4 class="font-medium text-gray-900 dark:text-white">Кастомный</h4>
+                <span class="px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 text-xs rounded-full">Индивидуальный</span>
+              </div>
+              <div class="mb-3">
+                <div class="grid grid-cols-7 gap-1 text-xs">
+                  <button class="w-6 h-6 rounded flex items-center justify-center font-medium workday-indicator hover:opacity-80 transition-opacity cursor-pointer">1</button>
+                  <button class="w-6 h-6 rounded flex items-center justify-center font-medium glass-button-green hover:opacity-80 transition-opacity cursor-pointer">2</button>
+                  <button class="w-6 h-6 rounded flex items-center justify-center font-medium workday-indicator hover:opacity-80 transition-opacity cursor-pointer">3</button>
+                  <button class="w-6 h-6 rounded flex items-center justify-center font-medium workday-indicator hover:opacity-80 transition-opacity cursor-pointer">4</button>
+                  <button class="w-6 h-6 rounded flex items-center justify-center font-medium workday-indicator hover:opacity-80 transition-opacity cursor-pointer">5</button>
+                  <button class="w-6 h-6 rounded flex items-center justify-center font-medium glass-button-green hover:opacity-80 transition-opacity cursor-pointer">6</button>
+                  <button class="w-6 h-6 rounded flex items-center justify-center font-medium glass-button-green hover:opacity-80 transition-opacity cursor-pointer">7</button>
+                </div>
+              </div>
+              <p class="text-sm text-gray-600 dark:text-gray-400">20 рабочих дней в месяце</p>
+            </div>
+
+            <!-- Settings Block -->
+            <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+              <div class="flex items-center justify-between mb-3">
+                <h4 class="font-medium text-gray-900 dark:text-white">Настройки</h4>
+                <span class="px-2 py-1 bg-gray-100 dark:bg-gray-800/50 text-gray-600 dark:text-gray-400 text-xs rounded-full">Дополнительно</span>
+              </div>
+              
+              <div class="space-y-4">
+                <!-- Daily Plan Input -->
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">План на день:</label>
+                  <div class="flex items-center gap-2">
+                    <input 
+                      type="number" 
+                      value="6000" 
+                      class="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent min-w-0"
+                    />
+                    <span class="text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">₽</span>
+                  </div>
+                </div>
+
+                <!-- Monthly Plan Calculation -->
+                <div class="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-500/30">
+                  <div class="flex items-start gap-2 mb-2">
+                    <span class="text-sm font-medium text-blue-700 dark:text-blue-300 flex-shrink-0">План на месяц:</span>
+                    <span class="text-base font-bold text-blue-800 dark:text-blue-200 whitespace-nowrap">120 000 ₽</span>
+                  </div>
+                  <p class="text-xs text-blue-600 dark:text-blue-400 break-words">
+                    Автоматически рассчитано: 6 000 ₽ × 20 рабочих дней
+                  </p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Legend -->
+          <div class="mt-4 p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg flex items-center gap-3 text-xs">
+            <span class="font-medium text-gray-900 dark:text-white mr-2">Легенда:</span>
+            <div class="w-6 h-6 workday-indicator rounded inline-block align-middle"></div>
+            <span class="mx-1 text-gray-600 dark:text-gray-400">Рабочий день</span>
+            <div class="w-6 h-6 glass-button-green rounded inline-block align-middle"></div>
+            <span class="mx-1 text-gray-600 dark:text-gray-400">Выходной день</span>
+          </div>
+
+          <!-- Week Start Selector -->
+          <div class="mt-6 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+            <div class="flex items-center gap-3 flex-wrap">
+              <span class="text-sm font-medium text-gray-900 dark:text-white">Начало рабочей недели:</span>
+              <div class="flex gap-1">
+                <button class="px-2 py-1 text-xs rounded bg-blue-500 text-white">ПН</button>
+                <button class="px-2 py-1 text-xs rounded bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600">ВТ</button>
+                <button class="px-2 py-1 text-xs rounded bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600">СР</button>
+                <button class="px-2 py-1 text-xs rounded bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600">ЧТ</button>
+                <button class="px-2 py-1 text-xs rounded bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600">ПТ</button>
+                <button class="px-2 py-1 text-xs rounded bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600">СБ</button>
+                <button class="px-2 py-1 text-xs rounded bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600">ВС</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Info Block -->
+          <div class="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+            <h4 class="font-medium text-blue-900 dark:text-blue-300 mb-2 flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              Как это работает?
+            </h4>
+            <p class="text-sm text-blue-700 dark:text-blue-400">
+              Выберите подходящий шаблон рабочего графика. Система автоматически рассчитает ваши рабочие дни и учтет их при планировании и аналитике.
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex gap-3 mt-6">
+        <button class="px-6 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg font-medium text-gray-800 dark:text-white transition-colors">
+          Отмена
+        </button>
+        <button class="flex-1 px-6 py-2 bg-blue-500 hover:bg-blue-600 rounded-lg font-medium text-white transition-colors">
+          Сохранить
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>
+

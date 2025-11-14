@@ -1,0 +1,1460 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Time Tracker - Детализированные логотипы v2</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 40px 20px;
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      h1 {
+        text-align: center;
+        color: white;
+        font-size: 3em;
+        margin-bottom: 20px;
+        text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .subtitle {
+        text-align: center;
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 1.2em;
+        margin-bottom: 60px;
+      }
+
+      .logo-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+        gap: 40px;
+        margin-bottom: 60px;
+      }
+
+      .logo-card {
+        background: white;
+        border-radius: 24px;
+        padding: 40px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease;
+      }
+
+      .logo-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+      }
+
+      .logo-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 30px;
+      }
+
+      .logo-number {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 1.2em;
+      }
+
+      .logo-title {
+        font-size: 1.5em;
+        font-weight: 600;
+        color: #2d3748;
+      }
+
+      .logo-preview {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 40px;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        border-radius: 16px;
+        margin-bottom: 30px;
+        min-height: 350px;
+      }
+
+      .logo-description {
+        color: #4a5568;
+        line-height: 1.8;
+        margin-bottom: 20px;
+      }
+
+      .logo-features {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+
+      .feature-tag {
+        background: #e6f7ff;
+        color: #0066cc;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 0.9em;
+        font-weight: 500;
+      }
+
+      .feature-tag.time {
+        background: #e6f7ff;
+        color: #0066cc;
+      }
+
+      .feature-tag.money {
+        background: #f0fdf4;
+        color: #059669;
+      }
+
+      .feature-tag.analytics {
+        background: #fef3c7;
+        color: #d97706;
+      }
+
+      .color-variants {
+        display: flex;
+        gap: 15px;
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 2px solid #e2e8f0;
+      }
+
+      .color-variant {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .color-preview {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: transform 0.2s;
+      }
+
+      .color-preview:hover {
+        transform: scale(1.1);
+      }
+
+      .color-label {
+        font-size: 0.8em;
+        color: #718096;
+      }
+
+      .best-choice {
+        position: relative;
+      }
+
+      .best-choice::before {
+        content: '⭐ Рекомендуется';
+        position: absolute;
+        top: -15px;
+        right: -15px;
+        background: #ffd700;
+        color: #000;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 0.9em;
+        font-weight: bold;
+        box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+      }
+
+      .elements-breakdown {
+        background: #f7fafc;
+        padding: 20px;
+        border-radius: 12px;
+        margin-top: 20px;
+      }
+
+      .elements-breakdown h4 {
+        font-size: 1.1em;
+        margin-bottom: 15px;
+        color: #2d3748;
+      }
+
+      .element-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+
+      .element-icon {
+        width: 24px;
+        height: 24px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+      }
+
+      .download-section {
+        background: white;
+        border-radius: 24px;
+        padding: 40px;
+        text-align: center;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      }
+
+      .download-section h2 {
+        font-size: 2em;
+        color: #2d3748;
+        margin-bottom: 20px;
+      }
+
+      .download-buttons {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 30px;
+      }
+
+      .download-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 15px 30px;
+        border-radius: 12px;
+        text-decoration: none;
+        font-weight: 600;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+        display: inline-block;
+      }
+
+      .download-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      .floating {
+        animation: float 3s ease-in-out infinite;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>⏱️💰📊 Time Tracker Dashboard</h1>
+      <p class="subtitle">5 детализированных логотипов: Время + Деньги + Аналитика</p>
+
+      <div class="logo-grid">
+        <!-- Логотип 6: Money Clock Dashboard -->
+        <div class="logo-card best-choice">
+          <div class="logo-header">
+            <div class="logo-number">6</div>
+            <div class="logo-title">Money Clock Dashboard</div>
+          </div>
+
+          <div class="logo-preview">
+            <svg width="240" height="240" viewBox="0 0 240 240">
+              <!-- Background circle -->
+              <circle cx="120" cy="120" r="110" fill="white" stroke="#E2E8F0" stroke-width="3" />
+
+              <!-- Main clock circle -->
+              <circle cx="120" cy="120" r="100" fill="none" stroke="#3B82F6" stroke-width="4" />
+
+              <!-- Dollar sign in center -->
+              <text
+                x="120"
+                y="135"
+                font-size="60"
+                font-weight="bold"
+                fill="#10B981"
+                text-anchor="middle"
+                font-family="Arial"
+              >
+                $
+              </text>
+
+              <!-- Clock hands -->
+              <line
+                x1="120"
+                y1="120"
+                x2="120"
+                y2="55"
+                stroke="#3B82F6"
+                stroke-width="5"
+                stroke-linecap="round"
+              />
+              <line
+                x1="120"
+                y1="120"
+                x2="165"
+                y2="120"
+                stroke="#10B981"
+                stroke-width="4"
+                stroke-linecap="round"
+              />
+              <circle cx="120" cy="120" r="8" fill="#3B82F6" />
+
+              <!-- Time markers with $ -->
+              <text
+                x="120"
+                y="35"
+                font-size="16"
+                font-weight="bold"
+                fill="#718096"
+                text-anchor="middle"
+              >
+                12
+              </text>
+              <text
+                x="195"
+                y="125"
+                font-size="16"
+                font-weight="bold"
+                fill="#718096"
+                text-anchor="middle"
+              >
+                3
+              </text>
+              <text
+                x="120"
+                y="210"
+                font-size="16"
+                font-weight="bold"
+                fill="#718096"
+                text-anchor="middle"
+              >
+                6
+              </text>
+              <text
+                x="50"
+                y="125"
+                font-size="16"
+                font-weight="bold"
+                fill="#718096"
+                text-anchor="middle"
+              >
+                9
+              </text>
+
+              <!-- Mini graphs around clock -->
+              <!-- Top right - rising graph -->
+              <g transform="translate(175, 45)">
+                <polyline
+                  points="0,20 5,15 10,12 15,8 20,5"
+                  fill="none"
+                  stroke="#10B981"
+                  stroke-width="2"
+                />
+                <circle cx="20" cy="5" r="2" fill="#10B981" />
+              </g>
+
+              <!-- Bottom right - bar chart -->
+              <g transform="translate(175, 160)">
+                <rect x="0" y="12" width="4" height="8" fill="#3B82F6" opacity="0.7" />
+                <rect x="6" y="8" width="4" height="12" fill="#3B82F6" opacity="0.8" />
+                <rect x="12" y="5" width="4" height="15" fill="#3B82F6" opacity="0.9" />
+                <rect x="18" y="10" width="4" height="10" fill="#3B82F6" opacity="0.8" />
+              </g>
+
+              <!-- Bottom left - pie chart -->
+              <g transform="translate(35, 170)">
+                <circle cx="15" cy="15" r="12" fill="none" stroke="#E2E8F0" stroke-width="2" />
+                <path d="M 15 15 L 15 3 A 12 12 0 0 1 24 10 Z" fill="#3B82F6" opacity="0.7" />
+                <path d="M 15 15 L 24 10 A 12 12 0 0 1 20 24 Z" fill="#10B981" opacity="0.7" />
+                <path d="M 15 15 L 20 24 A 12 12 0 0 1 15 3 Z" fill="#F59E0B" opacity="0.7" />
+              </g>
+
+              <!-- Top left - coins stack -->
+              <g transform="translate(40, 45)">
+                <ellipse cx="15" cy="22" rx="10" ry="3" fill="#F59E0B" opacity="0.6" />
+                <ellipse cx="15" cy="18" rx="10" ry="3" fill="#F59E0B" opacity="0.7" />
+                <ellipse cx="15" cy="14" rx="10" ry="3" fill="#F59E0B" opacity="0.8" />
+              </g>
+
+              <!-- Corner accents -->
+              <circle cx="30" cy="30" r="4" fill="#3B82F6" opacity="0.3" />
+              <circle cx="210" cy="30" r="4" fill="#10B981" opacity="0.3" />
+              <circle cx="30" cy="210" r="4" fill="#F59E0B" opacity="0.3" />
+              <circle cx="210" cy="210" r="4" fill="#3B82F6" opacity="0.3" />
+            </svg>
+          </div>
+
+          <div class="logo-description">
+            <strong>Концепция:</strong> Комплексный dashboard показывающий все три аспекта: часы с
+            долларом в центре, окруженные мини-графиками (линейный график роста, столбчатая
+            диаграмма, круговая диаграмма, стопка монет). Идеальный баланс детализации и читаемости.
+          </div>
+
+          <div class="logo-features">
+            <span class="feature-tag time">⏰ Время</span>
+            <span class="feature-tag money">💰 Деньги</span>
+            <span class="feature-tag analytics">📊 Аналитика</span>
+          </div>
+
+          <div class="elements-breakdown">
+            <h4>🎯 Элементы логотипа:</h4>
+            <div class="element-item">
+              <div class="element-icon" style="background: #dbeafe">⏰</div>
+              <span>Циферблат с часовыми метками - учет времени</span>
+            </div>
+            <div class="element-item">
+              <div class="element-icon" style="background: #d1fae5">💵</div>
+              <span>Доллар в центре + стопка монет - заработок</span>
+            </div>
+            <div class="element-item">
+              <div class="element-icon" style="background: #fef3c7">📈</div>
+              <span>Линейный график - рост дохода</span>
+            </div>
+            <div class="element-item">
+              <div class="element-icon" style="background: #dbeafe">📊</div>
+              <span>Столбчатая диаграмма - статистика</span>
+            </div>
+            <div class="element-item">
+              <div class="element-icon" style="background: #fef3c7">🥧</div>
+              <span>Круговая диаграмма - распределение</span>
+            </div>
+          </div>
+
+          <div class="color-variants">
+            <div class="color-variant">
+              <div
+                class="color-preview"
+                style="background: linear-gradient(135deg, #3b82f6 0%, #10b981 100%)"
+              >
+                <svg width="40" height="40" viewBox="0 0 240 240">
+                  <circle cx="120" cy="120" r="100" fill="none" stroke="white" stroke-width="4" />
+                  <text
+                    x="120"
+                    y="135"
+                    font-size="60"
+                    font-weight="bold"
+                    fill="white"
+                    text-anchor="middle"
+                  >
+                    $
+                  </text>
+                  <line x1="120" y1="120" x2="120" y2="55" stroke="white" stroke-width="5" />
+                </svg>
+              </div>
+              <span class="color-label">Default</span>
+            </div>
+            <div class="color-variant">
+              <div class="color-preview" style="background: #2d3748">
+                <svg width="40" height="40" viewBox="0 0 240 240">
+                  <circle cx="120" cy="120" r="100" fill="none" stroke="#3B82F6" stroke-width="4" />
+                  <text
+                    x="120"
+                    y="135"
+                    font-size="60"
+                    font-weight="bold"
+                    fill="#10B981"
+                    text-anchor="middle"
+                  >
+                    $
+                  </text>
+                </svg>
+              </div>
+              <span class="color-label">Dark</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Логотип 7: Growth Timepiece -->
+        <div class="logo-card">
+          <div class="logo-header">
+            <div class="logo-number">7</div>
+            <div class="logo-title">Growth Timepiece</div>
+          </div>
+
+          <div class="logo-preview">
+            <svg width="240" height="240" viewBox="0 0 240 240">
+              <!-- Outer ring with gradient -->
+              <defs>
+                <linearGradient id="grad7" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" style="stop-color: #3b82f6; stop-opacity: 1" />
+                  <stop offset="50%" style="stop-color: #10b981; stop-opacity: 1" />
+                  <stop offset="100%" style="stop-color: #f59e0b; stop-opacity: 1" />
+                </linearGradient>
+              </defs>
+
+              <!-- Main clock -->
+              <circle cx="120" cy="120" r="95" fill="white" stroke="url(#grad7)" stroke-width="6" />
+
+              <!-- Rising graph line behind clock -->
+              <path
+                d="M 40 180 Q 80 140, 120 100 Q 160 60, 200 40"
+                fill="none"
+                stroke="#10B981"
+                stroke-width="4"
+                opacity="0.3"
+              />
+
+              <!-- Money symbols as clock markers -->
+              <g>
+                <text
+                  x="120"
+                  y="45"
+                  font-size="20"
+                  font-weight="bold"
+                  fill="#10B981"
+                  text-anchor="middle"
+                >
+                  $
+                </text>
+                <text x="185" y="90" font-size="16" fill="#10B981" text-anchor="middle">€</text>
+                <text x="185" y="155" font-size="16" fill="#10B981" text-anchor="middle">£</text>
+                <text x="120" y="200" font-size="18" fill="#10B981" text-anchor="middle">¥</text>
+                <text x="55" y="155" font-size="16" fill="#10B981" text-anchor="middle">₹</text>
+                <text x="55" y="90" font-size="16" fill="#10B981" text-anchor="middle">₽</text>
+              </g>
+
+              <!-- Center display - earnings -->
+              <rect
+                x="70"
+                y="100"
+                width="100"
+                height="40"
+                rx="8"
+                fill="#F0FDF4"
+                stroke="#10B981"
+                stroke-width="2"
+              />
+              <text
+                x="120"
+                y="118"
+                font-size="12"
+                fill="#059669"
+                text-anchor="middle"
+                font-weight="600"
+              >
+                TODAY
+              </text>
+              <text
+                x="120"
+                y="133"
+                font-size="16"
+                font-weight="bold"
+                fill="#10B981"
+                text-anchor="middle"
+              >
+                $250
+              </text>
+
+              <!-- Clock hands -->
+              <line
+                x1="120"
+                y1="120"
+                x2="120"
+                y2="60"
+                stroke="#3B82F6"
+                stroke-width="5"
+                stroke-linecap="round"
+              />
+              <line
+                x1="120"
+                y1="120"
+                x2="160"
+                y2="120"
+                stroke="#3B82F6"
+                stroke-width="4"
+                stroke-linecap="round"
+              />
+              <circle cx="120" cy="120" r="6" fill="#3B82F6" />
+
+              <!-- Graph bars at bottom -->
+              <g transform="translate(60, 150)">
+                <rect x="0" y="15" width="8" height="20" fill="#3B82F6" opacity="0.6" rx="2" />
+                <rect x="12" y="10" width="8" height="25" fill="#3B82F6" opacity="0.7" rx="2" />
+                <rect x="24" y="5" width="8" height="30" fill="#3B82F6" opacity="0.8" rx="2" />
+                <rect x="36" y="8" width="8" height="27" fill="#10B981" opacity="0.7" rx="2" />
+                <rect x="48" y="3" width="8" height="32" fill="#10B981" opacity="0.9" rx="2" />
+                <rect x="60" y="6" width="8" height="29" fill="#10B981" opacity="0.8" rx="2" />
+                <rect x="72" y="1" width="8" height="34" fill="#F59E0B" opacity="0.9" rx="2" />
+                <rect x="84" y="4" width="8" height="31" fill="#F59E0B" opacity="0.8" rx="2" />
+              </g>
+
+              <!-- Trend arrow -->
+              <g transform="translate(180, 60)">
+                <path
+                  d="M 0 20 L 20 0 L 20 10 L 35 10 L 35 20 L 20 20 L 20 30 Z"
+                  fill="#10B981"
+                  opacity="0.7"
+                />
+              </g>
+            </svg>
+          </div>
+
+          <div class="logo-description">
+            <strong>Концепция:</strong> Часы с валютными символами вместо цифр, центральный дисплей
+            показывает заработок за день, снизу - столбчатая диаграмма роста, стрелка тренда вверху.
+            Яркий и информативный.
+          </div>
+
+          <div class="logo-features">
+            <span class="feature-tag time">⏰ Время</span>
+            <span class="feature-tag money">💰 Мультивалюта</span>
+            <span class="feature-tag analytics">📈 Тренд</span>
+          </div>
+
+          <div class="elements-breakdown">
+            <h4>🎯 Элементы логотипа:</h4>
+            <div class="element-item">
+              <div class="element-icon" style="background: #dbeafe">⏰</div>
+              <span>Часы с стрелками - отслеживание времени</span>
+            </div>
+            <div class="element-item">
+              <div class="element-icon" style="background: #d1fae5">💱</div>
+              <span>6 валют ($ € £ ¥ ₹ ₽) - глобальность</span>
+            </div>
+            <div class="element-item">
+              <div class="element-icon" style="background: #d1fae5">💵</div>
+              <span>Дисплей TODAY $250 - текущий заработок</span>
+            </div>
+            <div class="element-item">
+              <div class="element-icon" style="background: #dbeafe">📊</div>
+              <span>8 столбцов - статистика по дням</span>
+            </div>
+            <div class="element-item">
+              <div class="element-icon" style="background: #d1fae5">↗️</div>
+              <span>Стрелка вверх - рост дохода</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Логотип 8: Profit Timer -->
+        <div class="logo-card">
+          <div class="logo-header">
+            <div class="logo-number">8</div>
+            <div class="logo-title">Profit Timer</div>
+          </div>
+
+          <div class="logo-preview">
+            <svg width="240" height="240" viewBox="0 0 240 240">
+              <!-- Stopwatch body -->
+              <circle cx="120" cy="130" r="85" fill="white" stroke="#3B82F6" stroke-width="5" />
+
+              <!-- Button on top -->
+              <rect x="100" y="35" width="40" height="20" rx="6" fill="#3B82F6" />
+              <line
+                x1="120"
+                y1="35"
+                x2="120"
+                y2="45"
+                stroke="#3B82F6"
+                stroke-width="5"
+                stroke-linecap="round"
+              />
+
+              <!-- Dollar coins falling into timer -->
+              <g opacity="0.8">
+                <ellipse cx="90" cy="70" rx="12" ry="4" fill="#F59E0B" />
+                <circle cx="90" cy="70" r="10" fill="#F59E0B" opacity="0.7" />
+                <text
+                  x="90"
+                  y="73"
+                  font-size="10"
+                  font-weight="bold"
+                  fill="white"
+                  text-anchor="middle"
+                >
+                  $
+                </text>
+
+                <ellipse cx="145" cy="85" rx="10" ry="3" fill="#10B981" />
+                <circle cx="145" cy="85" r="8" fill="#10B981" opacity="0.7" />
+                <text
+                  x="145"
+                  y="88"
+                  font-size="8"
+                  font-weight="bold"
+                  fill="white"
+                  text-anchor="middle"
+                >
+                  $
+                </text>
+
+                <ellipse cx="105" cy="95" rx="8" ry="3" fill="#F59E0B" />
+                <circle cx="105" cy="95" r="7" fill="#F59E0B" opacity="0.7" />
+                <text
+                  x="105"
+                  y="97"
+                  font-size="7"
+                  font-weight="bold"
+                  fill="white"
+                  text-anchor="middle"
+                >
+                  $
+                </text>
+              </g>
+
+              <!-- Inner circle with analytics -->
+              <circle cx="120" cy="130" r="70" fill="none" stroke="#E2E8F0" stroke-width="2" />
+
+              <!-- Mini pie chart inside -->
+              <g transform="translate(120, 130)">
+                <circle r="35" fill="none" stroke="#E2E8F0" stroke-width="1" />
+                <path d="M 0 0 L 0 -35 A 35 35 0 0 1 30 -17 Z" fill="#3B82F6" opacity="0.7" />
+                <path d="M 0 0 L 30 -17 A 35 35 0 0 1 30 17 Z" fill="#10B981" opacity="0.7" />
+                <path d="M 0 0 L 30 17 A 35 35 0 0 1 0 35 Z" fill="#F59E0B" opacity="0.7" />
+                <path d="M 0 0 L 0 35 A 35 35 0 0 1 -25 -20 Z" fill="#EF4444" opacity="0.7" />
+                <path d="M 0 0 L -25 -20 A 35 35 0 0 1 0 -35 Z" fill="#8B5CF6" opacity="0.7" />
+              </g>
+
+              <!-- Clock hands -->
+              <line
+                x1="120"
+                y1="130"
+                x2="120"
+                y2="85"
+                stroke="#2D3748"
+                stroke-width="4"
+                stroke-linecap="round"
+              />
+              <line
+                x1="120"
+                y1="130"
+                x2="150"
+                y2="130"
+                stroke="#2D3748"
+                stroke-width="3"
+                stroke-linecap="round"
+              />
+              <circle cx="120" cy="130" r="5" fill="#2D3748" />
+
+              <!-- Money earned label -->
+              <rect x="60" y="180" width="120" height="28" rx="14" fill="#10B981" />
+              <text
+                x="120"
+                y="198"
+                font-size="14"
+                font-weight="bold"
+                fill="white"
+                text-anchor="middle"
+              >
+                $1,250 earned
+              </text>
+
+              <!-- Time markers -->
+              <text
+                x="120"
+                y="65"
+                font-size="12"
+                font-weight="bold"
+                fill="#718096"
+                text-anchor="middle"
+              >
+                12
+              </text>
+              <text
+                x="180"
+                y="135"
+                font-size="12"
+                font-weight="bold"
+                fill="#718096"
+                text-anchor="middle"
+              >
+                3
+              </text>
+              <text
+                x="120"
+                y="205"
+                font-size="12"
+                font-weight="bold"
+                fill="#718096"
+                text-anchor="middle"
+              >
+                6
+              </text>
+              <text
+                x="65"
+                y="135"
+                font-size="12"
+                font-weight="bold"
+                fill="#718096"
+                text-anchor="middle"
+              >
+                9
+              </text>
+
+              <!-- Graph line around edge -->
+              <path
+                d="M 150 60 Q 180 80, 195 110 Q 200 130, 195 150 Q 180 180, 150 200"
+                fill="none"
+                stroke="#10B981"
+                stroke-width="3"
+                opacity="0.5"
+                stroke-dasharray="5,5"
+              />
+            </svg>
+          </div>
+
+          <div class="logo-description">
+            <strong>Концепция:</strong> Секундомер с падающими монетами (деньги зарабатываются со
+            временем), внутри - круговая диаграмма распределения времени по проектам, внизу - баннер
+            с суммой заработка. График роста по периметру.
+          </div>
+
+          <div class="logo-features">
+            <span class="feature-tag time">⏱️ Таймер</span>
+            <span class="feature-tag money">💰 Заработок</span>
+            <span class="feature-tag analytics">📊 Распределение</span>
+          </div>
+
+          <div class="elements-breakdown">
+            <h4>🎯 Элементы логотипа:</h4>
+            <div class="element-item">
+              <div class="element-icon" style="background: #dbeafe">⏱️</div>
+              <span>Секундомер - измерение времени</span>
+            </div>
+            <div class="element-item">
+              <div class="element-icon" style="background: #fef3c7">🪙</div>
+              <span>3 падающие монеты - накопление</span>
+            </div>
+            <div class="element-item">
+              <div class="element-icon" style="background: #fef3c7">🥧</div>
+              <span>5-секторная диаграмма - категории</span>
+            </div>
+            <div class="element-item">
+              <div class="element-icon" style="background: #d1fae5">💵</div>
+              <span>Баннер $1,250 - итоговый заработок</span>
+            </div>
+            <div class="element-item">
+              <div class="element-icon" style="background: #d1fae5">📈</div>
+              <span>Пунктирная линия - динамика роста</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Логотип 9: Analytics Wallet Watch -->
+        <div class="logo-card">
+          <div class="logo-header">
+            <div class="logo-number">9</div>
+            <div class="logo-title">Analytics Wallet Watch</div>
+          </div>
+
+          <div class="logo-preview">
+            <svg width="240" height="240" viewBox="0 0 240 240">
+              <!-- Wallet shape -->
+              <rect
+                x="40"
+                y="80"
+                width="160"
+                height="100"
+                rx="12"
+                fill="white"
+                stroke="#3B82F6"
+                stroke-width="4"
+              />
+              <rect x="40" y="70" width="160" height="20" rx="8" fill="#3B82F6" />
+
+              <!-- Wallet clasp -->
+              <circle cx="185" cy="130" r="18" fill="white" stroke="#10B981" stroke-width="3" />
+              <circle cx="185" cy="130" r="10" fill="#10B981" />
+
+              <!-- Clock face in wallet -->
+              <circle cx="110" cy="130" r="45" fill="none" stroke="#E2E8F0" stroke-width="2" />
+              <circle cx="110" cy="130" r="42" fill="none" stroke="#3B82F6" stroke-width="2" />
+
+              <!-- Clock hands -->
+              <line
+                x1="110"
+                y1="130"
+                x2="110"
+                y2="100"
+                stroke="#3B82F6"
+                stroke-width="3"
+                stroke-linecap="round"
+              />
+              <line
+                x1="110"
+                y1="130"
+                x2="135"
+                y2="130"
+                stroke="#10B981"
+                stroke-width="2.5"
+                stroke-linecap="round"
+              />
+              <circle cx="110" cy="130" r="4" fill="#3B82F6" />
+
+              <!-- Mini clock numbers -->
+              <text
+                x="110"
+                y="96"
+                font-size="8"
+                font-weight="bold"
+                fill="#718096"
+                text-anchor="middle"
+              >
+                12
+              </text>
+              <text
+                x="145"
+                y="133"
+                font-size="8"
+                font-weight="bold"
+                fill="#718096"
+                text-anchor="middle"
+              >
+                3
+              </text>
+              <text
+                x="110"
+                y="167"
+                font-size="8"
+                font-weight="bold"
+                fill="#718096"
+                text-anchor="middle"
+              >
+                6
+              </text>
+              <text
+                x="78"
+                y="133"
+                font-size="8"
+                font-weight="bold"
+                fill="#718096"
+                text-anchor="middle"
+              >
+                9
+              </text>
+
+              <!-- Dollar sign -->
+              <text
+                x="155"
+                y="120"
+                font-size="32"
+                font-weight="bold"
+                fill="#10B981"
+                text-anchor="middle"
+              >
+                $
+              </text>
+
+              <!-- Graph lines in background -->
+              <g opacity="0.4">
+                <polyline
+                  points="50,95 65,92 80,88 95,90 110,85"
+                  fill="none"
+                  stroke="#3B82F6"
+                  stroke-width="2"
+                />
+                <polyline
+                  points="125,95 140,90 155,85 170,88 185,82"
+                  fill="none"
+                  stroke="#10B981"
+                  stroke-width="2"
+                />
+              </g>
+
+              <!-- Bar chart at bottom of wallet -->
+              <g transform="translate(55, 150)">
+                <rect x="0" y="10" width="12" height="15" fill="#3B82F6" opacity="0.6" rx="2" />
+                <rect x="15" y="7" width="12" height="18" fill="#3B82F6" opacity="0.7" rx="2" />
+                <rect x="30" y="4" width="12" height="21" fill="#3B82F6" opacity="0.8" rx="2" />
+                <rect x="45" y="6" width="12" height="19" fill="#10B981" opacity="0.7" rx="2" />
+                <rect x="60" y="2" width="12" height="23" fill="#10B981" opacity="0.9" rx="2" />
+                <rect x="75" y="5" width="12" height="20" fill="#10B981" opacity="0.8" rx="2" />
+                <rect x="90" y="8" width="12" height="17" fill="#F59E0B" opacity="0.7" rx="2" />
+                <rect x="105" y="3" width="12" height="22" fill="#F59E0B" opacity="0.8" rx="2" />
+              </g>
+
+              <!-- Money cards sticking out -->
+              <rect x="45" y="60" width="30" height="18" rx="3" fill="#10B981" opacity="0.7" />
+              <rect x="80" y="60" width="30" height="18" rx="3" fill="#F59E0B" opacity="0.7" />
+              <rect x="115" y="60" width="30" height="18" rx="3" fill="#EF4444" opacity="0.7" />
+
+              <!-- Stats labels -->
+              <text
+                x="155"
+                y="145"
+                font-size="10"
+                fill="#059669"
+                text-anchor="middle"
+                font-weight="600"
+              >
+                +18%
+              </text>
+              <text x="155" y="158" font-size="8" fill="#718096" text-anchor="middle">
+                this week
+              </text>
+            </svg>
+          </div>
+
+          <div class="logo-description">
+            <strong>Концепция:</strong> Кошелек с встроенными часами и аналитикой. Часы слева
+            показывают рабочее время, большой $ справа - заработок, внизу - столбчатая диаграмма,
+            сверху торчат цветные карточки (категории проектов), фоновые графики роста.
+          </div>
+
+          <div class="logo-features">
+            <span class="feature-tag time">⏰ Часы</span>
+            <span class="feature-tag money">👛 Кошелек</span>
+            <span class="feature-tag analytics">📊 Статистика</span>
+          </div>
+
+          <div class="elements-breakdown">
+            <h4>🎯 Элементы логотипа:</h4>
+            <div class="element-item">
+              <div class="element-icon" style="background: #dbeafe">👛</div>
+              <span>Форма кошелька - накопление денег</span>
+            </div>
+            <div class="element-item">
+              <div class="element-icon" style="background: #dbeafe">⏰</div>
+              <span>Встроенный циферблат - время</span>
+            </div>
+            <div class="element-item">
+              <div class="element-icon" style="background: #d1fae5">💵</div>
+              <span>Знак доллара + процент (+18%) - доход</span>
+            </div>
+            <div class="element-item">
+              <div class="element-icon" style="background: #dbeafe">📊</div>
+              <span>8 столбцов - недельная статистика</span>
+            </div>
+            <div class="element-item">
+              <div class="element-icon" style="background: #fef3c7">🃏</div>
+              <span>3 цветные карточки - проекты/категории</span>
+            </div>
+            <div class="element-item">
+              <div class="element-icon" style="background: #d1fae5">📈</div>
+              <span>2 линейных графика - тренды</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Логотип 10: Time Revenue Analytics -->
+        <div class="logo-card">
+          <div class="logo-header">
+            <div class="logo-number">10</div>
+            <div class="logo-title">Time Revenue Analytics</div>
+          </div>
+
+          <div class="logo-preview">
+            <svg width="240" height="240" viewBox="0 0 240 240">
+              <!-- Main dashboard frame -->
+              <rect
+                x="30"
+                y="50"
+                width="180"
+                height="140"
+                rx="16"
+                fill="white"
+                stroke="#3B82F6"
+                stroke-width="4"
+              />
+
+              <!-- Top bar -->
+              <rect x="30" y="50" width="180" height="35" rx="16" fill="#3B82F6" />
+              <rect x="30" y="68" width="180" height="17" fill="#3B82F6" />
+
+              <!-- Dashboard icon indicators -->
+              <circle cx="50" cy="67" r="6" fill="white" />
+              <circle cx="68" cy="67" r="6" fill="white" opacity="0.7" />
+              <circle cx="86" cy="67" r="6" fill="white" opacity="0.5" />
+
+              <!-- Three panels layout -->
+
+              <!-- Panel 1: Clock (Time) -->
+              <g>
+                <rect
+                  x="45"
+                  y="100"
+                  width="55"
+                  height="70"
+                  rx="8"
+                  fill="#F0F9FF"
+                  stroke="#3B82F6"
+                  stroke-width="2"
+                />
+                <text
+                  x="72.5"
+                  y="115"
+                  font-size="10"
+                  font-weight="600"
+                  fill="#3B82F6"
+                  text-anchor="middle"
+                >
+                  TIME
+                </text>
+
+                <circle cx="72.5" cy="140" r="20" fill="none" stroke="#3B82F6" stroke-width="2" />
+                <line
+                  x1="72.5"
+                  y1="140"
+                  x2="72.5"
+                  y2="125"
+                  stroke="#3B82F6"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+                <line
+                  x1="72.5"
+                  y1="140"
+                  x2="85"
+                  y2="140"
+                  stroke="#10B981"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                />
+                <circle cx="72.5" cy="140" r="3" fill="#3B82F6" />
+
+                <text
+                  x="72.5"
+                  y="167"
+                  font-size="14"
+                  font-weight="bold"
+                  fill="#2D3748"
+                  text-anchor="middle"
+                >
+                  8.5h
+                </text>
+              </g>
+
+              <!-- Panel 2: Money (Revenue) -->
+              <g>
+                <rect
+                  x="110"
+                  y="100"
+                  width="55"
+                  height="70"
+                  rx="8"
+                  fill="#F0FDF4"
+                  stroke="#10B981"
+                  stroke-width="2"
+                />
+                <text
+                  x="137.5"
+                  y="115"
+                  font-size="10"
+                  font-weight="600"
+                  fill="#10B981"
+                  text-anchor="middle"
+                >
+                  REVENUE
+                </text>
+
+                <!-- Dollar icon -->
+                <text
+                  x="137.5"
+                  y="148"
+                  font-size="36"
+                  font-weight="bold"
+                  fill="#10B981"
+                  text-anchor="middle"
+                >
+                  $
+                </text>
+
+                <text
+                  x="137.5"
+                  y="167"
+                  font-size="14"
+                  font-weight="bold"
+                  fill="#2D3748"
+                  text-anchor="middle"
+                >
+                  $425
+                </text>
+              </g>
+
+              <!-- Panel 3: Analytics (Graph) -->
+              <g>
+                <rect
+                  x="45"
+                  y="180"
+                  width="120"
+                  height="0"
+                  rx="8"
+                  fill="#FEF3C7"
+                  stroke="#F59E0B"
+                  stroke-width="2"
+                />
+              </g>
+
+              <!-- Bottom graph section -->
+              <g transform="translate(50, 105)">
+                <!-- Mini line graph -->
+                <polyline
+                  points="135,20 145,15 155,12 165,10 175,7 185,5 195,3"
+                  fill="none"
+                  stroke="#10B981"
+                  stroke-width="3"
+                  stroke-linecap="round"
+                />
+                <circle cx="195" cy="3" r="3" fill="#10B981" />
+
+                <!-- Trend indicator -->
+                <path
+                  d="M 190 8 L 198 0 L 202 4"
+                  fill="none"
+                  stroke="#10B981"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </g>
+
+              <!-- Bar chart at bottom -->
+              <g transform="translate(50, 125)">
+                <rect x="135" y="35" width="8" height="15" fill="#3B82F6" opacity="0.5" rx="2" />
+                <rect x="146" y="30" width="8" height="20" fill="#3B82F6" opacity="0.6" rx="2" />
+                <rect x="157" y="25" width="8" height="25" fill="#3B82F6" opacity="0.7" rx="2" />
+                <rect x="168" y="28" width="8" height="22" fill="#10B981" opacity="0.6" rx="2" />
+                <rect x="179" y="20" width="8" height="30" fill="#10B981" opacity="0.8" rx="2" />
+              </g>
+
+              <!-- Percentage growth -->
+              <g transform="translate(165, 98)">
+                <rect x="0" y="0" width="35" height="18" rx="9" fill="#10B981" />
+                <text
+                  x="17.5"
+                  y="13"
+                  font-size="11"
+                  font-weight="bold"
+                  fill="white"
+                  text-anchor="middle"
+                >
+                  +24%
+                </text>
+              </g>
+
+              <!-- Category indicators -->
+              <g transform="translate(50, 147)">
+                <circle cx="137" cy="0" r="4" fill="#3B82F6" />
+                <circle cx="152" cy="0" r="4" fill="#10B981" />
+                <circle cx="167" cy="0" r="4" fill="#F59E0B" />
+                <circle cx="182" cy="0" r="4" fill="#EF4444" />
+              </g>
+
+              <!-- Decorative elements -->
+              <circle cx="195" cy="67" r="8" fill="white" opacity="0.3" />
+              <text x="195" y="70" font-size="10" fill="white" text-anchor="middle">⚙️</text>
+            </svg>
+          </div>
+
+          <div class="logo-description">
+            <strong>Концепция:</strong> Полноценный dashboard в миниатюре. Левая панель - часы с
+            отработанным временем (8.5h), центральная - доллар с заработком ($425), справа -
+            комбинированная аналитика (линейный график роста + столбчатая диаграмма), индикатор
+            роста +24%, цветовые маркеры категорий.
+          </div>
+
+          <div class="logo-features">
+            <span class="feature-tag time">⏰ Время</span>
+            <span class="feature-tag money">💰 Доход</span>
+            <span class="feature-tag analytics">📊 Dashboard</span>
+          </div>
+
+          <div class="elements-breakdown">
+            <h4>🎯 Элементы логотипа:</h4>
+            <div class="element-item">
+              <div class="element-icon" style="background: #dbeafe">📱</div>
+              <span>Форма dashboard - интерфейс приложения</span>
+            </div>
+            <div class="element-item">
+              <div class="element-icon" style="background: #dbeafe">⏰</div>
+              <span>Панель TIME с часами - 8.5h отработано</span>
+            </div>
+            <div class="element-item">
+              <div class="element-icon" style="background: #d1fae5">💵</div>
+              <span>Панель REVENUE - $425 заработано</span>
+            </div>
+            <div class="element-item">
+              <div class="element-icon" style="background: #d1fae5">📈</div>
+              <span>Линейный график - восходящий тренд</span>
+            </div>
+            <div class="element-item">
+              <div class="element-icon" style="background: #dbeafe">📊</div>
+              <span>5 столбцов - детальная статистика</span>
+            </div>
+            <div class="element-item">
+              <div class="element-icon" style="background: #d1fae5">📈</div>
+              <span>Бейдж +24% - процент роста</span>
+            </div>
+            <div class="element-item">
+              <div class="element-icon" style="background: #fef3c7">🎨</div>
+              <span>4 цветных точки - категории проектов</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Download Section -->
+      <div class="download-section">
+        <h2>💎 Детализированные логотипы готовы!</h2>
+        <p>Все логотипы сочетают три ключевых элемента: ⏰ Время + 💰 Деньги + 📊 Аналитика</p>
+
+        <div
+          style="
+            background: #f7fafc;
+            padding: 30px;
+            border-radius: 16px;
+            margin: 30px 0;
+            text-align: left;
+          "
+        >
+          <h3 style="color: #2d3748; margin-bottom: 20px; text-align: center">🏆 Лучший выбор</h3>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px">
+            <div
+              style="
+                background: white;
+                padding: 20px;
+                border-radius: 12px;
+                border: 3px solid #3b82f6;
+              "
+            >
+              <h4 style="color: #3b82f6; margin-bottom: 10px">⭐ #6 Money Clock Dashboard</h4>
+              <ul style="color: #4a5568; line-height: 1.8; margin-left: 20px">
+                <li>Идеальный баланс всех элементов</li>
+                <li>Отлично масштабируется</li>
+                <li>Универсален для всех размеров</li>
+                <li>Понятен на первый взгляд</li>
+              </ul>
+            </div>
+
+            <div
+              style="
+                background: white;
+                padding: 20px;
+                border-radius: 12px;
+                border: 2px solid #10b981;
+              "
+            >
+              <h4 style="color: #10b981; margin-bottom: 10px">🥈 #10 Time Revenue Analytics</h4>
+              <ul style="color: #4a5568; line-height: 1.8; margin-left: 20px">
+                <li>Максимально информативный</li>
+                <li>Показывает реальные данные</li>
+                <li>Отлично для dashboard</li>
+                <li>Современный UI дизайн</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin: 40px 0">
+          <h3 style="color: #2d3748; margin-bottom: 20px">📊 Сравнительная таблица</h3>
+
+          <table
+            style="
+              width: 100%;
+              border-collapse: collapse;
+              background: white;
+              border-radius: 12px;
+              overflow: hidden;
+            "
+          >
+            <thead>
+              <tr style="background: #3b82f6; color: white">
+                <th style="padding: 15px; text-align: left">Логотип</th>
+                <th style="padding: 15px">⏰ Время</th>
+                <th style="padding: 15px">💰 Деньги</th>
+                <th style="padding: 15px">📊 Аналитика</th>
+                <th style="padding: 15px">Детализация</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="background: #f7fafc">
+                <td style="padding: 15px; font-weight: 600">#6 Money Clock</td>
+                <td style="padding: 15px; text-align: center">⭐⭐⭐⭐⭐</td>
+                <td style="padding: 15px; text-align: center">⭐⭐⭐⭐⭐</td>
+                <td style="padding: 15px; text-align: center">⭐⭐⭐⭐⭐</td>
+                <td style="padding: 15px; text-align: center">⭐⭐⭐⭐⭐</td>
+              </tr>
+              <tr>
+                <td style="padding: 15px; font-weight: 600">#7 Growth Time</td>
+                <td style="padding: 15px; text-align: center">⭐⭐⭐⭐</td>
+                <td style="padding: 15px; text-align: center">⭐⭐⭐⭐⭐</td>
+                <td style="padding: 15px; text-align: center">⭐⭐⭐⭐</td>
+                <td style="padding: 15px; text-align: center">⭐⭐⭐⭐</td>
+              </tr>
+              <tr style="background: #f7fafc">
+                <td style="padding: 15px; font-weight: 600">#8 Profit Timer</td>
+                <td style="padding: 15px; text-align: center">⭐⭐⭐⭐⭐</td>
+                <td style="padding: 15px; text-align: center">⭐⭐⭐⭐</td>
+                <td style="padding: 15px; text-align: center">⭐⭐⭐⭐</td>
+                <td style="padding: 15px; text-align: center">⭐⭐⭐⭐⭐</td>
+              </tr>
+              <tr>
+                <td style="padding: 15px; font-weight: 600">#9 Wallet Watch</td>
+                <td style="padding: 15px; text-align: center">⭐⭐⭐⭐</td>
+                <td style="padding: 15px; text-align: center">⭐⭐⭐⭐⭐</td>
+                <td style="padding: 15px; text-align: center">⭐⭐⭐⭐</td>
+                <td style="padding: 15px; text-align: center">⭐⭐⭐⭐⭐</td>
+              </tr>
+              <tr style="background: #f7fafc">
+                <td style="padding: 15px; font-weight: 600">#10 Dashboard</td>
+                <td style="padding: 15px; text-align: center">⭐⭐⭐⭐⭐</td>
+                <td style="padding: 15px; text-align: center">⭐⭐⭐⭐⭐</td>
+                <td style="padding: 15px; text-align: center">⭐⭐⭐⭐⭐</td>
+                <td style="padding: 15px; text-align: center">⭐⭐⭐⭐⭐</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="download-buttons">
+          <a href="#" class="download-btn" onclick="downloadSVG(6); return false;">
+            ⬇️ Скачать #6 Money Clock
+          </a>
+          <a href="#" class="download-btn" onclick="downloadSVG(7); return false;">
+            ⬇️ Скачать #7 Growth Time
+          </a>
+          <a href="#" class="download-btn" onclick="downloadSVG(8); return false;">
+            ⬇️ Скачать #8 Profit Timer
+          </a>
+          <a href="#" class="download-btn" onclick="downloadSVG(9); return false;">
+            ⬇️ Скачать #9 Wallet Watch
+          </a>
+          <a href="#" class="download-btn" onclick="downloadSVG(10); return false;">
+            ⬇️ Скачать #10 Dashboard
+          </a>
+        </div>
+
+        <p style="margin-top: 30px; color: #718096">
+          💡 Все логотипы доступны в SVG формате и готовы к использованию!
+        </p>
+      </div>
+    </div>
+
+    <script>
+      function downloadSVG(number) {
+        alert(
+          `Логотип #${number} готов к скачиванию! 🎉\n\nИспользуйте файл logo-${number}-[название].svg из папки logos/v2/`
+        )
+      }
+    </script>
+  </body>
+</html>

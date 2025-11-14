@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>List View - Вариант 2: Плотный аккордеон</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 2rem;
+    }
+    
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    
+    details > summary {
+      list-style: none;
+    }
+    
+    details > summary::-webkit-details-marker {
+      display: none;
+    }
+    
+    details[open] .chevron {
+      transform: rotate(180deg);
+    }
+  </style>
+</head>
+<body>
+  <div class="max-w-6xl mx-auto">
+    <h1 class="text-3xl font-bold text-white mb-6">🎨 List View - Вариант 2: Плотный аккордеон</h1>
+    
+    <div class="glass-effect rounded-2xl p-6 mb-8">
+      <h2 class="text-xl font-bold mb-4">📝 Описание</h2>
+      <ul class="space-y-2 text-gray-700">
+        <li><strong>Концепция:</strong> Максимально компактный аккордеон - минимум пустого пространства</li>
+        <li><strong>Особенности:</strong>
+          <ul class="ml-6 mt-2 space-y-1">
+            <li>• Однострочный заголовок с датой, статусом и итогом</li>
+            <li>• Встроенный прогресс-бар в заголовке (фон)</li>
+            <li>• Компактная таблица записей без лишних отступов</li>
+            <li>• Минимальные отступы между элементами</li>
+            <li>• Инсайты в виде компактных значков</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    
+    <!-- Список записей -->
+    <div class="space-y-2">
+      
+      <!-- День 1: План не выполнен -->
+      <details open class="glass-effect rounded-lg overflow-hidden">
+        <summary class="cursor-pointer relative overflow-hidden">
+          <!-- Фоновый прогресс-бар -->
+          <div class="absolute inset-0 bg-red-500 opacity-10" style="width: 33%;"></div>
+          
+          <!-- Содержимое summary -->
+          <div class="relative px-3 py-2 flex items-center justify-between gap-4 hover:bg-gray-50/50 transition-colors">
+            <!-- Левая часть: Дата и статус -->
+            <div class="flex items-center gap-2 min-w-0">
+              <svg class="w-4 h-4 text-gray-500 transition-transform chevron flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
+              <span class="font-semibold text-gray-800 whitespace-nowrap">29 Окт ПН</span>
+              <svg class="w-3.5 h-3.5 text-red-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+              </svg>
+              <span class="text-xs text-red-600 font-medium whitespace-nowrap">33%</span>
+            </div>
+            
+            <!-- Центр: Компактные инсайты -->
+            <div class="hidden md:flex items-center gap-3 text-xs text-gray-600">
+              <span title="Макс. сессия">🕐 3:17</span>
+              <span title="Макс. перерыв">⚠ 0:42</span>
+              <span title="Ср. ставка">💰 418₽</span>
+            </div>
+            
+            <!-- Правая часть: Итого -->
+            <div class="flex items-center gap-2">
+              <span class="text-xs text-gray-500">4.78ч</span>
+              <span class="text-lg font-bold text-red-600">2000₽</span>
+            </div>
+          </div>
+        </summary>
+        
+        <!-- Содержимое аккордеона -->
+        <div class="border-t border-gray-200">
+          <table class="w-full text-sm">
+            <tbody>
+              <tr class="hover:bg-gray-50 transition-colors border-b border-gray-100">
+                <td class="px-3 py-1.5 font-mono text-xs text-gray-600">13:19-14:49</td>
+                <td class="px-3 py-1.5">
+                  <span class="inline-flex items-center gap-1 text-xs">
+                    <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                    <span>remix</span>
+                  </span>
+                </td>
+                <td class="px-3 py-1.5 text-right text-xs text-gray-500">1.50ч</td>
+                <td class="px-3 py-1.5 text-right font-semibold">1000₽</td>
+              </tr>
+              <tr class="hover:bg-gray-50 transition-colors">
+                <td class="px-3 py-1.5 font-mono text-xs text-gray-600">09:20-12:37</td>
+                <td class="px-3 py-1.5">
+                  <span class="inline-flex items-center gap-1 text-xs">
+                    <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                    <span>remix</span>
+                    <span class="text-[10px] px-1 py-0.5 rounded bg-orange-100 text-orange-700">00:42</span>
+                  </span>
+                </td>
+                <td class="px-3 py-1.5 text-right text-xs text-gray-500">3.28ч</td>
+                <td class="px-3 py-1.5 text-right font-semibold">1000₽</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+      
+      <!-- День 2: На пути -->
+      <details class="glass-effect rounded-lg overflow-hidden">
+        <summary class="cursor-pointer relative overflow-hidden">
+          <div class="absolute inset-0 bg-yellow-500 opacity-10" style="width: 50%;"></div>
+          <div class="relative px-3 py-2 flex items-center justify-between gap-4 hover:bg-gray-50/50 transition-colors">
+            <div class="flex items-center gap-2 min-w-0">
+              <svg class="w-4 h-4 text-gray-500 transition-transform chevron flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
+              <span class="font-semibold text-gray-800 whitespace-nowrap">28 Окт ВС</span>
+              <svg class="w-3.5 h-3.5 text-yellow-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+              </svg>
+              <span class="text-xs text-yellow-600 font-medium whitespace-nowrap">50%</span>
+            </div>
+            <div class="hidden md:flex items-center gap-3 text-xs text-gray-600">
+              <span>🕐 3:15</span>
+              <span>⚠ 1:12</span>
+              <span>💰 558₽</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs text-gray-500">5.45ч</span>
+              <span class="text-lg font-bold text-yellow-600">3000₽</span>
+            </div>
+          </div>
+        </summary>
+        
+        <div class="border-t border-gray-200">
+          <table class="w-full text-sm">
+            <tbody>
+              <tr class="hover:bg-gray-50 transition-colors border-b border-gray-100">
+                <td class="px-3 py-1.5 font-mono text-xs text-gray-600">14:34-16:28</td>
+                <td class="px-3 py-1.5">
+                  <span class="inline-flex items-center gap-1 text-xs">
+                    <span class="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
+                    <span>Разработка</span>
+                  </span>
+                </td>
+                <td class="px-3 py-1.5 text-right text-xs text-gray-500">1.77ч</td>
+                <td class="px-3 py-1.5 text-right font-semibold">1100₽</td>
+              </tr>
+              <tr class="hover:bg-gray-50 transition-colors border-b border-gray-100">
+                <td class="px-3 py-1.5 font-mono text-xs text-gray-600">13:49-14:15</td>
+                <td class="px-3 py-1.5">
+                  <span class="inline-flex items-center gap-1 text-xs">
+                    <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                    <span>Дизайн</span>
+                    <span class="text-[10px] px-1 py-0.5 rounded bg-orange-100 text-orange-700">00:19</span>
+                  </span>
+                </td>
+                <td class="px-3 py-1.5 text-right text-xs text-gray-500">0.43ч</td>
+                <td class="px-3 py-1.5 text-right font-semibold">300₽</td>
+              </tr>
+              <tr class="hover:bg-gray-50 transition-colors">
+                <td class="px-3 py-1.5 font-mono text-xs text-gray-600">09:22-12:37</td>
+                <td class="px-3 py-1.5">
+                  <span class="inline-flex items-center gap-1 text-xs">
+                    <span class="w-1.5 h-1.5 rounded-full bg-orange-500"></span>
+                    <span>Маркетинг</span>
+                    <span class="text-[10px] px-1 py-0.5 rounded bg-orange-100 text-orange-700">01:12</span>
+                  </span>
+                </td>
+                <td class="px-3 py-1.5 text-right text-xs text-gray-500">3.25ч</td>
+                <td class="px-3 py-1.5 text-right font-semibold">1600₽</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+      
+      <!-- День 3: План выполнен -->
+      <details class="glass-effect rounded-lg overflow-hidden">
+        <summary class="cursor-pointer relative overflow-hidden">
+          <div class="absolute inset-0 bg-green-500 opacity-10" style="width: 100%;"></div>
+          <div class="relative px-3 py-2 flex items-center justify-between gap-4 hover:bg-gray-50/50 transition-colors">
+            <div class="flex items-center gap-2 min-w-0">
+              <svg class="w-4 h-4 text-gray-500 transition-transform chevron flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
+              <span class="font-semibold text-gray-800 whitespace-nowrap">27 Окт СБ</span>
+              <svg class="w-3.5 h-3.5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              </svg>
+              <span class="text-xs text-green-600 font-medium whitespace-nowrap">125%</span>
+            </div>
+            <div class="hidden md:flex items-center gap-3 text-xs text-gray-600">
+              <span>🕐 7:12</span>
+              <span>⚠ —</span>
+              <span>💰 1054₽</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs text-gray-500">7.12ч</span>
+              <span class="text-lg font-bold text-green-600">7500₽</span>
+            </div>
+          </div>
+        </summary>
+        
+        <div class="border-t border-gray-200">
+          <table class="w-full text-sm">
+            <tbody>
+              <tr class="hover:bg-gray-50 transition-colors">
+                <td class="px-3 py-1.5 font-mono text-xs text-gray-600">09:36-16:43</td>
+                <td class="px-3 py-1.5">
+                  <span class="inline-flex items-center gap-1 text-xs">
+                    <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                    <span>remix</span>
+                  </span>
+                </td>
+                <td class="px-3 py-1.5 text-right text-xs text-gray-500">7.12ч</td>
+                <td class="px-3 py-1.5 text-right font-semibold">7500₽</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+      
+    </div>
+    
+    <!-- Примечания -->
+    <div class="glass-effect rounded-2xl p-6 mt-8">
+      <h2 class="text-xl font-bold mb-4">💡 Преимущества варианта</h2>
+      <ul class="space-y-2 text-gray-700">
+        <li>✅ Максимальная компактность - минимум пустого пространства</li>
+        <li>✅ Прогресс-бар встроен в фон заголовка - не занимает место</li>
+        <li>✅ Однострочный заголовок - вся информация видна сразу</li>
+        <li>✅ Плотная таблица записей - больше данных на экране</li>
+        <li>✅ Эмодзи инсайты - понятно и компактно</li>
+        <li>✅ Минимальные отступы между днями</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>
+

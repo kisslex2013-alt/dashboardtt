@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Варианты звуковых уведомлений и анимации фавикона</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    
+    .glass-card {
+      background: rgba(17, 24, 39, 0.7);
+      backdrop-filter: blur(24px) saturate(200%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .glass-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 p-8">
+  <div class="max-w-7xl mx-auto space-y-8">
+    
+    <!-- Заголовок -->
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-white mb-4">Лаконичные варианты настроек звука</h1>
+      <p class="text-xl text-gray-400">5 упрощенных вариантов с анимацией только при наведении</p>
+      <p class="text-sm text-gray-500 mt-2">Каждый вариант содержит меньше опций и более простую компоновку</p>
+    </div>
+
+    <!-- Варианты -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      
+      <!-- Вариант 1: Компактный -->
+      <div class="glass-card rounded-xl p-6">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-12 h-12 rounded-lg bg-blue-500/20 flex items-center justify-center text-2xl">1</div>
+          <div>
+            <h2 class="text-xl font-bold text-white">Компактный</h2>
+            <p class="text-sm text-gray-400">Лаконичный, компактный</p>
+          </div>
+        </div>
+        
+        <div class="space-y-3 mb-4">
+          <div>
+            <p class="text-xs text-gray-400 mb-1">Особенности:</p>
+            <p class="text-sm text-white">Меньше опций, только основные</p>
+          </div>
+          <div>
+            <p class="text-xs text-gray-400 mb-1">Анимация:</p>
+            <p class="text-sm text-white">Только при наведении</p>
+          </div>
+          <div>
+            <p class="text-xs text-gray-400 mb-1">Интервалы:</p>
+            <p class="text-sm text-white">15, 30, 45, 60 мин</p>
+          </div>
+          <div>
+            <p class="text-xs text-gray-400 mb-1">Звуки:</p>
+            <p class="text-sm text-white">3 варианта</p>
+          </div>
+        </div>
+        
+        <a href="sound-notifications-variant-1-compact.html" target="_blank" class="block w-full px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/30 rounded-lg text-white text-center font-semibold transition-all">
+          Открыть вариант 1
+        </a>
+      </div>
+
+      <!-- Вариант 2: Минимальный -->
+      <div class="glass-card rounded-xl p-6">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-12 h-12 rounded-lg bg-gray-600/20 flex items-center justify-center text-2xl">2</div>
+          <div>
+            <h2 class="text-xl font-bold text-white">Минимальный</h2>
+            <p class="text-sm text-gray-400">Минимум элементов</p>
+          </div>
+        </div>
+        
+        <div class="space-y-3 mb-4">
+          <div>
+            <p class="text-xs text-gray-400 mb-1">Особенности:</p>
+            <p class="text-sm text-white">Максимально упрощенный</p>
+          </div>
+          <div>
+            <p class="text-xs text-gray-400 mb-1">Анимация:</p>
+            <p class="text-sm text-white">При наведении на иконку</p>
+          </div>
+          <div>
+            <p class="text-xs text-gray-400 mb-1">Интервалы:</p>
+            <p class="text-sm text-white">30 мин, 1 час, 2 часа</p>
+          </div>
+          <div>
+            <p class="text-xs text-gray-400 mb-1">Звуки:</p>
+            <p class="text-sm text-white">2 варианта</p>
+          </div>
+        </div>
+        
+        <a href="sound-notifications-variant-2-minimal.html" target="_blank" class="block w-full px-4 py-2 bg-gray-600/20 hover:bg-gray-600/30 border border-gray-600/30 rounded-lg text-white text-center font-semibold transition-all">
+          Открыть вариант 2
+        </a>
+      </div>
+
+      <!-- Вариант 3: Карточки -->
+      <div class="glass-card rounded-xl p-6">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-12 h-12 rounded-lg bg-purple-500/20 flex items-center justify-center text-2xl">3</div>
+          <div>
+            <h2 class="text-xl font-bold text-white">Карточки</h2>
+            <p class="text-sm text-gray-400">Блочная компоновка</p>
+          </div>
+        </div>
+        
+        <div class="space-y-3 mb-4">
+          <div>
+            <p class="text-xs text-gray-400 mb-1">Особенности:</p>
+            <p class="text-sm text-white">Карточки для каждой секции</p>
+          </div>
+          <div>
+            <p class="text-xs text-gray-400 mb-1">Анимация:</p>
+            <p class="text-sm text-white">При наведении на карточку</p>
+          </div>
+          <div>
+            <p class="text-xs text-gray-400 mb-1">Интервалы:</p>
+            <p class="text-sm text-white">30 мин, 1 час</p>
+          </div>
+          <div>
+            <p class="text-xs text-gray-400 mb-1">Звуки:</p>
+            <p class="text-sm text-white">3 варианта</p>
+          </div>
+        </div>
+        
+        <a href="sound-notifications-variant-3-cards.html" target="_blank" class="block w-full px-4 py-2 bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/30 rounded-lg text-white text-center font-semibold transition-all">
+          Открыть вариант 3
+        </a>
+      </div>
+
+      <!-- Вариант 4: Инлайн -->
+      <div class="glass-card rounded-xl p-6">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-12 h-12 rounded-lg bg-green-500/20 flex items-center justify-center text-2xl">4</div>
+          <div>
+            <h2 class="text-xl font-bold text-white">Инлайн</h2>
+            <p class="text-sm text-gray-400">В одну строку</p>
+          </div>
+        </div>
+        
+        <div class="space-y-3 mb-4">
+          <div>
+            <p class="text-xs text-gray-400 mb-1">Особенности:</p>
+            <p class="text-sm text-white">Все в одной строке</p>
+          </div>
+          <div>
+            <p class="text-xs text-gray-400 mb-1">Анимация:</p>
+            <p class="text-sm text-white">При наведении на превью</p>
+          </div>
+          <div>
+            <p class="text-xs text-gray-400 mb-1">Интервалы:</p>
+            <p class="text-sm text-white">30 мин, 1 час</p>
+          </div>
+          <div>
+            <p class="text-xs text-gray-400 mb-1">Звуки:</p>
+            <p class="text-sm text-white">2 варианта</p>
+          </div>
+        </div>
+        
+        <a href="sound-notifications-variant-4-inline.html" target="_blank" class="block w-full px-4 py-2 bg-green-500/20 hover:bg-green-500/30 border border-green-500/30 rounded-lg text-white text-center font-semibold transition-all">
+          Открыть вариант 4
+        </a>
+      </div>
+
+      <!-- Вариант 5: Простой -->
+      <div class="glass-card rounded-xl p-6">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-12 h-12 rounded-lg bg-orange-500/20 flex items-center justify-center text-2xl">5</div>
+          <div>
+            <h2 class="text-xl font-bold text-white">Простой</h2>
+            <p class="text-sm text-gray-400">Максимально простой</p>
+          </div>
+        </div>
+        
+        <div class="space-y-3 mb-4">
+          <div>
+            <p class="text-xs text-gray-400 mb-1">Особенности:</p>
+            <p class="text-sm text-white">Минимум настроек</p>
+          </div>
+          <div>
+            <p class="text-xs text-gray-400 mb-1">Анимация:</p>
+            <p class="text-sm text-white">При наведении</p>
+          </div>
+          <div>
+            <p class="text-xs text-gray-400 mb-1">Интервалы:</p>
+            <p class="text-sm text-white">30 мин, 1 час</p>
+          </div>
+          <div>
+            <p class="text-xs text-gray-400 mb-1">Звуки:</p>
+            <p class="text-sm text-white">1 вариант</p>
+          </div>
+        </div>
+        
+        <a href="sound-notifications-variant-5-simple.html" target="_blank" class="block w-full px-4 py-2 bg-orange-500/20 hover:bg-orange-500/30 border border-orange-500/30 rounded-lg text-white text-center font-semibold transition-all">
+          Открыть вариант 5
+        </a>
+      </div>
+
+    </div>
+
+    <!-- Сравнительная таблица -->
+    <div class="glass-card rounded-xl p-6 mt-8">
+      <h2 class="text-2xl font-bold text-white mb-6">Сравнительная таблица</h2>
+      
+      <div class="overflow-x-auto">
+        <table class="w-full text-left">
+          <thead>
+            <tr class="border-b border-gray-700">
+              <th class="pb-3 pr-4 text-sm font-semibold text-gray-400">Вариант</th>
+              <th class="pb-3 pr-4 text-sm font-semibold text-gray-400">Звуки</th>
+              <th class="pb-3 pr-4 text-sm font-semibold text-gray-400">Анимация</th>
+              <th class="pb-3 pr-4 text-sm font-semibold text-gray-400">Интервалы</th>
+              <th class="pb-3 text-sm font-semibold text-gray-400">Стиль</th>
+            </tr>
+          </thead>
+          <tbody class="text-sm">
+            <tr class="border-b border-gray-800">
+              <td class="py-3 pr-4 text-white font-semibold">1. Компактный</td>
+              <td class="py-3 pr-4 text-gray-300">3 варианта (Chime, Alert, Phone)</td>
+              <td class="py-3 pr-4 text-gray-300">4 стиля, анимация при наведении</td>
+              <td class="py-3 pr-4 text-gray-300">4 интервала (15-60 мин)</td>
+              <td class="py-3 text-gray-300">Лаконичный, компактный</td>
+            </tr>
+            <tr class="border-b border-gray-800">
+              <td class="py-3 pr-4 text-white font-semibold">2. Минимальный</td>
+              <td class="py-3 pr-4 text-gray-300">2 варианта (Chime, Alert)</td>
+              <td class="py-3 pr-4 text-gray-300">4 стиля, анимация при наведении</td>
+              <td class="py-3 pr-4 text-gray-300">3 интервала (30 мин - 2 часа)</td>
+              <td class="py-3 text-gray-300">Минимум элементов</td>
+            </tr>
+            <tr class="border-b border-gray-800">
+              <td class="py-3 pr-4 text-white font-semibold">3. Карточки</td>
+              <td class="py-3 pr-4 text-gray-300">3 варианта (Chime, Alert, Phone)</td>
+              <td class="py-3 pr-4 text-gray-300">4 стиля, анимация при наведении</td>
+              <td class="py-3 pr-4 text-gray-300">2 интервала (30 мин, 1 час)</td>
+              <td class="py-3 text-gray-300">Блочная компоновка</td>
+            </tr>
+            <tr class="border-b border-gray-800">
+              <td class="py-3 pr-4 text-white font-semibold">4. Инлайн</td>
+              <td class="py-3 pr-4 text-gray-300">2 варианта (Chime, Alert)</td>
+              <td class="py-3 pr-4 text-gray-300">4 стиля, анимация при наведении</td>
+              <td class="py-3 pr-4 text-gray-300">2 интервала (30 мин, 1 час)</td>
+              <td class="py-3 text-gray-300">В одну строку</td>
+            </tr>
+            <tr>
+              <td class="py-3 pr-4 text-white font-semibold">5. Простой</td>
+              <td class="py-3 pr-4 text-gray-300">1 вариант (Chime)</td>
+              <td class="py-3 pr-4 text-gray-300">4 стиля, анимация при наведении</td>
+              <td class="py-3 pr-4 text-gray-300">2 интервала (30 мин, 1 час)</td>
+              <td class="py-3 text-gray-300">Максимально простой</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Рекомендации -->
+    <div class="glass-card rounded-xl p-6 mt-8">
+      <h2 class="text-2xl font-bold text-white mb-4">Рекомендации по выбору</h2>
+      
+      <div class="space-y-4 text-gray-300">
+        <div class="p-4 bg-blue-900/20 rounded-lg border border-blue-500/20">
+          <h3 class="font-semibold text-blue-400 mb-2">Вариант 1: Компактный</h3>
+          <p class="text-sm">Лаконичный вариант с основными настройками. Интервалы: 15, 30, 45, 60 минут. 3 типа звуков. Анимация фавикона только при наведении мышкой. Подходит для большинства пользователей.</p>
+        </div>
+        
+        <div class="p-4 bg-gray-800/50 rounded-lg border border-gray-700/50">
+          <h3 class="font-semibold text-gray-400 mb-2">Вариант 2: Минимальный</h3>
+          <p class="text-sm">Максимально упрощенный вариант. Только 2 типа звуков и 3 интервала. Минимум элементов, анимация при наведении на иконку фавикона. Для пользователей, предпочитающих минимализм.</p>
+        </div>
+        
+        <div class="p-4 bg-purple-900/20 rounded-lg border border-purple-500/20">
+          <h3 class="font-semibold text-purple-400 mb-2">Вариант 3: Карточки</h3>
+          <p class="text-sm">Блочная компоновка с карточками для каждой секции. Звуки и анимация в отдельных карточках. Анимация фавикона при наведении на карточку. Удобно для структурированного отображения.</p>
+        </div>
+        
+        <div class="p-4 bg-green-900/20 rounded-lg border border-green-500/20">
+          <h3 class="font-semibold text-green-400 mb-2">Вариант 4: Инлайн</h3>
+          <p class="text-sm">Все настройки в одну строку. Компактный горизонтальный вариант. Анимация при наведении на превью фавикона. Экономит вертикальное пространство.</p>
+        </div>
+        
+        <div class="p-4 bg-orange-900/20 rounded-lg border border-orange-500/20">
+          <h3 class="font-semibold text-orange-400 mb-2">Вариант 5: Простой</h3>
+          <p class="text-sm">Максимально простой вариант с минимумом настроек. Только один тип звука по умолчанию. Анимация при наведении. Для пользователей, которые хотят быстро настроить и забыть.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
+
