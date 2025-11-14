@@ -74,16 +74,25 @@ try {
   // Создаем/обновляем version.json в public
   const versionJsonPath = join(rootDir, 'public', 'version.json')
   try {
+    // Читаем существующий version.json, если он есть, чтобы сохранить версию приложения
+    let existingVersion = '1.2.3'
+    if (existsSync(versionJsonPath)) {
+      try {
+        const existingData = JSON.parse(readFileSync(versionJsonPath, 'utf8'))
+        if (existingData.version && !existingData.version.startsWith('build_')) {
+          existingVersion = existingData.version
+        }
+      } catch (e) {
+        // Игнорируем ошибки чтения
+      }
+    }
+
     const versionData = {
-      version: buildVersion,
-      changelog: [
-        'обновлено автообновление',
-        'добавлены анимации',
-        'исправлены мелкие баги',
-      ],
+      version: existingVersion,
+      build: buildVersion,
     }
     writeFileSync(versionJsonPath, JSON.stringify(versionData, null, 2), 'utf8')
-    console.log(`✅ version.json обновлен: ${buildVersion}`)
+    console.log(`✅ version.json обновлен: version=${existingVersion}, build=${buildVersion}`)
   } catch (versionError) {
     console.warn('⚠️ Не удалось записать version.json:', versionError.message)
   }

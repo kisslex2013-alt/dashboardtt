@@ -70,8 +70,12 @@ import { useSync } from './hooks/useSync'
 import { useUpdateCategoryColors } from './store/useSettingsStore'
 import UpdateModal from './components/UpdateModal'
 import { useVersionCheck } from './hooks/useVersionCheck'
+import { useAppVersion } from './hooks/useAppVersion'
 
 function App() {
+  // Получаем версию приложения из version.json
+  const { version, build } = useAppVersion()
+
   // Проверка обновлений версии (только если версия определена и не пустая)
   // КРИТИЧНО: Отключаем проверку на промо-странице и если версия не определена
   const currentBuildVersion = import.meta.env.VITE_BUILD_VERSION
@@ -615,17 +619,12 @@ function App() {
 
         {/* Версия приложения - более заметная надпись */}
         <div className="mt-4 mb-2 px-2 text-center">
-          <p className="text-xs text-gray-400 dark:text-gray-500">
-            Time Tracker Dashboard v1.2.3</p>
-          <footer
-            style={{
-              fontSize: '11px',
-              textAlign: 'center',
-              opacity: 0.4,
-              marginTop: '4px',
-            }}
-          >
-            {import.meta.env.VITE_BUILD_VERSION}
+          <footer className="app-footer">
+            <span className="text-xs text-gray-400 dark:text-gray-500">
+              Time Tracker Dashboard
+              {version && ` v${version}`}
+              {build && ` ${build}`}
+            </span>
           </footer>
         </div>
 
