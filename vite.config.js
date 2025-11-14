@@ -296,10 +296,10 @@ export default defineConfig({
   },
   // Улучшенная обработка ошибок и оптимизация бандла
   build: {
-    sourcemap: true,
+    target: 'esnext',
     minify: 'esbuild', // esbuild быстрее и работает лучше с Vite (по умолчанию)
-    // Для terser нужно использовать плагин vite-plugin-terser
-    // Пока используем esbuild (быстрее и достаточно эффективен)
+    sourcemap: false, // Отключено для production на Vercel
+    chunkSizeWarningLimit: 1000, // Предупреждение при размере чанка > 1000 KB
     // ✅ ОПТИМИЗАЦИЯ: Разделение бандла на чанки для уменьшения размера
     rollupOptions: {
       output: {
