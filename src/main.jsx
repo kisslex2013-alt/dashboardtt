@@ -9,6 +9,20 @@ import './index.css'
 import './custom.css'
 import './styles/animations.css'
 
+// КРИТИЧНО: Глобальная защита от перезагрузок в первые секунды
+const PAGE_LOAD_TIME = Date.now()
+const RELOAD_BLOCK_TIME = 15000 // Блокируем перезагрузки первые 15 секунд
+
+// Создаем глобальную функцию-обертку для безопасной перезагрузки
+window.safeReload = function(forcedReload) {
+  const timeSinceLoad = Date.now() - PAGE_LOAD_TIME
+  if (timeSinceLoad < RELOAD_BLOCK_TIME) {
+    console.warn('🛡️ Перезагрузка заблокирована (начальный период защиты):', timeSinceLoad, 'ms')
+    return
+  }
+  window.location.reload(forcedReload)
+}
+
 // КРИТИЧНО: Не запускаем React приложение на промо-странице
 if (window.location.pathname.includes('/promo/')) {
   // На промо-странице React не нужен - это статическая HTML страница

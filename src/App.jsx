@@ -544,7 +544,13 @@ function App() {
           countdown={countdown}
           progress={progress}
           changelog={changelog}
-          onUpdateNow={() => window.location.reload(true)}
+          onUpdateNow={() => {
+            if (window.safeReload) {
+              window.safeReload(true)
+            } else {
+              window.location.reload(true)
+            }
+          }}
           onLater={() => setDismiss(true)}
         />
       )}
@@ -610,7 +616,17 @@ function App() {
         {/* Версия приложения - более заметная надпись */}
         <div className="mt-4 mb-2 px-2 text-center">
           <p className="text-xs text-gray-400 dark:text-gray-500">
-            Time Tracker Dashboard v1.2.3 build_16.09_14.11.25</p>
+            Time Tracker Dashboard v1.2.3 build_16.24_14.11.25</p>
+          <footer
+            style={{
+              fontSize: '11px',
+              textAlign: 'center',
+              opacity: 0.4,
+              marginTop: '4px',
+            }}
+          >
+            {import.meta.env.VITE_BUILD_VERSION}
+          </footer>
         </div>
 
         <FloatingPanel />
@@ -855,16 +871,6 @@ function App() {
           </div>
         )}
       </div>
-      <footer
-        style={{
-          fontSize: '11px',
-          textAlign: 'center',
-          opacity: 0.4,
-          marginTop: '20px',
-        }}
-      >
-        {import.meta.env.VITE_BUILD_VERSION}
-      </footer>
       </div>
     </>
   )

@@ -193,12 +193,18 @@ export function useAutoSync(options = {}) {
    * Синхронизирует данные между вкладками
    */
   const setupTabSync = useCallback(() => {
-    // КРИТИЧНО: Отключаем синхронизацию на промо-странице
-    if (!syncBetweenTabs || window.location.pathname.includes('/promo/')) return
+    // КРИТИЧНО: Отключаем синхронизацию на промо-странице или если версия не определена
+    const isPromoPage = window.location.pathname.includes('/promo/')
+    const hasVersion = import.meta.env.VITE_BUILD_VERSION && import.meta.env.VITE_BUILD_VERSION.trim() !== ''
+    
+    if (!syncBetweenTabs || isPromoPage || !hasVersion) {
+      return
+    }
 
     // Защита от циклических перезагрузок
-    const RELOAD_COOLDOWN = 5000 // Минимум 5 секунд между перезагрузками
-    const MAX_RELOADS_PER_MINUTE = 3 // Максимум 3 перезагрузки в минуту
+    const RELOAD_COOLDOWN = 10000 // Минимум 10 секунд между перезагрузками
+    const MAX_RELOADS_PER_MINUTE = 2 // Максимум 2 перезагрузки в минуту
+    const INITIAL_BLOCK_TIME = 10000 // Блокируем перезагрузки первые 10 секунд после загрузки
     
     // Используем sessionStorage для отслеживания перезагрузок в этой сессии
     const getReloadHistory = () => {
@@ -223,8 +229,19 @@ export function useAutoSync(options = {}) {
       }
     }
 
+    // Время загрузки страницы
+    const pageLoadTime = Date.now()
+
     const handleStorageChange = event => {
       if (event.key?.startsWith('time-tracker-')) {
+        const now = Date.now()
+        
+        // КРИТИЧНО: Блокируем перезагрузки в первые секунды после загрузки
+        if (now - pageLoadTime < INITIAL_BLOCK_TIME) {
+          logger.log('🔄 Перезагрузка заблокирована (начальный период блокировки)')
+          return
+        }
+
         // КРИТИЧНО: Игнорируем события, где newValue или oldValue равны null
         // Это может происходить при очистке localStorage или в режиме инкогнито
         if (event.newValue === null || event.oldValue === null) {
@@ -237,9 +254,16 @@ export function useAutoSync(options = {}) {
           return
         }
 
+        // КРИТИЧНО: Проверяем, что событие не было вызвано из той же вкладки
+        // В storage event event.storageArea должен быть null для событий из других вкладок
+        // Но это не всегда работает, поэтому используем дополнительную проверку
+        if (event.storageArea === window.localStorage) {
+          // Это событие из той же вкладки - игнорируем
+          return
+        }
+
         // Проверяем историю перезагрузок
         const history = getReloadHistory()
-        const now = Date.now()
         
         // Проверяем, не было ли недавно перезагрузки
         if (history.length > 0) {
@@ -260,7 +284,11 @@ export function useAutoSync(options = {}) {
 
         addReloadToHistory()
         // Перезагружаем данные из localStorage
-        window.location.reload()
+        if (window.safeReload) {
+          window.safeReload()
+        } else {
+          window.location.reload()
+        }
       }
     }
 

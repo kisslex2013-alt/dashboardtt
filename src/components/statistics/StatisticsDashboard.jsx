@@ -382,7 +382,7 @@ export function StatisticsDashboard({
 
           {/* Карточка 4: Ставка */}
           <StatCard
-            title="СТАВКА"
+            title="ЛАВКА!"
             numericValue={statsForDisplay.avgRate}
             suffix=" ₽/ч"
             decimals={0}
@@ -505,7 +505,7 @@ export function StatisticsDashboard({
 
       {/* Карточка 4: Ставка */}
       <StatCard
-        title="СТАВКА"
+        title="ЛАВКА!"
         numericValue={statsForDisplay.avgRate}
         suffix=" ₽/ч"
         decimals={0}

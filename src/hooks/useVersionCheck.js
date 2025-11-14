@@ -85,7 +85,11 @@ export function useVersionCheck(currentVersion) {
           clearInterval(t)
           // Добавляем небольшую задержку перед перезагрузкой
           setTimeout(() => {
-            window.location.reload(true)
+            if (window.safeReload) {
+              window.safeReload(true)
+            } else {
+              window.location.reload(true)
+            }
           }, 100)
         }
         return prev - 1
