@@ -17,28 +17,45 @@ export function useVersionCheck(currentVersion) {
 
   // Проверка версии
   useEffect(() => {
-    if (dismiss) return // Если пользователь отклонил обновление, не проверяем
+    // Если версия не определена или пользователь отклонил обновление, не проверяем
+    if (!currentVersion || dismiss) return
 
-    const interval = setInterval(async () => {
-      try {
-        const res = await fetch(`/version.json?ts=${Date.now()}`)
-        const data = await res.json()
+    let intervalId = null
 
-        if (data.version !== currentVersion && !dismiss) {
-          setUpdateAvailable(true)
-          setChangelog(data.changelog || [])
+    // Задержка перед первой проверкой (чтобы дать время загрузиться приложению)
+    const initialDelay = setTimeout(() => {
+      intervalId = setInterval(async () => {
+        try {
+          const res = await fetch(`/version.json?ts=${Date.now()}`)
+          const data = await res.json()
 
-          if (Notification.permission === 'granted') {
-            new Notification('Новая версия доступна', {
-              body: 'Страница будет обновлена автоматически.',
-              icon: '/icon-192.png',
-            })
+          // Проверяем, что версия действительно отличается и не пустая
+          if (
+            data.version &&
+            currentVersion &&
+            data.version !== currentVersion &&
+            !dismiss
+          ) {
+            setUpdateAvailable(true)
+            setChangelog(data.changelog || [])
+
+            if (Notification.permission === 'granted') {
+              new Notification('Новая версия доступна', {
+                body: 'Страница будет обновлена автоматически.',
+                icon: '/icon-192.png',
+              })
+            }
           }
-        }
-      } catch {}
-    }, 10000)
+        } catch {}
+      }, 60 * 60 * 1000) // Проверка раз в 60 минут
+    }, 60 * 1000) // Первая проверка через 60 секунд после загрузки
 
-    return () => clearInterval(interval)
+    return () => {
+      clearTimeout(initialDelay)
+      if (intervalId) {
+        clearInterval(intervalId)
+      }
+    }
   }, [currentVersion, dismiss])
 
   // Таймер
