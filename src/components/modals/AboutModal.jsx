@@ -244,7 +244,7 @@ export function AboutModal({ isOpen, onClose }) {
       isOpen={isOpen}
       onClose={onClose}
       title="Time Tracker Dashboard"
-      subtitle="Версия 1.3.0"
+      subtitle="Версия 1.2.1"
       size="large"
     >
       {/* Логотип приложения */}

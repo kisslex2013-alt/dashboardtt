@@ -2,7 +2,7 @@
 
 > Современное веб-приложение для учета рабочего времени с мощной аналитикой и визуализацией данных
 
-[![Version](https://img.shields.io/badge/version-1.3.0-blue.svg)](https://github.com/yourusername/time-tracker)
+[![Version](https://img.shields.io/badge/version-1.2.1-blue.svg)](https://github.com/yourusername/time-tracker)
 [![License](https://img.shields.io/badge/license-ISC-green.svg)](LICENSE)
 [![React](https://img.shields.io/badge/React-18.3.1-61dafb.svg)](https://reactjs.org/)
 [![Vite](https://img.shields.io/badge/Vite-7.1.7-646cff.svg)](https://vitejs.dev/)

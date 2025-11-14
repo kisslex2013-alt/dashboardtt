@@ -48,7 +48,9 @@ export function useOvertimeAlerts() {
 
   useEffect(() => {
     // Если предупреждения о переработке отключены, ничего не делаем
-    if (!notifications.overtimeAlertsEnabled || !dailyHours || dailyHours <= 0) {
+    // Убеждаемся, что dailyHours является числом
+    const dailyHoursNum = Number(dailyHours)
+    if (!notifications.overtimeAlertsEnabled || !Number.isFinite(dailyHoursNum) || dailyHoursNum <= 0) {
       return
     }
 
@@ -89,15 +91,18 @@ export function useOvertimeAlerts() {
       }
     }
 
-    const warningThreshold = dailyHours * (notifications.overtimeWarningThreshold || 1.0)
-    const criticalThreshold = dailyHours * (notifications.overtimeCriticalThreshold || 1.5)
+    // Убеждаемся, что пороги являются числами
+    const warningThresholdMultiplier = Number(notifications.overtimeWarningThreshold) || 1.0
+    const criticalThresholdMultiplier = Number(notifications.overtimeCriticalThreshold) || 1.5
+    const warningThreshold = Number.isFinite(warningThresholdMultiplier) ? dailyHoursNum * warningThresholdMultiplier : dailyHoursNum * 1.0
+    const criticalThreshold = Number.isFinite(criticalThresholdMultiplier) ? dailyHoursNum * criticalThresholdMultiplier : dailyHoursNum * 1.5
 
     // Проверяем критическое превышение (показываем только один раз за день)
     if (totalHours >= criticalThreshold && !alertsShownRef.current.critical) {
-      const overtimeHours = Number.isFinite(totalHours - dailyHours) ? totalHours - dailyHours : 0
+      const overtimeHours = Number.isFinite(totalHours - dailyHoursNum) ? totalHours - dailyHoursNum : 0
       const totalHoursFixed = Number.isFinite(totalHours) ? totalHours.toFixed(1) : '0.0'
       const overtimeHoursFixed = Number.isFinite(overtimeHours) ? overtimeHours.toFixed(1) : '0.0'
-      const message = `🚨 Критическая переработка! Вы работаете уже ${totalHoursFixed} ${totalHours === 1 ? 'час' : totalHours < 5 ? 'часа' : 'часов'} (норма: ${dailyHours} ч). Превышение: ${overtimeHoursFixed} ${overtimeHours === 1 ? 'час' : overtimeHours < 5 ? 'часа' : 'часов'}. Рекомендуется сделать перерыв и отдохнуть.`
+      const message = `🚨 Критическая переработка! Вы работаете уже ${totalHoursFixed} ${totalHours === 1 ? 'час' : totalHours < 5 ? 'часа' : 'часов'} (норма: ${dailyHoursNum} ч). Превышение: ${overtimeHoursFixed} ${overtimeHours === 1 ? 'час' : overtimeHours < 5 ? 'часа' : 'часов'}. Рекомендуется сделать перерыв и отдохнуть.`
 
       showError(message, 15000) // Показываем 15 секунд
 
@@ -108,14 +113,14 @@ export function useOvertimeAlerts() {
 
       alertsShownRef.current.critical = true
       const totalHoursLog = Number.isFinite(totalHours) ? totalHours.toFixed(1) : '0.0'
-      logger.log(`🚨 Критическое предупреждение о переработке показано (${totalHoursLog}ч / норма: ${dailyHours}ч)`)
+      logger.log(`🚨 Критическое предупреждение о переработке показано (${totalHoursLog}ч / норма: ${dailyHoursNum}ч)`)
     }
     // Проверяем предупреждение (показываем только один раз за день, если еще не было критического)
     else if (totalHours >= warningThreshold && !alertsShownRef.current.warning && !alertsShownRef.current.critical) {
-      const overtimeHours = Number.isFinite(totalHours - dailyHours) ? totalHours - dailyHours : 0
+      const overtimeHours = Number.isFinite(totalHours - dailyHoursNum) ? totalHours - dailyHoursNum : 0
       const totalHoursFixed = Number.isFinite(totalHours) ? totalHours.toFixed(1) : '0.0'
       const overtimeHoursFixed = Number.isFinite(overtimeHours) ? overtimeHours.toFixed(1) : '0.0'
-      const message = `⚠️ Переработка! Вы работаете уже ${totalHoursFixed} ${totalHours === 1 ? 'час' : totalHours < 5 ? 'часа' : 'часов'} (норма: ${dailyHours} ч). Превышение: ${overtimeHoursFixed} ${overtimeHours === 1 ? 'час' : overtimeHours < 5 ? 'часа' : 'часов'}. Рекомендуется сделать перерыв.`
+      const message = `⚠️ Переработка! Вы работаете уже ${totalHoursFixed} ${totalHours === 1 ? 'час' : totalHours < 5 ? 'часа' : 'часов'} (норма: ${dailyHoursNum} ч). Превышение: ${overtimeHoursFixed} ${overtimeHours === 1 ? 'час' : overtimeHours < 5 ? 'часа' : 'часов'}. Рекомендуется сделать перерыв.`
 
       showWarning(message, 12000) // Показываем 12 секунд
 
@@ -126,7 +131,7 @@ export function useOvertimeAlerts() {
 
       alertsShownRef.current.warning = true
       const totalHoursLog = Number.isFinite(totalHours) ? totalHours.toFixed(1) : '0.0'
-      logger.log(`⚠️ Предупреждение о переработке показано (${totalHoursLog}ч / норма: ${dailyHours}ч)`)
+      logger.log(`⚠️ Предупреждение о переработке показано (${totalHoursLog}ч / норма: ${dailyHoursNum}ч)`)
     }
   }, [entries, dailyHours, notifications.overtimeAlertsEnabled, notifications.overtimeWarningThreshold, notifications.overtimeCriticalThreshold, notifications.overtimeSoundAlert, showWarning, showError, playSound])
 }

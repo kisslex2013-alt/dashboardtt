@@ -38,7 +38,7 @@ try {
 
   if (versionPattern.test(content)) {
     // Заменяем версию
-    content = content.replace(versionPattern, `Time Tracker Dashboard v1.2.0 ${buildVersion}`)
+    content = content.replace(versionPattern, `Time Tracker Dashboard v1.2.1 ${buildVersion}`)
 
     // Записываем обратно
     writeFileSync(appJsxPath, content, 'utf8')

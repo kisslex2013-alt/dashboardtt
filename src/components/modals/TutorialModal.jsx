@@ -48,7 +48,7 @@ export function TutorialModal({ isOpen, onClose, onClearDemoData }) {
       content: (
         <div className="space-y-3">
           <p className="text-gray-700 dark:text-gray-300">
-            <strong>Time Tracker Dashboard v1.3.0</strong> - это современное приложение для учета
+            <strong>Time Tracker Dashboard v1.2.1</strong> - это современное приложение для учета
             рабочего времени с мощной аналитикой и умными инструментами.
           </p>
           <p className="text-gray-700 dark:text-gray-300">
@@ -74,7 +74,7 @@ export function TutorialModal({ isOpen, onClose, onClearDemoData }) {
             </ul>
           </div>
           <div className="bg-green-50 dark:bg-green-900/20 p-3 rounded-lg mt-3">
-            <h5 className="font-semibold text-xs mb-1">✨ Новые функции v1.3.0:</h5>
+            <h5 className="font-semibold text-xs mb-1">✨ Новые функции v1.2.1:</h5>
             <ul className="text-xs space-y-0.5 text-gray-600 dark:text-gray-400">
               <li>✓ Быстрый старт таймера - кнопка в шапке для мгновенного запуска</li>
               <li>✓ Индикаторы продуктивности - визуальный прогресс по целям, регулярности, фокусу и перерывам</li>
