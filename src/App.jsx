@@ -82,18 +82,6 @@ function App() {
     changelog,
   } = useVersionCheck(import.meta.env.VITE_BUILD_VERSION)
 
-  // Если доступно обновление и не отклонено, показываем модалку
-  if (updateAvailable && !dismiss) {
-    return (
-      <UpdateModal
-        countdown={countdown}
-        progress={progress}
-        changelog={changelog}
-        onUpdateNow={() => window.location.reload(true)}
-        onLater={() => setDismiss(true)}
-      />
-    )
-  }
   // ✅ ОПТИМИЗИРОВАНО: Используем единый хук вместо множества отдельных селекторов
   // Это уменьшает количество подписок и предотвращает избыточные re-renders
   const {
@@ -541,10 +529,21 @@ function App() {
   }, []) // Выполняется только один раз при монтировании
 
   return (
-    <div
-      className="min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors duration-300"
-      style={{ isolation: 'isolate' }}
-    >
+    <>
+      {/* Модалка обновления - показывается поверх всего контента */}
+      {updateAvailable && !dismiss && (
+        <UpdateModal
+          countdown={countdown}
+          progress={progress}
+          changelog={changelog}
+          onUpdateNow={() => window.location.reload(true)}
+          onLater={() => setDismiss(true)}
+        />
+      )}
+      <div
+        className="min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors duration-300"
+        style={{ isolation: 'isolate' }}
+      >
       {/* ✅ A11Y: Ссылка для пропуска к основному контенту */}
       <a
         href="#main-content"
@@ -603,7 +602,7 @@ function App() {
         {/* Версия приложения - более заметная надпись */}
         <div className="mt-4 mb-2 px-2 text-center">
           <p className="text-xs text-gray-400 dark:text-gray-500">
-            Time Tracker Dashboard v1.2.3 build_14.30_14.11.25</p>
+            Time Tracker Dashboard v1.2.3 build_14.41_14.11.25</p>
         </div>
 
         <FloatingPanel />
@@ -858,7 +857,8 @@ function App() {
       >
         {import.meta.env.VITE_BUILD_VERSION}
       </footer>
-    </div>
+      </div>
+    </>
   )
 }
 
