@@ -67,33 +67,20 @@
     </div>
 
     <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
 
-    <!-- Проверка первого запуска до загрузки React -->
+    <!-- Скрываем анимацию загрузки после загрузки React -->
     <script>
       ;(function () {
-        // Проверяем флаг первого запуска
-        const promoShown = localStorage.getItem('promo_shown')
-
-        if (!promoShown) {
-          // Если промо еще не было показано - редиректим на промо-страницу
-          // Редирект ДО загрузки React, чтобы избежать проблем
-          window.location.href = '/promo/time-tracker-promo-variant-2.html'
-          return // Прерываем выполнение, чтобы не загружать React
-        } else {
-          // Если промо уже было показано - скрываем анимацию и загружаем React
-          const loadingCheck = document.getElementById('loading-check')
-          if (loadingCheck) {
+        // Скрываем анимацию загрузки после небольшой задержки
+        const loadingCheck = document.getElementById('loading-check')
+        if (loadingCheck) {
+          setTimeout(() => {
             loadingCheck.classList.add('hidden')
             setTimeout(() => {
               loadingCheck.remove()
             }, 300)
-          }
-          
-          // Загружаем React только если промо уже было показано
-          const script = document.createElement('script')
-          script.type = 'module'
-          script.src = '/src/main.jsx'
-          document.body.appendChild(script)
+          }, 500)
         }
       })()
     </script>
