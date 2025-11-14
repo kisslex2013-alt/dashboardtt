@@ -73,9 +73,14 @@ import { useVersionCheck } from './hooks/useVersionCheck'
 
 function App() {
   // Проверка обновлений версии (только если версия определена и не пустая)
+  // КРИТИЧНО: Отключаем проверку на промо-странице и если версия не определена
   const currentBuildVersion = import.meta.env.VITE_BUILD_VERSION
-  // Полностью отключаем проверку, если версия не определена
-  const versionCheckEnabled = currentBuildVersion && currentBuildVersion.trim() !== ''
+  const isPromoPage = window.location.pathname.includes('/promo/')
+  const versionCheckEnabled = 
+    !isPromoPage && 
+    currentBuildVersion && 
+    currentBuildVersion.trim() !== ''
+  
   const {
     updateAvailable,
     countdown,
@@ -605,7 +610,7 @@ function App() {
         {/* Версия приложения - более заметная надпись */}
         <div className="mt-4 mb-2 px-2 text-center">
           <p className="text-xs text-gray-400 dark:text-gray-500">
-            Time Tracker Dashboard v1.2.3 build_16.01_14.11.25</p>
+            Time Tracker Dashboard v1.2.3 build_16.09_14.11.25</p>
         </div>
 
         <FloatingPanel />

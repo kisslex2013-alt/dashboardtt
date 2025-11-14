@@ -76,20 +76,24 @@ export function useVersionCheck(currentVersion) {
 
   // Таймер
   useEffect(() => {
-    if (!updateAvailable || dismiss) return
+    // КРИТИЧНО: Отключаем таймер, если версия не валидна
+    if (!updateAvailable || dismiss || !isVersionValid) return
 
     const t = setInterval(() => {
       setCountdown(prev => {
         if (prev <= 1) {
           clearInterval(t)
-          window.location.reload(true)
+          // Добавляем небольшую задержку перед перезагрузкой
+          setTimeout(() => {
+            window.location.reload(true)
+          }, 100)
         }
         return prev - 1
       })
     }, 1000)
 
     return () => clearInterval(t)
-  }, [updateAvailable, dismiss])
+  }, [updateAvailable, dismiss, isVersionValid])
 
   // Прогресс-бар
   useEffect(() => {

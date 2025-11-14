@@ -193,12 +193,72 @@ export function useAutoSync(options = {}) {
    * Синхронизирует данные между вкладками
    */
   const setupTabSync = useCallback(() => {
-    if (!syncBetweenTabs) return
+    // КРИТИЧНО: Отключаем синхронизацию на промо-странице
+    if (!syncBetweenTabs || window.location.pathname.includes('/promo/')) return
+
+    // Защита от циклических перезагрузок
+    const RELOAD_COOLDOWN = 5000 // Минимум 5 секунд между перезагрузками
+    const MAX_RELOADS_PER_MINUTE = 3 // Максимум 3 перезагрузки в минуту
+    
+    // Используем sessionStorage для отслеживания перезагрузок в этой сессии
+    const getReloadHistory = () => {
+      try {
+        const history = sessionStorage.getItem('reload-history')
+        return history ? JSON.parse(history) : []
+      } catch {
+        return []
+      }
+    }
+
+    const addReloadToHistory = () => {
+      try {
+        const history = getReloadHistory()
+        const now = Date.now()
+        // Оставляем только записи за последнюю минуту
+        const recentHistory = history.filter(time => now - time < 60000)
+        recentHistory.push(now)
+        sessionStorage.setItem('reload-history', JSON.stringify(recentHistory))
+      } catch {
+        // Игнорируем ошибки sessionStorage
+      }
+    }
 
     const handleStorageChange = event => {
       if (event.key?.startsWith('time-tracker-')) {
+        // КРИТИЧНО: Игнорируем события, где newValue или oldValue равны null
+        // Это может происходить при очистке localStorage или в режиме инкогнито
+        if (event.newValue === null || event.oldValue === null) {
+          return
+        }
+
+        // Проверяем, что событие действительно пришло из другой вкладки
+        // (event.newValue и event.oldValue должны быть разными)
+        if (event.newValue === event.oldValue) {
+          return
+        }
+
+        // Проверяем историю перезагрузок
+        const history = getReloadHistory()
+        const now = Date.now()
+        
+        // Проверяем, не было ли недавно перезагрузки
+        if (history.length > 0) {
+          const lastReload = history[history.length - 1]
+          if (now - lastReload < RELOAD_COOLDOWN) {
+            logger.log('🔄 Перезагрузка пропущена (слишком рано после предыдущей)')
+            return
+          }
+        }
+
+        // Проверяем, не превышен ли лимит перезагрузок
+        if (history.length >= MAX_RELOADS_PER_MINUTE) {
+          logger.log('🔄 Перезагрузка пропущена (превышен лимит перезагрузок)')
+          return
+        }
+
         logger.log('🔄 Обнаружены изменения в другой вкладке')
 
+        addReloadToHistory()
         // Перезагружаем данные из localStorage
         window.location.reload()
       }
@@ -351,7 +411,19 @@ export function useAutoSync(options = {}) {
 
   // Синхронизация между вкладками
   useEffect(() => {
-    return setupTabSync()
+    // КРИТИЧНО: Добавляем задержку перед включением синхронизации между вкладками
+    // Это предотвращает перезагрузки при первой загрузке страницы
+    let cleanup = null
+    const delay = setTimeout(() => {
+      cleanup = setupTabSync()
+    }, 3000) // Задержка 3 секунды после загрузки
+
+    return () => {
+      clearTimeout(delay)
+      if (cleanup) {
+        cleanup()
+      }
+    }
   }, [setupTabSync])
 
   // Синхронизация при изменении данных
