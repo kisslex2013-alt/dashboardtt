@@ -72,9 +72,13 @@ export function useOvertimeAlerts() {
       if (entry.duration) {
         totalHours += parseFloat(entry.duration) || 0
       } else if (entry.start && entry.end) {
-        totalHours += calculateDuration(entry.start, entry.end)
+        const duration = calculateDuration(entry.start, entry.end)
+        totalHours += Number.isFinite(duration) ? duration : 0
       }
     })
+    
+    // Убеждаемся, что totalHours является числом
+    totalHours = Number.isFinite(totalHours) ? totalHours : 0
 
     // Проверяем, нужно ли сбросить флаги при смене дня
     if (alertsShownRef.current.date !== today) {
@@ -90,8 +94,10 @@ export function useOvertimeAlerts() {
 
     // Проверяем критическое превышение (показываем только один раз за день)
     if (totalHours >= criticalThreshold && !alertsShownRef.current.critical) {
-      const overtimeHours = totalHours - dailyHours
-      const message = `🚨 Критическая переработка! Вы работаете уже ${totalHours.toFixed(1)} ${totalHours === 1 ? 'час' : totalHours < 5 ? 'часа' : 'часов'} (норма: ${dailyHours} ч). Превышение: ${overtimeHours.toFixed(1)} ${overtimeHours === 1 ? 'час' : overtimeHours < 5 ? 'часа' : 'часов'}. Рекомендуется сделать перерыв и отдохнуть.`
+      const overtimeHours = Number.isFinite(totalHours - dailyHours) ? totalHours - dailyHours : 0
+      const totalHoursFixed = Number.isFinite(totalHours) ? totalHours.toFixed(1) : '0.0'
+      const overtimeHoursFixed = Number.isFinite(overtimeHours) ? overtimeHours.toFixed(1) : '0.0'
+      const message = `🚨 Критическая переработка! Вы работаете уже ${totalHoursFixed} ${totalHours === 1 ? 'час' : totalHours < 5 ? 'часа' : 'часов'} (норма: ${dailyHours} ч). Превышение: ${overtimeHoursFixed} ${overtimeHours === 1 ? 'час' : overtimeHours < 5 ? 'часа' : 'часов'}. Рекомендуется сделать перерыв и отдохнуть.`
 
       showError(message, 15000) // Показываем 15 секунд
 
@@ -101,12 +107,15 @@ export function useOvertimeAlerts() {
       }
 
       alertsShownRef.current.critical = true
-      logger.log(`🚨 Критическое предупреждение о переработке показано (${totalHours.toFixed(1)}ч / норма: ${dailyHours}ч)`)
+      const totalHoursLog = Number.isFinite(totalHours) ? totalHours.toFixed(1) : '0.0'
+      logger.log(`🚨 Критическое предупреждение о переработке показано (${totalHoursLog}ч / норма: ${dailyHours}ч)`)
     }
     // Проверяем предупреждение (показываем только один раз за день, если еще не было критического)
     else if (totalHours >= warningThreshold && !alertsShownRef.current.warning && !alertsShownRef.current.critical) {
-      const overtimeHours = totalHours - dailyHours
-      const message = `⚠️ Переработка! Вы работаете уже ${totalHours.toFixed(1)} ${totalHours === 1 ? 'час' : totalHours < 5 ? 'часа' : 'часов'} (норма: ${dailyHours} ч). Превышение: ${overtimeHours.toFixed(1)} ${overtimeHours === 1 ? 'час' : overtimeHours < 5 ? 'часа' : 'часов'}. Рекомендуется сделать перерыв.`
+      const overtimeHours = Number.isFinite(totalHours - dailyHours) ? totalHours - dailyHours : 0
+      const totalHoursFixed = Number.isFinite(totalHours) ? totalHours.toFixed(1) : '0.0'
+      const overtimeHoursFixed = Number.isFinite(overtimeHours) ? overtimeHours.toFixed(1) : '0.0'
+      const message = `⚠️ Переработка! Вы работаете уже ${totalHoursFixed} ${totalHours === 1 ? 'час' : totalHours < 5 ? 'часа' : 'часов'} (норма: ${dailyHours} ч). Превышение: ${overtimeHoursFixed} ${overtimeHours === 1 ? 'час' : overtimeHours < 5 ? 'часа' : 'часов'}. Рекомендуется сделать перерыв.`
 
       showWarning(message, 12000) // Показываем 12 секунд
 
@@ -116,7 +125,8 @@ export function useOvertimeAlerts() {
       }
 
       alertsShownRef.current.warning = true
-      logger.log(`⚠️ Предупреждение о переработке показано (${totalHours.toFixed(1)}ч / норма: ${dailyHours}ч)`)
+      const totalHoursLog = Number.isFinite(totalHours) ? totalHours.toFixed(1) : '0.0'
+      logger.log(`⚠️ Предупреждение о переработке показано (${totalHoursLog}ч / норма: ${dailyHours}ч)`)
     }
   }, [entries, dailyHours, notifications.overtimeAlertsEnabled, notifications.overtimeWarningThreshold, notifications.overtimeCriticalThreshold, notifications.overtimeSoundAlert, showWarning, showError, playSound])
 }
