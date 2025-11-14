@@ -68,8 +68,32 @@ import { loadDemoData } from './utils/loadDemoData'
 import { handleError } from './utils/errorHandler'
 import { useSync } from './hooks/useSync'
 import { useUpdateCategoryColors } from './store/useSettingsStore'
+import UpdateModal from './components/UpdateModal'
+import { useVersionCheck } from './hooks/useVersionCheck'
 
 function App() {
+  // Проверка обновлений версии
+  const {
+    updateAvailable,
+    countdown,
+    dismiss,
+    setDismiss,
+    progress,
+    changelog,
+  } = useVersionCheck(import.meta.env.VITE_BUILD_VERSION)
+
+  // Если доступно обновление и не отклонено, показываем модалку
+  if (updateAvailable && !dismiss) {
+    return (
+      <UpdateModal
+        countdown={countdown}
+        progress={progress}
+        changelog={changelog}
+        onUpdateNow={() => window.location.reload(true)}
+        onLater={() => setDismiss(true)}
+      />
+    )
+  }
   // ✅ ОПТИМИЗИРОВАНО: Используем единый хук вместо множества отдельных селекторов
   // Это уменьшает количество подписок и предотвращает избыточные re-renders
   const {
@@ -579,7 +603,7 @@ function App() {
         {/* Версия приложения - более заметная надпись */}
         <div className="mt-4 mb-2 px-2 text-center">
           <p className="text-xs text-gray-400 dark:text-gray-500">
-            Time Tracker Dashboard v1.2.3 build_13.10_14.11.25</p>
+            Time Tracker Dashboard v1.2.3 build_13.30_14.11.25</p>
         </div>
 
         <FloatingPanel />
@@ -824,6 +848,16 @@ function App() {
           </div>
         )}
       </div>
+      <footer
+        style={{
+          fontSize: '11px',
+          textAlign: 'center',
+          opacity: 0.4,
+          marginTop: '20px',
+        }}
+      >
+        {import.meta.env.VITE_BUILD_VERSION}
+      </footer>
     </div>
   )
 }

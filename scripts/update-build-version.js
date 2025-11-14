@@ -6,7 +6,7 @@
  * node scripts/update-build-version.js
  */
 
-import { readFileSync, writeFileSync } from 'fs'
+import { readFileSync, writeFileSync, existsSync } from 'fs'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
@@ -45,6 +45,47 @@ try {
     console.log(`✅ Версия сборки обновлена: ${buildVersion}`)
   } else {
     console.warn('⚠️ Паттерн версии не найден в App.jsx')
+  }
+
+  // Записываем версию в .env файл
+  const envPath = join(rootDir, '.env')
+  try {
+    let envContent = ''
+    if (existsSync(envPath)) {
+      envContent = readFileSync(envPath, 'utf8')
+    }
+
+    // Обновляем или добавляем VITE_BUILD_VERSION
+    if (envContent.includes('VITE_BUILD_VERSION=')) {
+      envContent = envContent.replace(
+        /VITE_BUILD_VERSION=.*/,
+        `VITE_BUILD_VERSION=${buildVersion}`
+      )
+    } else {
+      envContent += `\nVITE_BUILD_VERSION=${buildVersion}\n`
+    }
+
+    writeFileSync(envPath, envContent, 'utf8')
+    console.log(`✅ Версия сборки записана в .env: ${buildVersion}`)
+  } catch (envError) {
+    console.warn('⚠️ Не удалось записать версию в .env:', envError.message)
+  }
+
+  // Создаем/обновляем version.json в public
+  const versionJsonPath = join(rootDir, 'public', 'version.json')
+  try {
+    const versionData = {
+      version: buildVersion,
+      changelog: [
+        'обновлено автообновление',
+        'добавлены анимации',
+        'исправлены мелкие баги',
+      ],
+    }
+    writeFileSync(versionJsonPath, JSON.stringify(versionData, null, 2), 'utf8')
+    console.log(`✅ version.json обновлен: ${buildVersion}`)
+  } catch (versionError) {
+    console.warn('⚠️ Не удалось записать version.json:', versionError.message)
   }
 } catch (error) {
   console.error('❌ Ошибка обновления версии:', error)

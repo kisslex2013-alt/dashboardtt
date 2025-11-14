@@ -313,6 +313,9 @@ export default defineConfig({
   server: {
     port: 5173,
     host: '0.0.0.0', // Слушать на всех интерфейсах (IPv4 и IPv6)
+    headers: {
+      'Cache-Control': 'no-cache',
+    },
     hmr: {
       overlay: true, // Показывать ошибки в браузере
     },
@@ -323,6 +326,7 @@ export default defineConfig({
   },
   // Улучшенная обработка ошибок и оптимизация бандла
   build: {
+    outDir: 'dist',
     target: 'esnext',
     minify: 'esbuild', // esbuild быстрее и работает лучше с Vite (по умолчанию)
     sourcemap: false, // Отключено для production на Vercel
