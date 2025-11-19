@@ -790,6 +790,7 @@ export interface BackupModalProps {
 export interface ImportModalProps {
   isOpen: boolean
   onClose: () => void
+  onImport: (data: any, mode: 'replace' | 'merge') => Promise<void>
 }
 
 /**

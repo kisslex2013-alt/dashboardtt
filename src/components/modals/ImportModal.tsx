@@ -13,7 +13,7 @@ import type { ImportModalProps } from '../../types'
  * - Режим импорта: заменить или добавить
  * - Валидация данных
  */
-export function ImportModal({ isOpen, onClose }: ImportModalProps) {
+export function ImportModal({ isOpen, onClose, onImport }: ImportModalProps) {
   const [selectedFile, setSelectedFile] = useState(null)
   const [importMode, setImportMode] = useState('replace') // 'replace' или 'merge'
   const [previewData, setPreviewData] = useState(null)
@@ -87,7 +87,16 @@ export function ImportModal({ isOpen, onClose }: ImportModalProps) {
         reader.onload = async e => {
           try {
             const jsonString = e.target.result
-            const { data } = importFromJSON(jsonString)
+            const { isValid, data, error: validationError } = importFromJSON(jsonString)
+            
+            // Проверяем валидность данных перед импортом
+            if (!isValid || !data) {
+              const errorMsg = validationError || 'Некорректный формат файла'
+              setError(errorMsg)
+              reject(new Error(errorMsg))
+              return
+            }
+            
             await onImport(data, importMode)
             handleClose()
             resolve()

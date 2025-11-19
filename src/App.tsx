@@ -60,6 +60,7 @@ import { Button } from './components/ui/Button'
 import { Trash2 } from 'lucide-react'
 import { getIcon } from './utils/iconHelper'
 import { useAppSelectors } from './hooks/useAppSelectors'
+import { DashboardSkeleton } from './components/layout/DashboardSkeleton'
 // ✅ ОПТИМИЗАЦИЯ: useSettingsStore используется только в exportToJSON, можно оставить статический импорт
 // (динамический импорт в useEntriesStore используется только для бэкапов)
 import { useSettingsStore, usePomodoroSettings, useColorScheme, useSetColorScheme } from './store/useSettingsStore'
@@ -84,6 +85,7 @@ import { useVersionCheck } from './hooks/useVersionCheck'
 import { useAppVersion } from './hooks/useAppVersion'
 import { useIncognitoMode } from './hooks/useIncognitoMode'
 import { useHapticFeedback } from './hooks/useHapticFeedback'
+import { generateUUID } from './utils/uuid'
 
 function App() {
   // Получаем версию приложения из version.json
@@ -130,15 +132,71 @@ function App() {
   
   const showWarning = useShowWarning()
 
+  // ✅ SKELETON LOADER: Отслеживание гидрации storов для показа skeleton loader
+  // Всегда показываем skeleton минимум на 600мс для плавности UX
+  // Это гарантирует, что skeleton перекроет начальный loading screen из index.html
+  const [isHydrated, setIsHydrated] = useState(false)
+
+  // ✅ SKELETON LOADER: Проверяем гидрацию storов после монтирования
+  useEffect(() => {
+    let checkInterval = null
+    let maxWaitTimer = null
+
+    // Проверяем наличие ключей persist в localStorage
+    const checkHydration = () => {
+      const hasEntriesKey = localStorage.getItem('time-tracker-entries') !== null
+      const hasSettingsKey = localStorage.getItem('time-tracker-settings') !== null
+      
+      // Если оба ключа есть, считаем что гидрация завершена
+      return hasEntriesKey && hasSettingsKey
+    }
+
+    // Минимальное время показа skeleton (600мс) для плавности UX
+    // Это гарантирует, что skeleton перекроет начальный loading screen из index.html
+    // После этого проверяем гидрацию и показываем контент
+    const minDisplayTimer = setTimeout(() => {
+      if (checkHydration()) {
+        setIsHydrated(true)
+      } else {
+        // Если ключей еще нет, проверяем периодически
+        checkInterval = setInterval(() => {
+          if (checkHydration()) {
+            if (checkInterval) clearInterval(checkInterval)
+            if (maxWaitTimer) clearTimeout(maxWaitTimer)
+            setIsHydrated(true)
+          }
+        }, 100)
+
+        // Максимальное время ожидания (еще 400мс после минимального = 1000мс всего)
+        // После этого показываем контент в любом случае
+        maxWaitTimer = setTimeout(() => {
+          if (checkInterval) clearInterval(checkInterval)
+          setIsHydrated(true)
+        }, 400)
+      }
+    }, 600)
+
+    return () => {
+      clearTimeout(minDisplayTimer)
+      if (checkInterval) clearInterval(checkInterval)
+      if (maxWaitTimer) clearTimeout(maxWaitTimer)
+    }
+  }, [])
+
   // ✅ Отслеживание наличия демо-данных для показа предупреждения
+  // Показываем предупреждение ТОЛЬКО когда загружены ровно 906 демо-записей
   const [hasDemoData, setHasDemoData] = useState(() => {
-    return localStorage.getItem('demo_data_loaded') === 'true' && entries.length > 0
+    const isDemoLoaded = localStorage.getItem('demo_data_loaded') === 'true'
+    const has906Entries = entries.length === 906
+    return isDemoLoaded && has906Entries
   })
 
   // Обновляем состояние при изменении entries или localStorage
   useEffect(() => {
     const checkDemoData = () => {
-      setHasDemoData(localStorage.getItem('demo_data_loaded') === 'true' && entries.length > 0)
+      const isDemoLoaded = localStorage.getItem('demo_data_loaded') === 'true'
+      const has906Entries = entries.length === 906
+      setHasDemoData(isDemoLoaded && has906Entries)
     }
     checkDemoData()
     
@@ -582,23 +640,58 @@ function App() {
 
   const handleImport = async (data, mode) => {
     try {
+      // Проверяем наличие данных
+      if (!data) {
+        throw new Error('Данные для импорта отсутствуют')
+      }
+
       logger.log('📥 Импорт данных:', data)
       logger.log('📊 Количество записей:', data.entries?.length)
       logger.log('🎯 Режим импорта:', mode)
 
-      // Преобразуем записи: categoryId → category
-      const processedEntries = (data.entries || []).map(entry => {
+      // Проверяем наличие записей
+      if (!data.entries || !Array.isArray(data.entries)) {
+        throw new Error('Записи отсутствуют или имеют неверный формат')
+      }
+
+      if (data.entries.length === 0) {
+        throw new Error('Файл не содержит записей для импорта')
+      }
+
+      // Преобразуем записи: categoryId → category, генерируем ID если нужно
+      const processedEntries = data.entries.map((entry, index) => {
+        // Проверяем обязательные поля
+        if (!entry.date) {
+          logger.warn(`⚠️ Запись ${index + 1} не имеет даты, пропускаем`)
+          return null
+        }
+
+        // Генерируем ID если отсутствует
+        const entryId = entry.id || generateUUID()
+        
         // Если есть categoryId, но нет category - копируем значение
-        if (entry.categoryId && !entry.category) {
-          return { ...entry, category: entry.categoryId }
+        let category = entry.category
+        if (entry.categoryId && !category) {
+          category = entry.categoryId
         }
         // Если нет ни categoryId, ни category - ставим дефолтную
-        if (!entry.category && !entry.categoryId) {
-          return { ...entry, category: 'remix' }
+        if (!category && !entry.categoryId) {
+          category = 'remix'
         }
-        return entry
-      })
+        
+        return {
+          ...entry,
+          id: entryId,
+          category,
+          categoryId: category, // Оставляем и categoryId для совместимости
+        }
+      }).filter(entry => entry !== null) // Удаляем null записи
 
+      if (processedEntries.length === 0) {
+        throw new Error('Нет валидных записей для импорта')
+      }
+
+      logger.log('📝 Обработано записей:', processedEntries.length)
       logger.log('📝 Обработанные записи (первые 3):', processedEntries.slice(0, 3))
 
       if (mode === 'replace') {
@@ -612,7 +705,7 @@ function App() {
       }
 
       // Импортируем категории, если они есть
-      if (data.categories) {
+      if (data.categories && Array.isArray(data.categories)) {
         useSettingsStore.getState().importCategories(data.categories)
         logger.log('✅ Импортированы категории:', data.categories.length)
       }
@@ -720,6 +813,11 @@ function App() {
 
     return () => clearTimeout(timer)
   }, []) // Выполняется только один раз при монтировании
+
+  // ✅ SKELETON LOADER: Показываем skeleton пока данные не загружены
+  if (!isHydrated) {
+    return <DashboardSkeleton />
+  }
 
   return (
     <>

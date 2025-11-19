@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 
 /**
  * 🔔 Хук для управления модальным окном подтверждения
@@ -55,26 +55,36 @@ export function useConfirmModal() {
     cancelText: 'Отмена',
   })
 
+  // Используем ref для хранения актуального onConfirm, чтобы избежать проблем с замыканием
+  const onConfirmRef = useRef(config.onConfirm)
+  
+  useEffect(() => {
+    onConfirmRef.current = config.onConfirm
+  }, [config.onConfirm])
+
   const openConfirm = newConfig => {
     setConfig({
-      title: config.title,
-      message: config.message,
+      title: 'Подтверждение',
+      message: 'Вы уверены, что хотите выполнить это действие?',
       onConfirm: () => {},
-      confirmText: config.confirmText,
-      cancelText: config.cancelText,
-      ...newConfig,
+      confirmText: 'Подтвердить',
+      cancelText: 'Отмена',
+      ...newConfig, // Новый конфиг перезаписывает дефолтные значения
     })
     setIsOpen(true)
   }
 
-  const closeConfirm = () => {
+  const closeConfirm = useCallback(() => {
     setIsOpen(false)
-  }
+  }, [])
 
-  const handleConfirm = () => {
-    config.onConfirm?.()
+  const handleConfirm = useCallback(() => {
+    // Используем ref для получения актуального onConfirm
+    if (onConfirmRef.current) {
+      onConfirmRef.current()
+    }
     closeConfirm()
-  }
+  }, [closeConfirm])
 
   return {
     isOpen,
@@ -84,7 +94,10 @@ export function useConfirmModal() {
       isOpen,
       onClose: closeConfirm,
       onConfirm: handleConfirm,
-      ...config,
+      title: config.title,
+      message: config.message,
+      confirmText: config.confirmText,
+      cancelText: config.cancelText,
     },
   }
 }

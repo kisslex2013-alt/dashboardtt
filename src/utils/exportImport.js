@@ -128,6 +128,14 @@ export function importFromJSON(jsonString) {
   try {
     const data = JSON.parse(jsonString)
 
+    // Логируем структуру для отладки
+    console.log('📋 Структура импортируемого файла:', {
+      hasData: !!data.data,
+      hasEntries: !!(data.data?.entries || data.entries),
+      entriesCount: (data.data?.entries || data.entries)?.length || 0,
+      version: data.version,
+    })
+
     // Валидация структуры файла
     const validation = validateImportData(data)
     if (!validation.isValid) {
@@ -139,6 +147,7 @@ export function importFromJSON(jsonString) {
         return 'Неизвестная ошибка'
       })
 
+      console.error('❌ Ошибки валидации:', errorMessages)
       return {
         isValid: false,
         error: `Ошибка валидации: ${errorMessages.join(', ')}`,
@@ -146,14 +155,30 @@ export function importFromJSON(jsonString) {
       }
     }
 
+    // Извлекаем данные - поддерживаем оба формата: { data: { entries: [...] } } и { entries: [...] }
+    const extractedData = data.data || data
+    
+    // Проверяем, что entries есть
+    if (!extractedData.entries || !Array.isArray(extractedData.entries)) {
+      console.error('❌ Записи отсутствуют или имеют неверный формат')
+      return {
+        isValid: false,
+        error: 'Записи отсутствуют или имеют неверный формат',
+        data: null,
+      }
+    }
+
+    console.log('✅ Валидация пройдена, записей:', extractedData.entries.length)
+
     return {
       isValid: true,
-      data: data.data || data, // Поддерживаем оба формата
+      data: extractedData,
       metadata: data.metadata,
       version: data.version,
       error: null,
     }
   } catch (error) {
+    console.error('❌ Ошибка парсинга JSON:', error)
     return {
       isValid: false,
       error: `Ошибка парсинга JSON: ${error.message}`,
@@ -228,27 +253,29 @@ export function validateImportData(data) {
   let hasErrors = false
 
   entriesToCheck.forEach((entry, index) => {
-    if (!entry.id) {
-      errors.push(`Запись ${index + 1}: отсутствует ID`)
-      hasErrors = true
-    }
+    // ID не обязателен - может быть сгенерирован при импорте
+    // if (!entry.id) {
+    //   errors.push(`Запись ${index + 1}: отсутствует ID`)
+    //   hasErrors = true
+    // }
     if (!entry.date) {
       errors.push(`Запись ${index + 1}: отсутствует дата`)
       hasErrors = true
     }
-    if (!entry.start) {
-      errors.push(`Запись ${index + 1}: отсутствует время начала`)
-      hasErrors = true
-    }
-    if (!entry.end) {
-      errors.push(`Запись ${index + 1}: отсутствует время окончания`)
-      hasErrors = true
-    }
-    // category или categoryId допустимы
-    if (!entry.category && !entry.categoryId) {
-      errors.push(`Запись ${index + 1}: отсутствует категория`)
-      hasErrors = true
-    }
+    // start и end не обязательны - могут быть вычислены из duration
+    // if (!entry.start) {
+    //   errors.push(`Запись ${index + 1}: отсутствует время начала`)
+    //   hasErrors = true
+    // }
+    // if (!entry.end) {
+    //   errors.push(`Запись ${index + 1}: отсутствует время окончания`)
+    //   hasErrors = true
+    // }
+    // category или categoryId допустимы, но не обязательны (может быть дефолтная)
+    // if (!entry.category && !entry.categoryId) {
+    //   errors.push(`Запись ${index + 1}: отсутствует категория`)
+    //   hasErrors = true
+    // }
 
     // Останавливаемся после 3 ошибок для краткости
     if (errors.length >= 3) {
