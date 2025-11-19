@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Концепт 2: Accordion Sections - Звуки и анимация</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      color: #e2e8f0;
+    }
+
+    /* Glass Effect */
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Modal */
+    .modal {
+      width: 100%;
+      max-width: 700px;
+      border-radius: 24px;
+      overflow: hidden;
+      animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Header */
+    .modal-header {
+      padding: 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .modal-title {
+      font-size: 24px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .title-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .modal-subtitle {
+      font-size: 14px;
+      color: #94a3b8;
+      margin-left: 44px;
+    }
+
+    /* Content */
+    .modal-content {
+      padding: 24px;
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+
+    .modal-content::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .modal-content::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 4px;
+    }
+
+    .modal-content::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+    }
+
+    /* Accordion */
+    .accordion-item {
+      margin-bottom: 16px;
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .accordion-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    .accordion-header {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.3s ease;
+      border-radius: 16px;
+    }
+
+    .accordion-item.active .accordion-header {
+      background: rgba(59, 130, 246, 0.1);
+      border-color: rgba(59, 130, 246, 0.3);
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    .accordion-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .accordion-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      transition: all 0.3s ease;
+    }
+
+    .accordion-item:nth-child(1) .accordion-icon {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+    }
+
+    .accordion-item:nth-child(2) .accordion-icon {
+      background: linear-gradient(135deg, #10b981, #059669);
+    }
+
+    .accordion-item:nth-child(3) .accordion-icon {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+    }
+
+    .accordion-info h3 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: #f1f5f9;
+    }
+
+    .accordion-info p {
+      font-size: 13px;
+      color: #94a3b8;
+    }
+
+    .accordion-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .status-badge {
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .status-badge.on {
+      background: rgba(16, 185, 129, 0.15);
+      color: #10b981;
+    }
+
+    .status-badge.off {
+      background: rgba(148, 163, 184, 0.15);
+      color: #94a3b8;
+    }
+
+    .accordion-chevron {
+      font-size: 20px;
+      transition: transform 0.3s ease;
+      color: #94a3b8;
+    }
+
+    .accordion-item.active .accordion-chevron {
+      transform: rotate(180deg);
+      color: #3b82f6;
+    }
+
+    /* Accordion Body */
+    .accordion-body {
+      max-height: 0;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-top: none;
+      border-bottom-left-radius: 16px;
+      border-bottom-right-radius: 16px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .accordion-item.active .accordion-body {
+      max-height: 800px;
+      padding: 20px;
+      border-color: rgba(59, 130, 246, 0.3);
+    }
+
+    .accordion-content {
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Setting Row */
+    .setting-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .setting-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .setting-row:first-child {
+      padding-top: 0;
+    }
+
+    .setting-info {
+      flex: 1;
+    }
+
+    .setting-label {
+      font-size: 15px;
+      font-weight: 600;
+      color: #f1f5f9;
+      margin-bottom: 4px;
+    }
+
+    .setting-description {
+      font-size: 13px;
+      color: #94a3b8;
+    }
+
+    .setting-control {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Toggle Switch */
+    .toggle {
+      width: 48px;
+      height: 28px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      border: none;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      flex-shrink: 0;
+    }
+
+    .toggle.active {
+      background: #3b82f6;
+    }
+
+    .toggle::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 22px;
+      height: 22px;
+      background: white;
+      border-radius: 50%;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .toggle.active::after {
+      transform: translateX(20px);
+    }
+
+    /* Select */
+    .select-control {
+      min-width: 150px;
+      padding: 10px 14px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      color: #e2e8f0;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      outline: none;
+    }
+
+    .select-control:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .select-control:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    /* Button */
+    .btn {
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-primary {
+      background: #3b82f6;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #2563eb;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: #e2e8f0;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-small {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+
+    /* Range Input */
+    .range-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 200px;
+    }
+
+    .range-input {
+      flex: 1;
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.1);
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    .range-input::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #3b82f6;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+    }
+
+    .range-value {
+      min-width: 50px;
+      text-align: right;
+      font-size: 13px;
+      color: #94a3b8;
+      font-weight: 600;
+    }
+
+    /* Favicon Grid */
+    .favicon-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .favicon-card {
+      background: rgba(255, 255, 255, 0.08);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .favicon-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 255, 255, 0.3);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .favicon-card.active {
+      border-color: #3b82f6;
+      background: rgba(59, 130, 246, 0.1);
+    }
+
+    .favicon-canvas {
+      width: 32px;
+      height: 32px;
+      margin: 0 auto 8px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .favicon-label {
+      display: block;
+      font-size: 11px;
+      color: #94a3b8;
+      font-weight: 500;
+    }
+
+    /* Color Grid */
+    .color-grid {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .color-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .color-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .color-btn.active {
+      border-color: white;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+    }
+
+    /* Footer */
+    .modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+  </style>
+</head>
+<body>
+  <div class="modal glass-effect">
+    <!-- Header -->
+    <div class="modal-header">
+      <div class="modal-title">
+        <div class="title-icon">🔊</div>
+        <span>Звуки и анимация</span>
+      </div>
+      <div class="modal-subtitle">Настройка уведомлений и визуальных эффектов</div>
+    </div>
+
+    <!-- Content -->
+    <div class="modal-content">
+      <!-- Accordion: Notifications -->
+      <div class="accordion-item active">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+          <div class="accordion-left">
+            <div class="accordion-icon">🔔</div>
+            <div class="accordion-info">
+              <h3>Уведомления</h3>
+              <p>Звуки и напоминания о перерывах</p>
+            </div>
+          </div>
+          <div class="accordion-right">
+            <span class="status-badge on">● Включено</span>
+            <span class="accordion-chevron">▼</span>
+          </div>
+        </div>
+        <div class="accordion-body">
+          <div class="accordion-content">
+            <div class="setting-row">
+              <div class="setting-info">
+                <div class="setting-label">Звуковые уведомления</div>
+                <div class="setting-description">Воспроизведение звуков при важных событиях</div>
+              </div>
+              <div class="setting-control">
+                <button class="toggle active" onclick="this.classList.toggle('active')"></button>
+              </div>
+            </div>
+
+            <div class="setting-row">
+              <div class="setting-info">
+                <div class="setting-label">Интервал уведомлений</div>
+                <div class="setting-description">Частота звуковых сигналов</div>
+              </div>
+              <div class="setting-control">
+                <select class="select-control">
+                  <option>15 минут</option>
+                  <option selected>30 минут</option>
+                  <option>45 минут</option>
+                  <option>1 час</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="setting-row">
+              <div class="setting-info">
+                <div class="setting-label">Тип звука</div>
+                <div class="setting-description">Выбор мелодии уведомления</div>
+              </div>
+              <div class="setting-control">
+                <select class="select-control">
+                  <option selected>Мелодия</option>
+                  <option>Предупреждение</option>
+                  <option>Звонок</option>
+                  <option>Тревога</option>
+                </select>
+                <button class="btn btn-secondary btn-small">▶ Тест</button>
+              </div>
+            </div>
+
+            <div class="setting-row">
+              <div class="setting-info">
+                <div class="setting-label">Напоминания о перерывах</div>
+                <div class="setting-description">Уведомления после длительной работы</div>
+              </div>
+              <div class="setting-control">
+                <button class="toggle active" onclick="this.classList.toggle('active')"></button>
+              </div>
+            </div>
+
+            <div class="setting-row">
+              <div class="setting-info">
+                <div class="setting-label">Интервал перерывов</div>
+                <div class="setting-description">Частота напоминаний</div>
+              </div>
+              <div class="setting-control">
+                <select class="select-control">
+                  <option>Каждый час</option>
+                  <option selected>Каждые 2 часа</option>
+                  <option>Каждые 3 часа</option>
+                  <option>Каждые 4 часа</option>
+                </select>
+                <button class="btn btn-secondary btn-small">Пример</button>
+              </div>
+            </div>
+
+            <div class="setting-row">
+              <div class="setting-info">
+                <div class="setting-label">Предупреждения о переработке</div>
+                <div class="setting-description">Уведомления при превышении нормы</div>
+              </div>
+              <div class="setting-control">
+                <button class="toggle active" onclick="this.classList.toggle('active')"></button>
+              </div>
+            </div>
+
+            <div class="setting-row">
+              <div class="setting-info">
+                <div class="setting-label">Порог переработки</div>
+                <div class="setting-description">Максимальное рабочее время</div>
+              </div>
+              <div class="setting-control">
+                <div class="range-group">
+                  <input type="range" class="range-input" min="0.5" max="2" step="0.1" value="1.2" oninput="this.nextElementSibling.textContent = (this.value * 8).toFixed(1) + ' ч'">
+                  <span class="range-value">9.6 ч</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Accordion: Pomodoro -->
+      <div class="accordion-item">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+          <div class="accordion-left">
+            <div class="accordion-icon">🍅</div>
+            <div class="accordion-info">
+              <h3>Pomodoro</h3>
+              <p>Техника управления временем</p>
+            </div>
+          </div>
+          <div class="accordion-right">
+            <span class="status-badge on">● Включено</span>
+            <span class="accordion-chevron">▼</span>
+          </div>
+        </div>
+        <div class="accordion-body">
+          <div class="accordion-content">
+            <div class="setting-row">
+              <div class="setting-info">
+                <div class="setting-label">Pomodoro таймер</div>
+                <div class="setting-description">25 минут работы + перерыв</div>
+              </div>
+              <div class="setting-control">
+                <button class="toggle active" onclick="this.classList.toggle('active')"></button>
+              </div>
+            </div>
+
+            <div class="setting-row">
+              <div class="setting-info">
+                <div class="setting-label">Автостарт перерывов</div>
+                <div class="setting-description">Автоматический запуск перерыва после работы</div>
+              </div>
+              <div class="setting-control">
+                <button class="toggle active" onclick="this.classList.toggle('active')"></button>
+              </div>
+            </div>
+
+            <div class="setting-row">
+              <div class="setting-info">
+                <div class="setting-label">Автостарт работы</div>
+                <div class="setting-description">Автоматический запуск работы после перерыва</div>
+              </div>
+              <div class="setting-control">
+                <button class="toggle" onclick="this.classList.toggle('active')"></button>
+              </div>
+            </div>
+
+            <div class="setting-row">
+              <div class="setting-info">
+                <div class="setting-label">Звук при завершении</div>
+                <div class="setting-description">Звуковое уведомление о конце периода</div>
+              </div>
+              <div class="setting-control">
+                <button class="toggle active" onclick="this.classList.toggle('active')"></button>
+              </div>
+            </div>
+
+            <div class="setting-row">
+              <div class="setting-info">
+                <div class="setting-label">Уведомления</div>
+                <div class="setting-description">Browser notifications при завершении</div>
+              </div>
+              <div class="setting-control">
+                <button class="toggle active" onclick="this.classList.toggle('active')"></button>
+                <button class="btn btn-secondary btn-small">Тест</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Accordion: Favicon -->
+      <div class="accordion-item">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+          <div class="accordion-left">
+            <div class="accordion-icon">🎨</div>
+            <div class="accordion-info">
+              <h3>Анимация фавикона</h3>
+              <p>Визуальный индикатор в табе</p>
+            </div>
+          </div>
+          <div class="accordion-right">
+            <span class="status-badge on">● Включено</span>
+            <span class="accordion-chevron">▼</span>
+          </div>
+        </div>
+        <div class="accordion-body">
+          <div class="accordion-content">
+            <div class="setting-row">
+              <div class="setting-info">
+                <div class="setting-label">Анимация фавикона</div>
+                <div class="setting-description">Визуальный индикатор в табе браузера</div>
+              </div>
+              <div class="setting-control">
+                <button class="toggle active" onclick="this.classList.toggle('active')"></button>
+              </div>
+            </div>
+
+            <div class="setting-row" style="display: block; padding: 16px 0;">
+              <div class="setting-info" style="margin-bottom: 12px;">
+                <div class="setting-label">Стиль анимации</div>
+                <div class="setting-description">Выберите тип визуального эффекта</div>
+              </div>
+              <div class="favicon-grid">
+                <div class="favicon-card active">
+                  <div class="favicon-canvas" style="background: linear-gradient(135deg, #3b82f6, #2563eb);"></div>
+                  <span class="favicon-label">Pulse</span>
+                </div>
+                <div class="favicon-card">
+                  <div class="favicon-canvas" style="background: linear-gradient(135deg, #10b981, #059669);"></div>
+                  <span class="favicon-label">Blink</span>
+                </div>
+                <div class="favicon-card">
+                  <div class="favicon-canvas" style="background: linear-gradient(135deg, #f59e0b, #d97706);"></div>
+                  <span class="favicon-label">Rotate</span>
+                </div>
+                <div class="favicon-card">
+                  <div class="favicon-canvas" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);"></div>
+                  <span class="favicon-label">Wave</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="setting-row" style="display: block; padding: 16px 0;">
+              <div class="setting-info" style="margin-bottom: 12px;">
+                <div class="setting-label">Цвет анимации</div>
+                <div class="setting-description">Выберите цвет индикатора</div>
+              </div>
+              <div class="color-grid">
+                <button class="color-btn active" style="background: #3b82f6;"></button>
+                <button class="color-btn" style="background: #10b981;"></button>
+                <button class="color-btn" style="background: #f59e0b;"></button>
+                <button class="color-btn" style="background: #ef4444;"></button>
+                <button class="color-btn" style="background: #8b5cf6;"></button>
+                <button class="color-btn" style="background: linear-gradient(135deg, #3b82f6, #8b5cf6);"></button>
+              </div>
+            </div>
+
+            <div class="setting-row">
+              <div class="setting-info">
+                <div class="setting-label">Скорость анимации</div>
+                <div class="setting-description">Скорость визуального эффекта</div>
+              </div>
+              <div class="setting-control">
+                <select class="select-control">
+                  <option>Медленно</option>
+                  <option selected>Обычно</option>
+                  <option>Быстро</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="modal-footer">
+      <button class="btn btn-secondary">Отмена</button>
+      <button class="btn btn-primary">Сохранить</button>
+    </div>
+  </div>
+
+  <script>
+    function toggleAccordion(header) {
+      const item = header.parentElement;
+      const isActive = item.classList.contains('active');
+      
+      // Close all accordions
+      document.querySelectorAll('.accordion-item').forEach(el => {
+        el.classList.remove('active');
+      });
+      
+      // Open clicked accordion if it wasn't active
+      if (!isActive) {
+        item.classList.add('active');
+      }
+    }
+
+    // Color picker
+    document.querySelectorAll('.color-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    // Favicon cards
+    document.querySelectorAll('.favicon-card').forEach(card => {
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.favicon-card').forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
+

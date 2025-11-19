@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Концепт 1: Минималистичный - Настройка дат выплат</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .glass-effect {
+            background: rgba(31, 41, 55, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(75, 85, 99, 0.3);
+        }
+        
+        .payment-card {
+            transition: all 0.2s ease;
+        }
+        
+        .payment-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .editing {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: rgba(59, 130, 246, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-gray-900 p-8 min-h-screen flex items-center justify-center">
+    
+    <script>
+        // Данные выплат
+        let payments = [
+            {
+                id: 1,
+                name: 'Основная зарплата',
+                day: 25,
+                periodStart: 1,
+                periodEnd: 15,
+                periodMonth: 'current',
+                color: '#10B981',
+                type: 'monthly'
+            },
+            {
+                id: 2,
+                name: 'Аванс',
+                day: 10,
+                periodStart: 16,
+                periodEnd: 31,
+                periodMonth: 'previous',
+                color: '#3B82F6',
+                type: 'monthly'
+            },
+            {
+                id: 3,
+                name: 'Фриланс проект',
+                day: 5,
+                customDate: '05.12',
+                periodMonth: 'previous',
+                color: '#8B5CF6',
+                type: 'once'
+            }
+        ];
+        
+        let editingId = null;
+        
+        // Рендер списка
+        function renderPayments() {
+            const container = document.getElementById('payments-list');
+            container.innerHTML = payments.map(payment => `
+                <div class="payment-card bg-gray-800/50 rounded-xl p-4 border border-gray-700/50 ${editingId === payment.id ? 'editing' : ''}" data-id="${payment.id}">
+                    ${editingId === payment.id ? renderEditForm(payment) : renderViewMode(payment)}
+                </div>
+            `).join('');
+        }
+        
+        // Режим просмотра
+        function renderViewMode(payment) {
+            return `
+                <div class="flex items-center gap-4">
+                    <div class="w-1 h-12 rounded-full" style="background-color: ${payment.color}"></div>
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="text-white font-medium">${payment.name}</h3>
+                            <span class="text-2xl font-bold text-white">${payment.type === 'once' ? payment.customDate : payment.day}</span>
+                        </div>
+                        <div class="flex items-center gap-4 text-sm text-gray-400">
+                            <span>${payment.type === 'once' ? 'Конкретная дата: ' + payment.customDate : 'Период: ' + payment.periodStart + '-' + payment.periodEnd + ' число'}</span>
+                            <span>•</span>
+                            <span>${payment.periodMonth === 'previous' ? 'Предыдущий месяц' : 'Текущий месяц'}</span>
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="startEdit(${payment.id})" class="p-2 hover:bg-gray-700 rounded-lg transition-colors">
+                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                            </svg>
+                        </button>
+                        <button onclick="deletePayment(${payment.id})" class="p-2 hover:bg-red-500/20 rounded-lg transition-colors">
+                            <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Режим редактирования
+        function renderEditForm(payment) {
+            return `
+                <div class="space-y-3">
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-1">Название</label>
+                        <input type="text" id="edit-name" value="${payment.name}" class="w-full bg-gray-700 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">Дата выплаты</label>
+                            <input type="number" id="edit-day" value="${payment.day || ''}" min="1" max="31" class="w-full bg-gray-700 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">Цвет</label>
+                            <input type="color" id="edit-color" value="${payment.color}" class="w-full h-10 bg-gray-700 rounded-lg cursor-pointer">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">Период с</label>
+                            <input type="number" id="edit-period-start" value="${payment.periodStart || ''}" min="1" max="31" class="w-full bg-gray-700 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">Период по</label>
+                            <input type="number" id="edit-period-end" value="${payment.periodEnd || ''}" min="1" max="31" class="w-full bg-gray-700 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-1">Месяц периода</label>
+                        <select id="edit-period-month" class="w-full bg-gray-700 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="current" ${payment.periodMonth === 'current' ? 'selected' : ''}>Текущий месяц</option>
+                            <option value="previous" ${payment.periodMonth === 'previous' ? 'selected' : ''}>Предыдущий месяц</option>
+                        </select>
+                    </div>
+                    <div class="flex gap-2 pt-2">
+                        <button onclick="saveEdit(${payment.id})" class="flex-1 py-2 px-4 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors">
+                            Сохранить
+                        </button>
+                        <button onclick="cancelEdit()" class="flex-1 py-2 px-4 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-medium transition-colors">
+                            Отмена
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Начать редактирование
+        function startEdit(id) {
+            editingId = id;
+            renderPayments();
+        }
+        
+        // Отменить редактирование
+        function cancelEdit() {
+            editingId = null;
+            renderPayments();
+        }
+        
+        // Сохранить изменения
+        function saveEdit(id) {
+            const payment = payments.find(p => p.id === id);
+            if (payment) {
+                payment.name = document.getElementById('edit-name').value;
+                payment.day = parseInt(document.getElementById('edit-day').value);
+                payment.color = document.getElementById('edit-color').value;
+                payment.periodStart = parseInt(document.getElementById('edit-period-start').value);
+                payment.periodEnd = parseInt(document.getElementById('edit-period-end').value);
+                payment.periodMonth = document.getElementById('edit-period-month').value;
+            }
+            editingId = null;
+            renderPayments();
+            showNotification('Изменения сохранены', 'success');
+        }
+        
+        // Удалить выплату
+        function deletePayment(id) {
+            if (confirm('Удалить эту выплату?')) {
+                payments = payments.filter(p => p.id !== id);
+                renderPayments();
+                showNotification('Выплата удалена', 'success');
+            }
+        }
+        
+        // Добавить новую выплату
+        function addPayment() {
+            const newId = Math.max(...payments.map(p => p.id), 0) + 1;
+            payments.push({
+                id: newId,
+                name: 'Новая выплата',
+                day: 1,
+                periodStart: 1,
+                periodEnd: 15,
+                periodMonth: 'current',
+                color: '#6366F1',
+                type: 'monthly'
+            });
+            editingId = newId;
+            renderPayments();
+        }
+        
+        // Закрыть модальное окно
+        function closeModal() {
+            if (confirm('Закрыть окно? Несохраненные изменения будут потеряны.')) {
+                window.close();
+            }
+        }
+        
+        // Сохранить все
+        function saveAll() {
+            console.log('Сохранено:', payments);
+            showNotification('Все изменения сохранены', 'success');
+        }
+        
+        // Уведомления
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg text-white font-medium shadow-lg z-50 ${
+                type === 'success' ? 'bg-green-600' : 
+                type === 'error' ? 'bg-red-600' : 
+                'bg-blue-600'
+            }`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transition = 'opacity 0.3s';
+                setTimeout(() => notification.remove(), 300);
+            }, 2000);
+        }
+        
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', () => {
+            renderPayments();
+        });
+    </script>
+    
+    <!-- Концепт 1: Минималистичный список -->
+    <div class="glass-effect rounded-2xl p-8 max-w-2xl w-full shadow-2xl">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-8">
+            <div>
+                <h2 class="text-2xl font-bold text-white mb-1">Даты выплат</h2>
+                <p class="text-sm text-gray-400">Настройте периоды и даты получения оплаты</p>
+            </div>
+            <button onclick="closeModal()" class="text-gray-400 hover:text-white transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Payment List -->
+        <div id="payments-list" class="space-y-3 mb-6">
+            <!-- Список будет отрендерен через JavaScript -->
+        </div>
+
+        <!-- Add Button -->
+        <button onclick="addPayment()" class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium transition-colors flex items-center justify-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+            Добавить дату выплаты
+        </button>
+
+        <!-- Footer Actions -->
+        <div class="flex gap-3 mt-6 pt-6 border-t border-gray-700/50">
+            <button onclick="closeModal()" class="flex-1 py-2.5 px-4 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-medium transition-colors">
+                Отмена
+            </button>
+            <button onclick="saveAll()" class="flex-1 py-2.5 px-4 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors">
+                Сохранить
+            </button>
+        </div>
+    </div>
+
+</body>
+</html>

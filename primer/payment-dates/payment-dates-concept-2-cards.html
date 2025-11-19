@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Концепт 2: Карточный - Настройка дат выплат</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .glass-effect {
+            background: rgba(31, 41, 55, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(75, 85, 99, 0.3);
+        }
+        
+        .payment-card-large {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .payment-card-large::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--card-color), transparent);
+        }
+        
+        .payment-card-large:hover {
+            transform: scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+    </style>
+</head>
+<body class="bg-gray-900 p-8 min-h-screen flex items-center justify-center">
+    
+    <!-- Концепт 2: Большие карточки -->
+    <div class="glass-effect rounded-2xl p-8 max-w-4xl w-full shadow-2xl">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-8">
+            <div>
+                <h2 class="text-3xl font-bold text-white mb-2">💰 Даты выплат</h2>
+                <p class="text-gray-400">Управляйте периодами получения оплаты</p>
+            </div>
+            <button onclick="closeModal()" class="p-2 hover:bg-gray-700 rounded-lg transition-colors">
+                <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Cards Grid -->
+        <div id="cards-grid" class="grid grid-cols-2 gap-6 mb-6">
+            <!-- Card 1 -->
+            <div class="payment-card-large bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 border border-gray-700" style="--card-color: #10B981">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="p-3 bg-green-500/20 rounded-xl">
+                        <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="p-2 hover:bg-gray-700 rounded-lg transition-colors">
+                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                            </svg>
+                        </button>
+                        <button class="p-2 hover:bg-red-500/20 rounded-lg transition-colors">
+                            <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <h3 class="text-xl font-bold text-white mb-2">Основная зарплата</h3>
+                
+                <div class="flex items-baseline gap-2 mb-4">
+                    <span class="text-5xl font-bold text-white">25</span>
+                    <span class="text-gray-400">число</span>
+                </div>
+                
+                <div class="space-y-2">
+                    <div class="flex items-center gap-2 text-sm text-gray-400">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                        <span>Период: 1-15 число</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-sm text-gray-400">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                        </svg>
+                        <span>Повторяется каждый месяц</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="payment-card-large bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 border border-gray-700" style="--card-color: #3B82F6">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="p-3 bg-blue-500/20 rounded-xl">
+                        <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="p-2 hover:bg-gray-700 rounded-lg transition-colors">
+                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                            </svg>
+                        </button>
+                        <button class="p-2 hover:bg-red-500/20 rounded-lg transition-colors">
+                            <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <h3 class="text-xl font-bold text-white mb-2">Аванс</h3>
+                
+                <div class="flex items-baseline gap-2 mb-4">
+                    <span class="text-5xl font-bold text-white">10</span>
+                    <span class="text-gray-400">число</span>
+                </div>
+                
+                <div class="space-y-2">
+                    <div class="flex items-center gap-2 text-sm text-gray-400">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                        <span>Период: 16-31 число</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-sm text-gray-400">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                        </svg>
+                        <span>Повторяется каждый месяц</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="payment-card-large bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 border border-gray-700" style="--card-color: #8B5CF6">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="p-3 bg-purple-500/20 rounded-xl">
+                        <svg class="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="p-2 hover:bg-gray-700 rounded-lg transition-colors">
+                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                            </svg>
+                        </button>
+                        <button class="p-2 hover:bg-red-500/20 rounded-lg transition-colors">
+                            <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <h3 class="text-xl font-bold text-white mb-2">Фриланс проект</h3>
+                
+                <div class="flex items-baseline gap-2 mb-4">
+                    <span class="text-5xl font-bold text-white">05.12</span>
+                </div>
+                
+                <div class="space-y-2">
+                    <div class="flex items-center gap-2 text-sm text-gray-400">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                        <span>Конкретная дата</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-sm text-gray-400">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                        <span>Разовая выплата</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add New Card -->
+            <button class="payment-card-large bg-gray-800/30 rounded-2xl p-6 border-2 border-dashed border-gray-700 hover:border-blue-500 hover:bg-gray-800/50 transition-all flex flex-col items-center justify-center gap-4">
+                <div class="p-4 bg-blue-500/20 rounded-full">
+                    <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                </div>
+                <div class="text-center">
+                    <p class="text-white font-medium mb-1">Добавить выплату</p>
+                    <p class="text-sm text-gray-400">Настройте новую дату</p>
+                </div>
+            </button>
+        </div>
+
+        <!-- Footer -->
+        <div class="flex gap-3 pt-6 border-t border-gray-700/50">
+            <button onclick="closeModal()" class="flex-1 py-3 px-4 bg-gray-700 hover:bg-gray-600 text-white rounded-xl font-medium transition-colors">
+                Отмена
+            </button>
+            <button onclick="saveAll()" class="flex-1 py-3 px-4 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white rounded-xl font-medium transition-all shadow-lg">
+                Сохранить изменения
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Данные выплат
+        let payments = [
+            { id: 1, name: 'Основная зарплата', day: 25, periodStart: 1, periodEnd: 15, periodMonth: 'current', color: '#10B981', type: 'monthly' },
+            { id: 2, name: 'Аванс', day: 10, periodStart: 16, periodEnd: 31, periodMonth: 'previous', color: '#3B82F6', type: 'monthly' },
+            { id: 3, name: 'Фриланс проект', day: 5, customDate: '05.12', periodMonth: 'previous', color: '#8B5CF6', type: 'once' }
+        ];
+        
+        let editingId = null;
+        
+        function renderCards() {
+            const container = document.getElementById('cards-grid');
+            const cardsHTML = payments.map(payment => editingId === payment.id ? renderEditCard(payment) : renderViewCard(payment)).join('');
+            const addCardHTML = `
+                <button onclick="addPayment()" class="payment-card-large bg-gray-800/30 rounded-2xl p-6 border-2 border-dashed border-gray-700 hover:border-blue-500 hover:bg-gray-800/50 transition-all flex flex-col items-center justify-center gap-4">
+                    <div class="p-4 bg-blue-500/20 rounded-full">
+                        <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-white font-medium mb-1">Добавить выплату</p>
+                        <p class="text-sm text-gray-400">Настройте новую дату</p>
+                    </div>
+                </button>
+            `;
+            container.innerHTML = cardsHTML + addCardHTML;
+        }
+        
+        function renderViewCard(payment) {
+            return `
+                <div class="payment-card-large bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 border border-gray-700" style="--card-color: ${payment.color}">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="p-3 rounded-xl" style="background-color: ${payment.color}20;">
+                            <svg class="w-6 h-6" style="color: ${payment.color}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="startEdit(${payment.id})" class="p-2 hover:bg-gray-700 rounded-lg transition-colors">
+                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                                </svg>
+                            </button>
+                            <button onclick="deletePayment(${payment.id})" class="p-2 hover:bg-red-500/20 rounded-lg transition-colors">
+                                <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">${payment.name}</h3>
+                    <div class="flex items-baseline gap-2 mb-4">
+                        <span class="text-5xl font-bold text-white">${payment.type === 'once' ? payment.customDate : payment.day}</span>
+                        ${payment.type === 'monthly' ? '<span class="text-gray-400">число</span>' : ''}
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex items-center gap-2 text-sm text-gray-400">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                            <span>${payment.type === 'once' ? 'Конкретная дата' : 'Период: ' + payment.periodStart + '-' + payment.periodEnd + ' число'}</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-sm text-gray-400">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                            </svg>
+                            <span>${payment.periodMonth === 'previous' ? 'Предыдущий месяц' : 'Текущий месяц'}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function renderEditCard(payment) {
+            return `
+                <div class="payment-card-large bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 border-2 border-blue-500" style="--card-color: ${payment.color}">
+                    <div class="space-y-3">
+                        <input type="text" id="edit-name" value="${payment.name}" placeholder="Название" class="w-full bg-gray-700 text-white rounded-lg px-3 py-2 text-lg font-bold">
+                        <input type="number" id="edit-day" value="${payment.day || ''}" min="1" max="31" placeholder="День" class="w-full bg-gray-700 text-white rounded-lg px-3 py-2 text-3xl font-bold text-center">
+                        <input type="color" id="edit-color" value="${payment.color}" class="w-full h-12 bg-gray-700 rounded-lg cursor-pointer">
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="number" id="edit-period-start" value="${payment.periodStart || ''}" min="1" max="31" placeholder="С" class="bg-gray-700 text-white rounded-lg px-3 py-2 text-center">
+                            <input type="number" id="edit-period-end" value="${payment.periodEnd || ''}" min="1" max="31" placeholder="По" class="bg-gray-700 text-white rounded-lg px-3 py-2 text-center">
+                        </div>
+                        <select id="edit-period-month" class="w-full bg-gray-700 text-white rounded-lg px-3 py-2">
+                            <option value="current" ${payment.periodMonth === 'current' ? 'selected' : ''}>Текущий месяц</option>
+                            <option value="previous" ${payment.periodMonth === 'previous' ? 'selected' : ''}>Предыдущий месяц</option>
+                        </select>
+                        <div class="flex gap-2 pt-2">
+                            <button onclick="saveEdit(${payment.id})" class="flex-1 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium">Сохранить</button>
+                            <button onclick="cancelEdit()" class="flex-1 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-medium">Отмена</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function startEdit(id) { editingId = id; renderCards(); }
+        function cancelEdit() { editingId = null; renderCards(); }
+        function saveEdit(id) {
+            const payment = payments.find(p => p.id === id);
+            if (payment) {
+                payment.name = document.getElementById('edit-name').value;
+                payment.day = parseInt(document.getElementById('edit-day').value) || 1;
+                payment.color = document.getElementById('edit-color').value;
+                payment.periodStart = parseInt(document.getElementById('edit-period-start').value) || 1;
+                payment.periodEnd = parseInt(document.getElementById('edit-period-end').value) || 31;
+                payment.periodMonth = document.getElementById('edit-period-month').value;
+            }
+            editingId = null;
+            renderCards();
+            showNotification('Изменения сохранены', 'success');
+        }
+        
+        function deletePayment(id) {
+            if (confirm('Удалить эту выплату?')) {
+                payments = payments.filter(p => p.id !== id);
+                renderCards();
+                showNotification('Выплата удалена', 'success');
+            }
+        }
+        
+        function addPayment() {
+            const newId = Math.max(...payments.map(p => p.id), 0) + 1;
+            payments.push({ id: newId, name: 'Новая выплата', day: 1, periodStart: 1, periodEnd: 15, periodMonth: 'current', color: '#6366F1', type: 'monthly' });
+            editingId = newId;
+            renderCards();
+        }
+        
+        function closeModal() { if (confirm('Закрыть окно?')) window.close(); }
+        function saveAll() { console.log('Сохранено:', payments); showNotification('Все изменения сохранены', 'success'); }
+        
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg text-white font-medium shadow-lg z-50 ${type === 'success' ? 'bg-green-600' : type === 'error' ? 'bg-red-600' : 'bg-blue-600'}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => { notification.style.opacity = '0'; notification.style.transition = 'opacity 0.3s'; setTimeout(() => notification.remove(), 300); }, 2000);
+        }
+        
+        document.addEventListener('DOMContentLoaded', renderCards);
+    </script>
+
+</body>
+</html>

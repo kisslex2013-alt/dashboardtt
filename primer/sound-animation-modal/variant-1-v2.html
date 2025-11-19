@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Концепт 1 V2: Классический - Звуки и анимация</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    .glass-effect { background: rgba(17, 24, 39, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(75, 85, 99, 0.3); }
+    .toggle-switch { position: relative; width: 48px; height: 24px; background: #4B5563; border-radius: 12px; cursor: pointer; transition: background 0.3s ease; }
+    .toggle-switch.active { background: #10B981; }
+    .toggle-switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: white; border-radius: 50%; transition: transform 0.3s ease; }
+    .toggle-switch.active::after { transform: translateX(24px); }
+    input[type="range"] { -webkit-appearance: none; width: 100%; height: 6px; border-radius: 3px; background: #374151; outline: none; }
+    input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: #3B82F6; cursor: pointer; transition: all 0.2s ease; }
+    input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); background: #60A5FA; }
+    .tab-button { transition: all 0.3s ease; }
+    .tab-button.active { background: rgba(59, 130, 246, 0.2); border-color: #3B82F6; }
+    @keyframes wave { 0%, 100% { height: 20%; } 50% { height: 100%; } }
+    .wave-bar { animation: wave 0.8s ease-in-out infinite; }
+    .wave-bar:nth-child(1) { animation-delay: 0s; }
+    .wave-bar:nth-child(2) { animation-delay: 0.1s; }
+    .wave-bar:nth-child(3) { animation-delay: 0.2s; }
+    .wave-bar:nth-child(4) { animation-delay: 0.3s; }
+    .wave-bar:nth-child(5) { animation-delay: 0.4s; }
+    @keyframes pulse-ring { 0% { transform: scale(0.8); opacity: 1; } 100% { transform: scale(1.8); opacity: 0; } }
+    .pulse-ring { animation: pulse-ring 1s ease-out; }
+    @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .rotating { animation: rotate 2s linear infinite; }
+    .btn-hover { transition: all 0.2s ease; }
+    .btn-hover:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); }
+    .btn-hover:active { transform: translateY(0); }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 p-8 min-h-screen flex items-center justify-center">
+  <div class="glass-effect rounded-2xl p-8 max-w-4xl w-full shadow-2xl">
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h2 class="text-2xl font-bold text-white mb-1 flex items-center gap-2">
+          <svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15.536a5 5 0 001.414 1.414m2.828-9.9a9 9 0 012.828 2.828"/>
+          </svg>
+          Звуки и анимация
+        </h2>
+        <p class="text-sm text-gray-400">Настройка уведомлений и эффектов</p>
+      </div>
+      <button onclick="closeModal()" class="btn-hover text-gray-400 hover:text-white hover:bg-red-500/20 p-2 rounded-lg">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+    <div class="flex gap-2 mb-6 border-b border-gray-700">
+      <button onclick="switchTab('sounds')" id="tab-sounds" class="tab-button active px-4 py-2 text-sm font-medium text-white border-b-2 border-transparent">🔊 Звуки</button>
+      <button onclick="switchTab('animations')" id="tab-animations" class="tab-button px-4 py-2 text-sm font-medium text-gray-400 border-b-2 border-transparent">✨ Анимации</button>
+      <button onclick="switchTab('notifications')" id="tab-notifications" class="tab-button px-4 py-2 text-sm font-medium text-gray-400 border-b-2 border-transparent">🔔 Уведомления</button>
+    </div>
+    <div id="content-sounds" class="space-y-4">
+      <div class="bg-gray-800/50 rounded-xl p-4">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-lg font-semibold text-white">Звуковые эффекты</h3>
+          <div onclick="toggleSwitch('master-sound')" id="master-sound" class="toggle-switch active"></div>
+        </div>
+        <div class="mb-3">
+          <div class="flex items-center justify-between mb-2">
+            <label class="text-sm text-gray-300">Громкость</label>
+            <span id="volume-value" class="text-sm text-blue-400 font-semibold">75%</span>
+          </div>
+          <input type="range" id="volume-slider" min="0" max="100" value="75" oninput="updateVolume(this.value)">
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div class="bg-gray-800/50 rounded-xl p-3 flex items-center justify-between hover:bg-gray-800/70 transition-all">
+          <div class="flex items-center gap-2">
+            <div id="icon-start" class="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center relative">
+              <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/></svg>
+              <div class="absolute inset-0 rounded-lg border-2 border-green-400 opacity-0" id="ring-start"></div>
+            </div>
+            <div><p class="text-sm font-medium text-white">Старт</p><p class="text-xs text-gray-400">0.2с</p></div>
+          </div>
+          <div class="flex items-center gap-2">
+            <div id="wave-start" class="flex items-end gap-0.5 h-6 opacity-0">
+              <div class="wave-bar w-0.5 bg-green-400 rounded-full"></div>
+              <div class="wave-bar w-0.5 bg-green-400 rounded-full"></div>
+              <div class="wave-bar w-0.5 bg-green-400 rounded-full"></div>
+              <div class="wave-bar w-0.5 bg-green-400 rounded-full"></div>
+              <div class="wave-bar w-0.5 bg-green-400 rounded-full"></div>
+            </div>
+            <button onclick="playVisual('start')" class="btn-hover p-2 bg-green-500/20 hover:bg-green-500/30 rounded-lg"><svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/></svg></button>
+            <div onclick="toggleSwitch('sound-start')" id="sound-start" class="toggle-switch active"></div>
+          </div>
+        </div>
+        <div class="bg-gray-800/50 rounded-xl p-3 flex items-center justify-between hover:bg-gray-800/70 transition-all">
+          <div class="flex items-center gap-2">
+            <div id="icon-stop" class="w-8 h-8 bg-red-500/20 rounded-lg flex items-center justify-center relative">
+              <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"/></svg>
+              <div class="absolute inset-0 rounded-lg border-2 border-red-400 opacity-0" id="ring-stop"></div>
+            </div>
+            <div><p class="text-sm font-medium text-white">Стоп</p><p class="text-xs text-gray-400">0.4с</p></div>
+          </div>
+          <div class="flex items-center gap-2">
+            <div id="wave-stop" class="flex items-end gap-0.5 h-6 opacity-0">
+              <div class="wave-bar w-0.5 bg-red-400 rounded-full"></div>
+              <div class="wave-bar w-0.5 bg-red-400 rounded-full"></div>
+              <div class="wave-bar w-0.5 bg-red-400 rounded-full"></div>
+              <div class="wave-bar w-0.5 bg-red-400 rounded-full"></div>
+              <div class="wave-bar w-0.5 bg-red-400 rounded-full"></div>
+            </div>
+            <button onclick="playVisual('stop')" class="btn-hover p-2 bg-red-500/20 hover:bg-red-500/30 rounded-lg"><svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/></svg></button>
+            <div onclick="toggleSwitch('sound-stop')" id="sound-stop" class="toggle-switch active"></div>
+          </div>
+        </div>
+    <div class="mt-6 pt-6 border-t border-gray-700/50">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-sm font-medium text-gray-300">Громкость</h3>
+        <span class="text-xs text-gray-400">80%</span>
+      </div>
+      <div class="relative">
+        <input type="range" id="volume-slider" min="0" max="100" value="80" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider">
+        <div class="flex justify-between mt-2">
+          <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg>
+          <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-6 flex gap-3">
+      <button onclick="closeModal()" class="flex-1 px-4 py-2.5 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors btn-hover">Отмена</button>
+      <button onclick="saveSettings()" class="flex-1 px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition-colors btn-hover">Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+  
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 50; animation: fadeIn 0.3s ease-out; }
+  
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.5); opacity: 0; } }
+  @keyframes waveAnimation { 0%, 100% { height: 30%; } 50% { height: 100%; } }
+  
+  .modal-content { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); border-radius: 24px; padding: 32px; max-width: 480px; width: 100%; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); animation: slideUp 0.3s ease-out; border: 1px solid rgba(255, 255, 255, 0.1); }
+  
+  .toggle-switch { width: 44px; height: 24px; background: #374151; border-radius: 12px; position: relative; cursor: pointer; transition: all 0.3s ease; }
+  .toggle-switch::after { content: ''; position: absolute; width: 18px; height: 18px; background: white; border-radius: 50%; top: 3px; left: 3px; transition: all 0.3s ease; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); }
+  .toggle-switch.active { background: #3b82f6; }
+  .toggle-switch.active::after { transform: translateX(20px); }
+  
+  .btn-hover { transition: all 0.2s ease; }
+  .btn-hover:hover { transform: scale(1.05); }
+  .btn-hover:active { transform: scale(0.95); }
+  
+  .slider { -webkit-appearance: none; appearance: none; }
+  .slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; background: #3b82f6; border-radius: 50%; cursor: pointer; box-shadow: 0 2px 8px rgba(59, 130, 246, 0.5); }
+  .slider::-moz-range-thumb { width: 16px; height: 16px; background: #3b82f6; border-radius: 50%; cursor: pointer; border: none; box-shadow: 0 2px 8px rgba(59, 130, 246, 0.5); }
+  
+  .wave-bar { animation: waveAnimation 1s ease-in-out infinite; }
+  .wave-bar:nth-child(1) { animation-delay: 0s; }
+  .wave-bar:nth-child(2) { animation-delay: 0.1s; }
+  .wave-bar:nth-child(3) { animation-delay: 0.2s; }
+  .wave-bar:nth-child(4) { animation-delay: 0.3s; }
+  .wave-bar:nth-child(5) { animation-delay: 0.4s; }
+</style>
+
+<script>
+  function toggleSwitch(id) {
+    const element = document.getElementById(id);
+    element.classList.toggle('active');
+  }
+
+  function playVisual(type) {
+    const icon = document.getElementById(`icon-${type}`);
+    const ring = document.getElementById(`ring-${type}`);
+    const wave = document.getElementById(`wave-${type}`);
+    
+    // Анимация кольца
+    ring.style.animation = 'pulse 0.6s ease-out';
+    setTimeout(() => { ring.style.animation = ''; }, 600);
+    
+    // Анимация волны
+    wave.style.opacity = '1';
+    setTimeout(() => { wave.style.opacity = '0'; }, 1000);
+    
+    // Масштабирование иконки
+    icon.style.transform = 'scale(1.2)';
+    setTimeout(() => { icon.style.transform = 'scale(1)'; }, 200);
+  }
+
+  function closeModal() {
+    const modal = document.getElementById('modal');
+    modal.style.animation = 'fadeIn 0.2s ease-out reverse';
+    setTimeout(() => { modal.style.display = 'none'; }, 200);
+  }
+
+  function saveSettings() {
+    // Здесь логика сохранения настроек
+    console.log('Настройки сохранены');
+    closeModal();
+  }
+
+  // Обновление значения громкости
+  document.getElementById('volume-slider').addEventListener('input', function(e) {
+    const value = e.target.value;
+    this.previousElementSibling.querySelector('span').textContent = value + '%';
+  });
+</script>

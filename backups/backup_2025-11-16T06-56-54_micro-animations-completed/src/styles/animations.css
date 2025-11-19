@@ -1,0 +1,749 @@
+/* ============================================
+   Унифицированная система анимаций
+   Time Tracker Dashboard
+   
+   Стандарты:
+   - Fast: 150ms (активные состояния)
+   - Normal: 300ms (стандартные переходы)
+   - Slow: 500ms (крупные изменения)
+   
+   Easing:
+   - ease-out: для появления
+   - ease-in-out: для плавных переходов
+   - cubic-bezier(0.4, 0, 0.2, 1): Material Design стандарт
+   ============================================ */
+
+/* ============================================
+   Keyframes анимации
+   ============================================ */
+
+/* Появление - fade in */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Исчезновение - fade out */
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Появление - slide up (снизу вверх) */
+@keyframes slideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Появление - slide down (сверху вниз) */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Исчезновение - slide out (вниз) */
+@keyframes slideDownOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
+/* Исчезновение - slide out up (вверх) для dropdown открывающихся вверх */
+@keyframes slideUpOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+/* Появление - slide in right (справа) */
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Исчезновение - slide out right */
+@keyframes slideOutRight {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+/* Появление - scale in */
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Исчезновение - scale out */
+@keyframes scaleOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+/* Shake анимация для ошибок валидации */
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-4px);
+  }
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(4px);
+  }
+}
+
+/* Pulse анимация для валидации успеха */
+@keyframes pulseSuccess {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.02);
+  }
+}
+
+/* Pulse glow для активных элементов */
+@keyframes pulseGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 5px rgba(59, 130, 246, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.8);
+  }
+}
+
+/* ============================================
+   Классы анимаций появления (Appear)
+   ============================================ */
+
+/* Fade in */
+.animate-fade-in {
+  animation: fadeIn 300ms ease-out;
+}
+
+.animate-fade-in-fast {
+  animation: fadeIn 150ms ease-out;
+}
+
+.animate-fade-in-slow {
+  animation: fadeIn 500ms ease-out;
+}
+
+/* Fade out */
+/* ИСПРАВЛЕНО: Увеличена длительность для плавной анимации */
+.animate-fade-out {
+  animation: fadeOut 300ms ease-in-out;
+  animation-fill-mode: both;
+  will-change: opacity;
+}
+
+.animate-fade-out-fast {
+  animation: fadeOut 150ms ease-in;
+  animation-fill-mode: both;
+}
+
+/* Slide up */
+.animate-slide-up {
+  animation: slideUp 300ms ease-out;
+  animation-fill-mode: both;
+  will-change: transform, opacity;
+}
+
+.animate-slide-up-fast {
+  animation: slideUp 150ms ease-out;
+}
+
+.animate-slide-up-slow {
+  animation: slideUp 500ms ease-out;
+}
+
+/* Slide down (появление сверху вниз) */
+.animate-slide-down {
+  animation: slideDown 300ms ease-out;
+  animation-fill-mode: both;
+  will-change: transform, opacity;
+}
+
+.animate-slide-down-fast {
+  animation: slideDown 150ms ease-out;
+}
+
+.animate-slide-down-slow {
+  animation: slideDown 500ms ease-out;
+}
+
+/* Slide out (исчезновение вниз) */
+/* ИСПРАВЛЕНО: Увеличена длительность и изменен easing для плавной анимации */
+.animate-slide-out {
+  animation: slideDownOut 300ms ease-in-out;
+  animation-fill-mode: both;
+  will-change: transform, opacity;
+}
+
+.animate-slide-out-fast {
+  animation: slideDownOut 150ms ease-in;
+  animation-fill-mode: both;
+}
+
+/* Slide out up (исчезновение вверх) для dropdown открывающихся вверх */
+.animate-slide-up-out {
+  animation: slideUpOut 200ms ease-in;
+  animation-fill-mode: both;
+  will-change: transform, opacity;
+}
+
+.animate-slide-up-out-fast {
+  animation: slideUpOut 150ms ease-in;
+}
+
+/* Slide in right */
+.animate-slide-in-right {
+  animation: slideInRight 300ms ease-out;
+}
+
+.animate-slide-in-right-fast {
+  animation: slideInRight 150ms ease-out;
+}
+
+.animate-slide-in-right-slow {
+  animation: slideInRight 500ms ease-out;
+}
+
+/* Slide out right */
+.animate-slide-out-right {
+  animation: slideOutRight 200ms ease-in;
+}
+
+.animate-slide-out-right-fast {
+  animation: slideOutRight 150ms ease-in;
+}
+
+/* Scale in */
+.animate-scale-in {
+  animation: scaleIn 300ms ease-out;
+}
+
+.animate-scale-in-fast {
+  animation: scaleIn 150ms ease-out;
+}
+
+.animate-scale-in-slow {
+  animation: scaleIn 500ms ease-out;
+}
+
+/* Scale out */
+.animate-scale-out {
+  animation: scaleOut 200ms ease-in;
+}
+
+.animate-scale-out-fast {
+  animation: scaleOut 150ms ease-in;
+}
+
+/* Shake для ошибок */
+.animate-shake {
+  animation: shake 300ms ease-in-out;
+}
+
+/* Pulse success */
+.animate-pulse-success {
+  animation: pulseSuccess 400ms ease-in-out;
+}
+
+/* Pulse glow */
+.animate-pulse-glow {
+  animation: pulseGlow 2s infinite ease-in-out;
+}
+
+/* ============================================
+   Утилиты для transitions
+   ============================================ */
+
+/* Быстрые переходы (150ms) */
+.transition-fast {
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Стандартные переходы (300ms) */
+/* ИСПРАВЛЕНО: Уменьшена скорость анимации в 3 раза (300ms -> 900ms) */
+.transition-normal {
+  transition: all 900ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Медленные переходы (500ms) */
+.transition-slow {
+  transition: all 500ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Переходы только для transform и opacity (оптимизация производительности) */
+.transition-transform-opacity {
+  transition:
+    transform 300ms cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.transition-transform-opacity-fast {
+  transition:
+    transform 150ms cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Переходы только для цветов */
+.transition-colors {
+  transition:
+    color 200ms ease-in-out,
+    background-color 200ms ease-in-out,
+    border-color 200ms ease-in-out;
+}
+
+/* ============================================
+   Унифицированные hover эффекты
+   ============================================ */
+
+/* Hover lift - унифицированный подъем карточек */
+.hover-lift {
+  transition:
+    transform 300ms cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.dark .hover-lift:hover {
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* Hover lift medium - средний подъем */
+.hover-lift-medium {
+  transition:
+    transform 300ms cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift-medium:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.15);
+}
+
+.dark .hover-lift-medium:hover {
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.5);
+}
+
+/* Hover lift large - крупный подъем */
+.hover-lift-large {
+  transition:
+    transform 300ms cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift-large:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.dark .hover-lift-large:hover {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+/* Hover scale - унифицированное увеличение */
+.hover-scale {
+  transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-scale:hover {
+  transform: scale(1.02);
+}
+
+.hover-scale-medium:hover {
+  transform: scale(1.05);
+}
+
+.hover-scale-expressive:hover {
+  transform: scale(1.1);
+}
+
+/* Click shrink - унифицированное уменьшение при active */
+/* ИСПРАВЛЕНО: Уменьшена скорость анимации в 3 раза (150ms -> 450ms) */
+.click-shrink {
+  transition: transform 450ms ease-in;
+}
+
+.click-shrink:active {
+  transform: scale(0.95);
+}
+
+/* ============================================
+   Комбинированные эффекты
+   ============================================ */
+
+/* Hover lift + scale для кнопок */
+/* ИСПРАВЛЕНО: Уменьшена скорость анимации в 3 раза (300ms -> 900ms) */
+.hover-lift-scale {
+  transition:
+    transform 900ms cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 900ms cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 900ms cubic-bezier(0.4, 0, 0.2, 1);
+  /* ИСПРАВЛЕНО: Убрали scale для предотвращения размытия текста */
+  transform: translateY(0) translateZ(0);
+  will-change: transform;
+  /* Принудительное сглаживание текста без размытия */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+.hover-lift-scale:hover {
+  /* ИСПРАВЛЕНО: Используем только translateY вместо scale для четкого текста */
+  transform: translateY(-4px) translateZ(0);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.dark .hover-lift-scale:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+  border-color: rgba(59, 130, 246, 0.5);
+}
+
+.hover-lift-scale:active {
+  transform: translateY(-1px) translateZ(0);
+}
+
+/* ============================================
+   Специальные анимации
+   ============================================ */
+
+/* Staggered fade-in для списков (используется с animation-delay через inline стили) */
+.staggered-fade-in {
+  animation: fadeIn 300ms ease-out;
+  animation-fill-mode: both;
+}
+
+/* Smooth accordion раскрытие (используется с max-height transition) */
+.accordion-content {
+  transition:
+    max-height 300ms ease-in-out,
+    opacity 300ms ease-in-out;
+  overflow: hidden;
+}
+
+/* Плавное изменение размера модального окна при изменении контента */
+.modal-content {
+  /* Используем все свойства для плавной анимации изменения размера */
+  transition: all 400ms cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: contents, transform;
+}
+
+/* Chevron rotate */
+.chevron-rotate {
+  transition: transform 200ms ease-in-out;
+}
+
+.chevron-rotate[aria-expanded='true'],
+.details-open .chevron-rotate {
+  transform: rotate(180deg);
+}
+
+/* Icon hover rotate */
+.icon-hover-rotate:hover {
+  transform: rotate(12deg);
+  transition: transform 200ms ease-in-out;
+}
+
+/* ============================================
+   Оптимизация производительности
+   ============================================ */
+
+/* will-change для элементов с частыми анимациями */
+.animate-will-change {
+  will-change: transform, opacity;
+}
+
+/* Hardware acceleration */
+.animate-gpu {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* ============================================
+   Устаревшие анимации (будут удалены после унификации)
+   ============================================ */
+
+/* Эти анимации будут заменены на унифицированные */
+.animate-slide-in {
+  /* Устаревшая - используйте animate-slide-in-right или animate-slide-up */
+  animation: slideInRight 300ms ease-out;
+}
+
+/* ============================================
+   Медиа-запросы для мобильных устройств
+   ============================================ */
+
+/* ============================================
+   Анимация логотипа Data Pulse
+   ============================================ */
+
+/* ============================================
+   Анимации логотипа - Вариант 1: Пульсация с вращением
+   Основано на logo-animation-variant-1-pulse-rotate.html
+   ============================================ */
+
+/* Пульс (волна данных) - анимация как в реальном ECG (вертикальная пульсация через transform) */
+@keyframes pulse-heartbeat {
+  0%,
+  100% {
+    transform: scaleY(1);
+    transform-origin: 100px 100px;
+  }
+  25% {
+    transform: scaleY(1.15);
+    transform-origin: 100px 100px;
+  }
+  50% {
+    transform: scaleY(1.3);
+    transform-origin: 100px 100px;
+  }
+  75% {
+    transform: scaleY(1.15);
+    transform-origin: 100px 100px;
+  }
+}
+
+/* Дополнительная анимация для создания эффекта "бегущей волны" */
+@keyframes pulse-wave {
+  0% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.3);
+  }
+  100% {
+    filter: brightness(1);
+  }
+}
+
+/* Часовая стрелка - вращается медленнее (12 часов = 12 секунд) */
+@keyframes hour-hand-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Минутная стрелка - вращается быстрее (1 час = 1 секунда) */
+@keyframes minute-hand-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Точки на пульсе - вращаются по циферблату с разной скоростью */
+@keyframes dot-rotate-1 {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dot-rotate-2 {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes dot-rotate-3 {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dot-rotate-4 {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+/* Применение анимаций к SVG элементам через классы */
+/* Пульс (волна данных) - анимация как в реальном ECG (вертикальная пульсация пиков) */
+.logo-animation-1 svg .pulse-path {
+  animation:
+    pulse-heartbeat 1.2s ease-in-out infinite,
+    pulse-wave 1.2s ease-in-out infinite;
+  transform-origin: 100px 100px;
+}
+
+/* Часовая стрелка - вращается медленнее (12 секунд = 12 часов) */
+.logo-animation-1 svg .hour-hand {
+  animation: hour-hand-rotate 12s linear infinite;
+  transform-origin: 0 0;
+}
+
+/* Минутная стрелка - вращается быстрее (1 секунда = 1 час) */
+.logo-animation-1 svg .minute-hand {
+  animation: minute-hand-rotate 1s linear infinite;
+  transform-origin: 0 0;
+}
+
+/* Точки на пульсе - вращаются с разной скоростью */
+.logo-animation-1 svg .pulse-dot-group-1 {
+  animation: dot-rotate-1 6s linear infinite;
+  transform-origin: 100px 100px;
+}
+
+.logo-animation-1 svg .pulse-dot-group-2 {
+  animation: dot-rotate-2 8s linear infinite;
+  transform-origin: 100px 100px;
+}
+
+.logo-animation-1 svg .pulse-dot-group-3 {
+  animation: dot-rotate-3 10s linear infinite;
+  transform-origin: 100px 100px;
+}
+
+.logo-animation-1 svg .pulse-dot-group-4 {
+  animation: dot-rotate-4 12s linear infinite;
+  transform-origin: 100px 100px;
+}
+
+/* Анимация логотипа Data Pulse для Header */
+img.logo-data-pulse,
+.logo-data-pulse {
+  will-change: transform, opacity, filter;
+  display: block;
+  transition:
+    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    filter 0.3s ease;
+}
+
+/* Обертка для логотипа с эффектом подсветки при наведении */
+.logo-wrapper {
+  position: relative;
+  padding: 0.5rem;
+  border-radius: 0.75rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.logo-wrapper:hover {
+  box-shadow:
+    0 0 25px rgba(59, 130, 246, 0.4),
+    0 8px 24px rgba(0, 0, 0, 0.15);
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.dark .logo-wrapper:hover {
+  box-shadow:
+    0 0 30px rgba(59, 130, 246, 0.5),
+    0 12px 40px rgba(0, 0, 0, 0.5);
+  background: rgba(59, 130, 246, 0.15);
+}
+
+.logo-wrapper:hover .logo-data-pulse {
+  transform: scale(1.1) !important;
+  filter: drop-shadow(0 8px 16px rgba(59, 130, 246, 0.5)) !important;
+}
+
+/* ============================================
+   Медиа-запросы для мобильных устройств
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  /* Отключаем анимации для пользователей с настройкой "reduced motion" */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  /* Отключаем анимацию логотипа */
+  .logo-data-pulse {
+    animation: none !important;
+  }
+}

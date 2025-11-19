@@ -26,7 +26,12 @@ scripts/deploy-to-cloudflare-wrangler.js
 npm run deploy
 ```
 
-Эта команда вызывает `scripts/deploy-to-cloudflare-wrangler.js` через Wrangler CLI.
+**Важно:** Команда `npm run deploy` делает git commit/push в GitHub. Cloudflare Pages автоматически деплоит из GitHub репозитория через CI/CD интеграцию.
+
+**Альтернативный способ:** Если нужно деплоить напрямую через Wrangler CLI (без git), используй:
+```bash
+node scripts/deploy-to-cloudflare-wrangler.js
+```
 
 ### Альтернативные скрипты:
 
@@ -35,15 +40,17 @@ npm run deploy
 
 ### Процесс деплоя:
 
-1. Сборка проекта: `npm run build`
+1. Сборка проекта: `npm run build` (опционально, Cloudflare может собрать сам)
 2. Деплой: `npm run deploy`
-3. Скрипт автоматически:
-   - Проверяет наличие `dist/index.html`
-   - Проверяет/создает проект Cloudflare Pages
-   - Деплоит через Wrangler CLI
-   - Устанавливает production деплой
-   - Очищает старые деплои
-   - Проверяет Web Analytics
+   - Обновляет версию в `package.json`
+   - Делает git commit и push в GitHub
+3. Cloudflare Pages автоматически:
+   - Обнаруживает новый push в GitHub
+   - Запускает сборку (`npm run build`)
+   - Деплоит собранный `dist/` на Cloudflare Pages
+   - Обновляет production деплой
+
+**Примечание:** Скрипт `deploy-to-cloudflare-wrangler.js` используется только для прямого деплоя через Wrangler CLI (без git), что обычно не требуется при настройке CI/CD через GitHub.
 
 ### Если нужно изменить скрипт:
 

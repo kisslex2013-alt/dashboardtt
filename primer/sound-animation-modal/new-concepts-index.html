@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Концепты: Звуки и анимация - Навигация</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+      color: #e2e8f0;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .header-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 24px;
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    h1 {
+      font-size: 36px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      font-size: 18px;
+      color: #94a3b8;
+      font-weight: 500;
+    }
+
+    /* Glass Effect */
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Concepts Grid */
+    .concepts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    /* Concept Card */
+    .concept-card {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 24px;
+      padding: 32px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .concept-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .concept-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .concept-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .concept-number {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      width: 48px;
+      height: 48px;
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 700;
+      color: #3b82f6;
+    }
+
+    .concept-icon {
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+
+    .concept-card:nth-child(2) .concept-icon {
+      background: linear-gradient(135deg, #10b981, #059669);
+    }
+
+    .concept-card:nth-child(3) .concept-icon {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+    }
+
+    .concept-card:nth-child(4) .concept-icon {
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+    }
+
+    .concept-card:nth-child(5) .concept-icon {
+      background: linear-gradient(135deg, #ec4899, #db2777);
+    }
+
+    .concept-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: #f1f5f9;
+    }
+
+    .concept-description {
+      font-size: 15px;
+      color: #94a3b8;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .concept-features {
+      list-style: none;
+      margin-bottom: 24px;
+    }
+
+    .concept-features li {
+      padding: 8px 0;
+      color: #cbd5e1;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .concept-features li::before {
+      content: '✓';
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      background: rgba(16, 185, 129, 0.2);
+      color: #10b981;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 12px;
+    }
+
+    .view-btn {
+      width: 100%;
+      padding: 14px;
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 12px;
+      color: #3b82f6;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .view-btn:hover {
+      background: rgba(59, 130, 246, 0.25);
+      border-color: rgba(59, 130, 246, 0.5);
+      transform: translateY(-2px);
+    }
+
+    /* Info Section */
+    .info-section {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 24px;
+      padding: 32px;
+      margin-bottom: 40px;
+    }
+
+    .info-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: #f1f5f9;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .info-content {
+      font-size: 15px;
+      color: #94a3b8;
+      line-height: 1.8;
+    }
+
+    .info-content strong {
+      color: #cbd5e1;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 32px;
+      color: #64748b;
+      font-size: 14px;
+    }
+
+    .footer a {
+      color: #3b82f6;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer a:hover {
+      color: #2563eb;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .concepts-grid {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 28px;
+      }
+
+      .subtitle {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <div class="header-icon">🔊</div>
+      <h1>Концепты UI: Звуки и анимация</h1>
+      <p class="subtitle">5 современных вариантов дизайна модального окна настроек</p>
+    </div>
+
+    <!-- Info Section -->
+    <div class="info-section">
+      <div class="info-title">
+        <span>📋</span>
+        <span>О концептах</span>
+      </div>
+      <div class="info-content">
+        <p>Эта коллекция содержит <strong>5 уникальных концептов UI</strong> для модального окна настроек звуков и анимации. Каждый концепт решает проблемы текущего интерфейса: устаревший стиль табов, переизбыток контента, неединообразные переключатели.</p>
+        <br>
+        <p><strong>Все концепты выполнены в едином стиле проекта:</strong> glass-effect, минимализм, плавные анимации, единообразные UI-элементы.</p>
+      </div>
+    </div>
+
+    <!-- Concepts Grid -->
+    <div class="concepts-grid">
+      <!-- Concept 1 -->
+      <a href="new-concept-1-segmented.html" class="concept-card">
+        <div class="concept-number">1</div>
+        <div class="concept-icon">📱</div>
+        <div class="concept-title">Segmented Control</div>
+        <div class="concept-description">Apple-style дизайн с сегментированным контролом вместо классических табов</div>
+        <ul class="concept-features">
+          <li>iOS-стиль переключатели</li>
+          <li>Компактная группировка</li>
+          <li>Единообразные toggle</li>
+          <li>Grid-сетка для фавиконов</li>
+        </ul>
+        <div class="view-btn">
+          <span>Открыть концепт</span>
+          <span>→</span>
+        </div>
+      </a>
+
+      <!-- Concept 2 -->
+      <a href="new-concept-2-accordion.html" class="concept-card">
+        <div class="concept-number">2</div>
+        <div class="concept-icon">📂</div>
+        <div class="concept-title">Accordion Sections</div>
+        <div class="concept-description">Аккордеоны для каждой категории без табов, все в одном списке</div>
+        <ul class="concept-features">
+          <li>Без табов - компактно</li>
+          <li>Индикаторы состояния</li>
+          <li>Плавная анимация</li>
+          <li>Все настройки в одном месте</li>
+        </ul>
+        <div class="view-btn">
+          <span>Открыть концепт</span>
+          <span>→</span>
+        </div>
+      </a>
+
+      <!-- Concept 3 -->
+      <a href="new-concept-3-split.html" class="concept-card">
+        <div class="concept-number">3</div>
+        <div class="concept-icon">📊</div>
+        <div class="concept-title">Split View (Sidebar)</div>
+        <div class="concept-description">Боковая навигация с основной областью контента и живым preview</div>
+        <ul class="concept-features">
+          <li>Боковая панель навигации</li>
+          <li>Основная область контента</li>
+          <li>Live preview для фавикона</li>
+          <li>Профессиональный вид</li>
+        </ul>
+        <div class="view-btn">
+          <span>Открыть концепт</span>
+          <span>→</span>
+        </div>
+      </a>
+
+      <!-- Concept 4 -->
+      <a href="new-concept-4-cards.html" class="concept-card">
+        <div class="concept-number">4</div>
+        <div class="concept-icon">🎴</div>
+        <div class="concept-title">Cards Grid</div>
+        <div class="concept-description">Карточная раскладка для каждой настройки с фильтрами</div>
+        <ul class="concept-features">
+          <li>Grid-сетка карточек</li>
+          <li>Быстрые фильтры</li>
+          <li>Hover-эффекты</li>
+          <li>Цветовое кодирование</li>
+        </ul>
+        <div class="view-btn">
+          <span>Открыть концепт</span>
+          <span>→</span>
+        </div>
+      </a>
+
+      <!-- Concept 5 -->
+      <a href="new-concept-5-inline.html" class="concept-card">
+        <div class="concept-number">5</div>
+        <div class="concept-icon">⚡</div>
+        <div class="concept-title">Compact Inline</div>
+        <div class="concept-description">Максимально компактный дизайн с inline-редактированием всех настроек</div>
+        <ul class="concept-features">
+          <li>Pill-tabs навигация</li>
+          <li>Inline-контролы</li>
+          <li>Минимум скроллинга</li>
+          <li>Компактные секции</li>
+        </ul>
+        <div class="view-btn">
+          <span>Открыть концепт</span>
+          <span>→</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>Разработано для проекта <strong>Time Tracker Dashboard</strong></p>
+      <p>Все концепты выполнены в едином стиле с использованием современных UI/UX практик</p>
+    </div>
+  </div>
+</body>
+</html>
+

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Анимация логотипа - Вариант 2: Плавный поток</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    
+    .glass-card {
+      background: rgba(17, 24, 39, 0.7);
+      backdrop-filter: blur(24px) saturate(200%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Вариант 2: Плавный поток данных */
+    
+    /* Волны пульса - плавное движение */
+    @keyframes wave-flow {
+      0%, 100% {
+        d: path("M 30 100 L 50 100 L 60 85 L 70 115 L 80 100 L 100 100 L 110 90 L 120 110 L 130 100 L 150 100 L 170 100");
+      }
+      33% {
+        d: path("M 30 100 L 50 100 L 60 90 L 70 110 L 80 100 L 100 100 L 110 85 L 120 115 L 130 100 L 150 100 L 170 100");
+      }
+      66% {
+        d: path("M 30 100 L 50 100 L 60 80 L 70 120 L 80 100 L 100 100 L 110 95 L 120 105 L 130 100 L 150 100 L 170 100");
+      }
+    }
+    
+    /* Свечение пульса */
+    @keyframes pulse-glow {
+      0%, 100% {
+        filter: drop-shadow(0 0 2px rgba(59, 130, 246, 0.5));
+      }
+      50% {
+        filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.8)) drop-shadow(0 0 12px rgba(16, 185, 129, 0.6));
+      }
+    }
+    
+    /* Вращение кругов в разные стороны */
+    @keyframes rotate-clockwise {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    @keyframes rotate-counter {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(-360deg); }
+    }
+    
+    /* Пульсация кругов */
+    @keyframes circle-pulse {
+      0%, 100% {
+        r: 90;
+        opacity: 0.15;
+      }
+      50% {
+        r: 95;
+        opacity: 0.3;
+      }
+    }
+    
+    /* Орбитальное движение точек */
+    @keyframes orbit-1 {
+      from { transform: rotate(0deg) translateX(35px) rotate(0deg); }
+      to { transform: rotate(360deg) translateX(35px) rotate(-360deg); }
+    }
+    
+    @keyframes orbit-2 {
+      from { transform: rotate(120deg) translateX(30px) rotate(-120deg); }
+      to { transform: rotate(480deg) translateX(30px) rotate(-480deg); }
+    }
+    
+    @keyframes orbit-3 {
+      from { transform: rotate(240deg) translateX(25px) rotate(-240deg); }
+      to { transform: rotate(600deg) translateX(25px) rotate(-600deg); }
+    }
+    
+    /* Стрелка часов - плавное вращение */
+    @keyframes clock-hand {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Применение анимаций */
+    .logo-animation-2 svg .pulse-path {
+      animation: pulse-glow 2s ease-in-out infinite;
+    }
+    
+    .logo-animation-2 svg .circle-1 {
+      animation: rotate-clockwise 20s linear infinite;
+      transform-origin: 100px 100px;
+    }
+    
+    .logo-animation-2 svg .circle-2 {
+      animation: rotate-counter 15s linear infinite;
+      transform-origin: 100px 100px;
+    }
+    
+    .logo-animation-2 svg .circle-3 {
+      animation: rotate-clockwise 10s linear infinite;
+      transform-origin: 100px 100px;
+    }
+    
+    .logo-animation-2 svg .orbit-dot-1 {
+      animation: orbit-1 4s linear infinite;
+    }
+    
+    .logo-animation-2 svg .orbit-dot-2 {
+      animation: orbit-2 5s linear infinite;
+    }
+    
+    .logo-animation-2 svg .orbit-dot-3 {
+      animation: orbit-3 6s linear infinite;
+    }
+    
+    .logo-animation-2 svg .clock-hand {
+      animation: clock-hand 8s linear infinite;
+      transform-origin: 0 0;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 p-8">
+  <div class="max-w-4xl mx-auto space-y-8">
+    
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-white mb-4">Анимация логотипа - Вариант 2</h1>
+      <p class="text-xl text-gray-400">Плавный поток данных</p>
+      <p class="text-sm text-gray-500 mt-2">Мягкие переходы, орбитальное движение, свечение</p>
+    </div>
+
+    <div class="glass-card rounded-xl p-8">
+      <div class="flex flex-col items-center justify-center min-h-[400px] space-y-8">
+        <div class="text-center">
+          <h2 class="text-2xl font-bold text-white mb-4">Логотип с анимацией</h2>
+          <div class="flex items-center justify-center relative">
+            <div class="logo-animation-2">
+              <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="w-32 h-32">
+                <defs>
+                  <linearGradient id="grad-flow" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+                    <stop offset="50%" style="stop-color:#10B981;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#F59E0B;stop-opacity:1" />
+                  </linearGradient>
+                  <radialGradient id="grad-radial">
+                    <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:0.3" />
+                    <stop offset="100%" style="stop-color:#10B981;stop-opacity:0" />
+                  </radialGradient>
+                </defs>
+                
+                <!-- Фоновое свечение -->
+                <circle cx="100" cy="100" r="50" fill="url(#grad-radial)" opacity="0.5"/>
+                
+                <!-- Концентрические круги -->
+                <circle class="circle-1" cx="100" cy="100" r="90" fill="none" stroke="#3B82F6" stroke-width="1.5" opacity="0.2">
+                  <animate attributeName="r" values="90;92;90" dur="3s" repeatCount="indefinite"/>
+                  <animate attributeName="opacity" values="0.2;0.35;0.2" dur="3s" repeatCount="indefinite"/>
+                </circle>
+                <circle class="circle-2" cx="100" cy="100" r="70" fill="none" stroke="#10B981" stroke-width="1.5" opacity="0.25">
+                  <animate attributeName="r" values="70;73;70" dur="3.5s" repeatCount="indefinite"/>
+                  <animate attributeName="opacity" values="0.25;0.4;0.25" dur="3.5s" repeatCount="indefinite"/>
+                </circle>
+                <circle class="circle-3" cx="100" cy="100" r="50" fill="none" stroke="#F59E0B" stroke-width="1.5" opacity="0.3">
+                  <animate attributeName="r" values="50;53;50" dur="4s" repeatCount="indefinite"/>
+                  <animate attributeName="opacity" values="0.3;0.5;0.3" dur="4s" repeatCount="indefinite"/>
+                </circle>
+                
+                <!-- Пульс с свечением -->
+                <path class="pulse-path" d="M 30 100 L 50 100 L 60 85 L 70 115 L 80 100 L 100 100 L 110 90 L 120 110 L 130 100 L 150 100 L 170 100" 
+                      fill="none" stroke="url(#grad-flow)" stroke-width="3" stroke-linecap="round">
+                  <animate attributeName="d" 
+                    values="M 30 100 L 50 100 L 60 85 L 70 115 L 80 100 L 100 100 L 110 90 L 120 110 L 130 100 L 150 100 L 170 100;
+                            M 30 100 L 50 100 L 60 90 L 70 110 L 80 100 L 100 100 L 110 85 L 120 115 L 130 100 L 150 100 L 170 100;
+                            M 30 100 L 50 100 L 60 80 L 70 120 L 80 100 L 100 100 L 110 95 L 120 105 L 130 100 L 150 100 L 170 100;
+                            M 30 100 L 50 100 L 60 85 L 70 115 L 80 100 L 100 100 L 110 90 L 120 110 L 130 100 L 150 100 L 170 100"
+                    dur="2s" repeatCount="indefinite"/>
+                </path>
+                
+                <!-- Орбитальные точки -->
+                <g transform="translate(100, 100)">
+                  <g class="orbit-dot-1">
+                    <circle r="3" fill="#3B82F6">
+                      <animate attributeName="opacity" values="0.5;1;0.5" dur="2s" repeatCount="indefinite"/>
+                    </circle>
+                  </g>
+                  <g class="orbit-dot-2">
+                    <circle r="3" fill="#10B981">
+                      <animate attributeName="opacity" values="0.5;1;0.5" dur="2.5s" repeatCount="indefinite"/>
+                    </circle>
+                  </g>
+                  <g class="orbit-dot-3">
+                    <circle r="3" fill="#F59E0B">
+                      <animate attributeName="opacity" values="0.5;1;0.5" dur="3s" repeatCount="indefinite"/>
+                    </circle>
+                  </g>
+                </g>
+                
+                <!-- Центральный круг и стрелка -->
+                <circle cx="100" cy="100" r="18" fill="none" stroke="url(#grad-flow)" stroke-width="2.5"/>
+                <g transform="translate(100, 100)">
+                  <g class="clock-hand">
+                    <line x1="0" y1="0" x2="0" y2="-35" stroke="url(#grad-flow)" stroke-width="2.5" stroke-linecap="round"/>
+                  </g>
+                </g>
+                <circle cx="100" cy="100" r="4" fill="#F59E0B"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="w-full max-w-2xl space-y-4">
+          <div class="bg-gray-800/50 rounded-lg p-4">
+            <h3 class="text-lg font-semibold text-white mb-2">Особенности анимации:</h3>
+            <ul class="text-gray-300 space-y-1 text-sm">
+              <li>• Плавное свечение пульса (drop-shadow)</li>
+              <li>• Круги вращаются в разные стороны (20s, 15s, 10s)</li>
+              <li>• Орбитальное движение точек по эллипсам</li>
+              <li>• Мягкие переходы волны данных</li>
+              <li>• Центральная стрелка вращается (8s)</li>
+              <li>• Градиентные цвета для глубины</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center">
+      <a href="logo-animations-index.html" class="inline-block px-6 py-3 bg-blue-500 hover:bg-blue-600 rounded-lg text-white font-semibold transition-colors">
+        ← Вернуться к списку
+      </a>
+    </div>
+
+  </div>
+</body>
+</html>

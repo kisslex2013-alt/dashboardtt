@@ -440,6 +440,57 @@ body {
   }
 }
 
+/* Анимация подсветки кнопок для первого визита/инкогнито */
+@keyframes buttonHighlight {
+  0%,
+  100% {
+    box-shadow: 
+      0 0 0 0 rgba(59, 130, 246, 0.8),
+      0 0 0 0 rgba(59, 130, 246, 0.5);
+    transform: scale(1);
+    background-color: rgba(59, 130, 246, 0.1);
+  }
+  50% {
+    box-shadow: 
+      0 0 0 6px rgba(59, 130, 246, 0.4),
+      0 0 0 12px rgba(59, 130, 246, 0.2),
+      0 0 20px rgba(59, 130, 246, 0.3);
+    transform: scale(1.08);
+    background-color: rgba(59, 130, 246, 0.2);
+  }
+}
+
+.animate-button-highlight {
+  animation: buttonHighlight 1.5s ease-in-out infinite;
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes buttonHighlightDark {
+  0%,
+  100% {
+    box-shadow: 
+      0 0 0 0 rgba(96, 165, 250, 0.8),
+      0 0 0 0 rgba(96, 165, 250, 0.5);
+    transform: scale(1);
+    background-color: rgba(96, 165, 250, 0.1);
+  }
+  50% {
+    box-shadow: 
+      0 0 0 6px rgba(96, 165, 250, 0.4),
+      0 0 0 12px rgba(96, 165, 250, 0.2),
+      0 0 20px rgba(96, 165, 250, 0.3);
+    transform: scale(1.08);
+    background-color: rgba(96, 165, 250, 0.2);
+  }
+}
+
+.dark .animate-button-highlight {
+  animation: buttonHighlightDark 1.5s ease-in-out infinite;
+  position: relative;
+  z-index: 1;
+}
+
 .animate-slide-in {
   animation: slideIn 0.3s ease-out;
 }
@@ -1042,7 +1093,7 @@ details[open] > summary .chevron-icon {
 .day-dot {
   width: 1.5rem;
   height: 1.5rem;
-  border-radius: 50%;
+  border-radius: 0.375rem; /* rounded-md вместо rounded-full для соответствия основному календарю */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1051,20 +1102,51 @@ details[open] > summary .chevron-icon {
   transition: all 0.2s;
 }
 
+/* Рабочие дни - в стиле основного календаря (дни с записями) */
 .day-work {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.4) 0%,
+    rgba(37, 99, 235, 0.4) 100%
+  ) !important;
+  border: 2px solid rgba(59, 130, 246, 0.6) !important;
   color: white;
   box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+  font-weight: 600;
 }
 
+.dark .day-work {
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.5) 0%,
+    rgba(37, 99, 235, 0.5) 100%
+  ) !important;
+  border: 2px solid rgba(59, 130, 246, 0.8) !important;
+  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.4);
+}
+
+/* Выходные дни - в стиле основного календаря (нерабочие дни) */
 .day-off {
-  background: rgba(229, 231, 235, 0.5);
+  background: transparent !important;
+  border: 2px dashed rgba(156, 163, 175, 0.4) !important;
   color: #9ca3af;
 }
 
 .dark .day-off {
-  background: rgba(75, 85, 99, 0.3);
+  background: transparent !important;
+  border: 2px dashed rgba(75, 85, 99, 0.5) !important;
   color: #6b7280;
+}
+
+/* Hover эффекты для дней в календаре рабочего графика */
+.day-work:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dark .day-work:hover {
+  box-shadow: 0 4px 10px rgba(59, 130, 246, 0.5);
 }
 
 .pulse-ring {
@@ -1721,4 +1803,599 @@ progress,
 
 [data-color-scheme="soft-pop"] body {
   letter-spacing: var(--tracking-normal);
+}
+
+/* ============================================
+   NEON DARK COLOR SCHEME
+   ============================================ */
+
+[data-color-scheme="neon-dark"] {
+  --background: oklch(0.1 0.02 260);
+  --foreground: oklch(0.95 0.05 280);
+  --card: oklch(0.15 0.03 260);
+  --card-foreground: oklch(0.95 0.05 280);
+  --popover: oklch(0.15 0.03 260);
+  --popover-foreground: oklch(0.95 0.05 280);
+  --primary: oklch(0.7 0.25 280);
+  --primary-foreground: oklch(0.1 0.02 260);
+  --secondary: oklch(0.6 0.2 300);
+  --secondary-foreground: oklch(0.95 0.05 280);
+  --muted: oklch(0.2 0.02 260);
+  --muted-foreground: oklch(0.7 0.05 280);
+  --accent: oklch(0.65 0.22 320);
+  --accent-foreground: oklch(0.1 0.02 260);
+  --destructive: oklch(0.65 0.25 20);
+  --destructive-foreground: oklch(0.95 0.05 280);
+  --border: oklch(0.3 0.05 280);
+  --input: oklch(0.25 0.03 260);
+  --ring: oklch(0.7 0.25 280);
+  --chart-1: oklch(0.7 0.25 280);
+  --chart-2: oklch(0.65 0.22 320);
+  --chart-3: oklch(0.6 0.2 300);
+  --chart-4: oklch(0.55 0.18 260);
+  --chart-5: oklch(0.5 0.15 240);
+  --sidebar: oklch(0.12 0.02 260);
+  --sidebar-foreground: oklch(0.95 0.05 280);
+  --sidebar-primary: oklch(0.7 0.25 280);
+  --sidebar-primary-foreground: oklch(0.1 0.02 260);
+  --sidebar-accent: oklch(0.65 0.22 320);
+  --sidebar-accent-foreground: oklch(0.1 0.02 260);
+  --sidebar-border: oklch(0.3 0.05 280);
+  --sidebar-ring: oklch(0.7 0.25 280);
+  --radius: 0.75rem;
+  --shadow-x: 0px;
+  --shadow-y: 0px;
+  --shadow-blur: 20px;
+  --shadow-spread: 0px;
+  --shadow-opacity: 0.6;
+  --shadow-color: oklch(0.7 0.25 280);
+  --shadow-2xs: 0 0 10px oklch(0.7 0.25 280 / 0.3);
+  --shadow-xs: 0 0 15px oklch(0.7 0.25 280 / 0.4);
+  --shadow-sm: 0 0 20px oklch(0.7 0.25 280 / 0.5);
+  --shadow: 0 0 25px oklch(0.7 0.25 280 / 0.6);
+  --shadow-md: 0 0 30px oklch(0.7 0.25 280 / 0.6);
+  --shadow-lg: 0 0 40px oklch(0.7 0.25 280 / 0.7);
+  --shadow-xl: 0 0 50px oklch(0.7 0.25 280 / 0.8);
+  --shadow-2xl: 0 0 60px oklch(0.7 0.25 280 / 0.9);
+}
+
+[data-color-scheme="neon-dark"] .glass-effect {
+  background: var(--card);
+  border: 1px solid var(--primary);
+  box-shadow: 0 0 20px var(--primary) / 0.4, var(--shadow-md);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+[data-color-scheme="neon-dark"] .glass-button {
+  background: var(--secondary);
+  border: 1px solid var(--primary);
+  box-shadow: 0 0 15px var(--primary) / 0.3;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+[data-color-scheme="neon-dark"] .glass-button:hover {
+  box-shadow: 0 0 25px var(--primary) / 0.6;
+  transform: translateY(-2px);
+}
+
+[data-color-scheme="neon-dark"] .glass-card {
+  background: var(--card);
+  border: 1px solid var(--primary);
+  box-shadow: 0 0 20px var(--primary) / 0.4;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* ============================================
+   PASTEL LIGHT COLOR SCHEME
+   ============================================ */
+
+[data-color-scheme="pastel-light"] {
+  --background: oklch(0.98 0.01 120);
+  --foreground: oklch(0.25 0.02 280);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.25 0.02 280);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.25 0.02 280);
+  --primary: oklch(0.65 0.12 280);
+  --primary-foreground: oklch(0.98 0.01 120);
+  --secondary: oklch(0.85 0.08 320);
+  --secondary-foreground: oklch(0.25 0.02 280);
+  --muted: oklch(0.95 0.01 120);
+  --muted-foreground: oklch(0.45 0.02 280);
+  --accent: oklch(0.8 0.1 300);
+  --accent-foreground: oklch(0.25 0.02 280);
+  --destructive: oklch(0.7 0.15 20);
+  --destructive-foreground: oklch(0.98 0.01 120);
+  --border: oklch(0.9 0.02 280);
+  --input: oklch(0.92 0.01 120);
+  --ring: oklch(0.65 0.12 280);
+  --chart-1: oklch(0.65 0.12 280);
+  --chart-2: oklch(0.7 0.1 320);
+  --chart-3: oklch(0.75 0.08 300);
+  --chart-4: oklch(0.7 0.1 260);
+  --chart-5: oklch(0.65 0.12 240);
+  --sidebar: oklch(0.96 0.01 120);
+  --sidebar-foreground: oklch(0.25 0.02 280);
+  --sidebar-primary: oklch(0.65 0.12 280);
+  --sidebar-primary-foreground: oklch(0.98 0.01 120);
+  --sidebar-accent: oklch(0.8 0.1 300);
+  --sidebar-accent-foreground: oklch(0.25 0.02 280);
+  --sidebar-border: oklch(0.9 0.02 280);
+  --sidebar-ring: oklch(0.65 0.12 280);
+  --radius: 1.5rem;
+  --shadow-x: 0px;
+  --shadow-y: 2px;
+  --shadow-blur: 8px;
+  --shadow-spread: 0px;
+  --shadow-opacity: 0.1;
+  --shadow-color: oklch(0.5 0.1 280);
+  --shadow-2xs: 0 1px 3px oklch(0.5 0.1 280 / 0.05);
+  --shadow-xs: 0 1px 4px oklch(0.5 0.1 280 / 0.08);
+  --shadow-sm: 0 2px 6px oklch(0.5 0.1 280 / 0.1);
+  --shadow: 0 2px 8px oklch(0.5 0.1 280 / 0.12);
+  --shadow-md: 0 4px 10px oklch(0.5 0.1 280 / 0.15);
+  --shadow-lg: 0 6px 15px oklch(0.5 0.1 280 / 0.18);
+  --shadow-xl: 0 8px 20px oklch(0.5 0.1 280 / 0.2);
+  --shadow-2xl: 0 12px 30px oklch(0.5 0.1 280 / 0.25);
+}
+
+[data-color-scheme="pastel-light"] .glass-effect {
+  background: oklch(0.99 0.005 120);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+[data-color-scheme="pastel-light"] .glass-button {
+  background: var(--secondary);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-xs);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+[data-color-scheme="pastel-light"] .glass-button:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+[data-color-scheme="pastel-light"] .glass-card {
+  background: oklch(0.99 0.005 120);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+[data-color-scheme="pastel-light"].dark {
+  --background: oklch(0.15 0.01 260);
+  --foreground: oklch(0.9 0.02 280);
+  --card: oklch(0.2 0.01 260);
+  --card-foreground: oklch(0.9 0.02 280);
+  --popover: oklch(0.2 0.01 260);
+  --popover-foreground: oklch(0.9 0.02 280);
+  --primary: oklch(0.7 0.15 280);
+  --primary-foreground: oklch(0.15 0.01 260);
+  --secondary: oklch(0.3 0.05 300);
+  --secondary-foreground: oklch(0.9 0.02 280);
+  --muted: oklch(0.18 0.01 260);
+  --muted-foreground: oklch(0.7 0.02 280);
+  --accent: oklch(0.35 0.08 320);
+  --accent-foreground: oklch(0.9 0.02 280);
+  --destructive: oklch(0.65 0.18 20);
+  --destructive-foreground: oklch(0.9 0.02 280);
+  --border: oklch(0.25 0.02 280);
+  --input: oklch(0.22 0.01 260);
+  --ring: oklch(0.7 0.15 280);
+  --chart-1: oklch(0.7 0.15 280);
+  --chart-2: oklch(0.65 0.12 320);
+  --chart-3: oklch(0.6 0.1 300);
+  --chart-4: oklch(0.65 0.12 260);
+  --chart-5: oklch(0.7 0.15 240);
+  --sidebar: oklch(0.16 0.01 260);
+  --sidebar-foreground: oklch(0.9 0.02 280);
+  --sidebar-primary: oklch(0.7 0.15 280);
+  --sidebar-primary-foreground: oklch(0.15 0.01 260);
+  --sidebar-accent: oklch(0.35 0.08 320);
+  --sidebar-accent-foreground: oklch(0.9 0.02 280);
+  --sidebar-border: oklch(0.25 0.02 280);
+  --sidebar-ring: oklch(0.7 0.15 280);
+}
+
+/* ============================================
+   CORPORATE COLOR SCHEME
+   ============================================ */
+
+[data-color-scheme="corporate"] {
+  --background: oklch(0.99 0 0);
+  --foreground: oklch(0.15 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.15 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.15 0 0);
+  --primary: oklch(0.35 0.08 240);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.95 0 0);
+  --secondary-foreground: oklch(0.15 0 0);
+  --muted: oklch(0.96 0 0);
+  --muted-foreground: oklch(0.4 0 0);
+  --accent: oklch(0.4 0.06 240);
+  --accent-foreground: oklch(0.99 0 0);
+  --destructive: oklch(0.5 0.2 20);
+  --destructive-foreground: oklch(0.99 0 0);
+  --border: oklch(0.9 0 0);
+  --input: oklch(0.94 0 0);
+  --ring: oklch(0.35 0.08 240);
+  --chart-1: oklch(0.35 0.08 240);
+  --chart-2: oklch(0.4 0.06 240);
+  --chart-3: oklch(0.45 0.05 240);
+  --chart-4: oklch(0.3 0.1 240);
+  --chart-5: oklch(0.25 0.12 240);
+  --sidebar: oklch(0.97 0 0);
+  --sidebar-foreground: oklch(0.15 0 0);
+  --sidebar-primary: oklch(0.35 0.08 240);
+  --sidebar-primary-foreground: oklch(0.99 0 0);
+  --sidebar-accent: oklch(0.4 0.06 240);
+  --sidebar-accent-foreground: oklch(0.99 0 0);
+  --sidebar-border: oklch(0.9 0 0);
+  --sidebar-ring: oklch(0.35 0.08 240);
+  --radius: 0.5rem;
+  --shadow-x: 0px;
+  --shadow-y: 1px;
+  --shadow-blur: 3px;
+  --shadow-spread: 0px;
+  --shadow-opacity: 0.1;
+  --shadow-color: oklch(0.2 0 0);
+  --shadow-2xs: 0 1px 2px oklch(0.2 0 0 / 0.05);
+  --shadow-xs: 0 1px 3px oklch(0.2 0 0 / 0.08);
+  --shadow-sm: 0 1px 4px oklch(0.2 0 0 / 0.1);
+  --shadow: 0 2px 6px oklch(0.2 0 0 / 0.12);
+  --shadow-md: 0 3px 8px oklch(0.2 0 0 / 0.15);
+  --shadow-lg: 0 4px 12px oklch(0.2 0 0 / 0.18);
+  --shadow-xl: 0 6px 16px oklch(0.2 0 0 / 0.2);
+  --shadow-2xl: 0 8px 24px oklch(0.2 0 0 / 0.25);
+}
+
+[data-color-scheme="corporate"] .glass-effect {
+  background: var(--card);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+[data-color-scheme="corporate"] .glass-button {
+  background: var(--secondary);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-xs);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+[data-color-scheme="corporate"] .glass-button:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+[data-color-scheme="corporate"] .glass-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+[data-color-scheme="corporate"].dark {
+  --background: oklch(0.12 0 0);
+  --foreground: oklch(0.95 0 0);
+  --card: oklch(0.15 0 0);
+  --card-foreground: oklch(0.95 0 0);
+  --popover: oklch(0.15 0 0);
+  --popover-foreground: oklch(0.95 0 0);
+  --primary: oklch(0.6 0.12 240);
+  --primary-foreground: oklch(0.12 0 0);
+  --secondary: oklch(0.2 0 0);
+  --secondary-foreground: oklch(0.95 0 0);
+  --muted: oklch(0.14 0 0);
+  --muted-foreground: oklch(0.7 0 0);
+  --accent: oklch(0.25 0.05 240);
+  --accent-foreground: oklch(0.95 0 0);
+  --destructive: oklch(0.55 0.22 20);
+  --destructive-foreground: oklch(0.95 0 0);
+  --border: oklch(0.25 0 0);
+  --input: oklch(0.18 0 0);
+  --ring: oklch(0.6 0.12 240);
+  --chart-1: oklch(0.6 0.12 240);
+  --chart-2: oklch(0.55 0.1 240);
+  --chart-3: oklch(0.5 0.08 240);
+  --chart-4: oklch(0.65 0.14 240);
+  --chart-5: oklch(0.7 0.16 240);
+  --sidebar: oklch(0.13 0 0);
+  --sidebar-foreground: oklch(0.95 0 0);
+  --sidebar-primary: oklch(0.6 0.12 240);
+  --sidebar-primary-foreground: oklch(0.12 0 0);
+  --sidebar-accent: oklch(0.25 0.05 240);
+  --sidebar-accent-foreground: oklch(0.95 0 0);
+  --sidebar-border: oklch(0.25 0 0);
+  --sidebar-ring: oklch(0.6 0.12 240);
+}
+
+/* ============================================
+   HIGH CONTRAST COLOR SCHEME
+   ============================================ */
+
+[data-color-scheme="high-contrast"] {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0 0 0);
+  --primary: oklch(0.2 0.1 240);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.95 0 0);
+  --secondary-foreground: oklch(0 0 0);
+  --muted: oklch(0.9 0 0);
+  --muted-foreground: oklch(0.2 0 0);
+  --accent: oklch(0.15 0.1 240);
+  --accent-foreground: oklch(1 0 0);
+  --destructive: oklch(0.4 0.25 20);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.2 0 0);
+  --input: oklch(0.95 0 0);
+  --ring: oklch(0.2 0.1 240);
+  --chart-1: oklch(0.2 0.1 240);
+  --chart-2: oklch(0.3 0.1 260);
+  --chart-3: oklch(0.25 0.1 220);
+  --chart-4: oklch(0.15 0.1 240);
+  --chart-5: oklch(0.1 0.1 240);
+  --sidebar: oklch(0.98 0 0);
+  --sidebar-foreground: oklch(0 0 0);
+  --sidebar-primary: oklch(0.2 0.1 240);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.15 0.1 240);
+  --sidebar-accent-foreground: oklch(1 0 0);
+  --sidebar-border: oklch(0.2 0 0);
+  --sidebar-ring: oklch(0.2 0.1 240);
+  --radius: 0.25rem;
+  --shadow-x: 0px;
+  --shadow-y: 2px;
+  --shadow-blur: 4px;
+  --shadow-spread: 0px;
+  --shadow-opacity: 0.2;
+  --shadow-color: oklch(0 0 0);
+  --shadow-2xs: 0 1px 2px oklch(0 0 0 / 0.1);
+  --shadow-xs: 0 1px 3px oklch(0 0 0 / 0.15);
+  --shadow-sm: 0 2px 4px oklch(0 0 0 / 0.2);
+  --shadow: 0 2px 6px oklch(0 0 0 / 0.25);
+  --shadow-md: 0 3px 8px oklch(0 0 0 / 0.3);
+  --shadow-lg: 0 4px 12px oklch(0 0 0 / 0.35);
+  --shadow-xl: 0 6px 16px oklch(0 0 0 / 0.4);
+  --shadow-2xl: 0 8px 24px oklch(0 0 0 / 0.45);
+}
+
+[data-color-scheme="high-contrast"] .glass-effect {
+  background: var(--card);
+  border: 2px solid var(--border);
+  box-shadow: var(--shadow-md);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+[data-color-scheme="high-contrast"] .glass-button {
+  background: var(--secondary);
+  border: 2px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+[data-color-scheme="high-contrast"] .glass-button:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-1px);
+  border-color: var(--primary);
+}
+
+[data-color-scheme="high-contrast"] .glass-card {
+  background: var(--card);
+  border: 2px solid var(--border);
+  box-shadow: var(--shadow);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+[data-color-scheme="high-contrast"].dark {
+  --background: oklch(0 0 0);
+  --foreground: oklch(1 0 0);
+  --card: oklch(0.05 0 0);
+  --card-foreground: oklch(1 0 0);
+  --popover: oklch(0.05 0 0);
+  --popover-foreground: oklch(1 0 0);
+  --primary: oklch(0.85 0.1 240);
+  --primary-foreground: oklch(0 0 0);
+  --secondary: oklch(0.1 0 0);
+  --secondary-foreground: oklch(1 0 0);
+  --muted: oklch(0.15 0 0);
+  --muted-foreground: oklch(0.9 0 0);
+  --accent: oklch(0.9 0.1 240);
+  --accent-foreground: oklch(0 0 0);
+  --destructive: oklch(0.7 0.25 20);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.8 0 0);
+  --input: oklch(0.1 0 0);
+  --ring: oklch(0.85 0.1 240);
+  --chart-1: oklch(0.85 0.1 240);
+  --chart-2: oklch(0.8 0.1 260);
+  --chart-3: oklch(0.75 0.1 220);
+  --chart-4: oklch(0.9 0.1 240);
+  --chart-5: oklch(0.95 0.1 240);
+  --sidebar: oklch(0.02 0 0);
+  --sidebar-foreground: oklch(1 0 0);
+  --sidebar-primary: oklch(0.85 0.1 240);
+  --sidebar-primary-foreground: oklch(0 0 0);
+  --sidebar-accent: oklch(0.9 0.1 240);
+  --sidebar-accent-foreground: oklch(0 0 0);
+  --sidebar-border: oklch(0.8 0 0);
+  --sidebar-ring: oklch(0.85 0.1 240);
+}
+
+/* ============================================
+   PAYMENT DATES CALENDAR ANIMATIONS
+   ============================================ */
+
+/* Календарные дни с улучшенными анимациями */
+.calendar-day {
+  aspect-ratio: 1;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.calendar-day:hover {
+  transform: scale(1.1);
+  z-index: 10;
+}
+
+.calendar-day.selecting {
+  background: rgba(59, 130, 246, 0.3) !important;
+  border: 2px solid #3B82F6 !important;
+  animation: calendarPulse 0.5s ease-in-out infinite;
+}
+
+.calendar-day.in-selection {
+  background: rgba(59, 130, 246, 0.2) !important;
+}
+
+@keyframes calendarPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* Маркер выплаты */
+.payment-marker {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: markerPulse 2s ease-in-out infinite;
+}
+
+@keyframes markerPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* Анимация календаря при смене месяца */
+@keyframes slideCalendar {
+  from {
+    opacity: 0;
+    transform: translateX(var(--slide-direction, 100px));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.calendar-animate {
+  animation: slideCalendar 0.3s ease-out;
+}
+
+/* Анимации для карточек выплат */
+.payment-card {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.payment-card-enter {
+  animation: cardEnter 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.payment-card-exit {
+  animation: cardExit 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes cardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    max-height: 600px;
+  }
+}
+
+@keyframes cardExit {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    max-height: 600px;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+    max-height: 0;
+  }
+}
+
+/* Переключатель (Toggle Switch) */
+.toggle-switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  background: #4B5563;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.toggle-switch.active {
+  background: #10B981;
+}
+
+.toggle-switch::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+}
+
+.toggle-switch.active::after {
+  transform: translateX(20px);
+}
+
+/* Анимация для списка выплат */
+.payment-list-item {
+  animation: fadeInUp 0.3s ease-out backwards;
+}
+
+.payment-list-item:nth-child(1) { animation-delay: 0s; }
+.payment-list-item:nth-child(2) { animation-delay: 0.05s; }
+.payment-list-item:nth-child(3) { animation-delay: 0.1s; }
+.payment-list-item:nth-child(4) { animation-delay: 0.15s; }
+.payment-list-item:nth-child(5) { animation-delay: 0.2s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

@@ -8,7 +8,11 @@
  * - Интегрируется с UI хранилищем
  */
 
-import { useUIStore } from '../store/useUIStore'
+import { 
+  useNotifications as useUIStoreNotifications, 
+  useAddNotification, 
+  useRemoveNotification 
+} from '../store/useUIStore'
 import { logger } from '../utils/logger'
 
 /**
@@ -56,7 +60,9 @@ import { logger } from '../utils/logger'
  * }
  */
 export function useNotifications() {
-  const { addNotification, removeNotification, notifications } = useUIStore()
+  const notifications = useUIStoreNotifications()
+  const addNotification = useAddNotification()
+  const removeNotification = useRemoveNotification()
 
   /**
    * Показывает уведомление

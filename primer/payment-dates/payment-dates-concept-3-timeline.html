@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Концепт 3: Timeline - Настройка дат выплат</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .glass-effect {
+            background: rgba(31, 41, 55, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(75, 85, 99, 0.3);
+        }
+        
+        .timeline-item {
+            position: relative;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 19px;
+            top: 40px;
+            bottom: -20px;
+            width: 2px;
+            background: linear-gradient(180deg, var(--line-color), transparent);
+        }
+        
+        .timeline-item:last-child::before {
+            display: none;
+        }
+        
+        .timeline-dot {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-center;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 0 0 4px rgba(31, 41, 55, 1);
+        }
+    </style>
+</head>
+<body class="bg-gray-900 p-8 min-h-screen flex items-center justify-center">
+    
+    <!-- Концепт 3: Timeline -->
+    <div class="glass-effect rounded-2xl p-8 max-w-3xl w-full shadow-2xl">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-8">
+            <div>
+                <h2 class="text-2xl font-bold text-white mb-1">📅 График выплат</h2>
+                <p class="text-sm text-gray-400">Хронология получения оплаты в течение месяца</p>
+            </div>
+            <button onclick="closeModal()" class="text-gray-400 hover:text-white transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Month Selector -->
+        <div class="flex items-center justify-between mb-8 p-4 bg-gray-800/50 rounded-xl">
+            <button class="p-2 hover:bg-gray-700 rounded-lg transition-colors">
+                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+            </button>
+            <div class="text-center">
+                <p class="text-2xl font-bold text-white">Декабрь 2025</p>
+                <p class="text-sm text-gray-400">31 день</p>
+            </div>
+            <button class="p-2 hover:bg-gray-700 rounded-lg transition-colors">
+                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Timeline -->
+        <div id="timeline-list" class="space-y-6 mb-6">
+            <!-- Timeline Item 1 -->
+            <div class="timeline-item flex gap-4" style="--line-color: #8B5CF6">
+                <div class="timeline-dot bg-purple-500 text-white flex-shrink-0">
+                    05
+                </div>
+                <div class="flex-1 bg-gray-800/50 rounded-xl p-4 border border-gray-700/50">
+                    <div class="flex items-start justify-between mb-2">
+                        <div>
+                            <h3 class="text-white font-medium mb-1">Фриланс проект</h3>
+                            <p class="text-sm text-gray-400">5 декабря • Разовая выплата</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button class="p-1.5 hover:bg-gray-700 rounded-lg transition-colors">
+                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                                </svg>
+                            </button>
+                            <button class="p-1.5 hover:bg-red-500/20 rounded-lg transition-colors">
+                                <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 text-xs text-gray-500">
+                        <span class="px-2 py-1 bg-purple-500/20 text-purple-400 rounded">Конкретная дата</span>
+                        <span>Период работы: 01.11 - 30.11</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timeline Item 2 -->
+            <div class="timeline-item flex gap-4" style="--line-color: #3B82F6">
+                <div class="timeline-dot bg-blue-500 text-white flex-shrink-0">
+                    10
+                </div>
+                <div class="flex-1 bg-gray-800/50 rounded-xl p-4 border border-gray-700/50">
+                    <div class="flex items-start justify-between mb-2">
+                        <div>
+                            <h3 class="text-white font-medium mb-1">Аванс</h3>
+                            <p class="text-sm text-gray-400">10 декабря • Ежемесячно</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button class="p-1.5 hover:bg-gray-700 rounded-lg transition-colors">
+                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                                </svg>
+                            </button>
+                            <button class="p-1.5 hover:bg-red-500/20 rounded-lg transition-colors">
+                                <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 text-xs text-gray-500">
+                        <span class="px-2 py-1 bg-blue-500/20 text-blue-400 rounded">Повторяется</span>
+                        <span>Период работы: 16-31 число предыдущего месяца</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timeline Item 3 -->
+            <div class="timeline-item flex gap-4" style="--line-color: #10B981">
+                <div class="timeline-dot bg-green-500 text-white flex-shrink-0">
+                    25
+                </div>
+                <div class="flex-1 bg-gray-800/50 rounded-xl p-4 border border-gray-700/50">
+                    <div class="flex items-start justify-between mb-2">
+                        <div>
+                            <h3 class="text-white font-medium mb-1">Основная зарплата</h3>
+                            <p class="text-sm text-gray-400">25 декабря • Ежемесячно</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button class="p-1.5 hover:bg-gray-700 rounded-lg transition-colors">
+                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                                </svg>
+                            </button>
+                            <button class="p-1.5 hover:bg-red-500/20 rounded-lg transition-colors">
+                                <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 text-xs text-gray-500">
+                        <span class="px-2 py-1 bg-green-500/20 text-green-400 rounded">Повторяется</span>
+                        <span>Период работы: 1-15 число текущего месяца</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Button -->
+        <button onclick="addPayment()" class="w-full py-4 px-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-xl font-medium transition-all flex items-center justify-center gap-2 shadow-lg">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+            Добавить дату выплаты
+        </button>
+
+        <!-- Footer -->
+        <div class="flex gap-3 mt-6 pt-6 border-t border-gray-700/50">
+            <button onclick="closeModal()" class="flex-1 py-2.5 px-4 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-medium transition-colors">
+                Отмена
+            </button>
+            <button onclick="saveAll()" class="flex-1 py-2.5 px-4 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+                Сохранить
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let payments = [
+            { id: 1, name: 'Фриланс проект', day: 5, customDate: '05.12', color: '#8B5CF6', type: 'once', periodStart: 1, periodEnd: 30, periodMonth: 'previous' },
+            { id: 2, name: 'Аванс', day: 10, periodStart: 16, periodEnd: 31, periodMonth: 'previous', color: '#3B82F6', type: 'monthly' },
+            { id: 3, name: 'Основная зарплата', day: 25, periodStart: 1, periodEnd: 15, periodMonth: 'current', color: '#10B981', type: 'monthly' }
+        ];
+        let editingId = null;
+        
+        function renderTimeline() {
+            const container = document.getElementById('timeline-list');
+            container.innerHTML = payments.sort((a, b) => a.day - b.day).map(payment => 
+                editingId === payment.id ? renderEditItem(payment) : renderViewItem(payment)
+            ).join('');
+        }
+        
+        function renderViewItem(payment) {
+            return `
+                <div class="timeline-item flex gap-4" style="--line-color: ${payment.color}">
+                    <div class="timeline-dot flex-shrink-0" style="background-color: ${payment.color}">${payment.day < 10 ? '0' + payment.day : payment.day}</div>
+                    <div class="flex-1 bg-gray-800/50 rounded-xl p-4 border border-gray-700/50">
+                        <div class="flex items-start justify-between mb-2">
+                            <div>
+                                <h3 class="text-white font-medium mb-1">${payment.name}</h3>
+                                <p class="text-sm text-gray-400">${payment.day} декабря • ${payment.type === 'monthly' ? 'Ежемесячно' : 'Разовая выплата'}</p>
+                            </div>
+                            <div class="flex gap-2">
+                                <button onclick="startEdit(${payment.id})" class="p-1.5 hover:bg-gray-700 rounded-lg transition-colors">
+                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                                    </svg>
+                                </button>
+                                <button onclick="deletePayment(${payment.id})" class="p-1.5 hover:bg-red-500/20 rounded-lg transition-colors">
+                                    <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4 text-xs text-gray-500">
+                            <span class="px-2 py-1 rounded" style="background-color: ${payment.color}20; color: ${payment.color}">${payment.type === 'monthly' ? 'Повторяется' : 'Конкретная дата'}</span>
+                            <span>Период: ${payment.periodStart}-${payment.periodEnd} число (${payment.periodMonth === 'previous' ? 'пред. месяц' : 'тек. месяц'})</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function renderEditItem(payment) {
+            return `
+                <div class="timeline-item flex gap-4" style="--line-color: ${payment.color}">
+                    <div class="timeline-dot flex-shrink-0" style="background-color: ${payment.color}">
+                        <input type="number" id="edit-day" value="${payment.day}" min="1" max="31" class="w-full h-full bg-transparent text-white text-center text-sm font-bold focus:outline-none">
+                    </div>
+                    <div class="flex-1 bg-gray-800/50 rounded-xl p-4 border-2 border-blue-500">
+                        <div class="space-y-3">
+                            <input type="text" id="edit-name" value="${payment.name}" class="w-full bg-gray-700 text-white rounded-lg px-3 py-2">
+                            <input type="color" id="edit-color" value="${payment.color}" class="w-full h-10 bg-gray-700 rounded-lg cursor-pointer">
+                            <div class="grid grid-cols-2 gap-2">
+                                <input type="number" id="edit-period-start" value="${payment.periodStart}" min="1" max="31" placeholder="С" class="bg-gray-700 text-white rounded-lg px-3 py-2 text-center">
+                                <input type="number" id="edit-period-end" value="${payment.periodEnd}" min="1" max="31" placeholder="По" class="bg-gray-700 text-white rounded-lg px-3 py-2 text-center">
+                            </div>
+                            <select id="edit-period-month" class="w-full bg-gray-700 text-white rounded-lg px-3 py-2">
+                                <option value="current" ${payment.periodMonth === 'current' ? 'selected' : ''}>Текущий месяц</option>
+                                <option value="previous" ${payment.periodMonth === 'previous' ? 'selected' : ''}>Предыдущий месяц</option>
+                            </select>
+                            <div class="flex gap-2">
+                                <button onclick="saveEdit(${payment.id})" class="flex-1 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg">Сохранить</button>
+                                <button onclick="cancelEdit()" class="flex-1 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg">Отмена</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function startEdit(id) { editingId = id; renderTimeline(); }
+        function cancelEdit() { editingId = null; renderTimeline(); }
+        function saveEdit(id) {
+            const payment = payments.find(p => p.id === id);
+            if (payment) {
+                payment.name = document.getElementById('edit-name').value;
+                payment.day = parseInt(document.getElementById('edit-day').value) || 1;
+                payment.color = document.getElementById('edit-color').value;
+                payment.periodStart = parseInt(document.getElementById('edit-period-start').value) || 1;
+                payment.periodEnd = parseInt(document.getElementById('edit-period-end').value) || 31;
+                payment.periodMonth = document.getElementById('edit-period-month').value;
+            }
+            editingId = null;
+            renderTimeline();
+            showNotification('Изменения сохранены', 'success');
+        }
+        
+        function deletePayment(id) {
+            if (confirm('Удалить эту выплату?')) {
+                payments = payments.filter(p => p.id !== id);
+                renderTimeline();
+                showNotification('Выплата удалена', 'success');
+            }
+        }
+        
+        function addPayment() {
+            const newId = Math.max(...payments.map(p => p.id), 0) + 1;
+            payments.push({ id: newId, name: 'Новая выплата', day: 1, periodStart: 1, periodEnd: 15, periodMonth: 'current', color: '#6366F1', type: 'monthly' });
+            editingId = newId;
+            renderTimeline();
+        }
+        
+        function closeModal() { if (confirm('Закрыть окно?')) window.close(); }
+        function saveAll() { console.log('Сохранено:', payments); showNotification('Все изменения сохранены', 'success'); }
+        
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg text-white font-medium shadow-lg z-50 ${type === 'success' ? 'bg-green-600' : type === 'error' ? 'bg-red-600' : 'bg-blue-600'}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => { notification.style.opacity = '0'; notification.style.transition = 'opacity 0.3s'; setTimeout(() => notification.remove(), 300); }, 2000);
+        }
+        
+        document.addEventListener('DOMContentLoaded', renderTimeline);
+    </script>
+
+</body>
+</html>

@@ -25,6 +25,7 @@ import {
 } from '../store/useTimerStore'
 import { useAddEntry, useUpdateEntry, useEntriesStore } from '../store/useEntriesStore'
 import { useCategories, useNotificationsSettings } from '../store/useSettingsStore'
+import { usePomodoroIsRunning } from '../store/usePomodoroStore'
 import { useSoundManager } from './useSound'
 import { useFavicon } from './useFavicon'
 import { useBreakReminders } from './useBreakReminders'
@@ -43,6 +44,7 @@ export function useTimer() {
   const startTime = useStartTime()
   const isPaused = useIsPaused()
   const timerEntryId = useTimerEntryId()
+  const pomodoroIsRunning = usePomodoroIsRunning()
   
   // Actions
   const startTimer = useStartTimer()
@@ -88,8 +90,14 @@ export function useTimer() {
   }, [])
 
   // Обновление заголовка вкладки (работает даже когда вкладка в фоне)
+  // ✅ ИНТЕГРАЦИЯ: Приоритет Pomodoro - если Pomodoro запущен, не обновляем title
   useEffect(() => {
     const updateTitle = () => {
+      // ✅ ПРИОРИТЕТ POMODORO: Если Pomodoro запущен, пропускаем обновление title
+      if (pomodoroIsRunning) {
+        return // Pomodoro сам управляет title
+      }
+
       if (activeTimer && !isPaused) {
         const currentElapsed = getCurrentElapsed() * 1000
         document.title = `${formatElapsedTime(currentElapsed)} - Работаем`
@@ -121,7 +129,7 @@ export function useTimer() {
         document.removeEventListener('visibilitychange', handleVisibilityChange)
       }
     }
-  }, [activeTimer, isPaused, formatElapsedTime, getCurrentElapsed])
+  }, [activeTimer, isPaused, formatElapsedTime, getCurrentElapsed, pomodoroIsRunning])
 
   // Автоматическое обновление времени каждую секунду (работает даже когда вкладка в фоне)
   useEffect(() => {

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вариант 5 - Продвинутый</title>
+</head>
+<body>
+
+<div id="modal" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="header-left">
+        <div class="header-icon">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
+        </div>
+        <div>
+          <h2 class="modal-title">Звуковые настройки</h2>
+          <p class="modal-subtitle">Персонализация уведомлений</p>
+        </div>
+      </div>
+      <button onclick="closeModal()" class="btn-close">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('sounds')">Звуки</button>
+      <button class="tab" onclick="switchTab('advanced')">Дополнительно</button>
+    </div>
+
+    <div id="tab-sounds" class="tab-content active">
+      <div class="sound-list">
+        <div class="sound-row">
+          <div class="sound-main">
+            <div id="icon-notification" class="sound-icon purple">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+              <div class="icon-ring" id="ring-notification"></div>
+            </div>
+            <div class="sound-details">
+              <h3 class="sound-title">Уведомления</h3>
+              <p class="sound-desc">Общие системные уведомления</p>
+            </div>
+          </div>
+          <div class="sound-actions">
+            <div id="wave-notification" class="waveform">
+              <span></span><span></span><span></span><span></span><span></span>
+            </div>
+            <button onclick="playVisual('notification')" class="btn-play">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </button>
+            <div class="volume-mini">
+              <input type="range" min="0" max="100" value="80" class="mini-slider">
+              <span class="mini-value">80%</span>
+            </div>
+            <div onclick="toggleSwitch('sound-notification')" id="sound-notification" class="switch active"></div>
+          </div>
+        </div>
+
+        <div class="sound-row">
+          <div class="sound-main">
+            <div id="icon-message" class="sound-icon green">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+              <div class="icon-ring" id="ring-message"></div>
+            </div>
+            <div class="sound-details">
+              <h3 class="sound-title">Сообщения</h3>
+              <p class="sound-desc">Входящие сообщения и чаты</p>
+            </div>
+          </div>
+          <div class="sound-actions">
+            <div id="wave-message" class="waveform">
+              <span></span><span></span><span></span><span></span><span></span>
+            </div>
+            <button onclick="playVisual('message')" class="btn-play">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </button>
+            <div class="volume-mini">
+              <input type="range" min="0" max="100" value="90" class="mini-slider">
+              <span class="mini-value">90%</span>
+            </div>
+            <div onclick="toggleSwitch('sound-message')" id="sound-message" class="switch active"></div>
+          </div>
+        </div>
+
+        <div class="sound-row">
+          <div class="sound-main">
+            <div id="icon-hourly" class="sound-icon blue">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <div class="icon-ring" id="ring-hourly"></div>
+            </div>
+            <div class="sound-details">
+              <h3 class="sound-title">Час</h3>
+              <p class="sound-desc">Почасовые напоминания</p>
+            </div>
+          </div>
+          <div class="sound-actions">
+            <div id="wave-hourly" class="waveform">
+              <span></span><span></span><span></span><span></span><span></span>
+            </div>
+            <button onclick="playVisual('hourly')" class="btn-play">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </button>
+            <div class="volume-mini">
+              <input type="range" min="0" max="100" value="60" class="mini-slider">
+              <span class="mini-value">60%</span>
+            </div>
+            <div onclick="toggleSwitch('sound-hourly')" id="sound-hourly" class="switch"></div>
+          </div>
+        </div>
+
+        <div class="sound-row">
+          <div class="sound-main">
+            <div id="icon-achievement" class="sound-icon yellow">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+              <div class="icon-ring" id="ring-achievement"></div>
+            </div>
+            <div class="sound-details">
+              <h3 class="sound-title">Успех</h3>
+              <p class="sound-desc">Достижения и награды</p>
+            </div>
+          </div>
+          <div class="sound-actions">
+            <div id="wave-achievement" class="waveform">
+              <span></span><span></span><span></span><span></span><span></span>
+            </div>
+            <button onclick="playVisual('achievement')" class="btn-play">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </button>
+            <div class="volume-mini">
+              <input type="range" min="0" max="100" value="100" class="mini-slider">
+              <span class="mini-value">100%</span>
+            </div>
+            <div onclick="toggleSwitch('sound-achievement')" id="sound-achievement" class="switch active"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="master-volume">
+        <div class="volume-top">
+          <label class="volume-label">Общая громкость</label>
+          <span id="master-value" class="volume-display">80%</span>
+        </div>
+        <div class="volume-slider-wrap">
+          <input type="range" id="master-slider" min="0" max="100" value="80" class="master-range">
+          <div id="master-track" class="volume-track-fill"></div>
+        </div>
+        <div class="volume-marks">
+          <span>0%</span>
+          <span>25%</span>
+          <span>50%</span>
+          <span>75%</span>
+          <span>100%</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-advanced" class="tab-content">
+      <div class="advanced-options">
+        <div class="option-group">
+          <div class="option-header">
+            <h3 class="option-title">Режим "Не беспокоить"</h3>
+            <div onclick="toggleSwitch('dnd-mode')" id="dnd-mode" class="switch"></div>
+          </div>
+          <p class="option-desc">Отключить все звуковые уведомления</p>
+        </div>
+
+        <div class="option-group">
+          <div class="option-header">
+            <h3 class="option-title">Вибрация</h3>
+            <div onclick="toggleSwitch('vibration')" id="vibration" class="switch active"></div>
+          </div>
+          <p class="option-desc">Включить вибрацию при уведомлениях</p>
+        </div>
+
+        <div class="option-group">
+          <div class="option-header">
+            <h3 class="option-title">Звук при запуске</h3>
+            <div onclick="toggleSwitch('startup-sound')" id="startup-sound" class="switch active"></div>
+          </div>
+          <p class="option-desc">Воспроизводить звук при запуске приложения</p>
+        </div>
+
+        <div class="option-group">
+          <label class="option-title">Звуковая тема</label>
+          <select class="theme-select">
+            <option>По умолчанию</option>
+            <option>Минимализм</option>
+            <option>Классика</option>
+            <option>Футуристика</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button onclick="resetSettings()" class="btn-reset">Сбросить</button>
+      <div class="footer-right">
+        <button onclick="closeModal()" class="btn-cancel">Отмена</button>
+        <button onclick="saveSettings()" class="btn-save">Сохранить</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+  
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: center; z-index: 50; animation: fadeIn 0.3s ease-out; }
+  
+  .modal-content { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); border-radius: 24px; padding: 0; max-width: 720px; width: 100%; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7); animation: slideUp 0.4s ease-out; border: 1px solid rgba(255, 255, 255, 0.1); max-height: 90vh; overflow: hidden; display: flex; flex-direction: column; }
+  
+  .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 28px 32px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+  .header-left { display: flex; align-items: center; gap: 16px; }
+  .header-icon { width: 48px; height: 48px; background: rgba(59, 130, 246, 0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #60a5fa; }
+  .modal-title { color: white; font-size: 22px; font-weight: 700; margin-bottom: 2px; }
+  .modal-subtitle { color: #94a3b8; font-size: 13px; }
+  .btn-close { background: rgba(255, 255, 255, 0.05); border: none; color: #94a3b8; cursor: pointer; padding: 8px; border-radius: 10px; transition: all 0.2s; }
+  .btn-close:hover { background: rgba(255, 255, 255, 0.1); color: white; }
+  
+  .tabs { display: flex; gap: 8px; padding: 20px 32px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+  .tab { background: none; border: none; color: #94a3b8; padding: 12px 20px; cursor: pointer; font-size: 14px; font-weight: 500; border-bottom: 2px solid transparent; transition: all 0.2s; }
+  .tab:hover { color: #e2e8f0; }
+  .tab.active { color: #60a5fa; border-bottom-color: #60a5fa; }
+  
+  .tab-content { display: none; padding: 24px 32px; overflow-y: auto; flex: 1; }
+  .tab-content.active { display: block; }
+  
+  .sound-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+  
+  .sound-row { background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 16px; padding: 16px; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s; }
+  .sound-row:hover { background: rgba(30, 41, 59, 0.7); border-color: rgba(255, 255, 255, 0.1); }
+  
+  .sound-main { display: flex; align-items: center; gap: 14px; }
+  
+  .sound-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; position: relative; transition: transform 0.2s; }
+  .sound-icon.purple { background: rgba(168, 85, 247, 0.2); color: #c084fc; }
+  .sound-icon.green { background: rgba(34, 197, 94, 0.2); color: #4ade80; }
+  .sound-icon.blue { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+  .sound-icon.yellow { background: rgba(234, 179, 8, 0.2); color: #facc15; }
+  
+  .icon-ring { position: absolute; inset: -3px; border-radius: 14px; border: 2px solid currentColor; opacity: 0; }
+  
+  .sound-details { }
+  .sound-title { color: white; font-size: 15px; font-weight: 600; margin-bottom: 2px; }
+  .sound-desc { color: #94a3b8; font-size: 12px; }
+  
+  .sound-actions { display: flex; align-items: center; gap: 12px; }
+  
+  .waveform { display: flex; align-items: end; gap: 2px; height: 28px; width: 40px; opacity: 0; transition: opacity 0.3s; }
+  .waveform span { flex: 1; background: currentColor; border-radius: 2px; animation: waveAnimation 1s ease-in-out infinite; }
+  .sound-row:nth-child(1) .waveform span { color: #c084fc; }
+  .sound-row:nth-child(2) .waveform span { color: #4ade80; }
+  .sound-row:nth-child(3) .waveform span { color: #60a5fa; }
+  .sound-row:nth-child(4) .waveform span { color: #facc15; }
+  .waveform span:nth-child(1) { animation-delay: 0s; }
+  .waveform span:nth-child(2) { animation-delay: 0.1s; }
+  .waveform span:nth-child(3) { animation-delay: 0.2s; }
+  .waveform span:nth-child(4) { animation-delay: 0.3s; }
+  .waveform span:nth-child(5) { animation-delay: 0.4s; }
+  
+  .btn-play { background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); color: #60a5fa; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; }
+  .btn-play:hover { background: rgba(59, 130, 246, 0.25); transform: scale(1.1); }
+  
+  .volume-mini { display: flex; align-items: center; gap: 6px; background: rgba(30, 41, 59, 0.6); padding: 6px 10px; border-radius: 8px; }
+  .mini-slider { width: 60px; height: 4px; background: #374151; border-radius: 2px; appearance: none; cursor: pointer; }
+  .mini-slider::-webkit-slider-thumb { appearance: none; width: 12px; height: 12px; background: #3b82f6; border-radius: 50%; cursor: pointer; }
+  .mini-slider::-moz-range-thumb { width: 12px; height: 12px; background: #3b82f6; border-radius: 50%; cursor: pointer; border: none; }
+  .mini-value { color: #94a3b8; font-size: 11px; font-weight: 600; min-width: 32px; }
+  
+  .switch { width: 44px; height: 24px; background: #374151; border-radius: 12px; position: relative; cursor: pointer; transition: all 0.3s; }
+  .switch::after { content: ''; position: absolute; width: 18px; height: 18px; background: white; border-radius: 50%; top: 3px; left: 3px; transition: all 0.3s; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); }
+  .switch.active { background: #3b82f6; }
+  .switch.active::after { transform: translateX(20px); }
+  
+  .master-volume { background: rgba(30, 41, 59, 0.4); border-radius: 16px; padding: 20px; border: 1px solid rgba(255, 255, 255, 0.05); }
+  .volume-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .volume-label { color: #e2e8f0; font-size: 15px; font-weight: 600; }
+  .volume-display { color: #60a5fa; font-size: 18px; font-weight: 700; }
+  
+  .volume-slider-wrap { position: relative; height: 8px; margin-bottom: 8px; }
+  .master-range { position: absolute; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 2; }
+  .volume-track-fill { position: absolute; left: 0; top: 0; height: 100%; width: 80%; background: linear-gradient(90deg, #3b82f6, #60a5fa); border-radius: 4px; pointer-events: none; }
+  .volume-slider-wrap::before { content: ''; position: absolute; width: 100%; height: 100%; background: #374151; border-radius: 4px; }
+  
+  .volume-marks { display: flex; justify-content: space-between; }
+  .volume-marks span { color: #64748b; font-size: 11px; }
+  
+  .advanced-options { display: flex; flex-direction: column; gap: 16px; }
+  .option-group { background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 16px; }
+  .option-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .option-title { color: white; font-size: 15px; font-weight: 600; }
+  .option-desc { color: #94a3b8; font-size: 13px; }
+  
+  .theme-select { width: 100%; background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); color: white; padding: 10px 12px; border-radius: 8px; font-size: 14px; cursor: pointer; margin-top: 8px; }
+  .theme-select:focus { outline: none; border-color: #3b82f6; }
+  
+  .modal-footer { display: flex; justify-content: space-between; align-items: center; padding: 20px 32px; border-top: 1px solid rgba(255, 255, 255, 0.1); }
+  .footer-right { display: flex; gap: 10px; }
+  .btn-reset, .btn-cancel, .btn-save { padding: 11px 20px; border-radius: 12px; border: none; font-weight: 600; cursor: pointer; transition: all 0.2s; font-size: 14px; }
+  .btn-reset { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+  .btn-reset:hover { background: rgba(239, 68, 68, 0.25); }
+  .btn-cancel { background: #374151; color: white; }
+  .btn-cancel:hover { background: #4b5563; }
+  .btn-save { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; }
+  .btn-save:hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(59, 130, 246, 0.3); }
+  
+  .w-6 { width: 1.5rem; }
+  .h-6 { height: 1.5rem; }
+  .w-5 { width: 1.25rem; }
+  .h-5 { height: 1.25rem; }
+  .w-4 { width: 1rem; }
+  .h-4 { height: 1rem; }
+  
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.5); opacity: 0; } }
+  @keyframes waveAnimation { 0%, 100% { height: 30%; } 50% { height: 100%; } }
+</style>
+
+<script>
+  function toggleSwitch(id) {
+    document.getElementById(id).classList.toggle('active');
+  }
+
+  function playVisual(type) {
+    const icon = document.getElementById(`icon-${type}`);
+    const ring = document.getElementById(`ring-${type}`);
+    const wave = document.getElementById(`wave-${type}`);
+    
+    ring.style.animation = 'pulse 0.6s ease-out';
+    setTimeout(() => { ring.style.animation = ''; }, 600);
+    
+    wave.style.opacity = '1';
+    setTimeout(() => { wave.style.opacity = '0'; }, 1000);
+    
+    icon.style.transform = 'scale(1.15)';
+    setTimeout(() => { icon.style.transform = 'scale(1)'; }, 200);
+  }
+
+  function switchTab(tabName) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    
+    event.target.classList.add('active');
+    document.getElementById('tab-' + tabName).classList.add('active');
+  }
+
+  function closeModal() {
+    const modal = document.getElementById('modal');
+    modal.style.animation = 'fadeIn 0.2s ease-out reverse';
+    setTimeout(() => { modal.style.display = 'none'; }, 200);
+  }
+
+  function saveSettings() {
+    console.log('Настройки сохранены');
+    closeModal();
+  }
+
+  function resetSettings() {
+    if (confirm('Сбросить все настройки к значениям по умолчанию?')) {
+      console.log('Настройки сброшены');
+    }
+  }
+
+  const masterSlider = document.getElementById('master-slider');
+  const masterTrack = document.getElementById('master-track');
+  const masterValue = document.getElementById('master-value');
+  
+  masterSlider.addEventListener('input', function(e) {
+    const value = e.target.value;
+    masterTrack.style.width = value + '%';
+    masterValue.textContent = value + '%';
+  });
+
+  document.querySelectorAll('.mini-slider').forEach(slider => {
+    slider.addEventListener('input', function(e) {
+      const value = e.target.value;
+      this.nextElementSibling.textContent = value + '%';
+    });
+  });
+</script>
+</body>
+</html>

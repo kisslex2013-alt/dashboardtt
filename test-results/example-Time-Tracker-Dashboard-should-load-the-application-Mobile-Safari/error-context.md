@@ -1,0 +1,45 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - alert "Ошибка приложения" [ref=e4]:
+    - generic [ref=e5]:
+      - img [ref=e7]
+      - generic [ref=e9]:
+        - heading "Произошла ошибка" [level=1] [ref=e10]
+        - paragraph [ref=e11]: Что-то пошло не так. Попробуйте ещё раз или перезагрузите страницу.
+        - generic [ref=e12]:
+          - paragraph [ref=e13]:
+            - strong [ref=e14]: "Ошибка:"
+            - text: "ReferenceError: Can't find variable: Notification"
+          - group [ref=e15]:
+            - generic "Stack trace" [ref=e16] [cursor=pointer]
+    - generic [ref=e17]:
+      - button "Попробовать снова" [ref=e18] [cursor=pointer]:
+        - img [ref=e19]
+        - text: Попробовать снова
+      - button "Перезагрузить страницу" [ref=e24] [cursor=pointer]:
+        - img [ref=e25]
+        - text: Перезагрузить страницу
+      - button "На главную" [ref=e30] [cursor=pointer]:
+        - img [ref=e31]
+        - text: На главную
+    - generic [ref=e34]:
+      - paragraph [ref=e35]:
+        - strong [ref=e36]: "Что можно сделать:"
+      - list [ref=e37]:
+        - listitem [ref=e38]: Попробуйте обновить страницу
+        - listitem [ref=e39]: Очистите кеш браузера
+        - listitem [ref=e40]: Проверьте консоль разработчика (F12) для подробностей
+        - listitem [ref=e41]: Если проблема сохраняется, сообщите разработчикам
+  - generic [ref=e42]:
+    - strong [ref=e43]: "Ошибка загрузки:"
+    - text: "Can't find variable: Notification"
+    - text: Проверьте консоль браузера (F12) для подробностей
+    - button "Закрыть" [ref=e44] [cursor=pointer]
+  - generic [ref=e45]:
+    - strong [ref=e46]: "Ошибка загрузки:"
+    - text: "Can't find variable: Notification"
+    - text: Проверьте консоль браузера (F12) для подробностей
+    - button "Закрыть" [ref=e47] [cursor=pointer]
+```

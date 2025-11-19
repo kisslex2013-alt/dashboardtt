@@ -10,8 +10,10 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./src/test/setup.js'],
-    // ✅ ТЕСТЫ: UI mode для визуального интерфейса
-    ui: true,
+    // ✅ A11Y: Настройка для accessibility тестов
+    setupFilesAfterEnv: ['./src/test/a11y-setup.js'],
+    // ✅ ТЕСТЫ: UI mode отключен по умолчанию (включается через --ui флаг)
+    // ui: false, // UI включается только через флаг --ui
     // ✅ ТЕСТЫ: Исключаем папки backups и другие служебные
     exclude: [
       '**/node_modules/**',

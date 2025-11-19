@@ -1,0 +1,196 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - generic [ref=e3]:
+    - link [ref=e4] [cursor=pointer]:
+      - /url: "#main-content"
+      - text: Перейти к основному контенту
+    - banner [ref=e6]:
+      - generic [ref=e7]:
+        - generic [ref=e8]:
+          - img [ref=e10] [cursor=pointer]
+          - generic [ref=e31]:
+            - generic [ref=e32]:
+              - heading [level=1] [ref=e33]: Time Tracker Dashboard
+              - button [ref=e34] [cursor=pointer]:
+                - img [ref=e35]
+            - paragraph [ref=e40]: Умный учет рабочего времени
+        - generic [ref=e41]:
+          - button [ref=e42] [cursor=pointer]:
+            - img [ref=e43]
+          - button [ref=e49] [cursor=pointer]:
+            - img [ref=e50]
+          - button [ref=e52] [cursor=pointer]:
+            - img [ref=e53]
+          - button [ref=e63] [cursor=pointer]:
+            - img [ref=e64]
+          - button [ref=e68] [cursor=pointer]:
+            - img [ref=e69]
+          - button [ref=e73] [cursor=pointer]:
+            - img [ref=e74]
+      - generic [ref=e78]:
+        - generic [ref=e79]:
+          - generic [ref=e80]:
+            - paragraph [ref=e81]: Затрачено
+            - generic [ref=e82]: 0 ч.
+          - img
+        - generic [ref=e83]:
+          - generic [ref=e84]:
+            - paragraph [ref=e85]: Перерывы
+            - generic [ref=e86]: 0,00 ч.
+          - img
+        - generic [ref=e87]:
+          - generic [ref=e88]:
+            - paragraph [ref=e89]: Заработано
+            - generic [ref=e90]: 0 ₽
+          - img
+        - generic [ref=e91]:
+          - generic [ref=e92]:
+            - paragraph [ref=e93]: ЛАВКА!
+            - generic [ref=e94]: 0 ₽/ч
+          - img
+        - generic [ref=e95]:
+          - generic [ref=e96]:
+            - paragraph [ref=e97]: Рабочих дней
+            - generic [ref=e98]: 0 д.
+          - img
+        - generic [ref=e99]:
+          - generic [ref=e100]:
+            - paragraph [ref=e101]: Выходных
+            - generic [ref=e102]: 0 д.
+          - img
+    - main [ref=e103]:
+      - generic [ref=e106]:
+        - generic [ref=e107]:
+          - img [ref=e108]
+          - heading [level=2] [ref=e111]: Статистика и аналитика
+        - generic [ref=e112]:
+          - generic [ref=e113]:
+            - img [ref=e114]
+            - generic [ref=e117]: "63"
+            - generic [ref=e118]: /100
+          - generic [ref=e120]:
+            - generic [ref=e121]:
+              - generic [ref=e122]: Цели
+              - generic [ref=e125]: 16/40
+            - generic [ref=e126]:
+              - generic [ref=e127]: Регулярность
+              - generic [ref=e130]: 25/25
+            - generic [ref=e131]:
+              - generic [ref=e132]: Фокус
+              - generic [ref=e135]: 9/20
+            - generic [ref=e136]:
+              - generic [ref=e137]: Перерывы
+              - generic [ref=e140]: 13/15
+        - button [ref=e141] [cursor=pointer]:
+          - img [ref=e142]
+      - generic [ref=e146]:
+        - generic [ref=e147]:
+          - img [ref=e148]
+          - heading [level=2] [ref=e153]: Графики
+        - button [ref=e155] [cursor=pointer]:
+          - img [ref=e156]
+      - generic [ref=e158]:
+        - generic [ref=e159]:
+          - generic [ref=e160]:
+            - heading [level=2] [ref=e161]: Записи времени
+            - button [ref=e162] [cursor=pointer]:
+              - img [ref=e163]
+            - button [disabled] [ref=e166]:
+              - img [ref=e167]
+            - generic [ref=e170]:
+              - button [ref=e171] [cursor=pointer]:
+                - img [ref=e172]
+              - button [ref=e179] [cursor=pointer]:
+                - img [ref=e180]
+              - button [ref=e186] [cursor=pointer]:
+                - img [ref=e187]
+          - generic [ref=e190]:
+            - button [ref=e192] [cursor=pointer]:
+              - img [ref=e193]
+            - button [ref=e196] [cursor=pointer]:
+              - img [ref=e197]
+            - button [ref=e200] [cursor=pointer]:
+              - img [ref=e201]
+            - button [ref=e204] [cursor=pointer]:
+              - img [ref=e205]
+            - button [ref=e207] [cursor=pointer]:
+              - img [ref=e208]
+            - button [ref=e212] [cursor=pointer]:
+              - img [ref=e213]
+            - button [ref=e217] [cursor=pointer]:
+              - img [ref=e218]
+            - button [ref=e220] [cursor=pointer]:
+              - img [ref=e221]
+        - generic [ref=e228]:
+          - img [ref=e230]
+          - heading [level=3] [ref=e234]: Нет записей для выбранного фильтра
+          - paragraph [ref=e235]: Попробуйте изменить фильтр по дате или поисковый запрос, чтобы найти нужные записи
+        - generic [ref=e236]:
+          - generic [ref=e237]:
+            - button [ref=e238] [cursor=pointer]:
+              - img [ref=e239]
+              - text: Очистить базу (439)
+            - generic [ref=e245]: "Записей: 0 из 439"
+          - generic [ref=e246]:
+            - generic [ref=e247]: "Фильтр:"
+            - button [ref=e249] [cursor=pointer]:
+              - text: Месяц
+              - img [ref=e250]
+    - contentinfo [ref=e253]:
+      - generic [ref=e254]: Time Tracker Dashboard v1.2.3 build_19.06_14.11.25
+    - generic [ref=e255]:
+      - generic [ref=e258]:
+        - img [ref=e259]
+        - paragraph [ref=e264]: 🎨 Цвета категорий обновлены!
+      - generic [ref=e269]:
+        - img [ref=e270]
+        - paragraph [ref=e275]: Загружено 439 демонстрационных записей для ознакомления с функционалом
+  - generic:
+    - generic:
+      - generic:
+        - dialog "Добро пожаловать!" [active]:
+          - generic [ref=e279]:
+            - generic [ref=e280]:
+              - heading "Добро пожаловать!" [level=2] [ref=e282]:
+                - img [ref=e283]
+                - text: Добро пожаловать!
+              - button "Закрыть модальное окно" [ref=e286] [cursor=pointer]:
+                - img [ref=e287]
+            - generic [ref=e290]:
+              - generic [ref=e306]:
+                - paragraph [ref=e307]:
+                  - strong [ref=e308]: Time Tracker Dashboard v1.2.3
+                  - text: "- это современное приложение для учета рабочего времени с мощной аналитикой и умными инструментами."
+                - paragraph [ref=e309]: В этом кратком туре мы покажем вам основные возможности приложения.
+                - generic [ref=e310]:
+                  - heading "Основные возможности:" [level=4] [ref=e311]
+                  - list [ref=e312]:
+                    - listitem [ref=e313]: ⏱️ Таймер для отслеживания времени в реальном времени
+                    - listitem [ref=e314]: 📝 Ручное добавление записей с валидацией пересечений
+                    - listitem [ref=e315]: "📊 Детальная аналитика: графики, тренды, план/факт анализ"
+                    - listitem [ref=e316]: 📅 Календарь доходов с сравнением периодов
+                    - listitem [ref=e317]: 💰 Автоматический расчет заработка и ставок
+                    - listitem [ref=e318]: 🎯 Настройка рабочего графика (5/2, 2/2, 3/3, кастомный)
+                    - listitem [ref=e319]: "👁️ Три вида отображения: Список, Сетка, Таймлайн"
+                    - listitem [ref=e320]: 🔔 Звуковые уведомления и напоминания
+                    - listitem [ref=e321]: 💾 Экспорт и импорт данных (JSON)
+                    - listitem [ref=e322]: ↩️ История действий (Undo/Redo)
+                    - listitem [ref=e323]: 🔍 Умный поиск по записям с фильтрацией
+                    - listitem [ref=e324]: "📈 Расширенная аналитика: анализ дней недели, часов дня, прогнозы"
+                    - listitem [ref=e325]: 🎨 Кастомные иконки и цвета кнопок (dev режим)
+                    - listitem [ref=e326]: 📏 Настраиваемые размеры столбцов в списке записей
+                - generic [ref=e327]:
+                  - heading "✨ Новые функции v1.2.3:" [level=5] [ref=e328]
+                  - list [ref=e329]:
+                    - listitem [ref=e330]: ✓ Быстрый старт таймера - кнопка в шапке для мгновенного запуска
+                    - listitem [ref=e331]: ✓ Индикаторы продуктивности - визуальный прогресс по целям, регулярности, фокусу и перерывам
+                    - listitem [ref=e332]: ✓ Иллюстрации для пустых графиков - красивые анимированные картинки вместо пустых экранов
+                    - listitem [ref=e333]: ✓ Информационные подсказки - тултипы с описанием каждого графика
+              - generic [ref=e334]:
+                - button "Пропустить тур" [ref=e335] [cursor=pointer]
+                - button "Далее" [ref=e338] [cursor=pointer]:
+                  - img [ref=e339]
+                  - generic [ref=e341]: Далее
+```

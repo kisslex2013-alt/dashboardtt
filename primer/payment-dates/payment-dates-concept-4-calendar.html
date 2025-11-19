@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Концепт 4: Calendar - Настройка дат выплат</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .glass-effect {
+            background: rgba(31, 41, 55, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(75, 85, 99, 0.3);
+        }
+        
+        .calendar-day {
+            aspect-ratio: 1;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+        
+        .calendar-day:hover {
+            transform: scale(1.1);
+            z-index: 10;
+        }
+        
+        .calendar-day.selecting {
+            background: rgba(59, 130, 246, 0.3) !important;
+            border: 2px solid #3B82F6 !important;
+            animation: pulse 0.5s ease-in-out infinite;
+        }
+        
+        .calendar-day.in-selection {
+            background: rgba(59, 130, 246, 0.2) !important;
+        }
+        
+        /* Переключатель */
+        .toggle-switch {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            background: #4B5563;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .toggle-switch.active {
+            background: #10B981;
+        }
+        
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+        
+        .toggle-switch.active::after {
+            transform: translateX(20px);
+        }
+        
+        .payment-marker {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 4px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: markerPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        @keyframes markerPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        
+        @keyframes slideCalendar {
+            from {
+                opacity: 0;
+                transform: translateX(var(--slide-direction, 100px));
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .calendar-animate {
+            animation: slideCalendar 0.3s ease-out;
+        }
+        
+        /* Анимации для карточек выплат */
+        .payment-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+        
+        .payment-card-enter {
+            animation: cardEnter 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .payment-card-exit {
+            animation: cardExit 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        @keyframes cardEnter {
+            from {
+                opacity: 0;
+                transform: translateY(-10px) scale(0.95);
+                max-height: 0;
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                max-height: 600px;
+            }
+        }
+        
+        @keyframes cardExit {
+            from {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                max-height: 600px;
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-10px) scale(0.95);
+                max-height: 0;
+            }
+        }
+        
+        /* Анимация для кнопок */
+        .btn-animate {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .btn-animate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn-animate:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Анимация для input полей */
+        .input-animate {
+            transition: all 0.3s ease;
+        }
+        
+        .input-animate:focus {
+            transform: scale(1.02);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+        
+        /* Анимация для label */
+        .label-animate {
+            transition: all 0.3s ease;
+        }
+        
+        /* Плавное изменение высоты */
+        .smooth-height {
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                        opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                        transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Анимация для списка выплат */
+        #payment-list > * {
+            animation: fadeInUp 0.3s ease-out backwards;
+        }
+        
+        #payment-list > *:nth-child(1) { animation-delay: 0s; }
+        #payment-list > *:nth-child(2) { animation-delay: 0.05s; }
+        #payment-list > *:nth-child(3) { animation-delay: 0.1s; }
+        #payment-list > *:nth-child(4) { animation-delay: 0.15s; }
+        #payment-list > *:nth-child(5) { animation-delay: 0.2s; }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 p-8 min-h-screen flex items-center justify-center">
+    
+    <!-- Концепт 4: Calendar View -->
+    <div class="glass-effect rounded-2xl p-8 max-w-5xl w-full shadow-2xl">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h2 class="text-2xl font-bold text-white mb-1 flex items-center gap-2">
+                    <svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                    Календарь выплат
+                </h2>
+                <p class="text-sm text-gray-400">Управление датами получения оплаты</p>
+            </div>
+            <button onclick="closeModal()" class="btn-animate text-gray-400 hover:text-white hover:bg-red-500/20 p-2 rounded-lg transition-all">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+
+        <div class="grid grid-cols-3 gap-6">
+            <!-- Left: Calendar -->
+            <div class="col-span-2">
+                <!-- Month Navigation -->
+                <div class="flex items-center justify-between mb-4">
+                    <button onclick="changeMonth(-1)" class="btn-animate p-2 hover:bg-gray-700 rounded-lg transition-all">
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <h3 id="month-title" class="text-xl font-bold text-white transition-all">Ноябрь 2025</h3>
+                    <button onclick="changeMonth(1)" class="btn-animate p-2 hover:bg-gray-700 rounded-lg transition-all">
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Calendar Grid -->
+                <div class="bg-gray-800/30 rounded-xl p-4">
+                    <!-- Weekday Headers -->
+                    <div class="grid grid-cols-7 gap-2 mb-2">
+                        <div class="text-center text-xs font-medium text-gray-500">Пн</div>
+                        <div class="text-center text-xs font-medium text-gray-500">Вт</div>
+                        <div class="text-center text-xs font-medium text-gray-500">Ср</div>
+                        <div class="text-center text-xs font-medium text-gray-500">Чт</div>
+                        <div class="text-center text-xs font-medium text-gray-500">Пт</div>
+                        <div class="text-center text-xs font-medium text-gray-500">Сб</div>
+                        <div class="text-center text-xs font-medium text-gray-500">Вс</div>
+                    </div>
+
+                    <!-- Calendar Days -->
+                    <div id="calendar-days" class="grid grid-cols-7 gap-2">
+                        <!-- Генерируется динамически -->
+                    </div>
+                </div>
+
+                <!-- Legend -->
+                <div class="flex items-center gap-6 mt-4 text-sm">
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 rounded-full bg-purple-500"></div>
+                        <span class="text-gray-400">Фриланс</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 rounded-full bg-blue-500"></div>
+                        <span class="text-gray-400">Аванс</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        <span class="text-gray-400">Зарплата</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Payment List -->
+            <div id="payment-list" class="space-y-3">
+                <!-- Генерируется динамически -->
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="flex gap-3 mt-6 pt-6 border-t border-gray-700/50">
+            <button onclick="handleCancel()" class="btn-animate flex-1 py-2.5 px-4 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-medium transition-all flex items-center justify-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+                Отмена
+            </button>
+            <button onclick="handleSaveAll()" class="btn-animate flex-1 py-2.5 px-4 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-all flex items-center justify-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/>
+                </svg>
+                Сохранить
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Глобальные переменные
+        let currentYear = new Date().getFullYear();
+        let currentMonth = new Date().getMonth(); // 0-11
+        let payments = [
+            { id: 1, name: 'Фриланс', day: 5, month: 10, year: 2025, periodStart: 1, periodEnd: 10, periodMonth: 'previous', color: '#8B5CF6', type: 'once', repeat: false },
+            { id: 2, name: 'Аванс', day: 10, month: 10, year: 2025, periodStart: 5, periodEnd: 15, periodMonth: 'previous', color: '#3B82F6', type: 'monthly', repeat: true },
+            { id: 3, name: 'Зарплата', day: 25, month: 10, year: 2025, periodStart: 20, periodEnd: 31, periodMonth: 'current', color: '#10B981', type: 'monthly', repeat: true }
+        ];
+        let editingId = null;
+        let selectingMode = null; // 'payment' или 'period'
+        let selectingPaymentId = null;
+        let periodSelectionStart = null;
+        let isMouseDown = false;
+        let selectionDays = new Set();
+        
+        const monthNames = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+        
+        function getDaysInMonth(year, month) {
+            return new Date(year, month + 1, 0).getDate();
+        }
+        
+        function getFirstDayOfMonth(year, month) {
+            const day = new Date(year, month, 1).getDay();
+            return day === 0 ? 6 : day - 1; // Понедельник = 0
+        }
+        
+        function formatDate(day, month) {
+            return `${day}.${(month + 1).toString().padStart(2, '0')}`;
+        }
+        
+        function changeMonth(delta) {
+            currentMonth += delta;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            } else if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            renderCalendar();
+        }
+        
+        function renderCalendar() {
+            const container = document.getElementById('calendar-days');
+            const monthTitle = document.getElementById('month-title');
+            
+            monthTitle.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+            
+            const daysInMonth = getDaysInMonth(currentYear, currentMonth);
+            const firstDay = getFirstDayOfMonth(currentYear, currentMonth);
+            const daysHTML = [];
+            
+            // Пустые дни в начале
+            for (let i = 0; i < firstDay; i++) {
+                daysHTML.push('<div class="calendar-day"></div>');
+            }
+            
+            // Дни месяца
+            for (let day = 1; day <= daysInMonth; day++) {
+                const payment = payments.find(p => p.day === day && p.month === currentMonth && p.year === currentYear);
+                const inPeriod = payments.find(p => {
+                    const isInPeriod = day >= p.periodStart && day <= p.periodEnd;
+                    // Проверяем, что период относится к текущему отображаемому месяцу
+                    let isCorrectMonth = false;
+                    if (p.periodMonth === 'current') {
+                        // Период в текущем месяце - показываем если день выплаты в этом месяце
+                        isCorrectMonth = p.month === currentMonth && p.year === currentYear;
+                    } else if (p.periodMonth === 'previous') {
+                        // Период в предыдущем месяце - показываем если отображается предыдущий месяц
+                        const prevMonth = p.month === 0 ? 11 : p.month - 1;
+                        const prevYear = p.month === 0 ? p.year - 1 : p.year;
+                        isCorrectMonth = currentMonth === prevMonth && currentYear === prevYear;
+                    }
+                    return isInPeriod && isCorrectMonth;
+                });
+                
+                let classes = 'calendar-day rounded-lg flex items-center justify-center text-sm relative cursor-pointer hover:ring-2 hover:ring-blue-400 transition-all';
+                let styles = '';
+                let content = day;
+                
+                if (payment) {
+                    classes += ' font-bold border-2';
+                    styles = `background-color: ${payment.color}20; border-color: ${payment.color}; color: white;`;
+                    content += `<div class="payment-marker" style="background-color: ${payment.color}"></div>`;
+                } else if (inPeriod) {
+                    // День в периоде - заливка цветом выплаты
+                    classes += ' text-white font-medium';
+                    styles = `background: ${inPeriod.color}30; border: 1px solid ${inPeriod.color}50;`;
+                } else {
+                    classes += ' bg-gray-700/30 text-gray-400';
+                }
+                
+                daysHTML.push(`
+                    <div 
+                        data-day="${day}" 
+                        onmousedown="handleMouseDown(${day})" 
+                        onmouseenter="handleMouseEnter(${day}); updatePaymentDayLabelLive(${day});"
+                        onmouseup="handleMouseUp(${day})"
+                        onclick="handleDayClick(${day})" 
+                        class="${classes}" 
+                        style="${styles}">
+                        ${content}
+                    </div>
+                `);
+            }
+            
+            container.innerHTML = daysHTML.join('');
+            container.classList.add('calendar-animate');
+            setTimeout(() => container.classList.remove('calendar-animate'), 300);
+            
+            renderPaymentList();
+        }
+        
+        function handleMouseDown(day) {
+            if (selectingMode === 'period') {
+                isMouseDown = true;
+                selectionDays.clear();
+                selectionDays.add(day);
+                periodSelectionStart = day;
+                updateSelectionVisual();
+                updatePeriodLabelLive(day, day);
+            }
+        }
+        
+        function handleMouseEnter(day) {
+            if (isMouseDown && selectingMode === 'period') {
+                const start = Math.min(periodSelectionStart, day);
+                const end = Math.max(periodSelectionStart, day);
+                selectionDays.clear();
+                for (let i = start; i <= end; i++) {
+                    selectionDays.add(i);
+                }
+                updateSelectionVisual();
+                updatePeriodLabelLive(start, end);
+            }
+        }
+        
+        function handleMouseUp(day) {
+            if (isMouseDown && selectingMode === 'period') {
+                isMouseDown = false;
+                const payment = payments.find(p => p.id === selectingPaymentId);
+                if (payment) {
+                    payment.periodStart = Math.min(periodSelectionStart, day);
+                    payment.periodEnd = Math.max(periodSelectionStart, day);
+                    payment.month = currentMonth;
+                    payment.year = currentYear;
+                    
+                    // Сбрасываем стили
+                    const periodLabel = document.getElementById('period-label-live');
+                    if (periodLabel) {
+                        periodLabel.style.color = '';
+                        periodLabel.style.fontWeight = '';
+                    }
+                    
+                    selectingMode = null;
+                    selectingPaymentId = null;
+                    periodSelectionStart = null;
+                    selectionDays.clear();
+                    renderCalendar();
+                    showNotification('Период установлен', 'success');
+                }
+            }
+        }
+        
+        function updateSelectionVisual() {
+            document.querySelectorAll('.calendar-day').forEach(el => {
+                el.classList.remove('selecting', 'in-selection');
+                const day = parseInt(el.dataset.day);
+                if (day && selectionDays.has(day)) {
+                    if (day === periodSelectionStart || day === Math.max(...selectionDays)) {
+                        el.classList.add('selecting');
+                    } else {
+                        el.classList.add('in-selection');
+                    }
+                }
+            });
+        }
+        
+        function updatePeriodLabelLive(start, end) {
+            const periodLabel = document.getElementById('period-label-live');
+            if (periodLabel) {
+                periodLabel.textContent = `Период: ${formatDate(start, currentMonth)}-${formatDate(end, currentMonth)}`;
+            }
+        }
+        
+        document.addEventListener('mouseup', () => {
+            isMouseDown = false;
+        });
+        
+        function handleDayClick(day) {
+            if (selectingMode === 'payment') {
+                const payment = payments.find(p => p.id === selectingPaymentId);
+                if (payment) {
+                    payment.day = day;
+                    payment.month = currentMonth;
+                    payment.year = currentYear;
+                    
+                    // Сбрасываем стили
+                    const paymentDayLabel = document.getElementById('payment-day-label-live');
+                    if (paymentDayLabel) {
+                        paymentDayLabel.style.color = '';
+                        paymentDayLabel.style.fontWeight = '';
+                    }
+                    
+                    selectingMode = null;
+                    selectingPaymentId = null;
+                    renderCalendar();
+                    showNotification('День выплаты установлен', 'success');
+                }
+            } else if (!selectingMode) {
+                const payment = payments.find(p => p.day === day && p.month === currentMonth && p.year === currentYear);
+                if (payment) {
+                    startEdit(payment.id);
+                }
+            }
+        }
+        
+        function updatePaymentDayLabelLive(day) {
+            const paymentDayLabel = document.getElementById('payment-day-label-live');
+            if (paymentDayLabel && selectingMode === 'payment') {
+                paymentDayLabel.textContent = `День выплаты: ${formatDate(day, currentMonth)}`;
+            }
+        }
+        
+        function startSelectPaymentDay(id) {
+            selectingMode = 'payment';
+            selectingPaymentId = id;
+            periodSelectionStart = null;
+            showNotification('Выберите день выплаты в календаре', 'info');
+            
+            // Добавляем визуальную подсветку для режима выбора дня выплаты
+            const paymentDayLabel = document.getElementById('payment-day-label-live');
+            if (paymentDayLabel) {
+                paymentDayLabel.style.color = '#3B82F6';
+                paymentDayLabel.style.fontWeight = 'bold';
+            }
+        }
+        
+        function startSelectPeriod(id) {
+            selectingMode = 'period';
+            selectingPaymentId = id;
+            periodSelectionStart = null;
+            selectionDays.clear();
+            showNotification('Зажмите мышь и выделите период', 'info');
+            
+            // Добавляем визуальную подсветку для режима выбора периода
+            const periodLabel = document.getElementById('period-label-live');
+            if (periodLabel) {
+                periodLabel.style.color = '#3B82F6';
+                periodLabel.style.fontWeight = 'bold';
+            }
+        }
+        
+        function renderPaymentList() {
+            const container = document.getElementById('payment-list');
+            const header = '<h3 class="text-lg font-bold text-white mb-4">Выплаты</h3>';
+            const paymentsList = payments.map(payment => 
+                editingId === payment.id ? renderEditPayment(payment) : renderViewPayment(payment)
+            ).join('');
+            const addButton = `
+                <button onclick="addPayment()" class="btn-animate w-full py-2.5 px-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-medium transition-all flex items-center justify-center gap-2 mt-4">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                    </svg>
+                    Добавить выплату
+                </button>
+            `;
+            container.innerHTML = header + paymentsList + addButton;
+        }
+        
+        function renderViewPayment(payment) {
+            const repeatBadge = payment.repeat ? '<span class="text-xs bg-green-500/20 text-green-400 px-2 py-0.5 rounded">🔄</span>' : '';
+            return `
+                <div class="payment-card smooth-height bg-gray-800/50 rounded-xl p-3 border-l-4 hover:bg-gray-800/70 transition-all" style="border-color: ${payment.color}">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-white font-medium text-sm">${payment.name}</span>
+                        <button onclick="startEdit(${payment.id})" class="btn-animate p-1 hover:bg-gray-700 rounded">
+                            <svg class="w-3.5 h-3.5 text-gray-400 hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <p class="text-xs text-gray-400 mb-1">💰 ${formatDate(payment.day, payment.month)}</p>
+                    <p class="text-xs text-gray-500 mb-1">📊 ${formatDate(payment.periodStart, payment.month)}-${formatDate(payment.periodEnd, payment.month)}</p>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs text-gray-500">${payment.periodMonth === 'previous' ? '📆' : '📅'} ${payment.periodMonth === 'previous' ? 'Пред.' : 'Тек.'}</span>
+                        ${repeatBadge}
+                    </div>
+                </div>
+            `;
+        }
+        
+        function renderEditPayment(payment) {
+            return `
+                <div class="payment-card smooth-height bg-gray-800/50 rounded-xl p-3 border-2 border-blue-500 max-h-[500px] overflow-y-auto">
+                    <input type="text" id="edit-name" value="${payment.name}" class="input-animate w-full bg-gray-700 text-white rounded px-2 py-1.5 text-sm mb-2" placeholder="Название выплаты">
+                    
+                    <!-- День выплаты в одну строку -->
+                    <div class="flex items-center gap-2 mb-2">
+                        <label id="payment-day-label-live" class="label-animate text-xs text-gray-400 whitespace-nowrap">💰 ${formatDate(payment.day, payment.month)}</label>
+                        <button onclick="startSelectPaymentDay(${payment.id})" class="btn-animate flex-1 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs">
+                            <svg class="w-3 h-3 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                            Выбрать день
+                        </button>
+                    </div>
+                    
+                    <!-- Период и цвет в 2 строки -->
+                    <div class="grid grid-cols-2 gap-2 mb-2">
+                        <div>
+                            <label id="period-label-live" class="label-animate text-xs text-gray-400 mb-1 block">📊 ${formatDate(payment.periodStart, payment.month)}-${formatDate(payment.periodEnd, payment.month)}</label>
+                            <button onclick="startSelectPeriod(${payment.id})" class="btn-animate w-full py-1 bg-purple-600 hover:bg-purple-700 text-white rounded text-xs">
+                                <svg class="w-3 h-3 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                                </svg>
+                                Период
+                            </button>
+                        </div>
+                        <div>
+                            <label class="text-xs text-gray-400 mb-1 block">🎨 Цвет</label>
+                            <input type="color" id="edit-color" value="${payment.color}" class="input-animate w-full h-7 bg-gray-700 rounded cursor-pointer border border-gray-600">
+                        </div>
+                    </div>
+                    
+                    <select id="edit-period-month" onchange="handlePeriodMonthChange(${payment.id}, this.value)" class="input-animate w-full bg-gray-700 text-white rounded px-2 py-1.5 text-xs mb-2">
+                        <option value="current" ${payment.periodMonth === 'current' ? 'selected' : ''}>📅 Текущий месяц</option>
+                        <option value="previous" ${payment.periodMonth === 'previous' ? 'selected' : ''}>📆 Предыдущий месяц</option>
+                    </select>
+                    
+                    <!-- Переключатель вместо чекбокса -->
+                    <div class="flex items-center justify-between mb-3 px-1">
+                        <span class="text-xs text-gray-300">🔄 Повторять каждый месяц</span>
+                        <div id="toggle-repeat-${payment.id}" onclick="toggleRepeat(${payment.id})" class="toggle-switch ${payment.repeat ? 'active' : ''}"></div>
+                    </div>
+                    
+                    <div class="flex gap-1.5">
+                        <button onclick="saveEdit(${payment.id})" class="btn-animate flex-1 py-2 bg-green-600 hover:bg-green-700 text-white rounded text-xs font-medium">
+                            <svg class="w-3.5 h-3.5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                        </button>
+                        <button onclick="confirmDelete(${payment.id})" class="btn-animate flex-1 py-2 bg-red-600 hover:bg-red-700 text-white rounded text-xs font-medium">
+                            <svg class="w-3.5 h-3.5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                            </svg>
+                        </button>
+                        <button onclick="cancelEdit()" class="btn-animate flex-1 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded text-xs font-medium">
+                            <svg class="w-3.5 h-3.5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function handlePeriodMonthChange(id, value) {
+            const payment = payments.find(p => p.id === id);
+            if (payment) {
+                payment.periodMonth = value;
+                if (value === 'previous') {
+                    // Переключаем календарь на предыдущий месяц
+                    changeMonth(-1);
+                } else {
+                    // Переключаем на текущий месяц
+                    const now = new Date();
+                    currentMonth = now.getMonth();
+                    currentYear = now.getFullYear();
+                    renderCalendar();
+                }
+            }
+        }
+        
+        function startEdit(id) { 
+            editingId = id; 
+            renderCalendar(); 
+        }
+        
+        function cancelEdit() { 
+            editingId = null;
+            selectingMode = null;
+            selectingPaymentId = null;
+            
+            // Сбрасываем все стили подсветки
+            const paymentDayLabel = document.getElementById('payment-day-label-live');
+            const periodLabel = document.getElementById('period-label-live');
+            if (paymentDayLabel) {
+                paymentDayLabel.style.color = '';
+                paymentDayLabel.style.fontWeight = '';
+            }
+            if (periodLabel) {
+                periodLabel.style.color = '';
+                periodLabel.style.fontWeight = '';
+            }
+            
+            renderCalendar(); 
+        }
+        
+        function saveEdit(id) {
+            const payment = payments.find(p => p.id === id);
+            if (payment) {
+                const nameInput = document.getElementById('edit-name');
+                const colorInput = document.getElementById('edit-color');
+                const periodMonthSelect = document.getElementById('edit-period-month');
+                
+                if (nameInput) payment.name = nameInput.value;
+                if (colorInput) payment.color = colorInput.value;
+                if (periodMonthSelect) payment.periodMonth = periodMonthSelect.value;
+                // repeat уже обновляется через toggleRepeat
+            }
+            editingId = null;
+            selectingMode = null;
+            selectingPaymentId = null;
+            renderCalendar();
+            showNotification('Изменения сохранены', 'success');
+        }
+        
+        function confirmDelete(id) {
+            if (confirm('Удалить эту выплату?')) {
+                deletePayment(id);
+            }
+        }
+        
+        function deletePayment(id) {
+            payments = payments.filter(p => p.id !== id);
+            editingId = null;
+            selectingMode = null;
+            selectingPaymentId = null;
+            renderCalendar();
+            showNotification('Выплата удалена', 'success');
+        }
+        
+        function toggleRepeat(id) {
+            const payment = payments.find(p => p.id === id);
+            if (payment) {
+                payment.repeat = !payment.repeat;
+                const toggle = document.getElementById(`toggle-repeat-${id}`);
+                if (toggle) {
+                    if (payment.repeat) {
+                        toggle.classList.add('active');
+                    } else {
+                        toggle.classList.remove('active');
+                    }
+                }
+            }
+        }
+        
+        function addPayment() {
+            const newId = Math.max(...payments.map(p => p.id), 0) + 1;
+            payments.push({ 
+                id: newId, 
+                name: 'Новая выплата', 
+                day: 15, 
+                month: currentMonth,
+                year: currentYear,
+                periodStart: 1, 
+                periodEnd: 15, 
+                periodMonth: 'current', 
+                color: '#6366F1', 
+                type: 'monthly',
+                repeat: false
+            });
+            editingId = newId;
+            renderCalendar();
+            showNotification('Выплата добавлена. Настройте параметры.', 'info');
+        }
+        
+        function handleCancel() { 
+            if (confirm('Отменить все изменения?')) {
+                location.reload();
+            }
+        }
+        
+        function handleSaveAll() { 
+            console.log('Сохранено:', payments); 
+            showNotification('Все изменения сохранены', 'success');
+            
+            // Обработка повторяющихся выплат
+            const repeatPayments = payments.filter(p => p.repeat);
+            if (repeatPayments.length > 0) {
+                setTimeout(() => {
+                    showNotification(`${repeatPayments.length} выплат будут повторяться каждый месяц`, 'info');
+                }, 2500);
+            }
+        }
+        
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg text-white font-medium shadow-lg z-50 ${type === 'success' ? 'bg-green-600' : type === 'error' ? 'bg-red-600' : 'bg-blue-600'}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => { 
+                notification.style.opacity = '0'; 
+                notification.style.transition = 'opacity 0.3s'; 
+                setTimeout(() => notification.remove(), 300); 
+            }, 2000);
+        }
+        
+        // Инициализация при загрузке
+        document.addEventListener('DOMContentLoaded', () => {
+            // Устанавливаем текущий месяц
+            const now = new Date();
+            currentMonth = now.getMonth();
+            currentYear = now.getFullYear();
+            renderCalendar();
+        });
+    </script>
+
+</body>
+</html>

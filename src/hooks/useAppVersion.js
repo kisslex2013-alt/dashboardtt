@@ -14,7 +14,7 @@ function useAppVersion() {
       })
       .catch(() => {
         // на всякий случай дефолт
-        setInfo({ version: '1.2.3', build: null })
+        setInfo({ version: '1.3.0', build: null })
       })
   }, [])
 

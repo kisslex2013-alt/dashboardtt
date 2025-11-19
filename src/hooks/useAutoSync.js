@@ -23,7 +23,7 @@ import {
   useSetTheme,
   useUpdateSettings,
 } from '../store/useSettingsStore'
-import { useUIStore } from '../store/useUIStore'
+import { useNotifications, useAddNotification, useRemoveNotification } from '../store/useUIStore'
 import { logger } from '../utils/logger'
 
 /**
@@ -52,7 +52,9 @@ export function useAutoSync(options = {}) {
   const categories = useCategories()
   const setTheme = useSetTheme()
   const updateSettings = useUpdateSettings()
-  const { notifications, addNotification, removeNotification } = useUIStore()
+  const notifications = useNotifications()
+  const addNotification = useAddNotification()
+  const removeNotification = useRemoveNotification()
 
   const lastSyncRef = useRef(Date.now())
   const lastBackupRef = useRef(Date.now())

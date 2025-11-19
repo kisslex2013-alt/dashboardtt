@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Концепт 5: Compact Inline - Звуки и анимация</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      color: #e2e8f0;
+    }
+
+    /* Glass Effect */
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Modal */
+    .modal {
+      width: 100%;
+      max-width: 700px;
+      border-radius: 24px;
+      overflow: hidden;
+      animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Header */
+    .modal-header {
+      padding: 24px 24px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .modal-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .title-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    /* Pill Tabs */
+    .pill-tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+    }
+
+    .pill-tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .pill-tab {
+      padding: 10px 20px;
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      color: #94a3b8;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pill-tab:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: #cbd5e1;
+    }
+
+    .pill-tab.active {
+      background: #3b82f6;
+      border-color: #3b82f6;
+      color: white;
+    }
+
+    .pill-icon {
+      font-size: 16px;
+    }
+
+    /* Content */
+    .modal-content {
+      padding: 24px;
+      max-height: 55vh;
+      overflow-y: auto;
+    }
+
+    .modal-content::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .modal-content::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 4px;
+    }
+
+    .modal-content::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Compact Section */
+    .compact-section {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #f1f5f9;
+    }
+
+    .section-icon {
+      font-size: 20px;
+    }
+
+    /* Inline Row */
+    .inline-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+      gap: 16px;
+    }
+
+    .inline-label {
+      font-size: 14px;
+      color: #cbd5e1;
+      font-weight: 500;
+      flex-shrink: 0;
+    }
+
+    .inline-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Toggle Switch */
+    .toggle {
+      width: 44px;
+      height: 26px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 13px;
+      border: none;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      flex-shrink: 0;
+    }
+
+    .toggle.active {
+      background: #3b82f6;
+    }
+
+    .toggle::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      background: white;
+      border-radius: 50%;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .toggle.active::after {
+      transform: translateX(18px);
+    }
+
+    /* Compact Select */
+    .select-compact {
+      min-width: 140px;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      color: #e2e8f0;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      outline: none;
+    }
+
+    .select-compact:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .select-compact:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    /* Button */
+    .btn {
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-primary {
+      background: #3b82f6;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #2563eb;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: #e2e8f0;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-small {
+      padding: 6px 10px;
+      font-size: 12px;
+    }
+
+    /* Range Compact */
+    .range-compact {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 180px;
+    }
+
+    .range-input {
+      flex: 1;
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.1);
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    .range-input::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #3b82f6;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+    }
+
+    .range-value {
+      min-width: 40px;
+      text-align: right;
+      font-size: 12px;
+      color: #94a3b8;
+      font-weight: 600;
+    }
+
+    /* Favicon Grid Compact */
+    .favicon-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .favicon-card {
+      background: rgba(255, 255, 255, 0.08);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .favicon-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .favicon-card.active {
+      border-color: #3b82f6;
+      background: rgba(59, 130, 246, 0.1);
+    }
+
+    .favicon-canvas {
+      width: 28px;
+      height: 28px;
+      margin: 0 auto 6px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .favicon-label {
+      display: block;
+      font-size: 10px;
+      color: #94a3b8;
+      font-weight: 500;
+    }
+
+    /* Color Grid Compact */
+    .color-grid {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .color-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .color-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .color-btn.active {
+      border-color: white;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+    }
+
+    /* Footer */
+    .modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+
+    /* Divider */
+    .divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.08);
+      margin: 12px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="modal glass-effect">
+    <!-- Header -->
+    <div class="modal-header">
+      <div class="modal-title">
+        <div class="title-icon">🔊</div>
+        <span>Звуки и анимация</span>
+      </div>
+      
+      <!-- Pill Tabs -->
+      <div class="pill-tabs">
+        <button class="pill-tab active" data-tab="notifications">
+          <span class="pill-icon">🔔</span>
+          <span>Уведомления</span>
+        </button>
+        <button class="pill-tab" data-tab="pomodoro">
+          <span class="pill-icon">🍅</span>
+          <span>Pomodoro</span>
+        </button>
+        <button class="pill-tab" data-tab="favicon">
+          <span class="pill-icon">🎨</span>
+          <span>Фавикон</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="modal-content">
+      <!-- Tab: Notifications -->
+      <div class="tab-content active" data-content="notifications">
+        <!-- Sounds -->
+        <div class="compact-section">
+          <div class="section-header">
+            <div class="section-title">
+              <span class="section-icon">🔔</span>
+              <span>Звуковые уведомления</span>
+            </div>
+            <button class="toggle active" onclick="this.classList.toggle('active')"></button>
+          </div>
+          
+          <div class="inline-row">
+            <span class="inline-label">Интервал</span>
+            <div class="inline-control">
+              <select class="select-compact">
+                <option>15 минут</option>
+                <option selected>30 минут</option>
+                <option>45 минут</option>
+                <option>1 час</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="inline-row">
+            <span class="inline-label">Тип звука</span>
+            <div class="inline-control">
+              <select class="select-compact">
+                <option selected>Мелодия</option>
+                <option>Предупреждение</option>
+                <option>Звонок</option>
+                <option>Тревога</option>
+              </select>
+              <button class="btn btn-secondary btn-small">▶</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Break Reminders -->
+        <div class="compact-section">
+          <div class="section-header">
+            <div class="section-title">
+              <span class="section-icon">⏰</span>
+              <span>Напоминания о перерывах</span>
+            </div>
+            <button class="toggle active" onclick="this.classList.toggle('active')"></button>
+          </div>
+
+          <div class="inline-row">
+            <span class="inline-label">Интервал</span>
+            <div class="inline-control">
+              <select class="select-compact">
+                <option>Каждый час</option>
+                <option selected>Каждые 2 часа</option>
+                <option>Каждые 3 часа</option>
+                <option>Каждые 4 часа</option>
+              </select>
+              <button class="btn btn-secondary btn-small">Пример</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Overtime -->
+        <div class="compact-section">
+          <div class="section-header">
+            <div class="section-title">
+              <span class="section-icon">⚠️</span>
+              <span>Предупреждения о переработке</span>
+            </div>
+            <button class="toggle active" onclick="this.classList.toggle('active')"></button>
+          </div>
+
+          <div class="inline-row">
+            <span class="inline-label">Порог</span>
+            <div class="inline-control">
+              <div class="range-compact">
+                <input type="range" class="range-input" min="0.5" max="2" step="0.1" value="1.2" oninput="this.nextElementSibling.textContent = (this.value * 8).toFixed(1) + ' ч'">
+                <span class="range-value">9.6 ч</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: Pomodoro -->
+      <div class="tab-content" data-content="pomodoro">
+        <div class="compact-section">
+          <div class="section-header">
+            <div class="section-title">
+              <span class="section-icon">🍅</span>
+              <span>Pomodoro таймер</span>
+            </div>
+            <button class="toggle active" onclick="this.classList.toggle('active')"></button>
+          </div>
+
+          <div class="inline-row">
+            <span class="inline-label">Автостарт перерывов</span>
+            <div class="inline-control">
+              <button class="toggle active" onclick="this.classList.toggle('active')"></button>
+            </div>
+          </div>
+
+          <div class="inline-row">
+            <span class="inline-label">Автостарт работы</span>
+            <div class="inline-control">
+              <button class="toggle" onclick="this.classList.toggle('active')"></button>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="inline-row">
+            <span class="inline-label">Звук при завершении</span>
+            <div class="inline-control">
+              <button class="toggle active" onclick="this.classList.toggle('active')"></button>
+            </div>
+          </div>
+
+          <div class="inline-row">
+            <span class="inline-label">Уведомления</span>
+            <div class="inline-control">
+              <button class="toggle active" onclick="this.classList.toggle('active')"></button>
+              <button class="btn btn-secondary btn-small">Тест</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: Favicon -->
+      <div class="tab-content" data-content="favicon">
+        <div class="compact-section">
+          <div class="section-header">
+            <div class="section-title">
+              <span class="section-icon">🎨</span>
+              <span>Анимация фавикона</span>
+            </div>
+            <button class="toggle active" onclick="this.classList.toggle('active')"></button>
+          </div>
+
+          <div style="margin-bottom: 16px;">
+            <div class="inline-label" style="margin-bottom: 10px; display: block;">Стиль анимации</div>
+            <div class="favicon-grid">
+              <div class="favicon-card active">
+                <div class="favicon-canvas" style="background: linear-gradient(135deg, #3b82f6, #2563eb);"></div>
+                <span class="favicon-label">Pulse</span>
+              </div>
+              <div class="favicon-card">
+                <div class="favicon-canvas" style="background: linear-gradient(135deg, #10b981, #059669);"></div>
+                <span class="favicon-label">Blink</span>
+              </div>
+              <div class="favicon-card">
+                <div class="favicon-canvas" style="background: linear-gradient(135deg, #f59e0b, #d97706);"></div>
+                <span class="favicon-label">Rotate</span>
+              </div>
+              <div class="favicon-card">
+                <div class="favicon-canvas" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);"></div>
+                <span class="favicon-label">Wave</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="inline-row">
+            <span class="inline-label">Цвет</span>
+            <div class="inline-control">
+              <div class="color-grid">
+                <button class="color-btn active" style="background: #3b82f6;"></button>
+                <button class="color-btn" style="background: #10b981;"></button>
+                <button class="color-btn" style="background: #f59e0b;"></button>
+                <button class="color-btn" style="background: #ef4444;"></button>
+                <button class="color-btn" style="background: #8b5cf6;"></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="inline-row">
+            <span class="inline-label">Скорость</span>
+            <div class="inline-control">
+              <select class="select-compact">
+                <option>Медленно</option>
+                <option selected>Обычно</option>
+                <option>Быстро</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="modal-footer">
+      <button class="btn btn-secondary">Отмена</button>
+      <button class="btn btn-primary">Сохранить</button>
+    </div>
+  </div>
+
+  <script>
+    // Tab switching
+    document.querySelectorAll('.pill-tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tab = btn.dataset.tab;
+        
+        // Update buttons
+        document.querySelectorAll('.pill-tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        // Update content
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+        document.querySelector(`[data-content="${tab}"]`).classList.add('active');
+      });
+    });
+
+    // Color picker
+    document.querySelectorAll('.color-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    // Favicon cards
+    document.querySelectorAll('.favicon-card').forEach(card => {
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.favicon-card').forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
+

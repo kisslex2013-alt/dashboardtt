@@ -1,0 +1,70 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - link "Перейти к основному контенту" [ref=e4] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e6]:
+    - generic [ref=e7]:
+      - generic [ref=e8]:
+        - img "Time Tracker Logo" [ref=e10] [cursor=pointer]
+        - generic [ref=e31]:
+          - generic [ref=e32]:
+            - heading "Time Tracker Dashboard" [level=1] [ref=e33]
+            - button "Открыть промо-страницу" [ref=e34] [cursor=pointer]:
+              - img [ref=e35]
+          - paragraph [ref=e38]: Умный учет рабочего времени
+      - generic [ref=e39]:
+        - button "Режим сравнения" [ref=e40] [cursor=pointer]:
+          - img [ref=e41]
+        - button "Быстрый старт таймера" [ref=e47] [cursor=pointer]:
+          - img [ref=e48]
+        - button "Переключить тему" [ref=e50] [cursor=pointer]:
+          - img [ref=e51]
+        - button "Настройки звуков и анимации" [ref=e57] [cursor=pointer]:
+          - img [ref=e58]
+        - button "Открыть обучалку" [ref=e62] [cursor=pointer]:
+          - img [ref=e63]
+        - button "О приложении" [ref=e66] [cursor=pointer]:
+          - img [ref=e67]
+    - generic [ref=e69]:
+      - generic [ref=e70]:
+        - generic [ref=e71]:
+          - paragraph [ref=e72]: Затрачено
+          - generic [ref=e73]: 0 ч.
+        - img
+      - generic [ref=e74]:
+        - generic [ref=e75]:
+          - paragraph [ref=e76]: Перерывы
+          - generic [ref=e77]: 0,00 ч.
+        - img
+      - generic [ref=e78]:
+        - generic [ref=e79]:
+          - paragraph [ref=e80]: Заработано
+          - generic [ref=e81]: 0 ₽
+        - img
+      - generic [ref=e82]:
+        - generic [ref=e83]:
+          - paragraph [ref=e84]: ЛАВКА!
+          - generic [ref=e85]: 0 ₽/ч
+        - img
+      - generic [ref=e86]:
+        - generic [ref=e87]:
+          - paragraph [ref=e88]: Рабочих дней
+          - generic [ref=e89]: 0 д.
+        - img
+      - generic [ref=e90]:
+        - generic [ref=e91]:
+          - paragraph [ref=e92]: Выходных
+          - generic [ref=e93]: 0 д.
+        - img
+  - main [ref=e94]:
+    - generic [ref=e105]:
+      - paragraph [ref=e107]: Загрузка графиков и аналитики...
+      - paragraph [ref=e108]: Это происходит только при первой загрузке
+  - contentinfo [ref=e136]:
+    - generic [ref=e137]: Time Tracker Dashboard v1.2.3 build_19.06_14.11.25
+  - generic [ref=e141]:
+    - img [ref=e142]
+    - paragraph [ref=e147]: 🎨 Цвета категорий обновлены!
+```

@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Концепт 1: Segmented Control - Звуки и анимация</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      color: #e2e8f0;
+    }
+
+    /* Glass Effect */
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Modal */
+    .modal {
+      width: 100%;
+      max-width: 700px;
+      border-radius: 24px;
+      overflow: hidden;
+      animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Header */
+    .modal-header {
+      padding: 24px 24px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .modal-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .title-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    /* Segmented Control */
+    .segmented-control {
+      display: flex;
+      gap: 4px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 4px;
+      position: relative;
+    }
+
+    .segment-btn {
+      flex: 1;
+      padding: 10px 16px;
+      border: none;
+      background: transparent;
+      color: #94a3b8;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .segment-btn.active {
+      background: rgba(59, 130, 246, 0.2);
+      color: #3b82f6;
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+    }
+
+    .segment-btn:hover:not(.active) {
+      color: #cbd5e1;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .segment-icon {
+      font-size: 16px;
+    }
+
+    /* Content */
+    .modal-content {
+      padding: 24px;
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+
+    .modal-content::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .modal-content::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 4px;
+    }
+
+    .modal-content::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Setting Card */
+    .setting-card {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 16px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .setting-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .setting-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .setting-label {
+      font-size: 16px;
+      font-weight: 600;
+      color: #f1f5f9;
+    }
+
+    .setting-description {
+      font-size: 13px;
+      color: #94a3b8;
+      margin-top: 4px;
+    }
+
+    /* Toggle Switch */
+    .toggle {
+      width: 48px;
+      height: 28px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      border: none;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .toggle.active {
+      background: #3b82f6;
+    }
+
+    .toggle::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 22px;
+      height: 22px;
+      background: white;
+      border-radius: 50%;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .toggle.active::after {
+      transform: translateX(20px);
+    }
+
+    /* Setting Body */
+    .setting-body {
+      display: none;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .setting-body.active {
+      display: block;
+      animation: expandDown 0.3s ease-out;
+    }
+
+    @keyframes expandDown {
+      from { opacity: 0; max-height: 0; }
+      to { opacity: 1; max-height: 500px; }
+    }
+
+    /* Form Row */
+    .form-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .form-label {
+      font-size: 14px;
+      color: #cbd5e1;
+      min-width: 80px;
+      font-weight: 500;
+    }
+
+    .form-control {
+      flex: 1;
+    }
+
+    /* Select */
+    .select-control {
+      width: 100%;
+      padding: 10px 14px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      color: #e2e8f0;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      outline: none;
+    }
+
+    .select-control:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .select-control:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    /* Button */
+    .btn {
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-primary {
+      background: #3b82f6;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #2563eb;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: #e2e8f0;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-small {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+
+    /* Grid */
+    .grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .grid-4 {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    /* Favicon Preview */
+    .favicon-card {
+      background: rgba(255, 255, 255, 0.08);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .favicon-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 255, 255, 0.3);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .favicon-card.active {
+      border-color: #3b82f6;
+      background: rgba(59, 130, 246, 0.1);
+    }
+
+    .favicon-canvas {
+      width: 32px;
+      height: 32px;
+      margin: 0 auto 8px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .favicon-label {
+      display: block;
+      font-size: 11px;
+      color: #94a3b8;
+      font-weight: 500;
+    }
+
+    /* Color Picker */
+    .color-grid {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .color-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .color-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .color-btn.active {
+      border-color: white;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+    }
+
+    /* Footer */
+    .modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+
+    /* Range Input */
+    .range-input {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.1);
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    .range-input::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #3b82f6;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+    }
+
+    .range-value {
+      display: inline-block;
+      min-width: 50px;
+      text-align: right;
+      font-size: 13px;
+      color: #94a3b8;
+    }
+  </style>
+</head>
+<body>
+  <div class="modal glass-effect">
+    <!-- Header -->
+    <div class="modal-header">
+      <div class="modal-title">
+        <div class="title-icon">🔊</div>
+        <span>Звуки и анимация</span>
+      </div>
+      
+      <!-- Segmented Control -->
+      <div class="segmented-control">
+        <button class="segment-btn active" data-tab="notifications">
+          <span class="segment-icon">🔔</span>
+          <span>Уведомления</span>
+        </button>
+        <button class="segment-btn" data-tab="pomodoro">
+          <span class="segment-icon">🍅</span>
+          <span>Pomodoro</span>
+        </button>
+        <button class="segment-btn" data-tab="favicon">
+          <span class="segment-icon">🎨</span>
+          <span>Фавикон</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="modal-content">
+      <!-- Tab: Notifications -->
+      <div class="tab-content active" data-content="notifications">
+        <!-- Sound Notifications -->
+        <div class="setting-card">
+          <div class="setting-header">
+            <div>
+              <div class="setting-label">Звуковые уведомления</div>
+              <div class="setting-description">Воспроизведение звуков при важных событиях</div>
+            </div>
+            <button class="toggle active" onclick="this.classList.toggle('active'); document.querySelector('.sound-body').classList.toggle('active')"></button>
+          </div>
+          <div class="setting-body active sound-body">
+            <div class="form-row">
+              <label class="form-label">Интервал</label>
+              <select class="select-control form-control">
+                <option>15 минут</option>
+                <option selected>30 минут</option>
+                <option>45 минут</option>
+                <option>1 час</option>
+                <option>2 часа</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label class="form-label">Тип звука</label>
+              <select class="select-control form-control">
+                <option selected>Мелодия</option>
+                <option>Предупреждение</option>
+                <option>Звонок</option>
+                <option>Дверной звонок</option>
+                <option>Тревога</option>
+              </select>
+              <button class="btn btn-secondary btn-small">▶ Тест</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Break Reminders -->
+        <div class="setting-card">
+          <div class="setting-header">
+            <div>
+              <div class="setting-label">Напоминания о перерывах</div>
+              <div class="setting-description">Уведомления после длительной работы</div>
+            </div>
+            <button class="toggle active" onclick="this.classList.toggle('active'); document.querySelector('.break-body').classList.toggle('active')"></button>
+          </div>
+          <div class="setting-body active break-body">
+            <div class="form-row">
+              <label class="form-label">Интервал</label>
+              <select class="select-control form-control">
+                <option>Каждый час</option>
+                <option selected>Каждые 2 часа</option>
+                <option>Каждые 3 часа</option>
+                <option>Каждые 4 часа</option>
+              </select>
+              <button class="btn btn-secondary btn-small">Пример</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Overtime Alerts -->
+        <div class="setting-card">
+          <div class="setting-header">
+            <div>
+              <div class="setting-label">Предупреждения о переработке</div>
+              <div class="setting-description">Уведомления при превышении нормы</div>
+            </div>
+            <button class="toggle active" onclick="this.classList.toggle('active'); document.querySelector('.overtime-body').classList.toggle('active')"></button>
+          </div>
+          <div class="setting-body active overtime-body">
+            <div class="form-row">
+              <label class="form-label">Порог</label>
+              <input type="range" class="range-input" min="0.5" max="2" step="0.1" value="1.2" oninput="this.nextElementSibling.textContent = (this.value * 8).toFixed(1) + ' ч'">
+              <span class="range-value">9.6 ч</span>
+            </div>
+            <div class="form-row">
+              <label class="form-label">Звук</label>
+              <button class="toggle active" onclick="this.classList.toggle('active')"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: Pomodoro -->
+      <div class="tab-content" data-content="pomodoro">
+        <div class="setting-card">
+          <div class="setting-header">
+            <div>
+              <div class="setting-label">Pomodoro таймер</div>
+              <div class="setting-description">Техника управления временем (25 минут работы + перерыв)</div>
+            </div>
+            <button class="toggle active" onclick="this.classList.toggle('active'); document.querySelector('.pomodoro-body').classList.toggle('active')"></button>
+          </div>
+          <div class="setting-body active pomodoro-body">
+            <div class="form-row">
+              <label class="form-label">Автостарт перерывов</label>
+              <button class="toggle active" onclick="this.classList.toggle('active')"></button>
+            </div>
+            <div class="form-row">
+              <label class="form-label">Автостарт работы</label>
+              <button class="toggle" onclick="this.classList.toggle('active')"></button>
+            </div>
+            <div class="form-row">
+              <label class="form-label">Звук при завершении</label>
+              <button class="toggle active" onclick="this.classList.toggle('active')"></button>
+            </div>
+            <div class="form-row">
+              <label class="form-label">Уведомления</label>
+              <button class="toggle active" onclick="this.classList.toggle('active')"></button>
+            </div>
+            <div class="form-row">
+              <label class="form-label"></label>
+              <button class="btn btn-secondary btn-small">Тест уведомления</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: Favicon -->
+      <div class="tab-content" data-content="favicon">
+        <div class="setting-card">
+          <div class="setting-header">
+            <div>
+              <div class="setting-label">Анимация фавикона</div>
+              <div class="setting-description">Визуальный индикатор в табе браузера</div>
+            </div>
+            <button class="toggle active" onclick="this.classList.toggle('active'); document.querySelector('.favicon-body').classList.toggle('active')"></button>
+          </div>
+          <div class="setting-body active favicon-body">
+            <div style="margin-bottom: 16px;">
+              <label class="form-label" style="display: block; margin-bottom: 8px;">Стиль анимации</label>
+              <div class="grid grid-4">
+                <div class="favicon-card active">
+                  <div class="favicon-canvas" style="background: linear-gradient(135deg, #3b82f6, #2563eb);"></div>
+                  <span class="favicon-label">Pulse</span>
+                </div>
+                <div class="favicon-card">
+                  <div class="favicon-canvas" style="background: linear-gradient(135deg, #10b981, #059669);"></div>
+                  <span class="favicon-label">Blink</span>
+                </div>
+                <div class="favicon-card">
+                  <div class="favicon-canvas" style="background: linear-gradient(135deg, #f59e0b, #d97706);"></div>
+                  <span class="favicon-label">Rotate</span>
+                </div>
+                <div class="favicon-card">
+                  <div class="favicon-canvas" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);"></div>
+                  <span class="favicon-label">Wave</span>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <label class="form-label">Цвет</label>
+              <div class="color-grid">
+                <button class="color-btn active" style="background: #3b82f6;"></button>
+                <button class="color-btn" style="background: #10b981;"></button>
+                <button class="color-btn" style="background: #f59e0b;"></button>
+                <button class="color-btn" style="background: #ef4444;"></button>
+                <button class="color-btn" style="background: #8b5cf6;"></button>
+                <button class="color-btn" style="background: linear-gradient(135deg, #3b82f6, #8b5cf6);"></button>
+              </div>
+            </div>
+            <div class="form-row">
+              <label class="form-label">Скорость</label>
+              <select class="select-control form-control">
+                <option>Медленно</option>
+                <option selected>Обычно</option>
+                <option>Быстро</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="modal-footer">
+      <button class="btn btn-secondary">Отмена</button>
+      <button class="btn btn-primary">Сохранить</button>
+    </div>
+  </div>
+
+  <script>
+    // Tab switching
+    document.querySelectorAll('.segment-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tab = btn.dataset.tab;
+        
+        // Update buttons
+        document.querySelectorAll('.segment-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        // Update content
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+        document.querySelector(`[data-content="${tab}"]`).classList.add('active');
+      });
+    });
+
+    // Color picker
+    document.querySelectorAll('.color-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    // Favicon cards
+    document.querySelectorAll('.favicon-card').forEach(card => {
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.favicon-card').forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
+

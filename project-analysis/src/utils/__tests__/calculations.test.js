@@ -127,7 +127,7 @@ describe('calculations', () => {
 
     it('should handle zero planned', () => {
       const result = calculateEfficiency(100, 0)
-      expect(result.percentage).toBe(0)
+      expect(result.percentage).toBe('0')
       expect(result.color).toBe('gray')
       expect(result.status).toBe('no-plan')
     })

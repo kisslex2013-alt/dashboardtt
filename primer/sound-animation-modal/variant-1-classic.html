@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html lang='ru' class='dark'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<title>Концепт 1: Классический - Звуки и анимация</title>
+<script src='https://cdn.tailwindcss.com'></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+body{font-family:'Inter',sans-serif}.glass-effect{background:rgba(17,24,39,0.8);backdrop-filter:blur(20px);border:1px solid rgba(75,85,99,0.3)}.toggle-switch{position:relative;width:44px;height:22px;background:#4B5563;border-radius:11px;cursor:pointer;transition:all 0.3s ease}.toggle-switch.active{background:#10B981}.toggle-switch::after{content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;background:white;border-radius:50%;transition:transform 0.3s ease}.toggle-switch.active::after{transform:translateX(22px)}@keyframes wave{0%,100%{height:20%}50%{height:100%}}@keyframes pulse-ring{0%{transform:scale(0.8);opacity:1}100%{transform:scale(1.5);opacity:0}}@keyframes rotate{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}.wave-bar{animation:wave 0.8s ease-in-out infinite}.pulse-ring{animation:pulse-ring 1.5s ease-out infinite}.rotating{animation:rotate 2s linear infinite}.btn-hover{transition:all 0.3s ease}.btn-hover:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.3)}.tab-button{transition:all 0.3s ease}.tab-button.active{background:rgba(59,130,246,0.2);border-color:#3B82F6}
+</style>
+</head>
+<body class='bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 p-8 min-h-screen flex items-center justify-center'>
+<div class='glass-effect rounded-2xl p-8 max-w-4xl w-full shadow-2xl'>
+<div class='flex items-center justify-between mb-6'>
+<div><h2 class='text-2xl font-bold text-white mb-1'> Звуки и анимация</h2><p class='text-sm text-gray-400'>Полная настройка эффектов</p></div>
+<button onclick='window.location.href=\"index.html\"' class='text-gray-400 hover:text-white hover:bg-red-500/20 p-2 rounded-lg transition-all'><svg class='w-6 h-6' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 18L18 6M6 6l12 12'/></svg></button>
+</div>
+<div class='flex gap-2 mb-6 border-b border-gray-700'>
+<button onclick='switchTab(0)' id='tab-0' class='tab-button active px-4 py-2 text-sm font-medium text-white border-b-2 border-transparent'> Звуки</button>
+<button onclick='switchTab(1)' id='tab-1' class='tab-button px-4 py-2 text-sm font-medium text-gray-400 border-b-2 border-transparent'> Анимации</button>
+<button onclick='switchTab(2)' id='tab-2' class='tab-button px-4 py-2 text-sm font-medium text-gray-400 border-b-2 border-transparent'> Уведомления</button>
+</div>
+<div id='content-0' class='space-y-4'>
+<div class='bg-gray-800/50 rounded-xl p-4'><div class='flex items-center justify-between mb-3'><span class='text-sm font-medium text-white'>Общая громкость</span><span id='vol' class='text-blue-400 font-semibold'>75%</span></div><input type='range' min='0' max='100' value='75' oninput='document.getElementById(\"vol\").textContent=this.value+\"%\"' class='w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer'></div>
+" + @"
+<div class='grid grid-cols-2 gap-3'>
+" + (0..7 | ForEach-Object {
+ = @(
+@{n='Старт';c='green';i='M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z'},
+@{n='Стоп';c='red';i='M21 12a9 9 0 11-18 0 9 9 0 0118 0z'},
+@{n='Час';c='blue';i='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z'},
+@{n='Достижение';c='yellow';i='M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z'},
+@{n='Ошибка';c='red';i='M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z'},
+@{n='Уведомление';c='purple';i='M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9'},
+@{n='Успех';c='green';i='M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'},
+@{n='Предупреждение';c='yellow';i='M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z'}
+)[]
+"<div class='bg-gray-800/50 rounded-xl p-3 flex items-center justify-between btn-hover'><div class='flex items-center gap-2'><div class='w-8 h-8 bg--500/20 rounded-lg flex items-center justify-center'><svg class='w-4 h-4 text--400' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d=''/></svg></div><span class='text-sm text-white'></span></div><div class='flex items-center gap-2'><button onclick='playS()' class='p-1.5 bg--500/20 hover:bg--500/30 rounded transition-all'><svg class='w-3 h-3 text--400' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z'/></svg></button><div onclick='this.classList.toggle(\"active\")' class='toggle-switch active'></div></div></div>"
+}) -join "
+" + @"
+</div></div>
+<div id='content-1' class='space-y-3 hidden'>
+<div class='bg-gray-800/50 rounded-xl p-4 flex items-center justify-between'><div><p class='text-sm font-medium text-white'>Анимация фавикона</p><p class='text-xs text-gray-400'>Пульсация при работе</p></div><div onclick='this.classList.toggle(\"active\")' class='toggle-switch active'></div></div>
+<div class='bg-gray-800/50 rounded-xl p-4 flex items-center justify-between'><div><p class='text-sm font-medium text-white'>Плавные переходы</p><p class='text-xs text-gray-400'>Между страницами</p></div><div onclick='this.classList.toggle(\"active\")' class='toggle-switch active'></div></div>
+<div class='bg-gray-800/50 rounded-xl p-4 flex items-center justify-between'><div><p class='text-sm font-medium text-white'>Эффекты наведения</p><p class='text-xs text-gray-400'>Hover эффекты</p></div><div onclick='this.classList.toggle(\"active\")' class='toggle-switch active'></div></div>
+<div class='bg-gray-800/50 rounded-xl p-4 flex items-center justify-between'><div><p class='text-sm font-medium text-white'>Индикаторы загрузки</p><p class='text-xs text-gray-400'>Спиннеры</p></div><div onclick='this.classList.toggle(\"active\")' class='toggle-switch active'></div></div>
+</div>
+<div id='content-2' class='space-y-3 hidden'>
+<div class='bg-gray-800/50 rounded-xl p-4 flex items-center justify-between'><div><p class='text-sm font-medium text-white'>Браузерные уведомления</p><p class='text-xs text-gray-400'>Системные</p></div><div onclick='this.classList.toggle(\"active\")' class='toggle-switch'></div></div>
+<div class='bg-gray-800/50 rounded-xl p-4 flex items-center justify-between'><div><p class='text-sm font-medium text-white'>Завершение записи</p><p class='text-xs text-gray-400'>При остановке таймера</p></div><div onclick='this.classList.toggle(\"active\")' class='toggle-switch active'></div></div>
+<div class='bg-gray-800/50 rounded-xl p-4 flex items-center justify-between'><div><p class='text-sm font-medium text-white'>Достижения</p><p class='text-xs text-gray-400'>Выполнение целей</p></div><div onclick='this.classList.toggle(\"active\")' class='toggle-switch active'></div></div>
+<div class='bg-gray-800/50 rounded-xl p-4 flex items-center justify-between'><div><p class='text-sm font-medium text-white'>Напоминания</p><p class='text-xs text-gray-400'>Перерывы</p></div><div onclick='this.classList.toggle(\"active\")' class='toggle-switch'></div></div>
+</div>
+<div class='flex gap-3 mt-6 pt-6 border-t border-gray-700/50'>
+<button onclick='alert(\"Настройки сохранены\")' class='flex-1 py-2.5 px-4 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-all btn-hover'>Сохранить</button>
+</div>
+</div>
+<script src='shared-functionality.js'></script>
+<script>
+function switchTab(i){for(let j=0;j<3;j++){document.getElementById('content-'+j).classList.add('hidden');document.getElementById('tab-'+j).classList.remove('active','text-white');document.getElementById('tab-'+j).classList.add('text-gray-400')}document.getElementById('content-'+i).classList.remove('hidden');document.getElementById('tab-'+i).classList.add('active','text-white');document.getElementById('tab-'+i).classList.remove('text-gray-400')}
+function playS(i){const f=[523.25,392,659.25,783.99,220,440,698.46,329.63];const d=[200,400,600,1000,300,500,400,350];try{const a=new(window.AudioContext||window.webkitAudioContext)();const o=a.createOscillator();const g=a.createGain();o.connect(g);g.connect(a.destination);o.frequency.value=f[i];o.type='sine';g.gain.setValueAtTime(0.3,a.currentTime);g.gain.exponentialRampToValueAtTime(0.01,a.currentTime+d[i]/1000);o.start(a.currentTime);o.stop(a.currentTime+d[i]/1000)}catch(e){console.error(e)}}
+</script>
+</body>
+</html>

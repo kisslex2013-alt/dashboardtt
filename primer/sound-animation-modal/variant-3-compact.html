@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вариант 3 - Компактный</title>
+</head>
+<body>
+
+<div id="modal" class="modal-overlay">
+  <div class="modal-content">
+    <div class="header">
+      <h2 class="title">Звуки</h2>
+      <button onclick="closeModal()" class="close-btn">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <div class="sounds-list">
+      <div class="sound-item">
+        <div class="sound-info">
+          <div id="icon-notification" class="icon purple">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+            <div class="ring" id="ring-notification"></div>
+          </div>
+          <div>
+            <p class="sound-name">Уведомления</p>
+            <p class="sound-duration">0.8с</p>
+          </div>
+        </div>
+        <div class="sound-controls">
+          <button onclick="playVisual('notification')" class="play-mini">
+            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+          <div id="wave-notification" class="wave-mini">
+            <div class="bar purple"></div>
+            <div class="bar purple"></div>
+            <div class="bar purple"></div>
+          </div>
+          <div onclick="toggleSwitch('sound-notification')" id="sound-notification" class="toggle active"></div>
+        </div>
+      </div>
+
+      <div class="sound-item">
+        <div class="sound-info">
+          <div id="icon-message" class="icon green">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+            <div class="ring" id="ring-message"></div>
+          </div>
+          <div>
+            <p class="sound-name">Сообщения</p>
+            <p class="sound-duration">0.5с</p>
+          </div>
+        </div>
+        <div class="sound-controls">
+          <button onclick="playVisual('message')" class="play-mini">
+            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+          <div id="wave-message" class="wave-mini">
+            <div class="bar green"></div>
+            <div class="bar green"></div>
+            <div class="bar green"></div>
+          </div>
+          <div onclick="toggleSwitch('sound-message')" id="sound-message" class="toggle active"></div>
+        </div>
+      </div>
+
+      <div class="sound-item">
+        <div class="sound-info">
+          <div id="icon-hourly" class="icon blue">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <div class="ring" id="ring-hourly"></div>
+          </div>
+          <div>
+            <p class="sound-name">Час</p>
+            <p class="sound-duration">0.6с</p>
+          </div>
+        </div>
+        <div class="sound-controls">
+          <button onclick="playVisual('hourly')" class="play-mini">
+            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+          <div id="wave-hourly" class="wave-mini">
+            <div class="bar blue"></div>
+            <div class="bar blue"></div>
+            <div class="bar blue"></div>
+          </div>
+          <div onclick="toggleSwitch('sound-hourly')" id="sound-hourly" class="toggle"></div>
+        </div>
+      </div>
+
+      <div class="sound-item">
+        <div class="sound-info">
+          <div id="icon-achievement" class="icon yellow">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+            <div class="ring" id="ring-achievement"></div>
+          </div>
+          <div>
+            <p class="sound-name">Успех</p>
+            <p class="sound-duration">1.0с</p>
+          </div>
+        </div>
+        <div class="sound-controls">
+          <button onclick="playVisual('achievement')" class="play-mini">
+            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+          <div id="wave-achievement" class="wave-mini">
+            <div class="bar yellow"></div>
+            <div class="bar yellow"></div>
+            <div class="bar yellow"></div>
+          </div>
+          <div onclick="toggleSwitch('sound-achievement')" id="sound-achievement" class="toggle active"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="volume-bar">
+      <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg>
+      <input type="range" id="volume-slider" min="0" max="100" value="80" class="slider">
+      <span id="volume-value" class="volume-text">80%</span>
+    </div>
+
+    <div class="actions">
+      <button onclick="closeModal()" class="btn-cancel">Отмена</button>
+      <button onclick="saveSettings()" class="btn-save">Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+  
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 50; animation: fadeIn 0.3s ease-out; }
+  
+  .modal-content { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); border-radius: 20px; padding: 24px; max-width: 400px; width: 100%; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); animation: slideUp 0.3s ease-out; border: 1px solid rgba(255, 255, 255, 0.1); }
+  
+  .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+  .title { color: white; font-size: 20px; font-weight: 700; }
+  .close-btn { background: none; border: none; color: #9ca3af; cursor: pointer; padding: 4px; transition: color 0.2s; }
+  .close-btn:hover { color: white; }
+  
+  .sounds-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+  
+  .sound-item { background: rgba(30, 41, 59, 0.5); border-radius: 12px; padding: 12px; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s; border: 1px solid rgba(255, 255, 255, 0.05); }
+  .sound-item:hover { background: rgba(30, 41, 59, 0.7); transform: translateX(4px); }
+  
+  .sound-info { display: flex; align-items: center; gap: 12px; }
+  
+  .icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; position: relative; transition: transform 0.2s; }
+  .icon.purple { background: rgba(168, 85, 247, 0.2); color: #c084fc; }
+  .icon.green { background: rgba(34, 197, 94, 0.2); color: #4ade80; }
+  .icon.blue { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+  .icon.yellow { background: rgba(234, 179, 8, 0.2); color: #facc15; }
+  
+  .ring { position: absolute; inset: 0; border-radius: 8px; border: 2px solid currentColor; opacity: 0; }
+  
+  .sound-name { color: white; font-size: 14px; font-weight: 500; }
+  .sound-duration { color: #9ca3af; font-size: 11px; }
+  
+  .sound-controls { display: flex; align-items: center; gap: 8px; }
+  
+  .play-mini { background: rgba(59, 130, 246, 0.15); border: none; color: #60a5fa; width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; }
+  .play-mini:hover { background: rgba(59, 130, 246, 0.25); transform: scale(1.1); }
+  
+  .wave-mini { display: flex; align-items: end; gap: 2px; height: 20px; width: 24px; opacity: 0; transition: opacity 0.3s; }
+  .bar { width: 3px; border-radius: 2px; animation: waveAnimation 1s ease-in-out infinite; }
+  .bar.purple { background: #c084fc; }
+  .bar.green { background: #4ade80; }
+  .bar.blue { background: #60a5fa; }
+  .bar.yellow { background: #facc15; }
+  .bar:nth-child(1) { animation-delay: 0s; }
+  .bar:nth-child(2) { animation-delay: 0.15s; }
+  .bar:nth-child(3) { animation-delay: 0.3s; }
+  
+  .toggle { width: 36px; height: 20px; background: #374151; border-radius: 10px; position: relative; cursor: pointer; transition: all 0.3s; }
+  .toggle::after { content: ''; position: absolute; width: 14px; height: 14px; background: white; border-radius: 50%; top: 3px; left: 3px; transition: all 0.3s; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); }
+  .toggle.active { background: #3b82f6; }
+  .toggle.active::after { transform: translateX(16px); }
+  
+  .volume-bar { display: flex; align-items: center; gap: 10px; background: rgba(30, 41, 59, 0.4); padding: 12px; border-radius: 10px; margin-bottom: 16px; }
+  
+  .slider { flex: 1; height: 4px; background: #374151; border-radius: 2px; appearance: none; cursor: pointer; }
+  .slider::-webkit-slider-thumb { appearance: none; width: 14px; height: 14px; background: #3b82f6; border-radius: 50%; cursor: pointer; box-shadow: 0 2px 6px rgba(59, 130, 246, 0.5); }
+  .slider::-moz-range-thumb { width: 14px; height: 14px; background: #3b82f6; border-radius: 50%; cursor: pointer; border: none; box-shadow: 0 2px 6px rgba(59, 130, 246, 0.5); }
+  
+  .volume-text { color: #60a5fa; font-size: 13px; font-weight: 600; min-width: 36px; text-align: right; }
+  
+  .actions { display: flex; gap: 10px; }
+  .btn-cancel, .btn-save { flex: 1; padding: 10px; border-radius: 10px; border: none; font-weight: 500; cursor: pointer; transition: all 0.2s; font-size: 14px; }
+  .btn-cancel { background: #374151; color: white; }
+  .btn-cancel:hover { background: #4b5563; }
+  .btn-save { background: #3b82f6; color: white; }
+  .btn-save:hover { background: #2563eb; transform: translateY(-1px); }
+  
+  .w-5 { width: 1.25rem; }
+  .h-5 { height: 1.25rem; }
+  .w-4 { width: 1rem; }
+  .h-4 { height: 1rem; }
+  .w-3 { width: 0.75rem; }
+  .h-3 { height: 0.75rem; }
+  .text-gray-400 { color: #9ca3af; }
+  
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.5); opacity: 0; } }
+  @keyframes waveAnimation { 0%, 100% { height: 30%; } 50% { height: 100%; } }
+</style>
+
+<script>
+  function toggleSwitch(id) {
+    document.getElementById(id).classList.toggle('active');
+  }
+
+  function playVisual(type) {
+    const icon = document.getElementById(`icon-${type}`);
+    const ring = document.getElementById(`ring-${type}`);
+    const wave = document.getElementById(`wave-${type}`);
+    
+    ring.style.animation = 'pulse 0.6s ease-out';
+    setTimeout(() => { ring.style.animation = ''; }, 600);
+    
+    wave.style.opacity = '1';
+    setTimeout(() => { wave.style.opacity = '0'; }, 1000);
+    
+    icon.style.transform = 'scale(1.15)';
+    setTimeout(() => { icon.style.transform = 'scale(1)'; }, 200);
+  }
+
+  function closeModal() {
+    const modal = document.getElementById('modal');
+    modal.style.animation = 'fadeIn 0.2s ease-out reverse';
+    setTimeout(() => { modal.style.display = 'none'; }, 200);
+  }
+
+  function saveSettings() {
+    console.log('Настройки сохранены');
+    closeModal();
+  }
+
+  document.getElementById('volume-slider').addEventListener('input', function(e) {
+    document.getElementById('volume-value').textContent = e.target.value + '%';
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Концепт 4: Card Grid Layout - Настройки звуков и анимации</title>
+  <script src="shared-functionality.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      color: #e2e8f0;
+    }
+
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
+    }
+
+    .glass-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .modal-container {
+      width: 100%;
+      max-width: 1200px;
+      height: 90vh;
+      max-height: 900px;
+      border-radius: 24px;
+      overflow: hidden;
+      animation: slideUp 0.3s ease-out;
+      display: flex;
+      flex-direction: column;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal-header {
+      padding: 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .modal-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 0 24px;
+    }
+
+    .tab {
+      padding: 12px 20px;
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .tab:hover {
+      color: #e2e8f0;
+    }
+
+    .tab.active {
+      color: #60a5fa;
+      border-bottom-color: #3b82f6;
+    }
+
+    .modal-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+    }
+
+    .modal-body::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .modal-body::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .modal-body::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+    }
+
+    .settings-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .settings-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .settings-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .setting-card {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      min-height: 200px;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-icon {
+      width: 20px;
+      height: 20px;
+      color: #60a5fa;
+    }
+
+    .card-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 44px;
+      height: 24px;
+      background: #475569;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.3s;
+      flex-shrink: 0;
+    }
+
+    .toggle-switch.active {
+      background: #3b82f6;
+    }
+
+    .toggle-switch::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 20px;
+      height: 20px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.3s;
+    }
+
+    .toggle-switch.active::after {
+      transform: translateX(20px);
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #cbd5e1;
+      margin-bottom: 8px;
+    }
+
+    .form-select, .form-input {
+      width: 100%;
+      padding: 10px 12px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      color: #e2e8f0;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .form-select:focus, .form-input:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .sound-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+    }
+
+    .sound-btn {
+      padding: 8px 10px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      color: #cbd5e1;
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+
+    .sound-btn:hover {
+      border-color: #3b82f6;
+      transform: scale(1.02);
+    }
+
+    .sound-btn.active {
+      border-color: #3b82f6;
+      background: rgba(59, 130, 246, 0.1);
+      color: #fff;
+    }
+
+    .play-icon {
+      width: 14px;
+      height: 14px;
+      opacity: 0.6;
+      transition: opacity 0.2s;
+      flex-shrink: 0;
+    }
+
+    .sound-btn:hover .play-icon {
+      opacity: 1;
+    }
+
+    .slider-container {
+      position: relative;
+    }
+
+    .slider {
+      width: 100%;
+      height: 6px;
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 3px;
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      background: #3b82f6;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .slider::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      background: #3b82f6;
+      border-radius: 50%;
+      cursor: pointer;
+      border: none;
+    }
+
+    .slider-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: #94a3b8;
+      margin-top: 4px;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+    }
+
+    .btn-primary {
+      background: #3b82f6;
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: #2563eb;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: rgba(30, 41, 59, 0.6);
+      color: #e2e8f0;
+    }
+
+    .btn-warning {
+      background: #f59e0b;
+      color: #fff;
+    }
+
+    .btn-danger {
+      background: #ef4444;
+      color: #fff;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .favicon-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+
+    .favicon-preview {
+      padding: 10px;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .favicon-preview:hover {
+      border-color: #3b82f6;
+      transform: scale(1.05);
+    }
+
+    .favicon-preview.active {
+      border-color: #3b82f6;
+      background: rgba(59, 130, 246, 0.1);
+    }
+
+    .favicon-canvas {
+      width: 28px;
+      height: 28px;
+      margin: 0 auto 6px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+      image-rendering: pixelated;
+    }
+
+    .favicon-label {
+      font-size: 9px;
+      color: #94a3b8;
+    }
+
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+    }
+
+    .color-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .color-btn:hover {
+      transform: scale(1.1);
+      border-color: #3b82f6;
+    }
+
+    .color-btn.active {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+    }
+
+    .setting-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .setting-row:last-child {
+      border-bottom: none;
+    }
+
+    .setting-info {
+      flex: 1;
+    }
+
+    .setting-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 2px;
+    }
+
+    .setting-desc {
+      font-size: 10px;
+      color: #94a3b8;
+    }
+
+    .modal-footer {
+      padding: 20px 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      background: rgba(15, 23, 42, 0.8);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .flex-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .card-description {
+      font-size: 11px;
+      color: #94a3b8;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+  <div class="modal-container glass-effect">
+    <div class="modal-header">
+      <h2 class="modal-title">Звуки и анимация</h2>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="notifications">Уведомления</button>
+      <button class="tab" data-tab="pomodoro">Pomodoro</button>
+      <button class="tab" data-tab="favicon">Фавикон</button>
+    </div>
+
+    <div class="modal-body">
+      <!-- Tab: Notifications -->
+      <div id="tab-notifications" class="tab-content">
+        <div class="settings-grid">
+          <!-- Sound Notifications Card -->
+          <div class="glass-card setting-card">
+            <div class="card-header">
+              <div class="card-title">
+                <svg class="card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                </svg>
+                <span>Звуковые уведомления</span>
+              </div>
+              <div class="toggle-switch active" id="toggle-sound-notifications" onclick="toggle('soundNotificationsEnabled')"></div>
+            </div>
+            <div class="card-content">
+              <div class="form-group">
+                <label class="form-label">Интервал</label>
+                <div class="flex-row">
+                  <select class="form-select" id="notification-interval" style="flex: 1;">
+                    <option value="15">15 минут</option>
+                    <option value="30" selected>30 минут</option>
+                    <option value="45">45 минут</option>
+                    <option value="60">1 час</option>
+                    <option value="120">2 часа</option>
+                    <option value="custom">Кастомное</option>
+                  </select>
+                  <input type="number" class="form-input hidden" id="custom-interval" placeholder="Мин" style="width: 80px;" min="1" max="1440">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Тип звука</label>
+                <div class="sound-grid" id="sound-types-grid"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Break Reminders Card -->
+          <div class="glass-card setting-card">
+            <div class="card-header">
+              <div class="card-title">
+                <svg class="card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span>Напоминания о перерывах</span>
+              </div>
+              <div class="toggle-switch active" id="toggle-break-reminders" onclick="toggle('breakRemindersEnabled')"></div>
+            </div>
+            <div class="card-content">
+              <div class="form-group">
+                <label class="form-label">Интервал</label>
+                <div class="flex-row">
+                  <select class="form-select" id="break-interval" style="flex: 1;">
+                    <option value="1">Каждый час</option>
+                    <option value="2" selected>Каждые 2 часа</option>
+                    <option value="3">Каждые 3 часа</option>
+                    <option value="4">Каждые 4 часа</option>
+                    <option value="6">Каждые 6 часов</option>
+                  </select>
+                  <button class="btn btn-primary" onclick="testBreakReminder()">Пример</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Overtime Alerts Card -->
+          <div class="glass-card setting-card">
+            <div class="card-header">
+              <div class="card-title">
+                <svg class="card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                </svg>
+                <span>Предупреждения о переработке</span>
+              </div>
+              <div class="toggle-switch active" id="toggle-overtime-alerts" onclick="toggle('overtimeAlertsEnabled')"></div>
+            </div>
+            <div class="card-content">
+              <div class="form-group">
+                <label class="form-label">Порог предупреждения: <span id="warning-threshold-value">8.0</span> ч</label>
+                <input type="range" class="slider" id="warning-threshold" min="0.5" max="2.0" step="0.1" value="1.0">
+                <div class="slider-labels">
+                  <span>50%</span>
+                  <span>100%</span>
+                  <span>200%</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Порог критического: <span id="critical-threshold-value">12.0</span> ч</label>
+                <input type="range" class="slider" id="critical-threshold" min="1.0" max="3.0" step="0.1" value="1.5">
+                <div class="slider-labels">
+                  <span>100%</span>
+                  <span>200%</span>
+                  <span>300%</span>
+                </div>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info">
+                  <div class="setting-label">Звуковое уведомление</div>
+                </div>
+                <div class="toggle-switch active" id="toggle-overtime-sound" onclick="toggle('overtimeSoundAlert')"></div>
+              </div>
+              <div class="btn-group">
+                <button class="btn btn-warning" style="flex: 1;" onclick="testOvertimeAlert(false)">Пример предупреждения</button>
+                <button class="btn btn-danger" style="flex: 1;" onclick="testOvertimeAlert(true)">Пример критического</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: Pomodoro -->
+      <div id="tab-pomodoro" class="tab-content hidden">
+        <div class="settings-grid">
+          <div class="glass-card setting-card" style="grid-column: 1 / -1;">
+            <div class="card-header">
+              <div class="card-title">
+                <svg class="card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span>Pomodoro таймер</span>
+              </div>
+              <div class="toggle-switch" id="toggle-pomodoro" onclick="toggle('pomodoroEnabled')"></div>
+            </div>
+            <div class="card-content">
+              <p class="card-description">
+                Техника управления временем: работа разбивается на интервалы по 25 минут (помодоро), разделенные перерывами.
+              </p>
+              <div class="setting-row">
+                <div class="setting-info">
+                  <div class="setting-label">Автоматически запускать перерывы</div>
+                  <div class="setting-desc">После завершения работы</div>
+                </div>
+                <div class="toggle-switch active" id="toggle-pomodoro-breaks" onclick="toggle('pomodoroAutoStartBreaks')"></div>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info">
+                  <div class="setting-label">Автоматически запускать работу</div>
+                  <div class="setting-desc">После завершения перерыва</div>
+                </div>
+                <div class="toggle-switch" id="toggle-pomodoro-work" onclick="toggle('pomodoroAutoStartWork')"></div>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info">
+                  <div class="setting-label">Звук при завершении интервала</div>
+                  <div class="setting-desc">Воспроизводить звук</div>
+                </div>
+                <div class="toggle-switch active" id="toggle-pomodoro-sound" onclick="toggle('pomodoroSoundOnComplete')"></div>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info">
+                  <div class="setting-label">Показывать уведомления</div>
+                  <div class="setting-desc">Визуальные уведомления</div>
+                </div>
+                <div class="toggle-switch active" id="toggle-pomodoro-notifications" onclick="toggle('pomodoroShowNotifications')"></div>
+              </div>
+              <button class="btn btn-primary" onclick="testPomodoroNotification()" style="margin-top: 8px;">Пример</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: Favicon -->
+      <div id="tab-favicon" class="tab-content hidden">
+        <div class="settings-grid">
+          <div class="glass-card setting-card" style="grid-column: 1 / -1;">
+            <div class="card-header">
+              <div class="card-title">
+                <svg class="card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/>
+                </svg>
+                <span>Анимация фавикона</span>
+              </div>
+              <div class="toggle-switch active" id="toggle-favicon" onclick="toggle('faviconAnimationEnabled')"></div>
+            </div>
+            <div class="card-content">
+              <div class="form-group">
+                <label class="form-label">Стиль анимации</label>
+                <div class="favicon-grid" id="favicon-styles-grid"></div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Цвет</label>
+                <div class="color-grid" id="color-picker-grid"></div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Скорость</label>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
+                  <button class="btn btn-secondary" data-speed="slow" onclick="setFaviconSpeed('slow')">Медленно</button>
+                  <button class="btn btn-primary" data-speed="normal" onclick="setFaviconSpeed('normal')">Обычно</button>
+                  <button class="btn btn-secondary" data-speed="fast" onclick="setFaviconSpeed('fast')">Быстро</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal()">Отмена</button>
+      <button class="btn btn-primary" onclick="saveSettings()">Сохранить</button>
+    </div>
+  </div>
+
+  <script>
+    // State (same structure as previous concepts)
+    let state = {
+      soundNotificationsEnabled: true,
+      notificationInterval: 30,
+      customIntervalMinutes: null,
+      notificationSound: 'chime',
+      breakRemindersEnabled: true,
+      breakReminderInterval: 2,
+      overtimeAlertsEnabled: true,
+      overtimeWarningThreshold: 1.0,
+      overtimeCriticalThreshold: 1.5,
+      overtimeSoundAlert: true,
+      pomodoroEnabled: false,
+      pomodoroAutoStartBreaks: true,
+      pomodoroAutoStartWork: false,
+      pomodoroSoundOnComplete: true,
+      pomodoroShowNotifications: true,
+      faviconAnimationEnabled: true,
+      faviconAnimationStyle: 'pulse',
+      faviconAnimationColor: '#3b82f6',
+      faviconAnimationSpeed: 'normal',
+      activeTab: 'notifications'
+    };
+
+    const soundTypes = [
+      { value: 'chime', label: 'Мелодия' },
+      { value: 'alert', label: 'Предупреждение' },
+      { value: 'phone', label: 'Звонок' },
+      { value: 'doorbell', label: 'Дверной звонок' },
+      { value: 'alarm', label: 'Тревога' },
+      { value: 'notification', label: 'Уведомление' },
+      { value: 'bell', label: 'Колокол' },
+      { value: 'beep', label: 'Сигнал' },
+      { value: 'ping', label: 'Пинг' }
+    ];
+
+    const animationStyles = [
+      { value: 'pulse', label: 'Пульсация' },
+      { value: 'blink', label: 'Мигание' },
+      { value: 'rotate', label: 'Вращение' },
+      { value: 'breathe', label: 'Дыхание' },
+      { value: 'wave', label: 'Волна' },
+      { value: 'gradient', label: 'Градиент' },
+      { value: 'data-pulse', label: 'Data Pulse' },
+      { value: 'particles', label: 'Частицы' }
+    ];
+
+    const presetColors = [
+      { value: '#3b82f6', label: 'Синий' },
+      { value: '#22c55e', label: 'Зеленый' },
+      { value: '#f97316', label: 'Оранжевый' },
+      { value: '#ef4444', label: 'Красный' },
+      { value: '#8b5cf6', label: 'Фиолетовый' },
+      { value: '#06b6d4', label: 'Голубой' },
+      { value: '#fbbf24', label: 'Желтый' }
+    ];
+
+    function init() {
+      loadSettings();
+      renderSoundTypes();
+      renderFaviconStyles();
+      renderColorPicker();
+      setupEventListeners();
+      updateUI();
+    }
+
+    function loadSettings() {
+      const saved = localStorage.getItem('soundAnimationSettings');
+      if (saved) {
+        Object.assign(state, JSON.parse(saved));
+      }
+    }
+
+    function saveSettings() {
+      localStorage.setItem('soundAnimationSettings', JSON.stringify(state));
+      if (typeof showNotification === 'function') {
+        showNotification('Настройки сохранены', 'success');
+      }
+    }
+
+    function renderSoundTypes() {
+      const grid = document.getElementById('sound-types-grid');
+      grid.innerHTML = soundTypes.map(sound => `
+        <button class="sound-btn ${state.notificationSound === sound.value ? 'active' : ''}" 
+                onclick="selectSound('${sound.value}')">
+          <span>${sound.label}</span>
+          <svg class="play-icon" fill="currentColor" viewBox="0 0 24 24" onclick="event.stopPropagation(); playSoundLocal('${sound.value}')">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+        </button>
+      `).join('');
+    }
+
+    function renderFaviconStyles() {
+      const grid = document.getElementById('favicon-styles-grid');
+      grid.innerHTML = animationStyles.map(style => `
+        <div class="favicon-preview ${state.faviconAnimationStyle === style.value ? 'active' : ''}" 
+             onclick="selectFaviconStyle('${style.value}')"
+             onmouseenter="startFaviconPreview('${style.value}')"
+             onmouseleave="stopFaviconPreview()">
+          <canvas class="favicon-canvas" width="28" height="28" data-style="${style.value}"></canvas>
+          <div class="favicon-label">${style.label}</div>
+        </div>
+      `).join('');
+    }
+
+    function renderColorPicker() {
+      const grid = document.getElementById('color-picker-grid');
+      grid.innerHTML = presetColors.map(color => `
+        <button class="color-btn ${state.faviconAnimationColor === color.value ? 'active' : ''}" 
+                style="background: ${color.value}"
+                onclick="selectColor('${color.value}')"
+                title="${color.label}"></button>
+      `).join('') + `
+        <div class="color-btn ${!presetColors.some(c => c.value === state.faviconAnimationColor) ? 'active' : ''}" 
+             style="background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899); position: relative;">
+          <input type="color" value="${state.faviconAnimationColor}" 
+                 onchange="selectColor(this.value)" 
+                 style="position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;">
+        </div>
+      `;
+    }
+
+    function setupEventListeners() {
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', () => switchTab(tab.dataset.tab));
+      });
+
+      document.getElementById('notification-interval').addEventListener('change', (e) => {
+        if (e.target.value === 'custom') {
+          state.notificationInterval = -1;
+          document.getElementById('custom-interval').classList.remove('hidden');
+          if (!state.customIntervalMinutes) state.customIntervalMinutes = 30;
+          document.getElementById('custom-interval').value = state.customIntervalMinutes;
+        } else {
+          state.notificationInterval = parseInt(e.target.value);
+          document.getElementById('custom-interval').classList.add('hidden');
+        }
+      });
+
+      document.getElementById('custom-interval').addEventListener('input', (e) => {
+        const value = parseInt(e.target.value);
+        if (value >= 1 && value <= 1440) {
+          state.customIntervalMinutes = value;
+        }
+      });
+
+      document.getElementById('break-interval').addEventListener('change', (e) => {
+        state.breakReminderInterval = parseInt(e.target.value);
+      });
+
+      document.getElementById('warning-threshold').addEventListener('input', (e) => {
+        state.overtimeWarningThreshold = parseFloat(e.target.value);
+        document.getElementById('warning-threshold-value').textContent = (8 * state.overtimeWarningThreshold).toFixed(1);
+      });
+
+      document.getElementById('critical-threshold').addEventListener('input', (e) => {
+        state.overtimeCriticalThreshold = parseFloat(e.target.value);
+        document.getElementById('critical-threshold-value').textContent = (8 * state.overtimeCriticalThreshold).toFixed(1);
+      });
+    }
+
+    function toggle(key) {
+      state[key] = !state[key];
+      updateUI();
+    }
+
+    function updateUI() {
+      document.getElementById('toggle-sound-notifications').classList.toggle('active', state.soundNotificationsEnabled);
+      document.getElementById('toggle-break-reminders').classList.toggle('active', state.breakRemindersEnabled);
+      document.getElementById('toggle-overtime-alerts').classList.toggle('active', state.overtimeAlertsEnabled);
+      document.getElementById('toggle-overtime-sound').classList.toggle('active', state.overtimeSoundAlert);
+      document.getElementById('toggle-pomodoro').classList.toggle('active', state.pomodoroEnabled);
+      document.getElementById('toggle-pomodoro-breaks').classList.toggle('active', state.pomodoroAutoStartBreaks);
+      document.getElementById('toggle-pomodoro-work').classList.toggle('active', state.pomodoroAutoStartWork);
+      document.getElementById('toggle-pomodoro-sound').classList.toggle('active', state.pomodoroSoundOnComplete);
+      document.getElementById('toggle-pomodoro-notifications').classList.toggle('active', state.pomodoroShowNotifications);
+      document.getElementById('toggle-favicon').classList.toggle('active', state.faviconAnimationEnabled);
+    }
+
+    function switchTab(tab) {
+      state.activeTab = tab;
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
+      document.getElementById(`tab-${tab}`).classList.remove('hidden');
+    }
+
+    function selectSound(value) {
+      state.notificationSound = value;
+      renderSoundTypes();
+    }
+
+    function playSoundLocal(type) {
+      if (typeof playSound === 'function') {
+        playSound(type, 0.3);
+      }
+    }
+
+    function selectFaviconStyle(value) {
+      state.faviconAnimationStyle = value;
+      renderFaviconStyles();
+    }
+
+    function selectColor(value) {
+      state.faviconAnimationColor = value;
+      renderColorPicker();
+      renderFaviconStyles();
+    }
+
+    function setFaviconSpeed(value) {
+      state.faviconAnimationSpeed = value;
+      document.querySelectorAll('[data-speed]').forEach(btn => {
+        btn.classList.remove('btn-primary');
+        btn.classList.add('btn-secondary');
+      });
+      document.querySelector(`[data-speed="${value}"]`).classList.remove('btn-secondary');
+      document.querySelector(`[data-speed="${value}"]`).classList.add('btn-primary');
+    }
+
+    let faviconAnimationFrame = null;
+    function startFaviconPreview(style) {
+      const canvas = document.querySelector(`[data-style="${style}"]`);
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const color = state.faviconAnimationColor;
+      const speedMap = { slow: 4000, normal: 2000, fast: 1000 };
+      const speed = speedMap[state.faviconAnimationSpeed] || 2000;
+
+      function animate() {
+        ctx.clearRect(0, 0, 28, 28);
+        const time = Date.now() / speed;
+
+        switch(style) {
+          case 'pulse':
+            const pulseValue = 0.5 + Math.sin(time * Math.PI * 4) * 0.5;
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(14, 14, 7 + pulseValue * 7, 0, Math.PI * 2);
+            ctx.fill();
+            break;
+          case 'blink':
+            const blinkValue = Math.floor(time) % 2 === 0 ? 1 : 0.2;
+            ctx.globalAlpha = blinkValue;
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(14, 14, 12, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.globalAlpha = 1;
+            break;
+          case 'rotate':
+            ctx.save();
+            ctx.translate(14, 14);
+            ctx.rotate(((time * 0.5) % 1) * Math.PI * 2);
+            ctx.translate(-14, -14);
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(14, 14, 12, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.moveTo(14, 3);
+            ctx.lineTo(10, 10);
+            ctx.lineTo(18, 10);
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+            break;
+          default:
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(14, 14, 12, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        faviconAnimationFrame = requestAnimationFrame(animate);
+      }
+      animate();
+    }
+
+    function stopFaviconPreview() {
+      if (faviconAnimationFrame) {
+        cancelAnimationFrame(faviconAnimationFrame);
+        faviconAnimationFrame = null;
+      }
+      document.querySelectorAll('.favicon-canvas').forEach(canvas => {
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, 28, 28);
+        ctx.fillStyle = state.faviconAnimationColor;
+        ctx.beginPath();
+        ctx.arc(14, 14, 12, 0, Math.PI * 2);
+        ctx.fill();
+      });
+    }
+
+    function testBreakReminder() {
+      const hours = state.breakReminderInterval;
+      const message = `⏸️ Пора сделать перерыв! Вы работаете уже ${hours} ${hours === 1 ? 'час' : hours < 5 ? 'часа' : 'часов'}.`;
+      if (typeof showNotification === 'function') {
+        showNotification(message, 'warning');
+      }
+    }
+
+    function testOvertimeAlert(isCritical) {
+      const threshold = isCritical ? state.overtimeCriticalThreshold : state.overtimeWarningThreshold;
+      const totalHours = 8 * threshold;
+      const message = isCritical 
+        ? `🚨 Критическая переработка! Вы работаете уже ${totalHours.toFixed(1)} часов.`
+        : `⚠️ Переработка! Вы работаете уже ${totalHours.toFixed(1)} часов.`;
+      if (typeof showNotification === 'function') {
+        showNotification(message, isCritical ? 'error' : 'warning');
+      }
+    }
+
+    function testPomodoroNotification() {
+      const message = '🍅 Pomodoro завершен! Пора сделать перерыв.';
+      if (typeof showNotification === 'function') {
+        showNotification(message, 'success');
+      }
+    }
+
+    function closeModal() {
+      if (confirm('Закрыть без сохранения?')) {
+        window.close();
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>
+

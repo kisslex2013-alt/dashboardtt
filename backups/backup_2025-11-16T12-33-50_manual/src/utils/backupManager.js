@@ -1,0 +1,330 @@
+import { logger } from './logger'
+
+/**
+ * 💾 BackupManager - Менеджер резервных копий на IndexedDB
+ *
+ * 🎓 ПОЯСНЕНИЕ ДЛЯ НАЧИНАЮЩИХ:
+ *
+ * IndexedDB - это встроенная база данных в браузере, которая позволяет хранить
+ * большие объемы данных локально. Это лучше чем localStorage, потому что:
+ * - Может хранить больше данных (GB против MB)
+ * - Асинхронная работа (не блокирует интерфейс)
+ * - Поддерживает индексы для быстрого поиска
+ *
+ * Этот класс управляет автоматическими резервными копиями всех данных приложения.
+ * Резервные копии создаются автоматически при изменениях и хранятся в IndexedDB.
+ */
+export class BackupManager {
+  constructor(dbName = 'TimeTrackerBackupDB', storeName = 'backups') {
+    this.dbName = dbName
+    this.storeName = storeName
+    this.maxBackups = 10 // Максимум бэкапов для хранения
+    this.dbPromise = null // Кэш соединения с БД
+    this.broadcastChannel = null // Канал для синхронизации между вкладками
+
+    // Инициализируем BroadcastChannel для синхронизации между вкладками
+    if (typeof BroadcastChannel !== 'undefined') {
+      this.broadcastChannel = new BroadcastChannel('time-tracker-backups')
+    }
+  }
+
+  /**
+   * Открывает соединение с IndexedDB
+   * @returns {Promise<IDBDatabase>} Promise с объектом базы данных
+   */
+  async openDB() {
+    // Если соединение уже открыто, возвращаем его
+    if (this.dbPromise) {
+      return this.dbPromise
+    }
+
+    // Создаем новое Promise для открытия БД
+    this.dbPromise = new Promise((resolve, reject) => {
+      const request = indexedDB.open(this.dbName, 1)
+
+      request.onerror = () => {
+        logger.error('❌ Ошибка открытия IndexedDB:', request.error)
+        reject(request.error)
+      }
+
+      request.onsuccess = () => {
+        logger.log('✅ IndexedDB успешно открыта')
+        resolve(request.result)
+      }
+
+      // Выполняется при первом создании БД или обновлении версии
+      request.onupgradeneeded = event => {
+        const db = event.target.result
+
+        // Создаем хранилище (object store) если его еще нет
+        if (!db.objectStoreNames.contains(this.storeName)) {
+          const store = db.createObjectStore(this.storeName, { keyPath: 'timestamp' })
+          // Создаем индекс для быстрого поиска по времени
+          store.createIndex('timestamp', 'timestamp', { unique: false })
+          logger.log('✅ Хранилище бэкапов создано')
+        }
+      }
+    })
+
+    return this.dbPromise
+  }
+
+  /**
+   * Сохраняет резервную копию данных
+   * @param {Object} data - данные для сохранения (entries, categories, settings и т.д.)
+   * @returns {Promise<{success: boolean, timestamp?: number, error?: Error}>}
+   */
+  async saveBackup(data) {
+    try {
+      const db = await this.openDB()
+      const transaction = db.transaction([this.storeName], 'readwrite')
+      const store = transaction.objectStore(this.storeName)
+      const timestamp = Date.now()
+
+      // Сохраняем данные с timestamp
+      await new Promise((resolve, reject) => {
+        const request = store.add({ timestamp, data })
+        request.onsuccess = () => resolve()
+        request.onerror = () => reject(request.error)
+      })
+
+      // Удаляем старые бэкапы, если превышен лимит
+      await this.cleanupOldBackups(store)
+
+      // Уведомляем другие вкладки о создании нового бэкапа
+      if (this.broadcastChannel) {
+        const message = {
+          type: 'backup-created',
+          timestamp,
+        }
+        this.broadcastChannel.postMessage(message)
+        logger.log('📡 BroadcastChannel: отправлено сообщение о создании бэкапа', message)
+      } else {
+        logger.warn('⚠️ BroadcastChannel недоступен, синхронизация между вкладками не работает')
+      }
+
+      logger.log(`✅ Бэкап сохранен: ${new Date(timestamp).toLocaleString('ru-RU')}`)
+      return { success: true, timestamp }
+    } catch (error) {
+      logger.error('❌ Ошибка сохранения бэкапа:', error)
+      return { success: false, error }
+    }
+  }
+
+  /**
+   * Удаляет старые резервные копии, оставляя только последние maxBackups
+   * @param {IDBObjectStore} store - объект хранилища IndexedDB
+   * @returns {Promise<void>}
+   */
+  async cleanupOldBackups(store) {
+    return new Promise(resolve => {
+      const req = store.index('timestamp').openKeyCursor(null, 'prev') // Сортируем по убыванию
+      const keys = []
+
+      req.onsuccess = () => {
+        const cursor = req.result
+        if (cursor) {
+          keys.push(cursor.key)
+          // Если превышен лимит бэкапов, удаляем самый старый
+          if (keys.length > this.maxBackups) {
+            store.delete(cursor.key)
+          }
+          cursor.continue()
+        } else {
+          resolve()
+        }
+      }
+
+      req.onerror = () => resolve()
+    })
+  }
+
+  /**
+   * Получает список всех резервных копий
+   * @returns {Promise<Array<{timestamp: number, entriesCount: number}>>}
+   */
+  async listBackups() {
+    try {
+      const db = await this.openDB()
+      const transaction = db.transaction([this.storeName], 'readonly')
+      const store = transaction.objectStore(this.storeName)
+      const req = store.index('timestamp').openCursor(null, 'prev') // Сортируем по убыванию
+
+      return new Promise(resolve => {
+        const backups = []
+
+        req.onsuccess = () => {
+          const cursor = req.result
+          if (cursor) {
+            const { timestamp, data } = cursor.value
+            // Подсчитываем количество записей
+            const entriesCount = Array.isArray(data.entries) ? data.entries.length : 0
+            backups.push({ timestamp, entriesCount })
+            cursor.continue()
+          } else {
+            resolve(backups)
+          }
+        }
+
+        req.onerror = () => resolve([])
+      })
+    } catch (error) {
+      logger.error('❌ Ошибка получения списка бэкапов:', error)
+      return []
+    }
+  }
+
+  /**
+   * Подписывается на события создания/удаления бэкапов в других вкладках
+   * @param {Function} callback - функция обратного вызова при изменении бэкапов
+   * @returns {Function} функция для отписки
+   */
+  onBackupChange(callback) {
+    if (!this.broadcastChannel) {
+      logger.warn('⚠️ BroadcastChannel недоступен, синхронизация между вкладками не работает')
+      return () => {} // Возвращаем пустую функцию для отписки
+    }
+
+    const handler = event => {
+      if (
+        event.data &&
+        (event.data.type === 'backup-created' || event.data.type === 'backup-deleted')
+      ) {
+        logger.log('📡 BroadcastChannel: получено сообщение о изменении бэкапа', event.data)
+        callback()
+      }
+    }
+
+    this.broadcastChannel.addEventListener('message', handler)
+    logger.log('✅ BroadcastChannel: подписка на изменения бэкапов установлена')
+
+    // Возвращаем функцию для отписки
+    return () => {
+      this.broadcastChannel.removeEventListener('message', handler)
+    }
+  }
+
+  /**
+   * Закрывает соединение с BroadcastChannel (для cleanup)
+   */
+  close() {
+    if (this.broadcastChannel) {
+      this.broadcastChannel.close()
+      this.broadcastChannel = null
+    }
+  }
+
+  /**
+   * Восстанавливает данные из резервной копии по timestamp
+   * @param {number} timestamp - временная метка бэкапа
+   * @returns {Promise<Object|null>} восстановленные данные или null
+   */
+  async restoreBackup(timestamp) {
+    try {
+      const db = await this.openDB()
+      const transaction = db.transaction([this.storeName], 'readonly')
+      const store = transaction.objectStore(this.storeName)
+
+      return new Promise(resolve => {
+        const req = store.get(timestamp)
+
+        req.onsuccess = () => {
+          const result = req.result?.data || null
+          if (result) {
+            logger.log(`✅ Бэкап восстановлен: ${new Date(timestamp).toLocaleString('ru-RU')}`)
+          }
+          resolve(result)
+        }
+
+        req.onerror = () => {
+          logger.error('❌ Ошибка восстановления бэкапа')
+          resolve(null)
+        }
+      })
+    } catch (error) {
+      logger.error('❌ Ошибка восстановления бэкапа:', error)
+      return null
+    }
+  }
+
+  /**
+   * Удаляет конкретную резервную копию
+   * @param {number} timestamp - временная метка бэкапа для удаления
+   * @returns {Promise<boolean>} true если удаление успешно
+   */
+  async deleteBackup(timestamp) {
+    try {
+      const db = await this.openDB()
+      const transaction = db.transaction([this.storeName], 'readwrite')
+      const store = transaction.objectStore(this.storeName)
+
+      const success = await new Promise(resolve => {
+        const req = store.delete(timestamp)
+
+        req.onsuccess = () => {
+          logger.log(`✅ Бэкап удален: ${new Date(timestamp).toLocaleString('ru-RU')}`)
+          resolve(true)
+        }
+
+        req.onerror = () => {
+          logger.error('❌ Ошибка удаления бэкапа')
+          resolve(false)
+        }
+      })
+
+      // Уведомляем другие вкладки об удалении бэкапа
+      if (this.broadcastChannel) {
+        this.broadcastChannel.postMessage({
+          type: 'backup-deleted',
+          timestamp,
+        })
+      }
+
+      return success
+    } catch (error) {
+      logger.error('❌ Ошибка удаления бэкапа:', error)
+      return false
+    }
+  }
+
+  /**
+   * Получает информацию о конкретном бэкапе
+   * @param {number} timestamp - временная метка бэкапа
+   * @returns {Promise<{timestamp: number, data: Object, entriesCount: number}|null>}
+   */
+  async getBackupInfo(timestamp) {
+    try {
+      const db = await this.openDB()
+      const transaction = db.transaction([this.storeName], 'readonly')
+      const store = transaction.objectStore(this.storeName)
+
+      return new Promise(resolve => {
+        const req = store.get(timestamp)
+
+        req.onsuccess = () => {
+          const backup = req.result
+          if (backup) {
+            const entriesCount = Array.isArray(backup.data?.entries)
+              ? backup.data.entries.length
+              : 0
+            resolve({
+              timestamp: backup.timestamp,
+              data: backup.data,
+              entriesCount,
+            })
+          } else {
+            resolve(null)
+          }
+        }
+
+        req.onerror = () => resolve(null)
+      })
+    } catch (error) {
+      logger.error('❌ Ошибка получения информации о бэкапе:', error)
+      return null
+    }
+  }
+}
+
+// Создаем единственный экземпляр менеджера (singleton pattern)
+export const backupManager = new BackupManager()

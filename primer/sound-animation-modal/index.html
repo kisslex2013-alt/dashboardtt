@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Звуки и анимация - Все концепты</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    
+    .glass-card {
+      background: rgba(17, 24, 39, 0.7);
+      backdrop-filter: blur(24px) saturate(200%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      transition: all 0.3s ease;
+    }
+    
+    .glass-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+      border-color: rgba(59, 130, 246, 0.3);
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 p-8 min-h-screen">
+  <div class="max-w-6xl mx-auto">
+    
+    <div class="text-center mb-12">
+      <h1 class="text-5xl font-bold text-white mb-4">🔊 Звуки и анимация</h1>
+      <p class="text-xl text-gray-400">5 визуальных концептов модального окна</p>
+      <p class="text-sm text-gray-500 mt-2">Все элементы функциональны и интерактивны</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      
+      <!-- Концепт 1 -->
+      <a href="variant-1-classic.html" class="glass-card rounded-xl p-6 block">
+        <div class="flex items-start gap-4">
+          <div class="flex-shrink-0 w-16 h-16 bg-blue-500/20 rounded-lg flex items-center justify-center text-3xl">
+            1️⃣
+          </div>
+          <div class="flex-1">
+            <h3 class="text-xl font-bold text-white mb-2">Классический</h3>
+            <p class="text-sm text-gray-400 mb-3">Традиционный дизайн с вкладками, переключателями и слайдерами</p>
+            <div class="flex flex-wrap gap-2">
+              <span class="px-2 py-1 bg-blue-500/20 text-blue-400 rounded text-xs">Вкладки</span>
+              <span class="px-2 py-1 bg-green-500/20 text-green-400 rounded text-xs">Слайдеры</span>
+              <span class="px-2 py-1 bg-purple-500/20 text-purple-400 rounded text-xs">Переключатели</span>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Концепт 2 -->
+      <a href="variant-2-cards.html" class="glass-card rounded-xl p-6 block">
+        <div class="flex items-start gap-4">
+          <div class="flex-shrink-0 w-16 h-16 bg-green-500/20 rounded-lg flex items-center justify-center text-3xl">
+            2️⃣
+          </div>
+          <div class="flex-1">
+            <h3 class="text-xl font-bold text-white mb-2">Карточный</h3>
+            <p class="text-sm text-gray-400 mb-3">Большие карточки для каждой категории звуков</p>
+            <div class="flex flex-wrap gap-2">
+              <span class="px-2 py-1 bg-blue-500/20 text-blue-400 rounded text-xs">Карточки</span>
+              <span class="px-2 py-1 bg-green-500/20 text-green-400 rounded text-xs">Визуальный</span>
+              <span class="px-2 py-1 bg-yellow-500/20 text-yellow-400 rounded text-xs">Иконки</span>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Концепт 3 -->
+      <a href="variant-3-compact.html" class="glass-card rounded-xl p-6 block">
+        <div class="flex items-start gap-4">
+          <div class="flex-shrink-0 w-16 h-16 bg-purple-500/20 rounded-lg flex items-center justify-center text-3xl">
+            3️⃣
+          </div>
+          <div class="flex-1">
+            <h3 class="text-xl font-bold text-white mb-2">Компактный</h3>
+            <p class="text-sm text-gray-400 mb-3">Минималистичный дизайн с аккордеонами</p>
+            <div class="flex flex-wrap gap-2">
+              <span class="px-2 py-1 bg-purple-500/20 text-purple-400 rounded text-xs">Аккордеоны</span>
+              <span class="px-2 py-1 bg-blue-500/20 text-blue-400 rounded text-xs">Компактный</span>
+              <span class="px-2 py-1 bg-green-500/20 text-green-400 rounded text-xs">Быстрый</span>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Концепт 4 -->
+      <a href="variant-4-visual.html" class="glass-card rounded-xl p-6 block">
+        <div class="flex items-start gap-4">
+          <div class="flex-shrink-0 w-16 h-16 bg-orange-500/20 rounded-lg flex items-center justify-center text-3xl">
+            4️⃣
+          </div>
+          <div class="flex-1">
+            <h3 class="text-xl font-bold text-white mb-2">Визуальный</h3>
+            <p class="text-sm text-gray-400 mb-3">Анимированные превью и визуализация звука</p>
+            <div class="flex flex-wrap gap-2">
+              <span class="px-2 py-1 bg-orange-500/20 text-orange-400 rounded text-xs">Анимации</span>
+              <span class="px-2 py-1 bg-red-500/20 text-red-400 rounded text-xs">Превью</span>
+              <span class="px-2 py-1 bg-yellow-500/20 text-yellow-400 rounded text-xs">Эффектный</span>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Концепт 5 -->
+      <a href="variant-5-advanced.html" class="glass-card rounded-xl p-6 block">
+        <div class="flex items-start gap-4">
+          <div class="flex-shrink-0 w-16 h-16 bg-pink-500/20 rounded-lg flex items-center justify-center text-3xl">
+            5️⃣
+          </div>
+          <div class="flex-1">
+            <h3 class="text-xl font-bold text-white mb-2">Продвинутый</h3>
+            <p class="text-sm text-gray-400 mb-3">Расширенные настройки с пресетами и профилями</p>
+            <div class="flex flex-wrap gap-2">
+              <span class="px-2 py-1 bg-pink-500/20 text-pink-400 rounded text-xs">Пресеты</span>
+              <span class="px-2 py-1 bg-purple-500/20 text-purple-400 rounded text-xs">Профили</span>
+              <span class="px-2 py-1 bg-blue-500/20 text-blue-400 rounded text-xs">Продвинутый</span>
+            </div>
+          </div>
+        </div>
+      </a>
+
+    </div>
+
+    <div class="glass-card rounded-xl p-6 mb-8">
+      <h2 class="text-2xl font-bold text-white mb-4">📊 Сравнение концептов</h2>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-gray-700">
+              <th class="text-left py-3 px-4 text-gray-400 font-semibold">Характеристика</th>
+              <th class="text-center py-3 px-4 text-gray-400 font-semibold">Концепт 1</th>
+              <th class="text-center py-3 px-4 text-gray-400 font-semibold">Концепт 2</th>
+              <th class="text-center py-3 px-4 text-gray-400 font-semibold">Концепт 3</th>
+              <th class="text-center py-3 px-4 text-gray-400 font-semibold">Концепт 4</th>
+              <th class="text-center py-3 px-4 text-gray-400 font-semibold">Концепт 5</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-300">
+            <tr class="border-b border-gray-700/50">
+              <td class="py-3 px-4">Сложность</td>
+              <td class="text-center py-3 px-4">⭐⭐</td>
+              <td class="text-center py-3 px-4">⭐⭐⭐</td>
+              <td class="text-center py-3 px-4">⭐</td>
+              <td class="text-center py-3 px-4">⭐⭐⭐⭐</td>
+              <td class="text-center py-3 px-4">⭐⭐⭐⭐⭐</td>
+            </tr>
+            <tr class="border-b border-gray-700/50">
+              <td class="py-3 px-4">Визуальность</td>
+              <td class="text-center py-3 px-4 text-yellow-400">Средняя</td>
+              <td class="text-center py-3 px-4 text-green-400">Высокая</td>
+              <td class="text-center py-3 px-4 text-gray-400">Низкая</td>
+              <td class="text-center py-3 px-4 text-green-400">Очень высокая</td>
+              <td class="text-center py-3 px-4 text-green-400">Высокая</td>
+            </tr>
+            <tr class="border-b border-gray-700/50">
+              <td class="py-3 px-4">Функциональность</td>
+              <td class="text-center py-3 px-4">Базовая</td>
+              <td class="text-center py-3 px-4">Средняя</td>
+              <td class="text-center py-3 px-4">Базовая</td>
+              <td class="text-center py-3 px-4">Расширенная</td>
+              <td class="text-center py-3 px-4">Полная</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4">Рекомендация</td>
+              <td class="text-center py-3 px-4">✅ Универсальный</td>
+              <td class="text-center py-3 px-4">✅ Красивый</td>
+              <td class="text-center py-3 px-4">⚡ Быстрый</td>
+              <td class="text-center py-3 px-4">🎨 Эффектный</td>
+              <td class="text-center py-3 px-4">⭐ Профи</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="text-center">
+      <a href="../index.html" class="inline-block px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-xl text-white font-semibold transition-all shadow-lg hover:shadow-xl">
+        ← Вернуться к главной
+      </a>
+    </div>
+
+  </div>
+</body>
+</html>

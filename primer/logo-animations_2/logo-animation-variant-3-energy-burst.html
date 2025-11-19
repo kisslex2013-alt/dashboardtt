@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Анимация логотипа - Вариант 3: Энергетический всплеск</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    
+    .glass-card {
+      background: rgba(17, 24, 39, 0.7);
+      backdrop-filter: blur(24px) saturate(200%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Вариант 3: Энергетический всплеск */
+    
+    /* Импульсные волны */
+    @keyframes energy-pulse {
+      0% {
+        r: 45;
+        opacity: 0.6;
+      }
+      50% {
+        r: 95;
+        opacity: 0;
+      }
+      100% {
+        r: 45;
+        opacity: 0;
+      }
+    }
+    
+    /* Быстрая пульсация данных */
+    @keyframes data-spike {
+      0%, 100% {
+        d: path("M 30 100 L 50 100 L 55 95 L 60 75 L 65 125 L 70 100 L 100 100 L 105 90 L 110 70 L 115 130 L 120 100 L 150 100 L 170 100");
+      }
+      25% {
+        d: path("M 30 100 L 50 100 L 55 90 L 60 65 L 65 135 L 70 100 L 100 100 L 105 85 L 110 60 L 115 140 L 120 100 L 150 100 L 170 100");
+      }
+      50% {
+        d: path("M 30 100 L 50 100 L 55 100 L 60 100 L 65 100 L 70 100 L 100 100 L 105 100 L 110 100 L 115 100 L 120 100 L 150 100 L 170 100");
+      }
+      75% {
+        d: path("M 30 100 L 50 100 L 55 90 L 60 65 L 65 135 L 70 100 L 100 100 L 105 85 L 110 60 L 115 140 L 120 100 L 150 100 L 170 100");
+      }
+    }
+    
+    /* Вращение с ускорением */
+    @keyframes spin-accelerate {
+      0% { transform: rotate(0deg); }
+      50% { transform: rotate(180deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    /* Частицы энергии */
+    @keyframes particle-burst {
+      0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(var(--tx), var(--ty)) scale(0);
+        opacity: 0;
+      }
+    }
+    
+    /* Свечение центра */
+    @keyframes core-glow {
+      0%, 100% {
+        filter: drop-shadow(0 0 5px rgba(59, 130, 246, 0.8)) drop-shadow(0 0 10px rgba(16, 185, 129, 0.6));
+      }
+      50% {
+        filter: drop-shadow(0 0 15px rgba(59, 130, 246, 1)) drop-shadow(0 0 25px rgba(16, 185, 129, 0.8)) drop-shadow(0 0 35px rgba(245, 158, 11, 0.6));
+      }
+    }
+    
+    /* Применение анимаций */
+    .logo-animation-3 svg .pulse-wave-1 {
+      animation: energy-pulse 2s ease-out infinite;
+    }
+    
+    .logo-animation-3 svg .pulse-wave-2 {
+      animation: energy-pulse 2s ease-out 0.4s infinite;
+    }
+    
+    .logo-animation-3 svg .pulse-wave-3 {
+      animation: energy-pulse 2s ease-out 0.8s infinite;
+    }
+    
+    .logo-animation-3 svg .pulse-path {
+      animation: core-glow 1.5s ease-in-out infinite;
+    }
+    
+    .logo-animation-3 svg .spinner {
+      animation: spin-accelerate 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      transform-origin: 100px 100px;
+    }
+    
+    .logo-animation-3 svg .particle {
+      animation: particle-burst 1.5s ease-out infinite;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 p-8">
+  <div class="max-w-4xl mx-auto space-y-8">
+    
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-white mb-4">Анимация логотипа - Вариант 3</h1>
+      <p class="text-xl text-gray-400">Энергетический всплеск</p>
+      <p class="text-sm text-gray-500 mt-2">Импульсные волны, быстрая пульсация, частицы энергии</p>
+    </div>
+
+    <div class="glass-card rounded-xl p-8">
+      <div class="flex flex-col items-center justify-center min-h-[400px] space-y-8">
+        <div class="text-center">
+          <h2 class="text-2xl font-bold text-white mb-4">Логотип с анимацией</h2>
+          <div class="flex items-center justify-center relative">
+            <div class="logo-animation-3">
+              <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="w-32 h-32">
+                <defs>
+                  <linearGradient id="grad-energy" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+                    <stop offset="50%" style="stop-color:#10B981;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#F59E0B;stop-opacity:1" />
+                  </linearGradient>
+                </defs>
+                
+                <!-- Импульсные волны -->
+                <circle class="pulse-wave-1" cx="100" cy="100" r="45" fill="none" stroke="#3B82F6" stroke-width="2"/>
+                <circle class="pulse-wave-2" cx="100" cy="100" r="45" fill="none" stroke="#10B981" stroke-width="2"/>
+                <circle class="pulse-wave-3" cx="100" cy="100" r="45" fill="none" stroke="#F59E0B" stroke-width="2"/>
+                
+                <!-- Вращающиеся круги -->
+                <g class="spinner">
+                  <circle cx="100" cy="100" r="75" fill="none" stroke="#3B82F6" stroke-width="1.5" opacity="0.3" stroke-dasharray="10 5"/>
+                  <circle cx="100" cy="100" r="60" fill="none" stroke="#10B981" stroke-width="1.5" opacity="0.4" stroke-dasharray="8 4"/>
+                  <circle cx="100" cy="100" r="45" fill="none" stroke="#F59E0B" stroke-width="1.5" opacity="0.5" stroke-dasharray="6 3"/>
+                </g>
+                
+                <!-- Пульс данных с быстрой анимацией -->
+                <path class="pulse-path" d="M 30 100 L 50 100 L 55 95 L 60 75 L 65 125 L 70 100 L 100 100 L 105 90 L 110 70 L 115 130 L 120 100 L 150 100 L 170 100" 
+                      fill="none" stroke="url(#grad-energy)" stroke-width="3.5" stroke-linecap="round">
+                  <animate attributeName="d" 
+                    values="M 30 100 L 50 100 L 55 95 L 60 75 L 65 125 L 70 100 L 100 100 L 105 90 L 110 70 L 115 130 L 120 100 L 150 100 L 170 100;
+                            M 30 100 L 50 100 L 55 90 L 60 65 L 65 135 L 70 100 L 100 100 L 105 85 L 110 60 L 115 140 L 120 100 L 150 100 L 170 100;
+                            M 30 100 L 50 100 L 55 100 L 60 100 L 65 100 L 70 100 L 100 100 L 105 100 L 110 100 L 115 100 L 120 100 L 150 100 L 170 100;
+                            M 30 100 L 50 100 L 55 90 L 60 65 L 65 135 L 70 100 L 100 100 L 105 85 L 110 60 L 115 140 L 120 100 L 150 100 L 170 100;
+                            M 30 100 L 50 100 L 55 95 L 60 75 L 65 125 L 70 100 L 100 100 L 105 90 L 110 70 L 115 130 L 120 100 L 150 100 L 170 100"
+                    dur="1.5s" repeatCount="indefinite"/>
+                </path>
+                
+                <!-- Частицы энергии -->
+                <g transform="translate(100, 100)">
+                  <circle class="particle" r="2" fill="#3B82F6" style="--tx: 40px; --ty: -40px;">
+                    <animate attributeName="opacity" values="1;0" dur="1.5s" repeatCount="indefinite"/>
+                  </circle>
+                  <circle class="particle" r="2" fill="#10B981" style="--tx: -40px; --ty: 40px;">
+                    <animate attributeName="opacity" values="1;0" dur="1.5s" begin="0.3s" repeatCount="indefinite"/>
+                  </circle>
+                  <circle class="particle" r="2" fill="#F59E0B" style="--tx: 40px; --ty: 40px;">
+                    <animate attributeName="opacity" values="1;0" dur="1.5s" begin="0.6s" repeatCount="indefinite"/>
+                  </circle>
+                  <circle class="particle" r="2" fill="#3B82F6" style="--tx: -40px; --ty: -40px;">
+                    <animate attributeName="opacity" values="1;0" dur="1.5s" begin="0.9s" repeatCount="indefinite"/>
+                  </circle>
+                </g>
+                
+                <!-- Центральный круг -->
+                <circle cx="100" cy="100" r="20" fill="none" stroke="url(#grad-energy)" stroke-width="3">
+                  <animate attributeName="r" values="20;22;20" dur="1.5s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="100" cy="100" r="5" fill="url(#grad-energy)">
+                  <animate attributeName="r" values="5;7;5" dur="1.5s" repeatCount="indefinite"/>
+                </circle>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="w-full max-w-2xl space-y-4">
+          <div class="bg-gray-800/50 rounded-lg p-4">
+            <h3 class="text-lg font-semibold text-white mb-2">Особенности анимации:</h3>
+            <ul class="text-gray-300 space-y-1 text-sm">
+              <li>• Импульсные волны расходятся от центра (3 слоя)</li>
+              <li>• Быстрая пульсация данных с пиками</li>
+              <li>• Вращающиеся пунктирные круги</li>
+              <li>• Частицы энергии разлетаются в стороны</li>
+              <li>• Мощное свечение центра</li>
+              <li>• Динамичная и энергичная анимация</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center">
+      <a href="logo-animations-index.html" class="inline-block px-6 py-3 bg-blue-500 hover:bg-blue-600 rounded-lg text-white font-semibold transition-colors">
+        ← Вернуться к списку
+      </a>
+    </div>
+
+  </div>
+</body>
+</html>

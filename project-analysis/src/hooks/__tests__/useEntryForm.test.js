@@ -6,21 +6,33 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { renderHook, act } from '@testing-library/react'
 import { useEntryForm } from '../useEntryForm'
 
-// Мокаем useSettingsStore
+// Мокаем useSettingsStore и useCategory
+const mockCategories = [
+  { id: '1', name: 'Разработка', color: '#FF0000' },
+  { id: '2', name: 'Тестирование', color: '#00FF00' },
+]
+
 vi.mock('../../store/useSettingsStore', () => ({
   useSettingsStore: () => ({
-    categories: [
-      { id: '1', name: 'Разработка', color: '#FF0000' },
-      { id: '2', name: 'Тестирование', color: '#00FF00' },
-    ],
+    categories: mockCategories,
+  }),
+  useCategories: () => mockCategories,
+}))
+
+vi.mock('../useCategory', () => ({
+  useCategory: () => ({
+    categories: mockCategories,
+    getCategoryName: (categoryOrId) => {
+      if (typeof categoryOrId === 'string') {
+        const category = mockCategories.find(c => c.id === categoryOrId || c.name === categoryOrId)
+        return category?.name || categoryOrId
+      }
+      return categoryOrId?.name || categoryOrId?.category || 'Разработка'
+    },
   }),
 }))
 
 describe('useEntryForm', () => {
-  const mockCategories = [
-    { id: '1', name: 'Разработка', color: '#FF0000' },
-    { id: '2', name: 'Тестирование', color: '#00FF00' },
-  ]
 
   beforeEach(() => {
     vi.useFakeTimers()

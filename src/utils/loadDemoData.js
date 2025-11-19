@@ -23,7 +23,11 @@ export async function loadDemoData() {
   try {
     // Загружаем JSON файл с тестовыми данными
     // В Vite можно использовать импорт JSON напрямую или fetch
-    const response = await fetch('/test-data-sample.json')
+    // Добавляем cache-busting параметр для обновления данных (версия из package.json или timestamp)
+    const cacheBuster = `?v=${import.meta.env.VITE_BUILD_VERSION || Date.now()}`
+    const response = await fetch(`/test-data-sample.json${cacheBuster}`, {
+      cache: 'no-store' // Отключаем кэширование для актуальных данных
+    })
 
     if (!response.ok) {
       throw new Error(`Не удалось загрузить тестовые данные: ${response.status}`)

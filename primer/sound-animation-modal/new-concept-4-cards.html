@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Концепт 4: Cards Grid - Звуки и анимация</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      color: #e2e8f0;
+    }
+
+    /* Glass Effect */
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Modal */
+    .modal {
+      width: 100%;
+      max-width: 900px;
+      border-radius: 24px;
+      overflow: hidden;
+      animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Header */
+    .modal-header {
+      padding: 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .modal-title {
+      font-size: 24px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .title-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    /* Quick Filters */
+    .quick-filters {
+      display: flex;
+      gap: 8px;
+    }
+
+    .filter-btn {
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      color: #94a3b8;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .filter-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: #cbd5e1;
+    }
+
+    .filter-btn.active {
+      background: rgba(59, 130, 246, 0.2);
+      border-color: rgba(59, 130, 246, 0.3);
+      color: #3b82f6;
+    }
+
+    /* Content */
+    .modal-content {
+      padding: 24px;
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+
+    .modal-content::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .modal-content::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 4px;
+    }
+
+    .modal-content::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+    }
+
+    /* Cards Grid */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    /* Setting Card */
+    .setting-card {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+
+    .setting-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .setting-card.expanded {
+      grid-column: 1 / -1;
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(59, 130, 246, 0.3);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .card-icon.blue {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+    }
+
+    .card-icon.green {
+      background: linear-gradient(135deg, #10b981, #059669);
+    }
+
+    .card-icon.orange {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+    }
+
+    .card-icon.purple {
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+    }
+
+    .card-icon.pink {
+      background: linear-gradient(135deg, #ec4899, #db2777);
+    }
+
+    .card-info {
+      flex: 1;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: #f1f5f9;
+    }
+
+    .card-description {
+      font-size: 13px;
+      color: #94a3b8;
+      line-height: 1.4;
+    }
+
+    .card-toggle {
+      width: 44px;
+      height: 26px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 13px;
+      border: none;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      flex-shrink: 0;
+    }
+
+    .card-toggle.active {
+      background: #3b82f6;
+    }
+
+    .card-toggle::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      background: white;
+      border-radius: 50%;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-toggle.active::after {
+      transform: translateX(18px);
+    }
+
+    .card-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .setting-card.expanded .card-body {
+      max-height: 600px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      margin-top: 12px;
+    }
+
+    /* Form Row */
+    .form-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .form-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .form-label {
+      font-size: 14px;
+      color: #cbd5e1;
+      min-width: 100px;
+      font-weight: 500;
+    }
+
+    .form-control {
+      flex: 1;
+    }
+
+    /* Select */
+    .select-control {
+      width: 100%;
+      padding: 10px 14px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      color: #e2e8f0;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      outline: none;
+    }
+
+    .select-control:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .select-control:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    /* Button */
+    .btn {
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-primary {
+      background: #3b82f6;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #2563eb;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: #e2e8f0;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-small {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+
+    /* Range Input */
+    .range-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .range-input {
+      flex: 1;
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.1);
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    .range-input::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #3b82f6;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+    }
+
+    .range-value {
+      min-width: 50px;
+      text-align: right;
+      font-size: 13px;
+      color: #94a3b8;
+      font-weight: 600;
+    }
+
+    /* Grid */
+    .grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .grid-4 {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    /* Favicon Preview */
+    .favicon-card {
+      background: rgba(255, 255, 255, 0.08);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .favicon-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 255, 255, 0.3);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .favicon-card.active {
+      border-color: #3b82f6;
+      background: rgba(59, 130, 246, 0.1);
+    }
+
+    .favicon-canvas {
+      width: 32px;
+      height: 32px;
+      margin: 0 auto 8px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .favicon-label {
+      display: block;
+      font-size: 11px;
+      color: #94a3b8;
+      font-weight: 500;
+    }
+
+    /* Color Grid */
+    .color-grid {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .color-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .color-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .color-btn.active {
+      border-color: white;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+    }
+
+    /* Footer */
+    .modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+
+    /* Status Badge */
+    .status-badge {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      padding: 4px 10px;
+      background: rgba(16, 185, 129, 0.2);
+      color: #10b981;
+      font-size: 11px;
+      border-radius: 8px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .status-badge.off {
+      background: rgba(148, 163, 184, 0.15);
+      color: #94a3b8;
+    }
+  </style>
+</head>
+<body>
+  <div class="modal glass-effect">
+    <!-- Header -->
+    <div class="modal-header">
+      <div class="header-top">
+        <div class="modal-title">
+          <div class="title-icon">🔊</div>
+          <span>Звуки и анимация</span>
+        </div>
+        <div class="quick-filters">
+          <button class="filter-btn active" data-filter="all">
+            <span>📋</span>
+            <span>Все</span>
+          </button>
+          <button class="filter-btn" data-filter="enabled">
+            <span>✅</span>
+            <span>Включено</span>
+          </button>
+          <button class="filter-btn" data-filter="disabled">
+            <span>⭕</span>
+            <span>Выключено</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="modal-content">
+      <div class="cards-grid">
+        <!-- Card: Sound Notifications -->
+        <div class="setting-card" data-category="notifications" data-status="enabled" onclick="toggleCard(this)">
+          <span class="status-badge">● ВКЛ</span>
+          <div class="card-header">
+            <div class="card-icon blue">🔔</div>
+            <div class="card-info">
+              <div class="card-title">Звуковые уведомления</div>
+              <div class="card-description">Воспроизведение звуков при событиях</div>
+            </div>
+            <button class="card-toggle active" onclick="event.stopPropagation(); this.classList.toggle('active')"></button>
+          </div>
+          <div class="card-body">
+            <div class="form-row">
+              <label class="form-label">Интервал</label>
+              <select class="select-control form-control">
+                <option>15 минут</option>
+                <option selected>30 минут</option>
+                <option>1 час</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label class="form-label">Тип звука</label>
+              <div style="display: flex; gap: 8px; flex: 1;">
+                <select class="select-control" style="flex: 1;">
+                  <option selected>Мелодия</option>
+                  <option>Предупреждение</option>
+                  <option>Звонок</option>
+                </select>
+                <button class="btn btn-secondary btn-small">▶ Тест</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card: Break Reminders -->
+        <div class="setting-card" data-category="notifications" data-status="enabled" onclick="toggleCard(this)">
+          <span class="status-badge">● ВКЛ</span>
+          <div class="card-header">
+            <div class="card-icon green">⏰</div>
+            <div class="card-info">
+              <div class="card-title">Напоминания о перерывах</div>
+              <div class="card-description">Уведомления после длительной работы</div>
+            </div>
+            <button class="card-toggle active" onclick="event.stopPropagation(); this.classList.toggle('active')"></button>
+          </div>
+          <div class="card-body">
+            <div class="form-row">
+              <label class="form-label">Интервал</label>
+              <select class="select-control form-control">
+                <option>Каждый час</option>
+                <option selected>Каждые 2 часа</option>
+                <option>Каждые 3 часа</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label class="form-label"></label>
+              <button class="btn btn-secondary btn-small">Пример уведомления</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card: Overtime Alerts -->
+        <div class="setting-card" data-category="notifications" data-status="enabled" onclick="toggleCard(this)">
+          <span class="status-badge">● ВКЛ</span>
+          <div class="card-header">
+            <div class="card-icon orange">⚠️</div>
+            <div class="card-info">
+              <div class="card-title">Предупреждения</div>
+              <div class="card-description">Уведомления о переработке</div>
+            </div>
+            <button class="card-toggle active" onclick="event.stopPropagation(); this.classList.toggle('active')"></button>
+          </div>
+          <div class="card-body">
+            <div class="form-row">
+              <label class="form-label">Порог</label>
+              <div class="range-group" style="flex: 1;">
+                <input type="range" class="range-input" min="0.5" max="2" step="0.1" value="1.2" oninput="this.nextElementSibling.textContent = (this.value * 8).toFixed(1) + ' ч'">
+                <span class="range-value">9.6 ч</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card: Pomodoro -->
+        <div class="setting-card" data-category="pomodoro" data-status="enabled" onclick="toggleCard(this)">
+          <span class="status-badge">● ВКЛ</span>
+          <div class="card-header">
+            <div class="card-icon purple">🍅</div>
+            <div class="card-info">
+              <div class="card-title">Pomodoro таймер</div>
+              <div class="card-description">25 минут работы + перерыв</div>
+            </div>
+            <button class="card-toggle active" onclick="event.stopPropagation(); this.classList.toggle('active')"></button>
+          </div>
+          <div class="card-body">
+            <div class="form-row">
+              <label class="form-label">Автостарт перерывов</label>
+              <button class="card-toggle active" onclick="event.stopPropagation(); this.classList.toggle('active')"></button>
+            </div>
+            <div class="form-row">
+              <label class="form-label">Автостарт работы</label>
+              <button class="card-toggle" onclick="event.stopPropagation(); this.classList.toggle('active')"></button>
+            </div>
+            <div class="form-row">
+              <label class="form-label">Звук при завершении</label>
+              <button class="card-toggle active" onclick="event.stopPropagation(); this.classList.toggle('active')"></button>
+            </div>
+            <div class="form-row">
+              <label class="form-label"></label>
+              <button class="btn btn-secondary btn-small">Тест уведомления</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card: Favicon Animation -->
+        <div class="setting-card" data-category="favicon" data-status="enabled" onclick="toggleCard(this)">
+          <span class="status-badge">● ВКЛ</span>
+          <div class="card-header">
+            <div class="card-icon pink">🎨</div>
+            <div class="card-info">
+              <div class="card-title">Анимация фавикона</div>
+              <div class="card-description">Визуальный индикатор в табе</div>
+            </div>
+            <button class="card-toggle active" onclick="event.stopPropagation(); this.classList.toggle('active')"></button>
+          </div>
+          <div class="card-body">
+            <div style="margin-bottom: 16px;">
+              <label class="form-label" style="display: block; margin-bottom: 8px;">Стиль анимации</label>
+              <div class="grid grid-4">
+                <div class="favicon-card active">
+                  <div class="favicon-canvas" style="background: linear-gradient(135deg, #3b82f6, #2563eb);"></div>
+                  <span class="favicon-label">Pulse</span>
+                </div>
+                <div class="favicon-card">
+                  <div class="favicon-canvas" style="background: linear-gradient(135deg, #10b981, #059669);"></div>
+                  <span class="favicon-label">Blink</span>
+                </div>
+                <div class="favicon-card">
+                  <div class="favicon-canvas" style="background: linear-gradient(135deg, #f59e0b, #d97706);"></div>
+                  <span class="favicon-label">Rotate</span>
+                </div>
+                <div class="favicon-card">
+                  <div class="favicon-canvas" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);"></div>
+                  <span class="favicon-label">Wave</span>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <label class="form-label">Цвет</label>
+              <div class="color-grid">
+                <button class="color-btn active" style="background: #3b82f6;"></button>
+                <button class="color-btn" style="background: #10b981;"></button>
+                <button class="color-btn" style="background: #f59e0b;"></button>
+                <button class="color-btn" style="background: #ef4444;"></button>
+                <button class="color-btn" style="background: #8b5cf6;"></button>
+              </div>
+            </div>
+            <div class="form-row">
+              <label class="form-label">Скорость</label>
+              <select class="select-control form-control">
+                <option>Медленно</option>
+                <option selected>Обычно</option>
+                <option>Быстро</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="modal-footer">
+      <button class="btn btn-secondary">Отмена</button>
+      <button class="btn btn-primary">Сохранить</button>
+    </div>
+  </div>
+
+  <script>
+    function toggleCard(card) {
+      const wasExpanded = card.classList.contains('expanded');
+      
+      // Close all cards
+      document.querySelectorAll('.setting-card').forEach(c => {
+        c.classList.remove('expanded');
+      });
+      
+      // Open clicked card if it wasn't expanded
+      if (!wasExpanded) {
+        card.classList.add('expanded');
+      }
+    }
+
+    // Quick filters
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const filter = btn.dataset.filter;
+        
+        // Update active button
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        // Filter cards
+        document.querySelectorAll('.setting-card').forEach(card => {
+          if (filter === 'all') {
+            card.style.display = '';
+          } else if (filter === 'enabled') {
+            card.style.display = card.dataset.status === 'enabled' ? '' : 'none';
+          } else if (filter === 'disabled') {
+            card.style.display = card.dataset.status === 'disabled' ? '' : 'none';
+          }
+        });
+      });
+    });
+
+    // Color picker
+    document.querySelectorAll('.color-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    // Favicon cards
+    document.querySelectorAll('.favicon-card').forEach(card => {
+      card.addEventListener('click', (e) => {
+        e.stopPropagation();
+        document.querySelectorAll('.favicon-card').forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
+

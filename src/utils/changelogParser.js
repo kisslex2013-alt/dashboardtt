@@ -23,8 +23,8 @@ export function parseChangelog(changelogContent) {
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i].trim()
 
-    // Определяем новую версию
-    const versionMatch = line.match(/^## \[([^\]]+)\]\s*-\s*(\d{4}-\d{2}-\d{2})/)
+    // Определяем новую версию (поддерживаем формат с XX в дате)
+    const versionMatch = line.match(/^## \[([^\]]+)\]\s*-\s*(\d{4}-\d{2}-(?:XX|\d{2}))/)
     if (versionMatch) {
       if (currentVersion) {
         versions.push(currentVersion)
@@ -67,11 +67,13 @@ export function parseChangelog(changelogContent) {
           categoryName.includes('новые возможности')
         ) {
           currentCategory = 'Новые возможности'
+          console.log('🔍 [changelogParser] Установлена категория: Новые возможности')
         } else if (
           categoryName.includes('улучшения интерфейса') ||
           categoryName.includes('улучшения интерфейса')
         ) {
           currentCategory = 'Улучшения интерфейса'
+          console.log('🔍 [changelogParser] Установлена категория: Улучшения интерфейса')
         } else if (
           categoryName.includes('исправления ошибок') ||
           categoryName.includes('исправления ошибок') ||
@@ -120,10 +122,12 @@ export function parseChangelog(changelogContent) {
         const cleanedText = textWithoutEmoji.replace(/\*\*([^*]+)\*\*\s*-\s*/g, '$1 - ')
 
         // Сохраняем с эмодзи и очищенным текстом
-        currentVersion.categories[currentCategory].push({
+        const featureItem = {
           emoji: emoji || null,
           text: cleanedText,
-        })
+        }
+        currentVersion.categories[currentCategory].push(featureItem)
+        console.log(`🔍 [changelogParser] Добавлен пункт в "${currentCategory}":`, featureItem)
       }
       continue
     }
@@ -146,6 +150,15 @@ export function parseChangelog(changelogContent) {
   // Добавляем последнюю версию
   if (currentVersion) {
     versions.push(currentVersion)
+  }
+
+  // Отладочные логи
+  console.log('🔍 [changelogParser] Итоговый результат парсинга:', versions)
+  if (versions.length > 0) {
+    const latestVersion = versions[0]
+    console.log('🔍 [changelogParser] Последняя версия:', latestVersion.version)
+    console.log('🔍 [changelogParser] Новые возможности для последней версии:', latestVersion.categories['Новые возможности'])
+    console.log('🔍 [changelogParser] Количество новых возможностей:', latestVersion.categories['Новые возможности']?.length || 0)
   }
 
   return versions
