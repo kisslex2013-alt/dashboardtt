@@ -43,6 +43,7 @@ export function BaseModal({
   footer,
   disableContentScroll = false,
   fixedHeight = false,
+  nested = false,
 }: BaseModalProps) {
   // Три состояния для контроля анимаций (Three-State Animation Control)
   const [shouldMount, setShouldMount] = useState(false)
@@ -207,8 +208,35 @@ export function BaseModal({
       const panel = panelRef.current
       if (!panel) return
 
+      const target = e.target as HTMLElement
+      if (!target) return
+      
+      // ✅ ИСПРАВЛЕНО: Проверяем, не находится ли клик на дочернем модальном окне
+      // Проверяем, есть ли у target или его родителя класс с z-[9999999] (вложенное модальное окно)
+      const isNestedModal = target.closest('[class*="z-[9999999]"]') !== null
+      
+      // Если клик на дочернем модальном окне - не блокируем
+      if (isNestedModal) {
+        return // Позволяем событию продолжить
+      }
+      
+      // ✅ ИСПРАВЛЕНО: Проверяем, был ли клик на интерактивном элементе (кнопка, ссылка, input)
+      // Если клик на интерактивном элементе внутри панели - не блокируем
+      const isInteractiveElement = (
+        target.tagName === 'BUTTON' ||
+        target.tagName === 'A' ||
+        target.tagName === 'INPUT' ||
+        target.closest('button') !== null ||
+        target.closest('a') !== null ||
+        target.closest('[role="button"]') !== null
+      )
+
+      // Если клик был внутри панели на интерактивном элементе - пропускаем событие
+      if (panel.contains(target) && isInteractiveElement) {
+        return // Позволяем событию продолжить
+      }
+
       // Проверяем, был ли клик вне панели
-      const target = e.target as Node
       if (!panel.contains(target)) {
         // Клик был вне панели - предотвращаем закрытие
         e.preventDefault()
@@ -238,6 +266,7 @@ export function BaseModal({
 
   return (
     // ИСПРАВЛЕНО: Увеличен z-index для модальных окон, чтобы они были выше аккордеонов
+    // Для вложенных модальных окон используем еще больший z-index
     <Dialog
       open={shouldMount}
       onClose={(value) => {
@@ -247,7 +276,7 @@ export function BaseModal({
         }
         onClose()
       }}
-      className="relative z-[999999]"
+      className={`relative ${nested ? 'z-[9999999]' : 'z-[999999]'}`}
       static={!closeOnOverlayClick}
     >
       {/* Overlay с backdrop blur - унифицированная анимация появления/исчезновения */}
@@ -313,13 +342,33 @@ export function BaseModal({
             willChange: isResizing ? 'width, height' : undefined,
           }}
           onClick={(e) => {
-            e.stopPropagation()
-            if (!closeOnOverlayClick) {
+            // ✅ ИСПРАВЛЕНО: Не блокируем клики на интерактивных элементах
+            const target = e.target as HTMLElement
+            const isInteractiveElement = target.tagName === 'BUTTON' ||
+              target.tagName === 'A' ||
+              target.tagName === 'INPUT' ||
+              target.closest('button') !== null ||
+              target.closest('a') !== null ||
+              target.closest('[role="button"]') !== null
+
+            if (!isInteractiveElement) {
+              e.stopPropagation()
+            }
+            if (!closeOnOverlayClick && !isInteractiveElement) {
               e.preventDefault()
             }
           }}
           onMouseDown={(e) => {
-            if (!closeOnOverlayClick) {
+            // ✅ ИСПРАВЛЕНО: Не блокируем mousedown на интерактивных элементах
+            const target = e.target as HTMLElement
+            const isInteractiveElement = target.tagName === 'BUTTON' ||
+              target.tagName === 'A' ||
+              target.tagName === 'INPUT' ||
+              target.closest('button') !== null ||
+              target.closest('a') !== null ||
+              target.closest('[role="button"]') !== null
+
+            if (!closeOnOverlayClick && !isInteractiveElement) {
               e.stopPropagation()
             }
           }}
@@ -359,7 +408,12 @@ export function BaseModal({
 
               {showCloseButton && (
                 <button
-                  onClick={onClose}
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    e.preventDefault()
+                    onClose()
+                  }}
                   className="glass-button p-1 rounded-lg flex-shrink-0 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors hover-lift-scale click-shrink"
                   aria-label="Закрыть модальное окно"
                   title="Закрыть (Escape)"
@@ -388,7 +442,13 @@ export function BaseModal({
 
           {/* Футер (опционально) */}
           {footer && (
-            <div className="mt-0 pt-4 border-t border-gray-200 dark:border-gray-700">{footer}</div>
+            <div 
+              className="mt-0 pt-4 border-t border-gray-200 dark:border-gray-700"
+              onClick={(e) => e.stopPropagation()}
+              onMouseDown={(e) => e.stopPropagation()}
+            >
+              {footer}
+            </div>
           )}
         </Dialog.Panel>
       </div>

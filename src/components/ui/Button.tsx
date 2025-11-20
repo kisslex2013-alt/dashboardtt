@@ -200,7 +200,16 @@ export function Button({
   // ✅ ОПТИМИЗАЦИЯ: Обработчик клика с haptic feedback
   const handleClick = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
-      if (!disabled && hapticFeedback) {
+      // ✅ ИСПРАВЛЕНО: Останавливаем распространение события, чтобы оно не блокировалось родительскими обработчиками
+      // НЕ используем preventDefault(), чтобы не блокировать стандартное поведение кнопки
+      e.stopPropagation()
+      
+      if (disabled) {
+        e.preventDefault() // Только для disabled кнопок предотвращаем действие
+        return
+      }
+      
+      if (hapticFeedback) {
         // Определяем тип вибрации в зависимости от варианта кнопки
         const hapticPattern = variant === 'danger' ? 'error' : variant === 'success' ? 'success' : 'light'
         triggerHaptic(hapticPattern as 'light' | 'medium' | 'heavy' | 'success' | 'warning' | 'error')

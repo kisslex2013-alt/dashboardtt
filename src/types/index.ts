@@ -587,6 +587,7 @@ export interface BaseModalProps {
   closeOnOverlayClick?: boolean
   className?: string
   footer?: React.ReactNode
+  nested?: boolean // Для вложенных модальных окон - увеличивает z-index
 }
 
 /**

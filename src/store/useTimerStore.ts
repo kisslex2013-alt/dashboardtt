@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 
 /**
  * ⏱️ Хранилище для управления таймером реального времени
@@ -13,8 +14,7 @@ import { create } from 'zustand'
  * - Пауза и возобновление таймера
  * - Остановка таймера с возвратом общего времени работы
  *
- * Важно: НЕ сохраняется в localStorage, так как таймер - это временное состояние.
- * При перезагрузке страницы таймер сбрасывается.
+ * ✅ ИСПРАВЛЕНО: Сохраняется в localStorage для восстановления после перезагрузки страницы.
  *
  * Состояние:
  * - activeTimer: название активной категории (null если не запущен)
@@ -24,7 +24,9 @@ import { create } from 'zustand'
  * - timerEntryId: ID записи, созданной при старте таймера
  */
 
-export const useTimerStore = create((set, get) => ({
+export const useTimerStore = create(
+  persist(
+    (set, get) => ({
   // Текущая активная категория таймера (null если не запущен)
   activeTimer: null,
 
@@ -239,7 +241,21 @@ export const useTimerStore = create((set, get) => ({
       timerEntryId: null, // Сбрасываем ID записи
     })
   },
-}))
+    }),
+    {
+      name: 'time-tracker-timer', // Ключ в localStorage
+      // Сохраняем только критичные поля для восстановления таймера
+      partialize: (state) => ({
+        activeTimer: state.activeTimer,
+        startTime: state.startTime,
+        elapsedTime: state.elapsedTime,
+        lastUpdateTime: state.lastUpdateTime,
+        isPaused: state.isPaused,
+        timerEntryId: state.timerEntryId,
+      }),
+    }
+  )
+)
 
 // ===== Атомарные селекторы (рекомендуемое использование) =====
 export const useActiveTimer = () => useTimerStore(state => state.activeTimer)

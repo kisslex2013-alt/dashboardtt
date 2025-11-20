@@ -45,6 +45,35 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Glass effect для модальных окон */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  transition: background 0.3s, border-color 0.3s;
+}
+
+.dark .glass-effect {
+  background: rgba(30, 30, 30, 0.9);
+  border-color: rgba(75, 85, 99, 0.3);
+}
+
+/* Shimmer анимация */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+}
+
 /* ============================================
    📐 TYPOGRAPHY SCALE SYSTEM
    Система размеров шрифтов для консистентного дизайна

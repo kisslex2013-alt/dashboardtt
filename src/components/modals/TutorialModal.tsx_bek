@@ -1,5 +1,4 @@
-import { useState, useEffect, useMemo, useRef, useLayoutEffect, useCallback } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useState, useEffect, useMemo } from 'react'
 import {
   ChevronLeft,
   ChevronRight,
@@ -22,19 +21,20 @@ import {
 } from '../../utils/icons'
 import { Button } from '../ui/Button'
 import { BaseModal } from '../ui/BaseModal'
+import { AnimatedModalContent } from '../ui/AnimatedModalContent'
 import { useChangelogFeatures } from '../../hooks/useChangelogFeatures'
 
 /**
  * Модальное окно обучения (Tutorial)
  * - 11 подробных шагов обучения
- * - Навигация вперед/назад (кнопки + клавиатура)
- * - Индикатор прогресса (кликабельный)
+ * - Навигация вперед/назад
+ * - Индикатор прогресса
  * - Сохранение флага завершения в localStorage
- * - Анимация слайдов справа-налево
+ * - Информация о тестовых данных и возможность их удаления
+ * - Отдельный шаг о настройке плана заработка и дат выплат
  */
 export function TutorialModal({ isOpen, onClose, onClearDemoData }) {
   const [currentStep, setCurrentStep] = useState(0)
-  const [direction, setDirection] = useState(0)
   const [hasDemoData, setHasDemoData] = useState(false)
   
   // Загружаем новые возможности из changelog.md
@@ -636,55 +636,29 @@ export function TutorialModal({ isOpen, onClose, onClearDemoData }) {
     },
   ], [newFeatures, isLoadingFeatures, hasDemoData])
 
-  // Навигация
-  const handleNext = useCallback(() => {
+  const handleNext = () => {
     if (currentStep < steps.length - 1) {
-      setDirection(1)
-      setCurrentStep((prev) => prev + 1)
+      setCurrentStep(currentStep + 1)
     }
-  }, [currentStep, steps.length])
+  }
 
-  const handlePrevious = useCallback(() => {
+  const handlePrevious = () => {
     if (currentStep > 0) {
-      setDirection(-1)
-      setCurrentStep((prev) => prev - 1)
+      setCurrentStep(currentStep - 1)
     }
-  }, [currentStep])
-
-  const handleJumpToStep = (index) => {
-    if (index === currentStep) return
-    setDirection(index > currentStep ? 1 : -1)
-    setCurrentStep(index)
   }
 
   const handleFinish = () => {
     localStorage.setItem('tutorial_completed', 'true')
-    setDirection(1)
     onClose()
     setCurrentStep(0)
   }
 
   const handleSkip = () => {
     localStorage.setItem('tutorial_completed', 'true')
-    setDirection(1)
     onClose()
     setCurrentStep(0)
   }
-
-  // Обработчик клавиатуры
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (!isOpen) return
-      if (e.key === 'ArrowRight') {
-        handleNext()
-      } else if (e.key === 'ArrowLeft') {
-        handlePrevious()
-      }
-    }
-
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [isOpen, handleNext, handlePrevious])
 
   const currentStepData = steps[currentStep]
   const Icon = currentStepData.icon
@@ -698,13 +672,12 @@ export function TutorialModal({ isOpen, onClose, onClearDemoData }) {
       size="large"
       closeOnOverlayClick={false}
     >
-      {/* Индикатор шагов (кликабельный) */}
+      {/* Индикатор шагов */}
       <div className="flex gap-2 mb-6">
         {steps.map((step, index) => (
           <div
             key={`progress-${step.title}-${index}`}
-            onClick={() => handleJumpToStep(index)}
-            className={`flex-1 h-2 rounded-full transition-colors cursor-pointer hover:opacity-80 ${
+            className={`flex-1 h-2 rounded-full transition-colors ${
               index === currentStep
                 ? 'bg-blue-500'
                 : index < currentStep
@@ -715,18 +688,13 @@ export function TutorialModal({ isOpen, onClose, onClearDemoData }) {
         ))}
       </div>
 
-      {/* Контент С НОВЫМИ анимациями */}
-      <StepContentWrapper
-        isCompleted={false}
-        currentStep={currentStep}
-        direction={direction}
-        className="space-y-2"
-      >
+      {/* Контент С анимацией */}
+      <AnimatedModalContent contentKey={currentStep}>
         {currentStepData.content}
-      </StepContentWrapper>
+      </AnimatedModalContent>
 
       {/* Навигация */}
-      <div className="flex justify-between items-center mt-6">
+      <div className="flex justify-between items-center">
         <button
           onClick={handleSkip}
           className="text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
@@ -765,73 +733,3 @@ export function TutorialModal({ isOpen, onClose, onClearDemoData }) {
     </BaseModal>
   )
 }
-
-// --- Анимационные компоненты ---
-
-function StepContentWrapper({
-  isCompleted,
-  currentStep,
-  direction,
-  children,
-  className = ''
-}) {
-  const [parentHeight, setParentHeight] = useState(0);
-
-  return (
-    <motion.div
-      style={{ position: 'relative', overflow: 'hidden' }}
-      animate={{ height: isCompleted ? 0 : parentHeight || 'auto' }}
-      transition={{ type: 'spring', duration: 0.4 }}
-      className={className}
-    >
-      <AnimatePresence initial={false} mode="sync" custom={direction}>
-        {!isCompleted && (
-          <SlideTransition key={currentStep} direction={direction} onHeightReady={h => setParentHeight(h)}>
-            {children}
-          </SlideTransition>
-        )}
-      </AnimatePresence>
-    </motion.div>
-  );
-}
-
-function SlideTransition({ children, direction, onHeightReady }) {
-  const containerRef = useRef(null);
-
-  useLayoutEffect(() => {
-    if (containerRef.current) {
-      onHeightReady(containerRef.current.offsetHeight);
-    }
-  }, [children, onHeightReady]);
-
-  return (
-    <motion.div
-      ref={containerRef}
-      custom={direction}
-      variants={stepVariants}
-      initial="enter"
-      animate="center"
-      exit="exit"
-      transition={{ duration: 0.4 }}
-      style={{ position: 'absolute', left: 0, right: 0, top: 0 }}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
-// Инвертированная анимация для движения справа налево
-const stepVariants = {
-  enter: (dir) => ({
-    x: dir > 0 ? '100%' : '-100%', // При Next (dir=1) появляется справа (100%)
-    opacity: 0
-  }),
-  center: {
-    x: '0%',
-    opacity: 1
-  },
-  exit: (dir) => ({
-    x: dir > 0 ? '-50%' : '50%', // При Next (dir=1) уходит влево (-50%)
-    opacity: 0
-  })
-};

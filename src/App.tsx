@@ -80,8 +80,9 @@ import { loadDemoData } from './utils/loadDemoData'
 import { handleError } from './utils/errorHandler'
 import { useSync } from './hooks/useSync'
 import { useUpdateCategoryColors } from './store/useSettingsStore'
-import { UpdateModal } from './components/UpdateModal'
-import { useVersionCheck } from './hooks/useVersionCheck'
+// ✅ ОТКЛЮЧЕНО: Модальное окно обновления работает нестабильно
+// import { UpdateModal } from './components/UpdateModal'
+// import { useVersionCheck } from './hooks/useVersionCheck'
 import { useAppVersion } from './hooks/useAppVersion'
 import { useIncognitoMode } from './hooks/useIncognitoMode'
 import { useHapticFeedback } from './hooks/useHapticFeedback'
@@ -91,23 +92,30 @@ function App() {
   // Получаем версию приложения из version.json
   const { version, build } = useAppVersion()
 
+  // ✅ ОТКЛЮЧЕНО: Проверка обновлений версии работает нестабильно
   // Проверка обновлений версии (только если версия определена и не пустая)
   // КРИТИЧНО: Отключаем проверку на промо-странице и если версия не определена
-  const currentBuildVersion = import.meta.env.VITE_BUILD_VERSION
-  const isPromoPage = window.location.pathname.includes('/promo/')
-  const versionCheckEnabled = 
-    !isPromoPage && 
-    currentBuildVersion && 
-    currentBuildVersion.trim() !== ''
-  
-  const {
-    updateAvailable,
-    countdown,
-    dismiss,
-    setDismiss,
-    progress,
-    changelog,
-  } = useVersionCheck(versionCheckEnabled ? currentBuildVersion : null)
+  // const currentBuildVersion = import.meta.env.VITE_BUILD_VERSION
+  // const isPromoPage = window.location.pathname.includes('/promo/')
+  // const versionCheckEnabled = 
+  //   !isPromoPage && 
+  //   currentBuildVersion && 
+  //   currentBuildVersion.trim() !== ''
+  // 
+  // const {
+  //   updateAvailable,
+  //   countdown,
+  //   dismiss,
+  //   setDismiss,
+  //   progress,
+  //   changelog,
+  //   newVersion,
+  //   isPaused,
+  //   setIsPaused,
+  // } = useVersionCheck(versionCheckEnabled ? currentBuildVersion : null)
+  // 
+  // Состояние для тестового вызова модалки обновления
+  // const [testUpdateModal, setTestUpdateModal] = useState(false)
 
   // ✅ ОПТИМИЗИРОВАНО: Используем единый хук вместо множества отдельных селекторов
   // Это уменьшает количество подписок и предотвращает избыточные re-renders
@@ -433,12 +441,17 @@ function App() {
   }, [clearEntries, showSuccess, showError])
 
   // Горячие клавиши
+
   useHotkeys({
     n: () => openModal('editEntry'),
     t: () => openModal('editEntry'),
     s: handleTimerToggle,
     'ctrl+z': handleUndo,
     'ctrl+y': handleRedo,
+    // ✅ ОТКЛЮЧЕНО: Горячая клавиша для тестового вызова модалки обновления
+    // 'ctrl+alt+u': () => {
+    //   setTestUpdateModal(true)
+    // },
   })
 
   const handleSaveEntry = useCallback(
@@ -821,22 +834,43 @@ function App() {
 
   return (
     <>
+      {/* ✅ ОТКЛЮЧЕНО: Модалка обновления работает нестабильно */}
       {/* Модалка обновления - показывается поверх всего контента */}
-      {updateAvailable && !dismiss && (
+      {/* {(updateAvailable && !dismiss) || testUpdateModal ? (
         <UpdateModal
-          countdown={countdown}
-          progress={progress}
-          changelog={changelog}
+          countdown={testUpdateModal ? 10 : countdown}
+          progress={testUpdateModal ? 0 : progress}
+          changelog={testUpdateModal ? [
+            '✨ Экспорт данных в Excel формат',
+            '✨ Новые темы оформления',
+            '🚀 Оптимизирована производительность',
+            '🚀 Улучшен интерфейс импорта',
+            '🐛 Исправлены ошибки импорта JSON',
+          ] : changelog}
+          newVersion={newVersion || '1.4.0'}
+          currentVersion={version || currentBuildVersion || '1.3.0'}
+          isTestMode={testUpdateModal}
+          onPauseChange={testUpdateModal ? undefined : setIsPaused}
           onUpdateNow={() => {
+            if (testUpdateModal) {
+              setTestUpdateModal(false)
+              return
+            }
             if (window.safeReload) {
               window.safeReload(true)
             } else {
               window.location.reload(true)
             }
           }}
-          onLater={() => setDismiss(true)}
+          onLater={() => {
+            if (testUpdateModal) {
+              setTestUpdateModal(false)
+            } else {
+              setDismiss(true)
+            }
+          }}
         />
-      )}
+      ) : null} */}
       <div
         className="min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors duration-300"
         style={{ isolation: 'isolate' }}

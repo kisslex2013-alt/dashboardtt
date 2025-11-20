@@ -17,8 +17,19 @@ export function ConfirmModal({
   confirmText = 'Подтвердить',
   cancelText = 'Отмена',
 }: ConfirmModalProps) {
-  const handleConfirm = () => {
-    onConfirm?.()
+  // ✅ ИСПРАВЛЕНО: Обработчики с явной остановкой распространения событий
+  const handleConfirm = (e?: React.MouseEvent) => {
+    e?.stopPropagation()
+    e?.preventDefault()
+    if (onConfirm) {
+      onConfirm()
+    }
+    onClose()
+  }
+
+  const handleCancel = (e?: React.MouseEvent) => {
+    e?.stopPropagation()
+    e?.preventDefault()
     onClose()
   }
 
@@ -30,9 +41,20 @@ export function ConfirmModal({
       titleIcon={AlertTriangle}
       size="small"
       closeOnOverlayClick={false}
+      nested={true}
       footer={
-        <div className="flex gap-2">
-          <Button variant="secondary" onClick={onClose} className="flex-1" iconId="confirm-cancel">
+        <div 
+          className="flex gap-2"
+          onClick={(e) => e.stopPropagation()}
+          onMouseDown={(e) => e.stopPropagation()}
+        >
+          <Button 
+            variant="secondary" 
+            onClick={handleCancel} 
+            className="flex-1" 
+            iconId="confirm-cancel"
+            type="button"
+          >
             {cancelText}
           </Button>
           <Button
@@ -40,6 +62,7 @@ export function ConfirmModal({
             onClick={handleConfirm}
             className="flex-1"
             iconId="confirm-submit"
+            type="button"
           >
             {confirmText}
           </Button>
