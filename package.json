@@ -25,7 +25,12 @@
     "lint:fix": "eslint . --fix",
     "lint:ts": "eslint . --ext .ts,.tsx",
     "lint:js": "eslint . --ext .js,.jsx",
-    "lint:a11y": "eslint . --ext .js,.jsx --plugin jsx-a11y"
+    "lint:a11y": "eslint . --ext .js,.jsx --plugin jsx-a11y",
+    "quality:check": "agent-enforcer check src/ || true",
+    "quality:check:verbose": "agent-enforcer check src/ --verbose || true",
+    "quality:check:modified": "node scripts/quality-check-modified.js || true",
+    "quality:sync-rules": "node scripts/sync-enforcer-rules.js",
+    "quality:to-beads": "node scripts/enforcer-to-beads.js"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.9",

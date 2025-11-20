@@ -3,7 +3,7 @@
 ```
 Time Tracker Dashboard/
 │
-├── 📄 KIRO_ANALYSIS.md ⭐ НАЧНИТЕ ЗДЕСЬ!
+├── 📄 docs/analysis/KIRO_ANALYSIS.md ⭐ НАЧНИТЕ ЗДЕСЬ!
 │   └── Точка входа, краткий обзор всей документации
 │
 └── 📁 Kiro/ (91 KB документации)
@@ -207,7 +207,7 @@ Time Tracker Dashboard/
 
 ### Для быстрого старта:
 ```
-KIRO_ANALYSIS.md → Kiro/README.md → Kiro/SUMMARY.md → Kiro/QUICK_START_IMPROVEMENTS.md
+docs/analysis/KIRO_ANALYSIS.md → Kiro/README.md → Kiro/SUMMARY.md → Kiro/QUICK_START_IMPROVEMENTS.md
 ```
 
 ### Для детального изучения:
@@ -277,7 +277,7 @@ Kiro/SUMMARY.md → Kiro/ROADMAP.md → Kiro/IMPROVEMENTS.md
 
 Отмечайте прочитанные документы:
 
-- [ ] KIRO_ANALYSIS.md (корень)
+- [ ] docs/analysis/KIRO_ANALYSIS.md
 - [ ] Kiro/README.md
 - [ ] Kiro/SUMMARY.md
 - [ ] Kiro/QUICK_START_IMPROVEMENTS.md

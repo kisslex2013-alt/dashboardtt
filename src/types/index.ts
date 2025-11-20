@@ -345,6 +345,92 @@ export interface EntriesState {
 /**
  * Настройки уведомлений
  */
+/**
+ * Настройки типов уведомлений для категории
+ */
+export interface NotificationTypeSettings {
+  success: boolean
+  error: boolean
+  warning: boolean
+  info: boolean
+}
+
+/**
+ * Условия показа уведомления
+ */
+export interface NotificationConditions {
+  minDuration?: number // Минимальная длительность (минуты)
+  minValue?: number // Минимальное значение
+  threshold?: number // Порог для предупреждения
+  criticalThreshold?: number // Критический порог
+  onlyWorkDays?: boolean // Только рабочие дни
+  onlyActiveWork?: boolean // Только активная работа
+  showOnSuccess?: boolean // Показывать при успехе
+  showOnError?: boolean // Показывать при ошибке
+  showOnUpdate?: boolean // Показывать при обновлении
+  showOnDelete?: boolean // Показывать при удалении
+  showOnStart?: boolean // Показывать при запуске
+  showOnStop?: boolean // Показывать при остановке
+  showOnPause?: boolean // Показывать при паузе
+  minDurationMinutes?: number // Минимальная длительность для показа (минуты)
+}
+
+/**
+ * Настройки частоты показа уведомлений
+ */
+export interface NotificationFrequency {
+  maxPerDay?: number // Максимум раз в день
+  minInterval?: number // Минимальный интервал между показами (минуты)
+  showOncePerDay?: boolean // Показывать только один раз в день
+  showEveryXHours?: number // Показывать каждые X часов
+  showEveryXMinutes?: number // Показывать каждые X минут
+}
+
+export interface ExportReminderSettings {
+  enabled: boolean
+  showWhenNeverExported: boolean
+  minEntriesForReminder: number
+  enableOvertimeReminder: boolean
+  enableTimeBasedReminder: boolean
+  remindAfterDays: number
+  showOncePerDay: boolean
+  minIntervalMinutes: number
+}
+
+/**
+ * Настройки категории уведомлений
+ */
+export interface NotificationCategorySettings {
+  enabled: boolean
+  types: NotificationTypeSettings
+  // Детальные настройки (опционально, только для категорий, которые их поддерживают)
+  conditions?: NotificationConditions
+  frequency?: NotificationFrequency
+}
+
+/**
+ * Настройки отображения уведомлений по категориям
+ */
+export interface NotificationDisplaySettings {
+  enabled: boolean // Общее включение/выключение всех уведомлений
+  categories: {
+    timer: NotificationCategorySettings
+    entries: NotificationCategorySettings
+    categories: NotificationCategorySettings
+    exportImport: NotificationCategorySettings
+    backups: NotificationCategorySettings
+    settings: NotificationCategorySettings
+    filters: NotificationCategorySettings
+    actions: NotificationCategorySettings
+    cleanup: NotificationCategorySettings
+    colors: NotificationCategorySettings
+    validation: NotificationCategorySettings
+    overtime: NotificationCategorySettings
+    breaks: NotificationCategorySettings
+    autoSync: NotificationCategorySettings
+  }
+}
+
 export interface NotificationSettings {
   enabled: boolean
   sound: boolean
@@ -353,7 +439,7 @@ export interface NotificationSettings {
   planCompleted: boolean
   soundNotificationsEnabled: boolean
   notificationInterval: number
-  notificationSound: 'chime' | 'alert' | 'phone' | 'doorbell' | 'alarm' | 'notification' | 'bell' | 'beep'
+  notificationSound: 'chime' | 'alert' | 'phone' | 'doorbell' | 'alarm' | 'notification' | 'bell' | 'beep' | 'ping' | 'gentle' | 'soft' | 'zen' | 'focus' | 'breeze' | 'crystal' | 'harmony' | 'whisper' | 'bloom'
   variant: number
   faviconAnimationEnabled: boolean
   faviconAnimationStyle: 'pulse' | 'blink' | 'rotate' | 'wave' | 'gradient' | 'morph' | 'particles' | 'breathe'
@@ -365,6 +451,9 @@ export interface NotificationSettings {
   overtimeWarningThreshold: number
   overtimeCriticalThreshold: number
   overtimeSoundAlert: boolean
+  // Настройки отображения уведомлений по категориям
+  display?: NotificationDisplaySettings
+  exportReminder?: ExportReminderSettings
 }
 
 /**

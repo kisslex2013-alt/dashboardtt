@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { generateUUID } from '../utils/uuid'
-import type { SettingsState, Category, WorkScheduleStats } from '../types'
+import type { SettingsState, Category, WorkScheduleStats, ExportReminderSettings } from '../types'
 
 /**
  * 🎓 ПОЯСНЕНИЕ ДЛЯ НАЧИНАЮЩИХ:
@@ -37,6 +37,17 @@ const defaultCategories = [
   { id: 'teaching', name: 'Обучение', icon: 'BookOpen', rate: 800, color: SEMANTIC_COLORS.learning },
   { id: 'other', name: 'Другое', icon: 'MoreHorizontal', rate: 1000, color: SEMANTIC_COLORS.other },
 ]
+
+export const DEFAULT_EXPORT_REMINDER_SETTINGS: ExportReminderSettings = {
+  enabled: true,
+  showWhenNeverExported: true,
+  minEntriesForReminder: 1,
+  enableOvertimeReminder: true,
+  enableTimeBasedReminder: true,
+  remindAfterDays: 7,
+  showOncePerDay: true,
+  minIntervalMinutes: 720, // 12 часов
+}
 
 export const useSettingsStore = create<SettingsState>()(
   persist(
@@ -77,7 +88,7 @@ export const useSettingsStore = create<SettingsState>()(
         // Периодические звуковые уведомления во время работы таймера
         soundNotificationsEnabled: true,
         notificationInterval: 30, // минут между уведомлениями
-        notificationSound: 'chime', // 'chime' | 'alert' | 'phone' | 'doorbell' | 'alarm' | 'notification' | 'bell' | 'beep'
+        notificationSound: 'chime', // 'chime' | 'alert' | 'phone' | 'doorbell' | 'alarm' | 'notification' | 'bell' | 'beep' | 'ping' | 'gentle' | 'soft' | 'zen' | 'focus' | 'breeze' | 'crystal' | 'harmony' | 'whisper' | 'bloom'
         // Визуальный вариант уведомления
         variant: 1, // 1-5 (по умолчанию 1 - Glass Effect)
         // Анимация фавикона
@@ -93,6 +104,50 @@ export const useSettingsStore = create<SettingsState>()(
         overtimeWarningThreshold: 1.0, // коэффициент превышения нормы для предупреждения (например, 1.0 = 100% = 8 часов при норме 8)
         overtimeCriticalThreshold: 1.5, // коэффициент превышения нормы для критического предупреждения (например, 1.5 = 150% = 12 часов при норме 8)
         overtimeSoundAlert: true, // звуковое уведомление при переработке
+        exportReminder: { ...DEFAULT_EXPORT_REMINDER_SETTINGS },
+        // Настройки отображения уведомлений по категориям
+        display: {
+          enabled: true, // Общее включение/выключение всех уведомлений
+          categories: {
+            timer: { enabled: true, types: { success: true, error: true, warning: true, info: true } },
+            entries: { enabled: true, types: { success: true, error: true, warning: true, info: true } },
+            categories: { enabled: true, types: { success: true, error: true, warning: true, info: true } },
+            exportImport: { enabled: true, types: { success: true, error: true, warning: true, info: true } },
+            backups: { enabled: true, types: { success: true, error: true, warning: true, info: true } },
+            settings: { enabled: true, types: { success: true, error: true, warning: true, info: true } },
+            filters: { enabled: true, types: { success: true, error: true, warning: true, info: true } },
+            actions: { enabled: true, types: { success: true, error: true, warning: true, info: true } },
+            cleanup: { enabled: true, types: { success: true, error: true, warning: true, info: true } },
+            colors: { enabled: true, types: { success: true, error: true, warning: true, info: true } },
+            validation: { enabled: true, types: { success: false, error: true, warning: true, info: false } }, // Ошибки валидации всегда показывать
+            overtime: { 
+              enabled: true, 
+              types: { success: false, error: false, warning: true, info: false },
+              conditions: {
+                threshold: 1.0, // Порог предупреждения (коэффициент)
+                criticalThreshold: 1.5, // Критический порог (коэффициент)
+                onlyWorkDays: false, // Учитывать только рабочие дни
+              },
+              frequency: {
+                showOncePerDay: true, // Показывать только один раз в день
+                minInterval: 60, // Минимальный интервал между показами (минуты)
+              },
+            },
+            breaks: { 
+              enabled: true, 
+              types: { success: false, error: false, warning: true, info: true },
+              conditions: {
+                minDurationMinutes: 0, // Минимальная длительность работы (минуты)
+                onlyActiveWork: true, // Только активная работа
+              },
+              frequency: {
+                showEveryXHours: 2, // Показывать каждые 2 часа
+                minInterval: 30, // Минимальный интервал между показами (минуты)
+              },
+            },
+            autoSync: { enabled: true, types: { success: true, error: true, warning: false, info: true } },
+          },
+        },
       },
 
       // Рабочий график по дням недели
@@ -545,6 +600,7 @@ export const useSettingsStore = create<SettingsState>()(
             overtimeWarningThreshold: 1.0,
             overtimeCriticalThreshold: 1.5,
             overtimeSoundAlert: true,
+            exportReminder: { ...DEFAULT_EXPORT_REMINDER_SETTINGS },
           },
           pomodoro: {
             enabled: false,

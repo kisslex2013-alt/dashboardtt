@@ -1,0 +1,8768 @@
+{
+  "entries": [
+    {
+      "id": "1735689600000",
+      "date": "2025-01-01",
+      "start": "09:00",
+      "end": "09:48",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 800,
+      "breakAfter": "00:53"
+    },
+    {
+      "id": "1735689601000",
+      "date": "2025-01-01",
+      "start": "10:41",
+      "end": "11:29",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 1200,
+      "breakMinutes": 20
+    },
+    {
+      "id": "1735689602000",
+      "date": "2025-01-01",
+      "start": "11:49",
+      "end": "12:37",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 960,
+      "breakMinutes": 42
+    },
+    {
+      "id": "1735689603000",
+      "date": "2025-01-01",
+      "start": "13:19",
+      "end": "14:07",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1120,
+      "breakAfter": "00:51"
+    },
+    {
+      "id": "1735689604000",
+      "date": "2025-01-01",
+      "start": "14:58",
+      "end": "15:46",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1120
+    },
+    {
+      "id": "1735776000000",
+      "date": "2025-01-02",
+      "start": "10:00",
+      "end": "12:34",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 1283,
+      "breakMinutes": 52
+    },
+    {
+      "id": "1735776001000",
+      "date": "2025-01-02",
+      "start": "13:26",
+      "end": "16:00",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 2567,
+      "breakAfter": "00:34"
+    },
+    {
+      "id": "1735776002000",
+      "date": "2025-01-02",
+      "start": "16:34",
+      "end": "19:08",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 3337
+    },
+    {
+      "id": "1735862400000",
+      "date": "2025-01-03",
+      "start": "09:00",
+      "end": "09:31",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 620,
+      "breakMinutes": 52
+    },
+    {
+      "id": "1735862401000",
+      "date": "2025-01-03",
+      "start": "10:23",
+      "end": "10:54",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 517,
+      "breakAfter": "00:28"
+    },
+    {
+      "id": "1735862402000",
+      "date": "2025-01-03",
+      "start": "11:22",
+      "end": "11:53",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 258,
+      "breakAfter": "00:17"
+    },
+    {
+      "id": "1735862403000",
+      "date": "2025-01-03",
+      "start": "12:10",
+      "end": "12:42",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 747
+    },
+    {
+      "id": "1736035200000",
+      "date": "2025-01-05",
+      "start": "09:00",
+      "end": "11:14",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 3127
+    },
+    {
+      "id": "1736121600000",
+      "date": "2025-01-06",
+      "start": "09:00",
+      "end": "10:46",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 2120,
+      "breakMinutes": 40
+    },
+    {
+      "id": "1736121601000",
+      "date": "2025-01-06",
+      "start": "11:26",
+      "end": "13:12",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 2650,
+      "breakAfter": "00:53"
+    },
+    {
+      "id": "1736121602000",
+      "date": "2025-01-06",
+      "start": "14:05",
+      "end": "15:51",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 2120,
+      "breakAfter": "00:25"
+    },
+    {
+      "id": "1736121603000",
+      "date": "2025-01-06",
+      "start": "16:16",
+      "end": "18:02",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 1060
+    },
+    {
+      "id": "1736208000000",
+      "date": "2025-01-07",
+      "start": "10:00",
+      "end": "10:38",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 507,
+      "breakAfter": "00:17"
+    },
+    {
+      "id": "1736208001000",
+      "date": "2025-01-07",
+      "start": "10:55",
+      "end": "11:33",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 823,
+      "breakAfter": "00:23"
+    },
+    {
+      "id": "1736208002000",
+      "date": "2025-01-07",
+      "start": "11:56",
+      "end": "12:34",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 950
+    },
+    {
+      "id": "1736294400000",
+      "date": "2025-01-08",
+      "start": "09:00",
+      "end": "11:04",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 2687,
+      "breakMinutes": 18
+    },
+    {
+      "id": "1736294401000",
+      "date": "2025-01-08",
+      "start": "11:22",
+      "end": "13:26",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 3100
+    },
+    {
+      "id": "1736380800000",
+      "date": "2025-01-09",
+      "start": "08:00",
+      "end": "10:00",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1600,
+      "breakAfter": "01:00"
+    },
+    {
+      "id": "1736380801000",
+      "date": "2025-01-09",
+      "start": "11:00",
+      "end": "13:00",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 2400,
+      "breakMinutes": 56
+    },
+    {
+      "id": "1736380802000",
+      "date": "2025-01-09",
+      "start": "13:56",
+      "end": "15:56",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 2400
+    },
+    {
+      "id": "1736467200000",
+      "date": "2025-01-10",
+      "start": "08:00",
+      "end": "09:14",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 1850,
+      "breakAfter": "00:36"
+    },
+    {
+      "id": "1736467201000",
+      "date": "2025-01-10",
+      "start": "09:50",
+      "end": "11:04",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1727
+    },
+    {
+      "id": "1736726400000",
+      "date": "2025-01-13",
+      "start": "08:00",
+      "end": "08:45",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 1125,
+      "breakAfter": "00:39"
+    },
+    {
+      "id": "1736726401000",
+      "date": "2025-01-13",
+      "start": "09:24",
+      "end": "10:09",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 750,
+      "breakMinutes": 18
+    },
+    {
+      "id": "1736726402000",
+      "date": "2025-01-13",
+      "start": "10:27",
+      "end": "11:12",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 1125,
+      "breakMinutes": 39
+    },
+    {
+      "id": "1736726403000",
+      "date": "2025-01-13",
+      "start": "11:51",
+      "end": "12:36",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 1125
+    },
+    {
+      "id": "1736812800000",
+      "date": "2025-01-14",
+      "start": "08:00",
+      "end": "08:30",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 700,
+      "breakMinutes": 39
+    },
+    {
+      "id": "1736812801000",
+      "date": "2025-01-14",
+      "start": "09:09",
+      "end": "09:39",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 700,
+      "breakAfter": "00:50"
+    },
+    {
+      "id": "1736812802000",
+      "date": "2025-01-14",
+      "start": "10:29",
+      "end": "10:59",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 400,
+      "breakAfter": "00:52"
+    },
+    {
+      "id": "1736812803000",
+      "date": "2025-01-14",
+      "start": "11:51",
+      "end": "12:21",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 172
+    },
+    {
+      "id": "1736899200000",
+      "date": "2025-01-15",
+      "start": "10:00",
+      "end": "11:10",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1400,
+      "breakMinutes": 35
+    },
+    {
+      "id": "1736899201000",
+      "date": "2025-01-15",
+      "start": "11:45",
+      "end": "12:55",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1517,
+      "breakAfter": "00:26"
+    },
+    {
+      "id": "1736899202000",
+      "date": "2025-01-15",
+      "start": "13:21",
+      "end": "14:31",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1633
+    },
+    {
+      "id": "1736985600000",
+      "date": "2025-01-16",
+      "start": "08:00",
+      "end": "14:35",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 7900
+    },
+    {
+      "id": "1737072000000",
+      "date": "2025-01-17",
+      "start": "08:00",
+      "end": "13:14",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 5233
+    },
+    {
+      "id": "1737158400000",
+      "date": "2025-01-18",
+      "start": "10:00",
+      "end": "12:12",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1760,
+      "breakMinutes": 21
+    },
+    {
+      "id": "1737158401000",
+      "date": "2025-01-18",
+      "start": "12:33",
+      "end": "14:45",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 1100,
+      "breakMinutes": 19
+    },
+    {
+      "id": "1737158402000",
+      "date": "2025-01-18",
+      "start": "15:04",
+      "end": "17:16",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 1100,
+      "breakAfter": "00:51"
+    },
+    {
+      "id": "1737158403000",
+      "date": "2025-01-18",
+      "start": "18:07",
+      "end": "19:31",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 1325
+    },
+    {
+      "id": "1737244800000",
+      "date": "2025-01-19",
+      "start": "10:00",
+      "end": "11:36",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1920,
+      "breakAfter": "00:58"
+    },
+    {
+      "id": "1737244801000",
+      "date": "2025-01-19",
+      "start": "12:34",
+      "end": "14:10",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 2240,
+      "breakMinutes": 51
+    },
+    {
+      "id": "1737244802000",
+      "date": "2025-01-19",
+      "start": "15:01",
+      "end": "16:37",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1600,
+      "breakMinutes": 55
+    },
+    {
+      "id": "1737244803000",
+      "date": "2025-01-19",
+      "start": "17:32",
+      "end": "19:08",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 800,
+      "breakMinutes": 16
+    },
+    {
+      "id": "1737244804000",
+      "date": "2025-01-19",
+      "start": "19:24",
+      "end": "21:00",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1280
+    },
+    {
+      "id": "1737331200000",
+      "date": "2025-01-20",
+      "start": "08:00",
+      "end": "12:23",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 2192,
+      "breakAfter": "00:34"
+    },
+    {
+      "id": "1737331201000",
+      "date": "2025-01-20",
+      "start": "12:57",
+      "end": "16:34",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 2623
+    },
+    {
+      "id": "1737417600000",
+      "date": "2025-01-21",
+      "start": "10:00",
+      "end": "14:04",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 4067,
+      "breakAfter": "00:19"
+    },
+    {
+      "id": "1737417601000",
+      "date": "2025-01-21",
+      "start": "14:23",
+      "end": "18:19",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 2434
+    },
+    {
+      "id": "1737504000000",
+      "date": "2025-01-22",
+      "start": "09:00",
+      "end": "10:37",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1617,
+      "breakMinutes": 24
+    },
+    {
+      "id": "1737504001000",
+      "date": "2025-01-22",
+      "start": "11:01",
+      "end": "12:38",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 2425,
+      "breakMinutes": 23
+    },
+    {
+      "id": "1737504002000",
+      "date": "2025-01-22",
+      "start": "13:01",
+      "end": "14:38",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 2263
+    },
+    {
+      "id": "1737590400000",
+      "date": "2025-01-23",
+      "start": "08:00",
+      "end": "08:34",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 850,
+      "breakAfter": "00:42"
+    },
+    {
+      "id": "1737590401000",
+      "date": "2025-01-23",
+      "start": "09:16",
+      "end": "09:50",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 850,
+      "breakAfter": "00:18"
+    },
+    {
+      "id": "1737590402000",
+      "date": "2025-01-23",
+      "start": "10:08",
+      "end": "10:42",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 850
+    },
+    {
+      "id": "1737676800000",
+      "date": "2025-01-24",
+      "start": "08:00",
+      "end": "08:30",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 650,
+      "breakMinutes": 20
+    },
+    {
+      "id": "1737676801000",
+      "date": "2025-01-24",
+      "start": "08:50",
+      "end": "09:20",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 500,
+      "breakMinutes": 16
+    },
+    {
+      "id": "1737676802000",
+      "date": "2025-01-24",
+      "start": "09:36",
+      "end": "10:06",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 650,
+      "breakMinutes": 17
+    },
+    {
+      "id": "1737676803000",
+      "date": "2025-01-24",
+      "start": "10:23",
+      "end": "10:53",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 250
+    },
+    {
+      "id": "1737849600000",
+      "date": "2025-01-26",
+      "start": "10:00",
+      "end": "12:15",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 3150,
+      "breakAfter": "00:17"
+    },
+    {
+      "id": "1737849601000",
+      "date": "2025-01-26",
+      "start": "12:32",
+      "end": "14:47",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 2925,
+      "breakAfter": "00:31"
+    },
+    {
+      "id": "1737849602000",
+      "date": "2025-01-26",
+      "start": "15:18",
+      "end": "17:33",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 1350
+    },
+    {
+      "id": "1737936000000",
+      "date": "2025-01-27",
+      "start": "10:00",
+      "end": "12:42",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 4050,
+      "breakAfter": "00:33"
+    },
+    {
+      "id": "1737936001000",
+      "date": "2025-01-27",
+      "start": "13:15",
+      "end": "15:57",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 2160
+    },
+    {
+      "id": "1738022400000",
+      "date": "2025-01-28",
+      "start": "10:00",
+      "end": "12:15",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 2700
+    },
+    {
+      "id": "1738108800000",
+      "date": "2025-01-29",
+      "start": "08:00",
+      "end": "08:51",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 1275,
+      "breakAfter": "00:53"
+    },
+    {
+      "id": "1738108801000",
+      "date": "2025-01-29",
+      "start": "09:44",
+      "end": "10:35",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 1275,
+      "breakAfter": "00:31"
+    },
+    {
+      "id": "1738108802000",
+      "date": "2025-01-29",
+      "start": "11:06",
+      "end": "11:57",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 425,
+      "breakMinutes": 23
+    },
+    {
+      "id": "1738108803000",
+      "date": "2025-01-29",
+      "start": "12:20",
+      "end": "13:11",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1020,
+      "breakAfter": "00:20"
+    },
+    {
+      "id": "1738108804000",
+      "date": "2025-01-29",
+      "start": "13:31",
+      "end": "14:22",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 680
+    },
+    {
+      "id": "1738195200000",
+      "date": "2025-01-30",
+      "start": "10:00",
+      "end": "11:11",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 592,
+      "breakAfter": "00:15"
+    },
+    {
+      "id": "1738195201000",
+      "date": "2025-01-30",
+      "start": "11:26",
+      "end": "12:37",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1657,
+      "breakMinutes": 53
+    },
+    {
+      "id": "1738195202000",
+      "date": "2025-01-30",
+      "start": "13:30",
+      "end": "14:41",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1538
+    },
+    {
+      "id": "1738281600000",
+      "date": "2025-01-31",
+      "start": "09:00",
+      "end": "09:58",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1257,
+      "breakMinutes": 32
+    },
+    {
+      "id": "1738281601000",
+      "date": "2025-01-31",
+      "start": "10:30",
+      "end": "11:28",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1353,
+      "breakMinutes": 23
+    },
+    {
+      "id": "1738281602000",
+      "date": "2025-01-31",
+      "start": "11:51",
+      "end": "12:49",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 773
+    },
+    {
+      "id": "1738368000000",
+      "date": "2025-02-01",
+      "start": "10:00",
+      "end": "11:53",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1883,
+      "breakMinutes": 44
+    },
+    {
+      "id": "1738368001000",
+      "date": "2025-02-01",
+      "start": "12:37",
+      "end": "14:30",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 2825,
+      "breakAfter": "00:22"
+    },
+    {
+      "id": "1738368002000",
+      "date": "2025-02-01",
+      "start": "14:52",
+      "end": "16:45",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 2260,
+      "breakAfter": "00:28"
+    },
+    {
+      "id": "1738368003000",
+      "date": "2025-02-01",
+      "start": "17:13",
+      "end": "19:06",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 942
+    },
+    {
+      "id": "1738540800000",
+      "date": "2025-02-03",
+      "start": "08:00",
+      "end": "10:33",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 3060,
+      "breakAfter": "00:40"
+    },
+    {
+      "id": "1738540801000",
+      "date": "2025-02-03",
+      "start": "11:13",
+      "end": "13:46",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 1275
+    },
+    {
+      "id": "1738627200000",
+      "date": "2025-02-04",
+      "start": "09:00",
+      "end": "15:11",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 6183
+    },
+    {
+      "id": "1738713600000",
+      "date": "2025-02-05",
+      "start": "08:00",
+      "end": "09:33",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1860,
+      "breakAfter": "00:39"
+    },
+    {
+      "id": "1738713601000",
+      "date": "2025-02-05",
+      "start": "10:12",
+      "end": "11:45",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 930,
+      "breakAfter": "00:45"
+    },
+    {
+      "id": "1738713602000",
+      "date": "2025-02-05",
+      "start": "12:30",
+      "end": "14:03",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1860
+    },
+    {
+      "id": "1738800000000",
+      "date": "2025-02-06",
+      "start": "09:00",
+      "end": "12:24",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 2720,
+      "breakMinutes": 32
+    },
+    {
+      "id": "1738800001000",
+      "date": "2025-02-06",
+      "start": "12:56",
+      "end": "16:20",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 2040,
+      "breakMinutes": 15
+    },
+    {
+      "id": "1738800002000",
+      "date": "2025-02-06",
+      "start": "16:35",
+      "end": "17:47",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 2032
+    },
+    {
+      "id": "1738886400000",
+      "date": "2025-02-07",
+      "start": "09:00",
+      "end": "10:36",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 2240,
+      "breakMinutes": 20
+    },
+    {
+      "id": "1738886401000",
+      "date": "2025-02-07",
+      "start": "10:56",
+      "end": "12:32",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 2400,
+      "breakAfter": "00:40"
+    },
+    {
+      "id": "1738886402000",
+      "date": "2025-02-07",
+      "start": "13:12",
+      "end": "14:48",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1920
+    },
+    {
+      "id": "1739059200000",
+      "date": "2025-02-09",
+      "start": "10:00",
+      "end": "11:17",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 642,
+      "breakAfter": "00:54"
+    },
+    {
+      "id": "1739059201000",
+      "date": "2025-02-09",
+      "start": "12:11",
+      "end": "13:28",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1540,
+      "breakAfter": "00:49"
+    },
+    {
+      "id": "1739059202000",
+      "date": "2025-02-09",
+      "start": "14:17",
+      "end": "15:34",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1283,
+      "breakAfter": "00:20"
+    },
+    {
+      "id": "1739059203000",
+      "date": "2025-02-09",
+      "start": "15:54",
+      "end": "17:11",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 1925
+    },
+    {
+      "id": "1739145600000",
+      "date": "2025-02-10",
+      "start": "10:00",
+      "end": "10:55",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1192,
+      "breakMinutes": 26
+    },
+    {
+      "id": "1739145601000",
+      "date": "2025-02-10",
+      "start": "11:21",
+      "end": "12:16",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1192,
+      "breakAfter": "00:20"
+    },
+    {
+      "id": "1739145602000",
+      "date": "2025-02-10",
+      "start": "12:36",
+      "end": "13:31",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 1375
+    },
+    {
+      "id": "1739232000000",
+      "date": "2025-02-11",
+      "start": "10:00",
+      "end": "10:40",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 933,
+      "breakMinutes": 27
+    },
+    {
+      "id": "1739232001000",
+      "date": "2025-02-11",
+      "start": "11:07",
+      "end": "11:47",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 867,
+      "breakAfter": "00:37"
+    },
+    {
+      "id": "1739232002000",
+      "date": "2025-02-11",
+      "start": "12:24",
+      "end": "13:04",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 933,
+      "breakMinutes": 39
+    },
+    {
+      "id": "1739232003000",
+      "date": "2025-02-11",
+      "start": "13:43",
+      "end": "14:23",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 400
+    },
+    {
+      "id": "1739318400000",
+      "date": "2025-02-12",
+      "start": "10:00",
+      "end": "11:44",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 2600,
+      "breakMinutes": 50
+    },
+    {
+      "id": "1739318401000",
+      "date": "2025-02-12",
+      "start": "12:34",
+      "end": "14:18",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 1040,
+      "breakMinutes": 28
+    },
+    {
+      "id": "1739318402000",
+      "date": "2025-02-12",
+      "start": "14:46",
+      "end": "16:30",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1733,
+      "breakAfter": "00:26"
+    },
+    {
+      "id": "1739318403000",
+      "date": "2025-02-12",
+      "start": "16:56",
+      "end": "18:40",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 2427
+    },
+    {
+      "id": "1739404800000",
+      "date": "2025-02-13",
+      "start": "09:00",
+      "end": "10:11",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 947,
+      "breakMinutes": 53
+    },
+    {
+      "id": "1739404801000",
+      "date": "2025-02-13",
+      "start": "11:04",
+      "end": "12:15",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 592,
+      "breakAfter": "00:15"
+    },
+    {
+      "id": "1739404802000",
+      "date": "2025-02-13",
+      "start": "12:30",
+      "end": "13:41",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1183
+    },
+    {
+      "id": "1739491200000",
+      "date": "2025-02-14",
+      "start": "08:00",
+      "end": "08:43",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 860,
+      "breakAfter": "00:27"
+    },
+    {
+      "id": "1739491201000",
+      "date": "2025-02-14",
+      "start": "09:10",
+      "end": "09:53",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1003,
+      "breakMinutes": 49
+    },
+    {
+      "id": "1739491202000",
+      "date": "2025-02-14",
+      "start": "10:42",
+      "end": "11:25",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1003,
+      "breakMinutes": 17
+    },
+    {
+      "id": "1739491203000",
+      "date": "2025-02-14",
+      "start": "11:42",
+      "end": "12:25",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 932,
+      "breakAfter": "00:19"
+    },
+    {
+      "id": "1739491204000",
+      "date": "2025-02-14",
+      "start": "12:44",
+      "end": "13:27",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 1075
+    },
+    {
+      "id": "1739750400000",
+      "date": "2025-02-17",
+      "start": "10:00",
+      "end": "10:49",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 408,
+      "breakMinutes": 15
+    },
+    {
+      "id": "1739750401000",
+      "date": "2025-02-17",
+      "start": "11:04",
+      "end": "11:53",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 653,
+      "breakAfter": "00:15"
+    },
+    {
+      "id": "1739750402000",
+      "date": "2025-02-17",
+      "start": "12:08",
+      "end": "12:57",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 1225,
+      "breakAfter": "01:00"
+    },
+    {
+      "id": "1739750403000",
+      "date": "2025-02-17",
+      "start": "13:57",
+      "end": "14:46",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 490,
+      "breakAfter": "00:34"
+    },
+    {
+      "id": "1739750404000",
+      "date": "2025-02-17",
+      "start": "15:20",
+      "end": "16:09",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 653
+    },
+    {
+      "id": "1739836800000",
+      "date": "2025-02-18",
+      "start": "08:00",
+      "end": "08:34",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 567,
+      "breakMinutes": 20
+    },
+    {
+      "id": "1739836801000",
+      "date": "2025-02-18",
+      "start": "08:54",
+      "end": "09:28",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 850,
+      "breakMinutes": 51
+    },
+    {
+      "id": "1739836802000",
+      "date": "2025-02-18",
+      "start": "10:19",
+      "end": "10:53",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 340,
+      "breakAfter": "00:55"
+    },
+    {
+      "id": "1739836803000",
+      "date": "2025-02-18",
+      "start": "11:48",
+      "end": "12:22",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 737
+    },
+    {
+      "id": "1739923200000",
+      "date": "2025-02-19",
+      "start": "09:00",
+      "end": "09:50",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1167,
+      "breakMinutes": 18
+    },
+    {
+      "id": "1739923201000",
+      "date": "2025-02-19",
+      "start": "10:08",
+      "end": "10:58",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 833,
+      "breakMinutes": 34
+    },
+    {
+      "id": "1739923202000",
+      "date": "2025-02-19",
+      "start": "11:32",
+      "end": "12:22",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1083
+    },
+    {
+      "id": "1740009600000",
+      "date": "2025-02-20",
+      "start": "09:00",
+      "end": "10:39",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 2145,
+      "breakMinutes": 43
+    },
+    {
+      "id": "1740009601000",
+      "date": "2025-02-20",
+      "start": "11:22",
+      "end": "13:01",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 990,
+      "breakAfter": "00:47"
+    },
+    {
+      "id": "1740009602000",
+      "date": "2025-02-20",
+      "start": "13:48",
+      "end": "15:27",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 825,
+      "breakAfter": "00:40"
+    },
+    {
+      "id": "1740009603000",
+      "date": "2025-02-20",
+      "start": "16:07",
+      "end": "17:46",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 825,
+      "breakMinutes": 50
+    },
+    {
+      "id": "1740009604000",
+      "date": "2025-02-20",
+      "start": "18:36",
+      "end": "20:00",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 2337
+    },
+    {
+      "id": "1740096000000",
+      "date": "2025-02-21",
+      "start": "08:00",
+      "end": "08:46",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 920,
+      "breakMinutes": 55
+    },
+    {
+      "id": "1740096001000",
+      "date": "2025-02-21",
+      "start": "09:41",
+      "end": "10:27",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 997,
+      "breakMinutes": 32
+    },
+    {
+      "id": "1740096002000",
+      "date": "2025-02-21",
+      "start": "10:59",
+      "end": "11:45",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 460,
+      "breakAfter": "00:49"
+    },
+    {
+      "id": "1740096003000",
+      "date": "2025-02-21",
+      "start": "12:34",
+      "end": "13:20",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 997
+    },
+    {
+      "id": "1740182400000",
+      "date": "2025-02-22",
+      "start": "08:00",
+      "end": "09:35",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 950,
+      "breakAfter": "00:58"
+    },
+    {
+      "id": "1740182401000",
+      "date": "2025-02-22",
+      "start": "10:33",
+      "end": "12:08",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1267
+    },
+    {
+      "id": "1740355200000",
+      "date": "2025-02-24",
+      "start": "09:00",
+      "end": "11:41",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 3220,
+      "breakMinutes": 47
+    },
+    {
+      "id": "1740355201000",
+      "date": "2025-02-24",
+      "start": "12:28",
+      "end": "15:09",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 3757
+    },
+    {
+      "id": "1740441600000",
+      "date": "2025-02-25",
+      "start": "10:00",
+      "end": "11:00",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1300,
+      "breakMinutes": 48
+    },
+    {
+      "id": "1740441601000",
+      "date": "2025-02-25",
+      "start": "11:48",
+      "end": "12:48",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 1500
+    },
+    {
+      "id": "1740528000000",
+      "date": "2025-02-26",
+      "start": "09:00",
+      "end": "11:09",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 3225,
+      "breakAfter": "00:57"
+    },
+    {
+      "id": "1740528001000",
+      "date": "2025-02-26",
+      "start": "12:06",
+      "end": "14:15",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 3010,
+      "breakMinutes": 47
+    },
+    {
+      "id": "1740528002000",
+      "date": "2025-02-26",
+      "start": "15:02",
+      "end": "17:11",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1720
+    },
+    {
+      "id": "1740614400000",
+      "date": "2025-02-27",
+      "start": "08:00",
+      "end": "10:36",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 3380,
+      "breakMinutes": 47
+    },
+    {
+      "id": "1740614401000",
+      "date": "2025-02-27",
+      "start": "11:23",
+      "end": "13:59",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 3120,
+      "breakMinutes": 26
+    },
+    {
+      "id": "1740614402000",
+      "date": "2025-02-27",
+      "start": "14:25",
+      "end": "17:01",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 1300
+    },
+    {
+      "id": "1740700800000",
+      "date": "2025-02-28",
+      "start": "10:00",
+      "end": "10:52",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 520,
+      "breakMinutes": 21
+    },
+    {
+      "id": "1740700801000",
+      "date": "2025-02-28",
+      "start": "11:13",
+      "end": "12:05",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 693,
+      "breakMinutes": 15
+    },
+    {
+      "id": "1740700802000",
+      "date": "2025-02-28",
+      "start": "12:20",
+      "end": "13:12",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1127,
+      "breakAfter": "00:31"
+    },
+    {
+      "id": "1740700803000",
+      "date": "2025-02-28",
+      "start": "13:43",
+      "end": "14:35",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1127,
+      "breakMinutes": 42
+    },
+    {
+      "id": "1740700804000",
+      "date": "2025-02-28",
+      "start": "15:17",
+      "end": "16:09",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1213
+    },
+    {
+      "id": "1740960000000",
+      "date": "2025-03-03",
+      "start": "09:00",
+      "end": "10:46",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 2297,
+      "breakAfter": "00:28"
+    },
+    {
+      "id": "1740960001000",
+      "date": "2025-03-03",
+      "start": "11:14",
+      "end": "13:00",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 883,
+      "breakAfter": "00:20"
+    },
+    {
+      "id": "1740960002000",
+      "date": "2025-03-03",
+      "start": "13:20",
+      "end": "15:06",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1413
+    },
+    {
+      "id": "1741046400000",
+      "date": "2025-03-04",
+      "start": "09:00",
+      "end": "11:08",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 1067,
+      "breakMinutes": 31
+    },
+    {
+      "id": "1741046401000",
+      "date": "2025-03-04",
+      "start": "11:39",
+      "end": "13:47",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 2773,
+      "breakAfter": "00:52"
+    },
+    {
+      "id": "1741046402000",
+      "date": "2025-03-04",
+      "start": "14:39",
+      "end": "16:47",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1707,
+      "breakMinutes": 27
+    },
+    {
+      "id": "1741046403000",
+      "date": "2025-03-04",
+      "start": "17:14",
+      "end": "18:50",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 960,
+      "breakAfter": "00:57"
+    },
+    {
+      "id": "1741046404000",
+      "date": "2025-03-04",
+      "start": "19:47",
+      "end": "20:17",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 1356
+    },
+    {
+      "id": "1741132800000",
+      "date": "2025-03-05",
+      "start": "09:00",
+      "end": "10:06",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1320,
+      "breakAfter": "00:32"
+    },
+    {
+      "id": "1741132801000",
+      "date": "2025-03-05",
+      "start": "10:38",
+      "end": "11:44",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 660,
+      "breakAfter": "01:00"
+    },
+    {
+      "id": "1741132802000",
+      "date": "2025-03-05",
+      "start": "12:44",
+      "end": "13:50",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 660,
+      "breakAfter": "00:30"
+    },
+    {
+      "id": "1741132803000",
+      "date": "2025-03-05",
+      "start": "14:20",
+      "end": "15:26",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1540,
+      "breakAfter": "00:19"
+    },
+    {
+      "id": "1741132804000",
+      "date": "2025-03-05",
+      "start": "15:45",
+      "end": "16:51",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 550
+    },
+    {
+      "id": "1741219200000",
+      "date": "2025-03-06",
+      "start": "08:00",
+      "end": "09:28",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 2053,
+      "breakMinutes": 53
+    },
+    {
+      "id": "1741219201000",
+      "date": "2025-03-06",
+      "start": "10:21",
+      "end": "11:49",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1173,
+      "breakAfter": "00:45"
+    },
+    {
+      "id": "1741219202000",
+      "date": "2025-03-06",
+      "start": "12:34",
+      "end": "14:02",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 733
+    },
+    {
+      "id": "1741305600000",
+      "date": "2025-03-07",
+      "start": "08:00",
+      "end": "09:35",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1900,
+      "breakAfter": "00:16"
+    },
+    {
+      "id": "1741305601000",
+      "date": "2025-03-07",
+      "start": "09:51",
+      "end": "11:26",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 792,
+      "breakAfter": "00:25"
+    },
+    {
+      "id": "1741305602000",
+      "date": "2025-03-07",
+      "start": "11:51",
+      "end": "13:26",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1583,
+      "breakAfter": "00:16"
+    },
+    {
+      "id": "1741305603000",
+      "date": "2025-03-07",
+      "start": "13:42",
+      "end": "15:17",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 2375
+    },
+    {
+      "id": "1741392000000",
+      "date": "2025-03-08",
+      "start": "10:00",
+      "end": "11:29",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 2077,
+      "breakAfter": "00:16"
+    },
+    {
+      "id": "1741392001000",
+      "date": "2025-03-08",
+      "start": "11:45",
+      "end": "13:14",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1483,
+      "breakAfter": "00:25"
+    },
+    {
+      "id": "1741392002000",
+      "date": "2025-03-08",
+      "start": "13:39",
+      "end": "15:08",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1187,
+      "breakMinutes": 58
+    },
+    {
+      "id": "1741392003000",
+      "date": "2025-03-08",
+      "start": "16:06",
+      "end": "17:35",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 2077,
+      "breakMinutes": 60
+    },
+    {
+      "id": "1741392004000",
+      "date": "2025-03-08",
+      "start": "18:35",
+      "end": "20:04",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 742
+    },
+    {
+      "id": "1741564800000",
+      "date": "2025-03-10",
+      "start": "10:00",
+      "end": "11:07",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 670,
+      "breakMinutes": 38
+    },
+    {
+      "id": "1741564801000",
+      "date": "2025-03-10",
+      "start": "11:45",
+      "end": "12:52",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 558,
+      "breakMinutes": 53
+    },
+    {
+      "id": "1741564802000",
+      "date": "2025-03-10",
+      "start": "13:45",
+      "end": "14:52",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1563,
+      "breakMinutes": 31
+    },
+    {
+      "id": "1741564803000",
+      "date": "2025-03-10",
+      "start": "15:23",
+      "end": "16:30",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1117
+    },
+    {
+      "id": "1741651200000",
+      "date": "2025-03-11",
+      "start": "08:00",
+      "end": "09:26",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 717,
+      "breakAfter": "00:58"
+    },
+    {
+      "id": "1741651201000",
+      "date": "2025-03-11",
+      "start": "10:24",
+      "end": "11:50",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1720
+    },
+    {
+      "id": "1741737600000",
+      "date": "2025-03-12",
+      "start": "09:00",
+      "end": "10:02",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1033,
+      "breakAfter": "00:59"
+    },
+    {
+      "id": "1741737601000",
+      "date": "2025-03-12",
+      "start": "11:01",
+      "end": "12:03",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 620,
+      "breakMinutes": 31
+    },
+    {
+      "id": "1741737602000",
+      "date": "2025-03-12",
+      "start": "12:34",
+      "end": "13:36",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 1550,
+      "breakMinutes": 23
+    },
+    {
+      "id": "1741737603000",
+      "date": "2025-03-12",
+      "start": "13:59",
+      "end": "15:01",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1447,
+      "breakAfter": "00:19"
+    },
+    {
+      "id": "1741737604000",
+      "date": "2025-03-12",
+      "start": "15:20",
+      "end": "16:22",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 517
+    },
+    {
+      "id": "1741824000000",
+      "date": "2025-03-13",
+      "start": "09:00",
+      "end": "11:07",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 1058,
+      "breakAfter": "00:41"
+    },
+    {
+      "id": "1741824001000",
+      "date": "2025-03-13",
+      "start": "11:48",
+      "end": "13:55",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 2752,
+      "breakMinutes": 34
+    },
+    {
+      "id": "1741824002000",
+      "date": "2025-03-13",
+      "start": "14:29",
+      "end": "16:36",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 3175
+    },
+    {
+      "id": "1741910400000",
+      "date": "2025-03-14",
+      "start": "09:00",
+      "end": "17:00",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 7567
+    },
+    {
+      "id": "1742083200000",
+      "date": "2025-03-16",
+      "start": "10:00",
+      "end": "10:42",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 420,
+      "breakAfter": "00:50"
+    },
+    {
+      "id": "1742083201000",
+      "date": "2025-03-16",
+      "start": "11:32",
+      "end": "12:14",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 420,
+      "breakAfter": "00:15"
+    },
+    {
+      "id": "1742083202000",
+      "date": "2025-03-16",
+      "start": "12:29",
+      "end": "13:11",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 910,
+      "breakMinutes": 41
+    },
+    {
+      "id": "1742083203000",
+      "date": "2025-03-16",
+      "start": "13:52",
+      "end": "14:34",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 910,
+      "breakAfter": "00:46"
+    },
+    {
+      "id": "1742083204000",
+      "date": "2025-03-16",
+      "start": "15:20",
+      "end": "16:02",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 350
+    },
+    {
+      "id": "1742169600000",
+      "date": "2025-03-17",
+      "start": "09:00",
+      "end": "17:00",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 7030
+    },
+    {
+      "id": "1742256000000",
+      "date": "2025-03-18",
+      "start": "10:00",
+      "end": "10:57",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 570,
+      "breakMinutes": 31
+    },
+    {
+      "id": "1742256001000",
+      "date": "2025-03-18",
+      "start": "11:28",
+      "end": "12:25",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1330,
+      "breakMinutes": 15
+    },
+    {
+      "id": "1742256002000",
+      "date": "2025-03-18",
+      "start": "12:40",
+      "end": "13:37",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 475,
+      "breakAfter": "00:40"
+    },
+    {
+      "id": "1742256003000",
+      "date": "2025-03-18",
+      "start": "14:17",
+      "end": "15:14",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1235,
+      "breakMinutes": 60
+    },
+    {
+      "id": "1742256004000",
+      "date": "2025-03-18",
+      "start": "16:14",
+      "end": "17:11",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1330
+    },
+    {
+      "id": "1742342400000",
+      "date": "2025-03-19",
+      "start": "10:00",
+      "end": "11:20",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 800,
+      "breakMinutes": 23
+    },
+    {
+      "id": "1742342401000",
+      "date": "2025-03-19",
+      "start": "11:43",
+      "end": "13:03",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1733,
+      "breakMinutes": 58
+    },
+    {
+      "id": "1742342402000",
+      "date": "2025-03-19",
+      "start": "14:01",
+      "end": "15:21",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1600,
+      "breakAfter": "00:54"
+    },
+    {
+      "id": "1742342403000",
+      "date": "2025-03-19",
+      "start": "16:15",
+      "end": "17:35",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1867
+    },
+    {
+      "id": "1742428800000",
+      "date": "2025-03-20",
+      "start": "10:00",
+      "end": "13:29",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 2090,
+      "breakMinutes": 28
+    },
+    {
+      "id": "1742428801000",
+      "date": "2025-03-20",
+      "start": "13:57",
+      "end": "17:26",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 4528
+    },
+    {
+      "id": "1742515200000",
+      "date": "2025-03-21",
+      "start": "09:00",
+      "end": "10:13",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1460,
+      "breakMinutes": 16
+    },
+    {
+      "id": "1742515201000",
+      "date": "2025-03-21",
+      "start": "10:29",
+      "end": "11:42",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1460,
+      "breakMinutes": 53
+    },
+    {
+      "id": "1742515202000",
+      "date": "2025-03-21",
+      "start": "12:35",
+      "end": "13:48",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1582,
+      "breakAfter": "00:43"
+    },
+    {
+      "id": "1742515203000",
+      "date": "2025-03-21",
+      "start": "14:31",
+      "end": "15:44",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 973
+    },
+    {
+      "id": "1742774400000",
+      "date": "2025-03-24",
+      "start": "10:00",
+      "end": "12:32",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 3040,
+      "breakAfter": "00:44"
+    },
+    {
+      "id": "1742774401000",
+      "date": "2025-03-24",
+      "start": "13:16",
+      "end": "15:48",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 1267
+    },
+    {
+      "id": "1742860800000",
+      "date": "2025-03-25",
+      "start": "08:00",
+      "end": "09:47",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 1070,
+      "breakMinutes": 37
+    },
+    {
+      "id": "1742860801000",
+      "date": "2025-03-25",
+      "start": "10:24",
+      "end": "12:11",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 892
+    },
+    {
+      "id": "1742947200000",
+      "date": "2025-03-26",
+      "start": "09:00",
+      "end": "10:39",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 990,
+      "breakMinutes": 22
+    },
+    {
+      "id": "1742947201000",
+      "date": "2025-03-26",
+      "start": "11:01",
+      "end": "12:40",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 2145,
+      "breakAfter": "00:25"
+    },
+    {
+      "id": "1742947202000",
+      "date": "2025-03-26",
+      "start": "13:05",
+      "end": "14:44",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 2475
+    },
+    {
+      "id": "1743033600000",
+      "date": "2025-03-27",
+      "start": "10:00",
+      "end": "11:47",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1427,
+      "breakMinutes": 33
+    },
+    {
+      "id": "1743033601000",
+      "date": "2025-03-27",
+      "start": "12:20",
+      "end": "14:07",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1427
+    },
+    {
+      "id": "1743120000000",
+      "date": "2025-03-28",
+      "start": "10:00",
+      "end": "12:24",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 1200,
+      "breakAfter": "00:44"
+    },
+    {
+      "id": "1743120001000",
+      "date": "2025-03-28",
+      "start": "13:08",
+      "end": "15:32",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 2400,
+      "breakAfter": "00:54"
+    },
+    {
+      "id": "1743120002000",
+      "date": "2025-03-28",
+      "start": "16:26",
+      "end": "18:50",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 2880
+    },
+    {
+      "id": "1743379200000",
+      "date": "2025-03-31",
+      "start": "09:00",
+      "end": "10:37",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 808,
+      "breakAfter": "00:56"
+    },
+    {
+      "id": "1743379201000",
+      "date": "2025-03-31",
+      "start": "11:33",
+      "end": "13:10",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 808,
+      "breakMinutes": 46
+    },
+    {
+      "id": "1743379202000",
+      "date": "2025-03-31",
+      "start": "13:56",
+      "end": "15:33",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1617
+    },
+    {
+      "id": "1743465600000",
+      "date": "2025-04-01",
+      "start": "08:00",
+      "end": "08:49",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 490,
+      "breakMinutes": 33
+    },
+    {
+      "id": "1743465601000",
+      "date": "2025-04-01",
+      "start": "09:22",
+      "end": "10:11",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 817,
+      "breakMinutes": 22
+    },
+    {
+      "id": "1743465602000",
+      "date": "2025-04-01",
+      "start": "10:33",
+      "end": "11:22",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 1225,
+      "breakMinutes": 54
+    },
+    {
+      "id": "1743465603000",
+      "date": "2025-04-01",
+      "start": "12:16",
+      "end": "13:05",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1062
+    },
+    {
+      "id": "1743552000000",
+      "date": "2025-04-02",
+      "start": "08:00",
+      "end": "08:58",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1353,
+      "breakMinutes": 39
+    },
+    {
+      "id": "1743552001000",
+      "date": "2025-04-02",
+      "start": "09:37",
+      "end": "10:35",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 967,
+      "breakMinutes": 17
+    },
+    {
+      "id": "1743552002000",
+      "date": "2025-04-02",
+      "start": "10:52",
+      "end": "11:50",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 483,
+      "breakMinutes": 56
+    },
+    {
+      "id": "1743552003000",
+      "date": "2025-04-02",
+      "start": "12:46",
+      "end": "13:44",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1160,
+      "breakAfter": "00:57"
+    },
+    {
+      "id": "1743552004000",
+      "date": "2025-04-02",
+      "start": "14:41",
+      "end": "15:39",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 580
+    },
+    {
+      "id": "1743638400000",
+      "date": "2025-04-03",
+      "start": "10:00",
+      "end": "10:30",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 650,
+      "breakMinutes": 31
+    },
+    {
+      "id": "1743638401000",
+      "date": "2025-04-03",
+      "start": "11:01",
+      "end": "11:31",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 700,
+      "breakAfter": "00:18"
+    },
+    {
+      "id": "1743638402000",
+      "date": "2025-04-03",
+      "start": "11:49",
+      "end": "12:19",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 500,
+      "breakAfter": "00:25"
+    },
+    {
+      "id": "1743638403000",
+      "date": "2025-04-03",
+      "start": "12:44",
+      "end": "13:14",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 600,
+      "breakAfter": "00:40"
+    },
+    {
+      "id": "1743638404000",
+      "date": "2025-04-03",
+      "start": "13:54",
+      "end": "14:24",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 100
+    },
+    {
+      "id": "1743724800000",
+      "date": "2025-04-04",
+      "start": "09:00",
+      "end": "11:00",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 2600,
+      "breakAfter": "00:52"
+    },
+    {
+      "id": "1743724801000",
+      "date": "2025-04-04",
+      "start": "11:52",
+      "end": "13:52",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 3000
+    },
+    {
+      "id": "1743897600000",
+      "date": "2025-04-06",
+      "start": "10:00",
+      "end": "11:25",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1983,
+      "breakAfter": "01:00"
+    },
+    {
+      "id": "1743897601000",
+      "date": "2025-04-06",
+      "start": "12:25",
+      "end": "13:50",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1417,
+      "breakAfter": "00:26"
+    },
+    {
+      "id": "1743897602000",
+      "date": "2025-04-06",
+      "start": "14:16",
+      "end": "15:41",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 708,
+      "breakMinutes": 37
+    },
+    {
+      "id": "1743897603000",
+      "date": "2025-04-06",
+      "start": "16:18",
+      "end": "17:43",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 708,
+      "breakAfter": "00:34"
+    },
+    {
+      "id": "1743897604000",
+      "date": "2025-04-06",
+      "start": "18:17",
+      "end": "19:42",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1983
+    },
+    {
+      "id": "1743984000000",
+      "date": "2025-04-07",
+      "start": "10:00",
+      "end": "11:10",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 1750,
+      "breakMinutes": 48
+    },
+    {
+      "id": "1743984001000",
+      "date": "2025-04-07",
+      "start": "11:58",
+      "end": "13:08",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1517,
+      "breakMinutes": 50
+    },
+    {
+      "id": "1743984002000",
+      "date": "2025-04-07",
+      "start": "13:58",
+      "end": "15:08",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1633
+    },
+    {
+      "id": "1744070400000",
+      "date": "2025-04-08",
+      "start": "10:00",
+      "end": "11:22",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1913,
+      "breakMinutes": 39
+    },
+    {
+      "id": "1744070401000",
+      "date": "2025-04-08",
+      "start": "12:01",
+      "end": "13:23",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1640,
+      "breakMinutes": 19
+    },
+    {
+      "id": "1744070402000",
+      "date": "2025-04-08",
+      "start": "13:42",
+      "end": "15:04",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 683,
+      "breakMinutes": 49
+    },
+    {
+      "id": "1744070403000",
+      "date": "2025-04-08",
+      "start": "15:53",
+      "end": "17:15",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1640,
+      "breakMinutes": 36
+    },
+    {
+      "id": "1744070404000",
+      "date": "2025-04-08",
+      "start": "17:51",
+      "end": "19:13",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1913
+    },
+    {
+      "id": "1744156800000",
+      "date": "2025-04-09",
+      "start": "08:00",
+      "end": "09:53",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 2260,
+      "breakMinutes": 46
+    },
+    {
+      "id": "1744156801000",
+      "date": "2025-04-09",
+      "start": "10:39",
+      "end": "12:32",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 1130,
+      "breakMinutes": 31
+    },
+    {
+      "id": "1744156802000",
+      "date": "2025-04-09",
+      "start": "13:03",
+      "end": "14:56",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1507,
+      "breakMinutes": 49
+    },
+    {
+      "id": "1744156803000",
+      "date": "2025-04-09",
+      "start": "15:45",
+      "end": "17:38",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 2448
+    },
+    {
+      "id": "1744243200000",
+      "date": "2025-04-10",
+      "start": "08:00",
+      "end": "08:32",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 267,
+      "breakAfter": "00:30"
+    },
+    {
+      "id": "1744243201000",
+      "date": "2025-04-10",
+      "start": "09:02",
+      "end": "09:34",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 800,
+      "breakAfter": "00:23"
+    },
+    {
+      "id": "1744243202000",
+      "date": "2025-04-10",
+      "start": "09:57",
+      "end": "10:29",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 693,
+      "breakMinutes": 32
+    },
+    {
+      "id": "1744243203000",
+      "date": "2025-04-10",
+      "start": "11:01",
+      "end": "11:33",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 640,
+      "breakMinutes": 17
+    },
+    {
+      "id": "1744243204000",
+      "date": "2025-04-10",
+      "start": "11:50",
+      "end": "12:22",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 427
+    },
+    {
+      "id": "1744329600000",
+      "date": "2025-04-11",
+      "start": "10:00",
+      "end": "17:17",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 5827
+    },
+    {
+      "id": "1744416000000",
+      "date": "2025-04-12",
+      "start": "09:00",
+      "end": "17:00",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 5497
+    },
+    {
+      "id": "1744588800000",
+      "date": "2025-04-14",
+      "start": "08:00",
+      "end": "09:47",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1427,
+      "breakAfter": "00:31"
+    },
+    {
+      "id": "1744588801000",
+      "date": "2025-04-14",
+      "start": "10:18",
+      "end": "12:05",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1427
+    },
+    {
+      "id": "1744675200000",
+      "date": "2025-04-15",
+      "start": "09:00",
+      "end": "09:57",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 475,
+      "breakAfter": "00:20"
+    },
+    {
+      "id": "1744675201000",
+      "date": "2025-04-15",
+      "start": "10:17",
+      "end": "11:14",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1330,
+      "breakAfter": "00:22"
+    },
+    {
+      "id": "1744675202000",
+      "date": "2025-04-15",
+      "start": "11:36",
+      "end": "12:33",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 760,
+      "breakMinutes": 45
+    },
+    {
+      "id": "1744675203000",
+      "date": "2025-04-15",
+      "start": "13:18",
+      "end": "14:15",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1330,
+      "breakMinutes": 48
+    },
+    {
+      "id": "1744675204000",
+      "date": "2025-04-15",
+      "start": "15:03",
+      "end": "16:00",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 475
+    },
+    {
+      "id": "1744761600000",
+      "date": "2025-04-16",
+      "start": "08:00",
+      "end": "10:20",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 2333,
+      "breakAfter": "00:34"
+    },
+    {
+      "id": "1744761601000",
+      "date": "2025-04-16",
+      "start": "10:54",
+      "end": "13:14",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 1167
+    },
+    {
+      "id": "1744848000000",
+      "date": "2025-04-17",
+      "start": "09:00",
+      "end": "10:41",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 2020
+    },
+    {
+      "id": "1744934400000",
+      "date": "2025-04-18",
+      "start": "09:00",
+      "end": "13:02",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 2017
+    },
+    {
+      "id": "1745193600000",
+      "date": "2025-04-21",
+      "start": "10:00",
+      "end": "11:26",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 717,
+      "breakAfter": "00:41"
+    },
+    {
+      "id": "1745193601000",
+      "date": "2025-04-21",
+      "start": "12:07",
+      "end": "13:33",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 2007,
+      "breakAfter": "00:18"
+    },
+    {
+      "id": "1745193602000",
+      "date": "2025-04-21",
+      "start": "13:51",
+      "end": "15:18",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 725
+    },
+    {
+      "id": "1745280000000",
+      "date": "2025-04-22",
+      "start": "10:00",
+      "end": "12:08",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 1067,
+      "breakMinutes": 25
+    },
+    {
+      "id": "1745280001000",
+      "date": "2025-04-22",
+      "start": "12:33",
+      "end": "14:41",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 1067,
+      "breakAfter": "00:53"
+    },
+    {
+      "id": "1745280002000",
+      "date": "2025-04-22",
+      "start": "15:34",
+      "end": "17:42",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1707,
+      "breakAfter": "00:30"
+    },
+    {
+      "id": "1745280003000",
+      "date": "2025-04-22",
+      "start": "18:12",
+      "end": "19:48",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 1288
+    },
+    {
+      "id": "1745366400000",
+      "date": "2025-04-23",
+      "start": "08:00",
+      "end": "09:55",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 1150,
+      "breakMinutes": 33
+    },
+    {
+      "id": "1745366401000",
+      "date": "2025-04-23",
+      "start": "10:28",
+      "end": "12:23",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 2683,
+      "breakAfter": "00:57"
+    },
+    {
+      "id": "1745366402000",
+      "date": "2025-04-23",
+      "start": "13:20",
+      "end": "15:15",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 1150
+    },
+    {
+      "id": "1745452800000",
+      "date": "2025-04-24",
+      "start": "09:00",
+      "end": "09:37",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 370,
+      "breakAfter": "00:55"
+    },
+    {
+      "id": "1745452801000",
+      "date": "2025-04-24",
+      "start": "10:32",
+      "end": "11:09",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 308,
+      "breakMinutes": 17
+    },
+    {
+      "id": "1745452802000",
+      "date": "2025-04-24",
+      "start": "11:26",
+      "end": "12:03",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 863,
+      "breakMinutes": 25
+    },
+    {
+      "id": "1745452803000",
+      "date": "2025-04-24",
+      "start": "12:28",
+      "end": "13:05",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 493,
+      "breakAfter": "00:49"
+    },
+    {
+      "id": "1745452804000",
+      "date": "2025-04-24",
+      "start": "13:54",
+      "end": "14:31",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 925
+    },
+    {
+      "id": "1745539200000",
+      "date": "2025-04-25",
+      "start": "09:00",
+      "end": "10:02",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1447,
+      "breakMinutes": 15
+    },
+    {
+      "id": "1745539201000",
+      "date": "2025-04-25",
+      "start": "10:17",
+      "end": "11:19",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 517,
+      "breakMinutes": 34
+    },
+    {
+      "id": "1745539202000",
+      "date": "2025-04-25",
+      "start": "11:53",
+      "end": "12:55",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 517
+    },
+    {
+      "id": "1745712000000",
+      "date": "2025-04-27",
+      "start": "08:00",
+      "end": "11:54",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 5070,
+      "breakAfter": "00:16"
+    },
+    {
+      "id": "1745712001000",
+      "date": "2025-04-27",
+      "start": "12:10",
+      "end": "16:04",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 1950
+    },
+    {
+      "id": "1745798400000",
+      "date": "2025-04-28",
+      "start": "08:00",
+      "end": "09:05",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1300,
+      "breakMinutes": 37
+    },
+    {
+      "id": "1745798401000",
+      "date": "2025-04-28",
+      "start": "09:42",
+      "end": "10:47",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 650,
+      "breakAfter": "00:19"
+    },
+    {
+      "id": "1745798402000",
+      "date": "2025-04-28",
+      "start": "11:06",
+      "end": "12:11",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 542,
+      "breakMinutes": 57
+    },
+    {
+      "id": "1745798403000",
+      "date": "2025-04-28",
+      "start": "13:08",
+      "end": "14:13",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1517
+    },
+    {
+      "id": "1745884800000",
+      "date": "2025-04-29",
+      "start": "09:00",
+      "end": "10:11",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 1775,
+      "breakMinutes": 29
+    },
+    {
+      "id": "1745884801000",
+      "date": "2025-04-29",
+      "start": "10:40",
+      "end": "11:51",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 1775,
+      "breakAfter": "00:55"
+    },
+    {
+      "id": "1745884802000",
+      "date": "2025-04-29",
+      "start": "12:46",
+      "end": "13:57",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1420,
+      "breakMinutes": 21
+    },
+    {
+      "id": "1745884803000",
+      "date": "2025-04-29",
+      "start": "14:18",
+      "end": "15:29",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 1775
+    },
+    {
+      "id": "1745971200000",
+      "date": "2025-04-30",
+      "start": "08:00",
+      "end": "09:17",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 1925
+    },
+    {
+      "id": "1746057600000",
+      "date": "2025-05-01",
+      "start": "10:00",
+      "end": "11:36",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 2080,
+      "breakMinutes": 50
+    },
+    {
+      "id": "1746057601000",
+      "date": "2025-05-01",
+      "start": "12:26",
+      "end": "14:02",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1920,
+      "breakMinutes": 45
+    },
+    {
+      "id": "1746057602000",
+      "date": "2025-05-01",
+      "start": "14:47",
+      "end": "16:23",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1600,
+      "breakMinutes": 34
+    },
+    {
+      "id": "1746057603000",
+      "date": "2025-05-01",
+      "start": "16:57",
+      "end": "18:33",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 960
+    },
+    {
+      "id": "1746144000000",
+      "date": "2025-05-02",
+      "start": "10:00",
+      "end": "15:55",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 7100
+    },
+    {
+      "id": "1746316800000",
+      "date": "2025-05-04",
+      "start": "08:00",
+      "end": "08:30",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 650,
+      "breakMinutes": 19
+    },
+    {
+      "id": "1746316801000",
+      "date": "2025-05-04",
+      "start": "08:49",
+      "end": "09:19",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 700,
+      "breakAfter": "00:31"
+    },
+    {
+      "id": "1746316802000",
+      "date": "2025-05-04",
+      "start": "09:50",
+      "end": "10:20",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 500,
+      "breakMinutes": 25
+    },
+    {
+      "id": "1746316803000",
+      "date": "2025-05-04",
+      "start": "10:45",
+      "end": "11:15",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 100
+    },
+    {
+      "id": "1746403200000",
+      "date": "2025-05-05",
+      "start": "10:00",
+      "end": "13:03",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 4575
+    },
+    {
+      "id": "1746489600000",
+      "date": "2025-05-06",
+      "start": "08:00",
+      "end": "09:27",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 870,
+      "breakMinutes": 51
+    },
+    {
+      "id": "1746489601000",
+      "date": "2025-05-06",
+      "start": "10:18",
+      "end": "11:45",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 2175,
+      "breakMinutes": 16
+    },
+    {
+      "id": "1746489602000",
+      "date": "2025-05-06",
+      "start": "12:01",
+      "end": "13:28",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1740
+    },
+    {
+      "id": "1746576000000",
+      "date": "2025-05-07",
+      "start": "10:00",
+      "end": "11:34",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1880,
+      "breakAfter": "00:33"
+    },
+    {
+      "id": "1746576001000",
+      "date": "2025-05-07",
+      "start": "12:07",
+      "end": "13:41",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1880,
+      "breakAfter": "01:00"
+    },
+    {
+      "id": "1746576002000",
+      "date": "2025-05-07",
+      "start": "14:41",
+      "end": "16:15",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 2037,
+      "breakAfter": "00:31"
+    },
+    {
+      "id": "1746576003000",
+      "date": "2025-05-07",
+      "start": "16:46",
+      "end": "18:20",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 783
+    },
+    {
+      "id": "1746662400000",
+      "date": "2025-05-08",
+      "start": "10:00",
+      "end": "16:53",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 4130
+    },
+    {
+      "id": "1746748800000",
+      "date": "2025-05-09",
+      "start": "09:00",
+      "end": "11:20",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 3500,
+      "breakAfter": "00:29"
+    },
+    {
+      "id": "1746748801000",
+      "date": "2025-05-09",
+      "start": "11:49",
+      "end": "14:09",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1867
+    },
+    {
+      "id": "1746835200000",
+      "date": "2025-05-10",
+      "start": "10:00",
+      "end": "11:36",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1920,
+      "breakMinutes": 38
+    },
+    {
+      "id": "1746835201000",
+      "date": "2025-05-10",
+      "start": "12:14",
+      "end": "13:50",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 800,
+      "breakAfter": "00:39"
+    },
+    {
+      "id": "1746835202000",
+      "date": "2025-05-10",
+      "start": "14:29",
+      "end": "16:05",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 2400
+    },
+    {
+      "id": "1747008000000",
+      "date": "2025-05-12",
+      "start": "09:00",
+      "end": "10:29",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 2077
+    },
+    {
+      "id": "1747094400000",
+      "date": "2025-05-13",
+      "start": "10:00",
+      "end": "11:27",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 870,
+      "breakAfter": "00:58"
+    },
+    {
+      "id": "1747094401000",
+      "date": "2025-05-13",
+      "start": "12:25",
+      "end": "13:52",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 2030,
+      "breakAfter": "00:47"
+    },
+    {
+      "id": "1747094402000",
+      "date": "2025-05-13",
+      "start": "14:39",
+      "end": "16:06",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1740
+    },
+    {
+      "id": "1747180800000",
+      "date": "2025-05-14",
+      "start": "10:00",
+      "end": "12:12",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 2200,
+      "breakAfter": "00:59"
+    },
+    {
+      "id": "1747180801000",
+      "date": "2025-05-14",
+      "start": "13:11",
+      "end": "15:23",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1760,
+      "breakAfter": "00:32"
+    },
+    {
+      "id": "1747180802000",
+      "date": "2025-05-14",
+      "start": "15:55",
+      "end": "18:07",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 1320
+    },
+    {
+      "id": "1747267200000",
+      "date": "2025-05-15",
+      "start": "09:00",
+      "end": "10:42",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 1020,
+      "breakAfter": "00:27"
+    },
+    {
+      "id": "1747267201000",
+      "date": "2025-05-15",
+      "start": "11:09",
+      "end": "12:50",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 2525
+    },
+    {
+      "id": "1747353600000",
+      "date": "2025-05-16",
+      "start": "09:00",
+      "end": "09:44",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 367,
+      "breakMinutes": 16
+    },
+    {
+      "id": "1747353601000",
+      "date": "2025-05-16",
+      "start": "10:00",
+      "end": "10:44",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 953,
+      "breakAfter": "00:38"
+    },
+    {
+      "id": "1747353602000",
+      "date": "2025-05-16",
+      "start": "11:22",
+      "end": "12:06",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 367,
+      "breakAfter": "00:28"
+    },
+    {
+      "id": "1747353603000",
+      "date": "2025-05-16",
+      "start": "12:34",
+      "end": "13:18",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1027,
+      "breakMinutes": 55
+    },
+    {
+      "id": "1747353604000",
+      "date": "2025-05-16",
+      "start": "14:13",
+      "end": "14:57",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 1100
+    },
+    {
+      "id": "1747612800000",
+      "date": "2025-05-19",
+      "start": "08:00",
+      "end": "09:36",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1280,
+      "breakAfter": "00:17"
+    },
+    {
+      "id": "1747612801000",
+      "date": "2025-05-19",
+      "start": "09:53",
+      "end": "11:29",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1280,
+      "breakAfter": "00:33"
+    },
+    {
+      "id": "1747612802000",
+      "date": "2025-05-19",
+      "start": "12:02",
+      "end": "13:38",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 2400,
+      "breakMinutes": 47
+    },
+    {
+      "id": "1747612803000",
+      "date": "2025-05-19",
+      "start": "14:25",
+      "end": "16:01",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 960,
+      "breakAfter": "00:27"
+    },
+    {
+      "id": "1747612804000",
+      "date": "2025-05-19",
+      "start": "16:28",
+      "end": "18:04",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 800
+    },
+    {
+      "id": "1747699200000",
+      "date": "2025-05-20",
+      "start": "10:00",
+      "end": "10:48",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 1200,
+      "breakMinutes": 53
+    },
+    {
+      "id": "1747699201000",
+      "date": "2025-05-20",
+      "start": "11:41",
+      "end": "12:29",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1040,
+      "breakAfter": "00:49"
+    },
+    {
+      "id": "1747699202000",
+      "date": "2025-05-20",
+      "start": "13:18",
+      "end": "14:06",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 1200
+    },
+    {
+      "id": "1747785600000",
+      "date": "2025-05-21",
+      "start": "09:00",
+      "end": "10:10",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1400,
+      "breakAfter": "00:35"
+    },
+    {
+      "id": "1747785601000",
+      "date": "2025-05-21",
+      "start": "10:45",
+      "end": "11:55",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 700
+    },
+    {
+      "id": "1747872000000",
+      "date": "2025-05-22",
+      "start": "09:00",
+      "end": "10:09",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 690,
+      "breakMinutes": 30
+    },
+    {
+      "id": "1747872001000",
+      "date": "2025-05-22",
+      "start": "10:39",
+      "end": "11:47",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 907,
+      "breakAfter": "01:00"
+    },
+    {
+      "id": "1747872002000",
+      "date": "2025-05-22",
+      "start": "12:47",
+      "end": "13:55",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 907
+    },
+    {
+      "id": "1747958400000",
+      "date": "2025-05-23",
+      "start": "08:00",
+      "end": "13:03",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 6565
+    },
+    {
+      "id": "1748217600000",
+      "date": "2025-05-26",
+      "start": "09:00",
+      "end": "11:43",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 3260,
+      "breakAfter": "00:41"
+    },
+    {
+      "id": "1748217601000",
+      "date": "2025-05-26",
+      "start": "12:24",
+      "end": "15:07",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 4075
+    },
+    {
+      "id": "1748304000000",
+      "date": "2025-05-27",
+      "start": "09:00",
+      "end": "09:30",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 700,
+      "breakMinutes": 24
+    },
+    {
+      "id": "1748304001000",
+      "date": "2025-05-27",
+      "start": "09:54",
+      "end": "10:24",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 650,
+      "breakMinutes": 30
+    },
+    {
+      "id": "1748304002000",
+      "date": "2025-05-27",
+      "start": "10:54",
+      "end": "11:24",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 250,
+      "breakAfter": "00:25"
+    },
+    {
+      "id": "1748304003000",
+      "date": "2025-05-27",
+      "start": "11:49",
+      "end": "12:19",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 100
+    },
+    {
+      "id": "1748390400000",
+      "date": "2025-05-28",
+      "start": "08:00",
+      "end": "13:05",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 7625
+    },
+    {
+      "id": "1748476800000",
+      "date": "2025-05-29",
+      "start": "08:00",
+      "end": "09:53",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 2637
+    },
+    {
+      "id": "1748563200000",
+      "date": "2025-05-30",
+      "start": "09:00",
+      "end": "09:59",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1180,
+      "breakAfter": "00:18"
+    },
+    {
+      "id": "1748563201000",
+      "date": "2025-05-30",
+      "start": "10:17",
+      "end": "11:16",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1180,
+      "breakMinutes": 30
+    },
+    {
+      "id": "1748563202000",
+      "date": "2025-05-30",
+      "start": "11:46",
+      "end": "12:45",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1278
+    },
+    {
+      "id": "1748649600000",
+      "date": "2025-05-31",
+      "start": "08:00",
+      "end": "08:35",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 875,
+      "breakAfter": "00:44"
+    },
+    {
+      "id": "1748649601000",
+      "date": "2025-05-31",
+      "start": "09:19",
+      "end": "09:54",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 350,
+      "breakMinutes": 28
+    },
+    {
+      "id": "1748649602000",
+      "date": "2025-05-31",
+      "start": "10:22",
+      "end": "10:57",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 875,
+      "breakMinutes": 58
+    },
+    {
+      "id": "1748649603000",
+      "date": "2025-05-31",
+      "start": "11:55",
+      "end": "12:30",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 700
+    },
+    {
+      "id": "1748822400000",
+      "date": "2025-06-02",
+      "start": "08:00",
+      "end": "08:30",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 750,
+      "breakMinutes": 28
+    },
+    {
+      "id": "1748822401000",
+      "date": "2025-06-02",
+      "start": "08:58",
+      "end": "09:28",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 500,
+      "breakAfter": "00:50"
+    },
+    {
+      "id": "1748822402000",
+      "date": "2025-06-02",
+      "start": "10:18",
+      "end": "10:48",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 611
+    },
+    {
+      "id": "1748908800000",
+      "date": "2025-06-03",
+      "start": "09:00",
+      "end": "09:47",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 1175,
+      "breakAfter": "00:54"
+    },
+    {
+      "id": "1748908801000",
+      "date": "2025-06-03",
+      "start": "10:41",
+      "end": "11:28",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 470
+    },
+    {
+      "id": "1748995200000",
+      "date": "2025-06-04",
+      "start": "09:00",
+      "end": "14:23",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 4307,
+      "breakAfter": "00:57"
+    },
+    {
+      "id": "1748995201000",
+      "date": "2025-06-04",
+      "start": "15:20",
+      "end": "17:57",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 2684
+    },
+    {
+      "id": "1749081600000",
+      "date": "2025-06-05",
+      "start": "10:00",
+      "end": "18:00",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 6529
+    },
+    {
+      "id": "1749168000000",
+      "date": "2025-06-06",
+      "start": "08:00",
+      "end": "09:40",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1667,
+      "breakAfter": "00:55"
+    },
+    {
+      "id": "1749168001000",
+      "date": "2025-06-06",
+      "start": "10:35",
+      "end": "12:15",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 1000,
+      "breakMinutes": 37
+    },
+    {
+      "id": "1749168002000",
+      "date": "2025-06-06",
+      "start": "12:52",
+      "end": "14:32",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 2000,
+      "breakAfter": "00:46"
+    },
+    {
+      "id": "1749168003000",
+      "date": "2025-06-06",
+      "start": "15:18",
+      "end": "16:58",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1667,
+      "breakAfter": "00:42"
+    },
+    {
+      "id": "1749168004000",
+      "date": "2025-06-06",
+      "start": "17:40",
+      "end": "19:00",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1646
+    },
+    {
+      "id": "1749427200000",
+      "date": "2025-06-09",
+      "start": "10:00",
+      "end": "11:04",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1493,
+      "breakAfter": "00:18"
+    },
+    {
+      "id": "1749427201000",
+      "date": "2025-06-09",
+      "start": "11:22",
+      "end": "12:26",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1387,
+      "breakAfter": "00:24"
+    },
+    {
+      "id": "1749427202000",
+      "date": "2025-06-09",
+      "start": "12:50",
+      "end": "13:54",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1387,
+      "breakMinutes": 49
+    },
+    {
+      "id": "1749427203000",
+      "date": "2025-06-09",
+      "start": "14:43",
+      "end": "15:47",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1387
+    },
+    {
+      "id": "1749513600000",
+      "date": "2025-06-10",
+      "start": "08:00",
+      "end": "09:41",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 2357,
+      "breakAfter": "00:28"
+    },
+    {
+      "id": "1749513601000",
+      "date": "2025-06-10",
+      "start": "10:09",
+      "end": "11:50",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 1010,
+      "breakMinutes": 44
+    },
+    {
+      "id": "1749513602000",
+      "date": "2025-06-10",
+      "start": "12:34",
+      "end": "14:15",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 1010,
+      "breakMinutes": 21
+    },
+    {
+      "id": "1749513603000",
+      "date": "2025-06-10",
+      "start": "14:36",
+      "end": "16:17",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1683
+    },
+    {
+      "id": "1749600000000",
+      "date": "2025-06-11",
+      "start": "08:00",
+      "end": "10:15",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 3375,
+      "breakMinutes": 25
+    },
+    {
+      "id": "1749600001000",
+      "date": "2025-06-11",
+      "start": "10:40",
+      "end": "12:55",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 3150
+    },
+    {
+      "id": "1749686400000",
+      "date": "2025-06-12",
+      "start": "10:00",
+      "end": "10:59",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 787,
+      "breakMinutes": 36
+    },
+    {
+      "id": "1749686401000",
+      "date": "2025-06-12",
+      "start": "11:35",
+      "end": "12:34",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1278,
+      "breakAfter": "00:23"
+    },
+    {
+      "id": "1749686402000",
+      "date": "2025-06-12",
+      "start": "12:57",
+      "end": "13:56",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1278,
+      "breakAfter": "00:37"
+    },
+    {
+      "id": "1749686403000",
+      "date": "2025-06-12",
+      "start": "14:33",
+      "end": "15:32",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1180,
+      "breakMinutes": 48
+    },
+    {
+      "id": "1749686404000",
+      "date": "2025-06-12",
+      "start": "16:20",
+      "end": "17:19",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1180
+    },
+    {
+      "id": "1749772800000",
+      "date": "2025-06-13",
+      "start": "09:00",
+      "end": "10:29",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1928,
+      "breakAfter": "00:37"
+    },
+    {
+      "id": "1749772801000",
+      "date": "2025-06-13",
+      "start": "11:06",
+      "end": "12:35",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1483
+    },
+    {
+      "id": "1750032000000",
+      "date": "2025-06-16",
+      "start": "08:00",
+      "end": "08:30",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 250,
+      "breakAfter": "00:17"
+    },
+    {
+      "id": "1750032001000",
+      "date": "2025-06-16",
+      "start": "08:47",
+      "end": "09:17",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 600,
+      "breakMinutes": 37
+    },
+    {
+      "id": "1750032002000",
+      "date": "2025-06-16",
+      "start": "09:54",
+      "end": "10:24",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 650,
+      "breakAfter": "00:52"
+    },
+    {
+      "id": "1750032003000",
+      "date": "2025-06-16",
+      "start": "11:16",
+      "end": "11:46",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 750,
+      "breakAfter": "00:35"
+    },
+    {
+      "id": "1750032004000",
+      "date": "2025-06-16",
+      "start": "12:21",
+      "end": "12:51",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 100
+    },
+    {
+      "id": "1750118400000",
+      "date": "2025-06-17",
+      "start": "08:00",
+      "end": "12:15",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 6375
+    },
+    {
+      "id": "1750204800000",
+      "date": "2025-06-18",
+      "start": "10:00",
+      "end": "11:12",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1560,
+      "breakMinutes": 33
+    },
+    {
+      "id": "1750204801000",
+      "date": "2025-06-18",
+      "start": "11:45",
+      "end": "12:57",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1440
+    },
+    {
+      "id": "1750291200000",
+      "date": "2025-06-19",
+      "start": "10:00",
+      "end": "12:55",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 3500
+    },
+    {
+      "id": "1750377600000",
+      "date": "2025-06-20",
+      "start": "08:00",
+      "end": "08:33",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 825,
+      "breakAfter": "00:29"
+    },
+    {
+      "id": "1750377601000",
+      "date": "2025-06-20",
+      "start": "09:02",
+      "end": "09:35",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 770,
+      "breakAfter": "00:25"
+    },
+    {
+      "id": "1750377602000",
+      "date": "2025-06-20",
+      "start": "10:00",
+      "end": "10:33",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 715,
+      "breakMinutes": 48
+    },
+    {
+      "id": "1750377603000",
+      "date": "2025-06-20",
+      "start": "11:21",
+      "end": "11:54",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 550,
+      "breakMinutes": 27
+    },
+    {
+      "id": "1750377604000",
+      "date": "2025-06-20",
+      "start": "12:21",
+      "end": "12:54",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 660
+    },
+    {
+      "id": "1750636800000",
+      "date": "2025-06-23",
+      "start": "10:00",
+      "end": "12:41",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 2147,
+      "breakAfter": "00:32"
+    },
+    {
+      "id": "1750636801000",
+      "date": "2025-06-23",
+      "start": "13:13",
+      "end": "15:54",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 4025
+    },
+    {
+      "id": "1750723200000",
+      "date": "2025-06-24",
+      "start": "08:00",
+      "end": "14:05",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 7908
+    },
+    {
+      "id": "1750809600000",
+      "date": "2025-06-25",
+      "start": "08:00",
+      "end": "16:00",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 7845
+    },
+    {
+      "id": "1750896000000",
+      "date": "2025-06-26",
+      "start": "08:00",
+      "end": "08:47",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 470,
+      "breakAfter": "00:48"
+    },
+    {
+      "id": "1750896001000",
+      "date": "2025-06-26",
+      "start": "09:35",
+      "end": "10:22",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 783,
+      "breakAfter": "00:23"
+    },
+    {
+      "id": "1750896002000",
+      "date": "2025-06-26",
+      "start": "10:45",
+      "end": "11:32",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1018
+    },
+    {
+      "id": "1750982400000",
+      "date": "2025-06-27",
+      "start": "10:00",
+      "end": "10:31",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 775,
+      "breakAfter": "00:44"
+    },
+    {
+      "id": "1750982401000",
+      "date": "2025-06-27",
+      "start": "11:15",
+      "end": "11:46",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 517,
+      "breakAfter": "00:37"
+    },
+    {
+      "id": "1750982402000",
+      "date": "2025-06-27",
+      "start": "12:23",
+      "end": "12:54",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 775,
+      "breakMinutes": 51
+    },
+    {
+      "id": "1750982403000",
+      "date": "2025-06-27",
+      "start": "13:45",
+      "end": "14:16",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 517
+    },
+    {
+      "id": "1751155200000",
+      "date": "2025-06-29",
+      "start": "09:00",
+      "end": "09:54",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1260,
+      "breakAfter": "00:43"
+    },
+    {
+      "id": "1751155201000",
+      "date": "2025-06-29",
+      "start": "10:37",
+      "end": "11:31",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 720,
+      "breakAfter": "00:46"
+    },
+    {
+      "id": "1751155202000",
+      "date": "2025-06-29",
+      "start": "12:17",
+      "end": "13:11",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 900,
+      "breakAfter": "00:37"
+    },
+    {
+      "id": "1751155203000",
+      "date": "2025-06-29",
+      "start": "13:48",
+      "end": "14:42",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 900
+    },
+    {
+      "id": "1751241600000",
+      "date": "2025-06-30",
+      "start": "08:00",
+      "end": "16:00",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 7841
+    },
+    {
+      "id": "1751328000000",
+      "date": "2025-07-01",
+      "start": "09:00",
+      "end": "10:53",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 1130,
+      "breakAfter": "00:24"
+    },
+    {
+      "id": "1751328001000",
+      "date": "2025-07-01",
+      "start": "11:17",
+      "end": "13:10",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 2637,
+      "breakAfter": "00:22"
+    },
+    {
+      "id": "1751328002000",
+      "date": "2025-07-01",
+      "start": "13:32",
+      "end": "15:25",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1507
+    },
+    {
+      "id": "1751414400000",
+      "date": "2025-07-02",
+      "start": "08:00",
+      "end": "13:37",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 7302
+    },
+    {
+      "id": "1751500800000",
+      "date": "2025-07-03",
+      "start": "08:00",
+      "end": "11:12",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 4160,
+      "breakMinutes": 17
+    },
+    {
+      "id": "1751500801000",
+      "date": "2025-07-03",
+      "start": "11:29",
+      "end": "14:41",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 3200
+    },
+    {
+      "id": "1751587200000",
+      "date": "2025-07-04",
+      "start": "08:00",
+      "end": "08:38",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 317,
+      "breakMinutes": 23
+    },
+    {
+      "id": "1751587201000",
+      "date": "2025-07-04",
+      "start": "09:01",
+      "end": "09:39",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 507,
+      "breakAfter": "00:23"
+    },
+    {
+      "id": "1751587202000",
+      "date": "2025-07-04",
+      "start": "10:02",
+      "end": "10:40",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 380,
+      "breakMinutes": 36
+    },
+    {
+      "id": "1751587203000",
+      "date": "2025-07-04",
+      "start": "11:16",
+      "end": "11:54",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 380,
+      "breakMinutes": 52
+    },
+    {
+      "id": "1751587204000",
+      "date": "2025-07-04",
+      "start": "12:46",
+      "end": "13:24",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 380
+    },
+    {
+      "id": "1751760000000",
+      "date": "2025-07-06",
+      "start": "10:00",
+      "end": "11:58",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 2360,
+      "breakMinutes": 49
+    },
+    {
+      "id": "1751760001000",
+      "date": "2025-07-06",
+      "start": "12:47",
+      "end": "14:45",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 2360,
+      "breakAfter": "00:38"
+    },
+    {
+      "id": "1751760002000",
+      "date": "2025-07-06",
+      "start": "15:23",
+      "end": "17:21",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 2753
+    },
+    {
+      "id": "1751846400000",
+      "date": "2025-07-07",
+      "start": "08:00",
+      "end": "09:33",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 2170,
+      "breakMinutes": 52
+    },
+    {
+      "id": "1751846401000",
+      "date": "2025-07-07",
+      "start": "10:25",
+      "end": "11:58",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1240
+    },
+    {
+      "id": "1751932800000",
+      "date": "2025-07-08",
+      "start": "08:00",
+      "end": "08:34",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 453,
+      "breakMinutes": 16
+    },
+    {
+      "id": "1751932801000",
+      "date": "2025-07-08",
+      "start": "08:50",
+      "end": "09:24",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 453,
+      "breakAfter": "00:26"
+    },
+    {
+      "id": "1751932802000",
+      "date": "2025-07-08",
+      "start": "09:50",
+      "end": "10:24",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 737,
+      "breakMinutes": 47
+    },
+    {
+      "id": "1751932803000",
+      "date": "2025-07-08",
+      "start": "11:11",
+      "end": "11:45",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 737,
+      "breakAfter": "00:54"
+    },
+    {
+      "id": "1751932804000",
+      "date": "2025-07-08",
+      "start": "12:39",
+      "end": "13:13",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 680
+    },
+    {
+      "id": "1752019200000",
+      "date": "2025-07-09",
+      "start": "09:00",
+      "end": "10:36",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 960,
+      "breakAfter": "00:51"
+    },
+    {
+      "id": "1752019201000",
+      "date": "2025-07-09",
+      "start": "11:27",
+      "end": "13:03",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 960,
+      "breakMinutes": 44
+    },
+    {
+      "id": "1752019202000",
+      "date": "2025-07-09",
+      "start": "13:47",
+      "end": "15:23",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 960,
+      "breakMinutes": 41
+    },
+    {
+      "id": "1752019203000",
+      "date": "2025-07-09",
+      "start": "16:04",
+      "end": "17:40",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1600
+    },
+    {
+      "id": "1752105600000",
+      "date": "2025-07-10",
+      "start": "08:00",
+      "end": "11:13",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 4825,
+      "breakAfter": "00:51"
+    },
+    {
+      "id": "1752105601000",
+      "date": "2025-07-10",
+      "start": "12:04",
+      "end": "15:17",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 2573
+    },
+    {
+      "id": "1752192000000",
+      "date": "2025-07-11",
+      "start": "09:00",
+      "end": "09:55",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1100,
+      "breakMinutes": 38
+    },
+    {
+      "id": "1752192001000",
+      "date": "2025-07-11",
+      "start": "10:33",
+      "end": "11:28",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1192,
+      "breakMinutes": 44
+    },
+    {
+      "id": "1752192002000",
+      "date": "2025-07-11",
+      "start": "12:12",
+      "end": "13:07",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 1375,
+      "breakMinutes": 46
+    },
+    {
+      "id": "1752192003000",
+      "date": "2025-07-11",
+      "start": "13:53",
+      "end": "14:48",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1192,
+      "breakAfter": "00:22"
+    },
+    {
+      "id": "1752192004000",
+      "date": "2025-07-11",
+      "start": "15:10",
+      "end": "16:05",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 1375
+    },
+    {
+      "id": "1752451200000",
+      "date": "2025-07-14",
+      "start": "09:00",
+      "end": "10:15",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1250,
+      "breakAfter": "00:16"
+    },
+    {
+      "id": "1752451201000",
+      "date": "2025-07-14",
+      "start": "10:31",
+      "end": "11:46",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1500,
+      "breakMinutes": 52
+    },
+    {
+      "id": "1752451202000",
+      "date": "2025-07-14",
+      "start": "12:38",
+      "end": "13:53",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1750,
+      "breakAfter": "00:27"
+    },
+    {
+      "id": "1752451203000",
+      "date": "2025-07-14",
+      "start": "14:20",
+      "end": "15:35",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 625
+    },
+    {
+      "id": "1752537600000",
+      "date": "2025-07-15",
+      "start": "08:00",
+      "end": "08:36",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 360,
+      "breakMinutes": 47
+    },
+    {
+      "id": "1752537601000",
+      "date": "2025-07-15",
+      "start": "09:23",
+      "end": "09:59",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 900,
+      "breakAfter": "00:45"
+    },
+    {
+      "id": "1752537602000",
+      "date": "2025-07-15",
+      "start": "10:44",
+      "end": "11:20",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 900,
+      "breakMinutes": 40
+    },
+    {
+      "id": "1752537603000",
+      "date": "2025-07-15",
+      "start": "12:00",
+      "end": "12:36",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 720
+    },
+    {
+      "id": "1752624000000",
+      "date": "2025-07-16",
+      "start": "10:00",
+      "end": "13:37",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 1808,
+      "breakMinutes": 26
+    },
+    {
+      "id": "1752624001000",
+      "date": "2025-07-16",
+      "start": "14:03",
+      "end": "17:40",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 1808,
+      "breakAfter": "00:41"
+    },
+    {
+      "id": "1752624002000",
+      "date": "2025-07-16",
+      "start": "18:21",
+      "end": "19:07",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 2897
+    },
+    {
+      "id": "1752710400000",
+      "date": "2025-07-17",
+      "start": "10:00",
+      "end": "10:33",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 825,
+      "breakMinutes": 60
+    },
+    {
+      "id": "1752710401000",
+      "date": "2025-07-17",
+      "start": "11:33",
+      "end": "12:06",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 330,
+      "breakMinutes": 17
+    },
+    {
+      "id": "1752710402000",
+      "date": "2025-07-17",
+      "start": "12:23",
+      "end": "12:56",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 770
+    },
+    {
+      "id": "1752796800000",
+      "date": "2025-07-18",
+      "start": "08:00",
+      "end": "09:14",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1480,
+      "breakAfter": "00:35"
+    },
+    {
+      "id": "1752796801000",
+      "date": "2025-07-18",
+      "start": "09:49",
+      "end": "11:03",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 617,
+      "breakMinutes": 18
+    },
+    {
+      "id": "1752796802000",
+      "date": "2025-07-18",
+      "start": "11:21",
+      "end": "12:35",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1727
+    },
+    {
+      "id": "1753056000000",
+      "date": "2025-07-21",
+      "start": "10:00",
+      "end": "16:44",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 3367,
+      "breakMinutes": 37
+    },
+    {
+      "id": "1753056001000",
+      "date": "2025-07-21",
+      "start": "17:21",
+      "end": "18:37",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 3364
+    },
+    {
+      "id": "1753142400000",
+      "date": "2025-07-22",
+      "start": "10:00",
+      "end": "12:17",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 1142,
+      "breakMinutes": 58
+    },
+    {
+      "id": "1753142401000",
+      "date": "2025-07-22",
+      "start": "13:15",
+      "end": "15:32",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 2283,
+      "breakMinutes": 57
+    },
+    {
+      "id": "1753142402000",
+      "date": "2025-07-22",
+      "start": "16:29",
+      "end": "18:46",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 2968,
+      "breakMinutes": 48
+    },
+    {
+      "id": "1753142403000",
+      "date": "2025-07-22",
+      "start": "19:34",
+      "end": "20:43",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 1146
+    },
+    {
+      "id": "1753228800000",
+      "date": "2025-07-23",
+      "start": "10:00",
+      "end": "10:37",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 740,
+      "breakAfter": "00:26"
+    },
+    {
+      "id": "1753228801000",
+      "date": "2025-07-23",
+      "start": "11:03",
+      "end": "11:40",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 863
+    },
+    {
+      "id": "1753315200000",
+      "date": "2025-07-24",
+      "start": "10:00",
+      "end": "12:05",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 2083,
+      "breakAfter": "00:54"
+    },
+    {
+      "id": "1753315201000",
+      "date": "2025-07-24",
+      "start": "12:59",
+      "end": "15:04",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 3125,
+      "breakAfter": "00:50"
+    },
+    {
+      "id": "1753315202000",
+      "date": "2025-07-24",
+      "start": "15:54",
+      "end": "17:59",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1667
+    },
+    {
+      "id": "1753401600000",
+      "date": "2025-07-25",
+      "start": "10:00",
+      "end": "11:42",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 2550,
+      "breakAfter": "00:52"
+    },
+    {
+      "id": "1753401601000",
+      "date": "2025-07-25",
+      "start": "12:34",
+      "end": "14:16",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1360,
+      "breakAfter": "00:49"
+    },
+    {
+      "id": "1753401602000",
+      "date": "2025-07-25",
+      "start": "15:05",
+      "end": "16:47",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1700,
+      "breakMinutes": 35
+    },
+    {
+      "id": "1753401603000",
+      "date": "2025-07-25",
+      "start": "17:22",
+      "end": "19:04",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 1020
+    },
+    {
+      "id": "1753660800000",
+      "date": "2025-07-28",
+      "start": "08:00",
+      "end": "08:55",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 917,
+      "breakAfter": "00:30"
+    },
+    {
+      "id": "1753660801000",
+      "date": "2025-07-28",
+      "start": "09:25",
+      "end": "10:20",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1192,
+      "breakMinutes": 24
+    },
+    {
+      "id": "1753660802000",
+      "date": "2025-07-28",
+      "start": "10:44",
+      "end": "11:39",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1283,
+      "breakAfter": "00:15"
+    },
+    {
+      "id": "1753660803000",
+      "date": "2025-07-28",
+      "start": "11:54",
+      "end": "12:49",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 733
+    },
+    {
+      "id": "1753747200000",
+      "date": "2025-07-29",
+      "start": "09:00",
+      "end": "11:05",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 2917
+    },
+    {
+      "id": "1753833600000",
+      "date": "2025-07-30",
+      "start": "10:00",
+      "end": "16:34",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 3940
+    },
+    {
+      "id": "1753920000000",
+      "date": "2025-07-31",
+      "start": "08:00",
+      "end": "09:15",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1000,
+      "breakAfter": "00:34"
+    },
+    {
+      "id": "1753920001000",
+      "date": "2025-07-31",
+      "start": "09:49",
+      "end": "11:04",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 625
+    },
+    {
+      "id": "1754006400000",
+      "date": "2025-08-01",
+      "start": "09:00",
+      "end": "10:55",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 2300
+    },
+    {
+      "id": "1754092800000",
+      "date": "2025-08-02",
+      "start": "10:00",
+      "end": "15:18",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 4240,
+      "breakMinutes": 16
+    },
+    {
+      "id": "1754092801000",
+      "date": "2025-08-02",
+      "start": "15:34",
+      "end": "18:16",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 2653
+    },
+    {
+      "id": "1754265600000",
+      "date": "2025-08-04",
+      "start": "08:00",
+      "end": "09:04",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1493,
+      "breakMinutes": 38
+    },
+    {
+      "id": "1754265601000",
+      "date": "2025-08-04",
+      "start": "09:42",
+      "end": "10:46",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 853,
+      "breakAfter": "00:34"
+    },
+    {
+      "id": "1754265602000",
+      "date": "2025-08-04",
+      "start": "11:20",
+      "end": "12:24",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 1600,
+      "breakAfter": "00:42"
+    },
+    {
+      "id": "1754265603000",
+      "date": "2025-08-04",
+      "start": "13:06",
+      "end": "14:10",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1387,
+      "breakAfter": "00:58"
+    },
+    {
+      "id": "1754265604000",
+      "date": "2025-08-04",
+      "start": "15:08",
+      "end": "16:12",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 853
+    },
+    {
+      "id": "1754352000000",
+      "date": "2025-08-05",
+      "start": "08:00",
+      "end": "09:29",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 2225,
+      "breakAfter": "00:18"
+    },
+    {
+      "id": "1754352001000",
+      "date": "2025-08-05",
+      "start": "09:47",
+      "end": "11:16",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 2077,
+      "breakAfter": "00:50"
+    },
+    {
+      "id": "1754352002000",
+      "date": "2025-08-05",
+      "start": "12:06",
+      "end": "13:35",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 2225
+    },
+    {
+      "id": "1754438400000",
+      "date": "2025-08-06",
+      "start": "09:00",
+      "end": "10:40",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 2000,
+      "breakAfter": "00:20"
+    },
+    {
+      "id": "1754438401000",
+      "date": "2025-08-06",
+      "start": "11:00",
+      "end": "12:40",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1333
+    },
+    {
+      "id": "1754524800000",
+      "date": "2025-08-07",
+      "start": "08:00",
+      "end": "10:52",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 1433,
+      "breakAfter": "00:46"
+    },
+    {
+      "id": "1754524801000",
+      "date": "2025-08-07",
+      "start": "11:38",
+      "end": "14:30",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 1720,
+      "breakAfter": "00:54"
+    },
+    {
+      "id": "1754524802000",
+      "date": "2025-08-07",
+      "start": "15:24",
+      "end": "17:40",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 2267,
+      "breakAfter": "00:27"
+    },
+    {
+      "id": "1754524803000",
+      "date": "2025-08-07",
+      "start": "18:07",
+      "end": "18:37",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 2018
+    },
+    {
+      "id": "1754611200000",
+      "date": "2025-08-08",
+      "start": "10:00",
+      "end": "10:31",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 672,
+      "breakAfter": "00:21"
+    },
+    {
+      "id": "1754611201000",
+      "date": "2025-08-08",
+      "start": "10:52",
+      "end": "11:23",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 672,
+      "breakMinutes": 33
+    },
+    {
+      "id": "1754611202000",
+      "date": "2025-08-08",
+      "start": "11:56",
+      "end": "12:27",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 775,
+      "breakAfter": "00:23"
+    },
+    {
+      "id": "1754611203000",
+      "date": "2025-08-08",
+      "start": "12:50",
+      "end": "13:21",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 775
+    },
+    {
+      "id": "1754784000000",
+      "date": "2025-08-10",
+      "start": "10:00",
+      "end": "10:44",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 587,
+      "breakAfter": "00:19"
+    },
+    {
+      "id": "1754784001000",
+      "date": "2025-08-10",
+      "start": "11:03",
+      "end": "11:47",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 880,
+      "breakMinutes": 57
+    },
+    {
+      "id": "1754784002000",
+      "date": "2025-08-10",
+      "start": "12:44",
+      "end": "13:28",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 880
+    },
+    {
+      "id": "1754870400000",
+      "date": "2025-08-11",
+      "start": "08:00",
+      "end": "09:33",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1240,
+      "breakMinutes": 57
+    },
+    {
+      "id": "1754870401000",
+      "date": "2025-08-11",
+      "start": "10:30",
+      "end": "12:03",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1240,
+      "breakMinutes": 36
+    },
+    {
+      "id": "1754870402000",
+      "date": "2025-08-11",
+      "start": "12:39",
+      "end": "14:12",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1550,
+      "breakMinutes": 54
+    },
+    {
+      "id": "1754870403000",
+      "date": "2025-08-11",
+      "start": "15:06",
+      "end": "16:39",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 2325,
+      "breakMinutes": 22
+    },
+    {
+      "id": "1754870404000",
+      "date": "2025-08-11",
+      "start": "17:01",
+      "end": "18:34",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1240
+    },
+    {
+      "id": "1754956800000",
+      "date": "2025-08-12",
+      "start": "10:00",
+      "end": "12:10",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 2167,
+      "breakMinutes": 19
+    },
+    {
+      "id": "1754956801000",
+      "date": "2025-08-12",
+      "start": "12:29",
+      "end": "14:39",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 2600,
+      "breakMinutes": 36
+    },
+    {
+      "id": "1754956802000",
+      "date": "2025-08-12",
+      "start": "15:15",
+      "end": "17:25",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 1083
+    },
+    {
+      "id": "1755043200000",
+      "date": "2025-08-13",
+      "start": "09:00",
+      "end": "11:28",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 2960
+    },
+    {
+      "id": "1755129600000",
+      "date": "2025-08-14",
+      "start": "08:00",
+      "end": "15:26",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 4460
+    },
+    {
+      "id": "1755216000000",
+      "date": "2025-08-15",
+      "start": "08:00",
+      "end": "09:54",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 2470,
+      "breakAfter": "00:58"
+    },
+    {
+      "id": "1755216001000",
+      "date": "2025-08-15",
+      "start": "10:52",
+      "end": "12:46",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 2470,
+      "breakMinutes": 59
+    },
+    {
+      "id": "1755216002000",
+      "date": "2025-08-15",
+      "start": "13:45",
+      "end": "15:39",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1900
+    },
+    {
+      "id": "1755302400000",
+      "date": "2025-08-16",
+      "start": "10:00",
+      "end": "12:34",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 3337,
+      "breakMinutes": 29
+    },
+    {
+      "id": "1755302401000",
+      "date": "2025-08-16",
+      "start": "13:03",
+      "end": "15:37",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 2567,
+      "breakMinutes": 32
+    },
+    {
+      "id": "1755302402000",
+      "date": "2025-08-16",
+      "start": "16:09",
+      "end": "18:43",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 1283
+    },
+    {
+      "id": "1755475200000",
+      "date": "2025-08-18",
+      "start": "09:00",
+      "end": "12:58",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 5950
+    },
+    {
+      "id": "1755561600000",
+      "date": "2025-08-19",
+      "start": "09:00",
+      "end": "10:40",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 833,
+      "breakAfter": "00:40"
+    },
+    {
+      "id": "1755561601000",
+      "date": "2025-08-19",
+      "start": "11:20",
+      "end": "13:00",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 2500,
+      "breakAfter": "00:49"
+    },
+    {
+      "id": "1755561602000",
+      "date": "2025-08-19",
+      "start": "13:49",
+      "end": "15:29",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 2500,
+      "breakMinutes": 26
+    },
+    {
+      "id": "1755561603000",
+      "date": "2025-08-19",
+      "start": "15:55",
+      "end": "17:35",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1667
+    },
+    {
+      "id": "1755648000000",
+      "date": "2025-08-20",
+      "start": "10:00",
+      "end": "10:30",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 300,
+      "breakMinutes": 56
+    },
+    {
+      "id": "1755648001000",
+      "date": "2025-08-20",
+      "start": "11:26",
+      "end": "11:56",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 700,
+      "breakAfter": "00:57"
+    },
+    {
+      "id": "1755648002000",
+      "date": "2025-08-20",
+      "start": "12:53",
+      "end": "13:23",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 750,
+      "breakMinutes": 56
+    },
+    {
+      "id": "1755648003000",
+      "date": "2025-08-20",
+      "start": "14:19",
+      "end": "14:49",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 500,
+      "breakMinutes": 11
+    },
+    {
+      "id": "1755648004000",
+      "date": "2025-08-20",
+      "start": "15:00",
+      "end": "15:30",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 100
+    },
+    {
+      "id": "1755734400000",
+      "date": "2025-08-21",
+      "start": "08:00",
+      "end": "08:51",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1020,
+      "breakMinutes": 27
+    },
+    {
+      "id": "1755734401000",
+      "date": "2025-08-21",
+      "start": "09:18",
+      "end": "10:09",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1105,
+      "breakAfter": "00:53"
+    },
+    {
+      "id": "1755734402000",
+      "date": "2025-08-21",
+      "start": "11:02",
+      "end": "11:53",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 510,
+      "breakAfter": "00:59"
+    },
+    {
+      "id": "1755734403000",
+      "date": "2025-08-21",
+      "start": "12:52",
+      "end": "13:43",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 425,
+      "breakAfter": "00:17"
+    },
+    {
+      "id": "1755734404000",
+      "date": "2025-08-21",
+      "start": "14:00",
+      "end": "14:51",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1020
+    },
+    {
+      "id": "1755820800000",
+      "date": "2025-08-22",
+      "start": "10:00",
+      "end": "16:04",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 3640
+    },
+    {
+      "id": "1755907200000",
+      "date": "2025-08-23",
+      "start": "10:00",
+      "end": "10:46",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 383,
+      "breakAfter": "00:54"
+    },
+    {
+      "id": "1755907201000",
+      "date": "2025-08-23",
+      "start": "11:40",
+      "end": "12:26",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 613,
+      "breakMinutes": 47
+    },
+    {
+      "id": "1755907202000",
+      "date": "2025-08-23",
+      "start": "13:13",
+      "end": "13:59",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 613,
+      "breakAfter": "00:49"
+    },
+    {
+      "id": "1755907203000",
+      "date": "2025-08-23",
+      "start": "14:48",
+      "end": "15:34",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 997,
+      "breakMinutes": 30
+    },
+    {
+      "id": "1755907204000",
+      "date": "2025-08-23",
+      "start": "16:04",
+      "end": "16:50",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 920
+    },
+    {
+      "id": "1756080000000",
+      "date": "2025-08-25",
+      "start": "09:00",
+      "end": "10:14",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1603,
+      "breakMinutes": 15
+    },
+    {
+      "id": "1756080001000",
+      "date": "2025-08-25",
+      "start": "10:29",
+      "end": "11:43",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1233,
+      "breakMinutes": 55
+    },
+    {
+      "id": "1756080002000",
+      "date": "2025-08-25",
+      "start": "12:38",
+      "end": "13:52",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1233
+    },
+    {
+      "id": "1756166400000",
+      "date": "2025-08-26",
+      "start": "08:00",
+      "end": "09:18",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1560,
+      "breakAfter": "00:42"
+    },
+    {
+      "id": "1756166401000",
+      "date": "2025-08-26",
+      "start": "10:00",
+      "end": "11:18",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1300,
+      "breakAfter": "00:21"
+    },
+    {
+      "id": "1756166402000",
+      "date": "2025-08-26",
+      "start": "11:39",
+      "end": "12:57",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 1950,
+      "breakMinutes": 36
+    },
+    {
+      "id": "1756166403000",
+      "date": "2025-08-26",
+      "start": "13:33",
+      "end": "14:51",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1690
+    },
+    {
+      "id": "1756252800000",
+      "date": "2025-08-27",
+      "start": "09:00",
+      "end": "11:07",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 3175
+    },
+    {
+      "id": "1756339200000",
+      "date": "2025-08-28",
+      "start": "08:00",
+      "end": "09:44",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 1040,
+      "breakAfter": "00:20"
+    },
+    {
+      "id": "1756339201000",
+      "date": "2025-08-28",
+      "start": "10:04",
+      "end": "11:48",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 2253,
+      "breakAfter": "00:19"
+    },
+    {
+      "id": "1756339202000",
+      "date": "2025-08-28",
+      "start": "12:07",
+      "end": "13:51",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1733
+    },
+    {
+      "id": "1756425600000",
+      "date": "2025-08-29",
+      "start": "08:00",
+      "end": "08:47",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 470,
+      "breakAfter": "00:16"
+    },
+    {
+      "id": "1756425601000",
+      "date": "2025-08-29",
+      "start": "09:03",
+      "end": "09:50",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 627,
+      "breakMinutes": 56
+    },
+    {
+      "id": "1756425602000",
+      "date": "2025-08-29",
+      "start": "10:46",
+      "end": "11:33",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 627,
+      "breakAfter": "00:39"
+    },
+    {
+      "id": "1756425603000",
+      "date": "2025-08-29",
+      "start": "12:12",
+      "end": "12:59",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 627
+    },
+    {
+      "id": "1756598400000",
+      "date": "2025-08-31",
+      "start": "08:00",
+      "end": "09:19",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1712,
+      "breakMinutes": 47
+    },
+    {
+      "id": "1756598401000",
+      "date": "2025-08-31",
+      "start": "10:06",
+      "end": "11:25",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1712,
+      "breakMinutes": 20
+    },
+    {
+      "id": "1756598402000",
+      "date": "2025-08-31",
+      "start": "11:45",
+      "end": "13:04",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1580,
+      "breakAfter": "00:35"
+    },
+    {
+      "id": "1756598403000",
+      "date": "2025-08-31",
+      "start": "13:39",
+      "end": "14:58",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 1975
+    },
+    {
+      "id": "1756684800000",
+      "date": "2025-09-01",
+      "start": "08:00",
+      "end": "09:56",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 2513,
+      "breakMinutes": 38
+    },
+    {
+      "id": "1756684801000",
+      "date": "2025-09-01",
+      "start": "10:34",
+      "end": "12:30",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 2707
+    },
+    {
+      "id": "1756771200000",
+      "date": "2025-09-02",
+      "start": "09:00",
+      "end": "09:42",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 560,
+      "breakAfter": "00:32"
+    },
+    {
+      "id": "1756771201000",
+      "date": "2025-09-02",
+      "start": "10:14",
+      "end": "10:56",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 560,
+      "breakMinutes": 59
+    },
+    {
+      "id": "1756771202000",
+      "date": "2025-09-02",
+      "start": "11:55",
+      "end": "12:37",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 1050,
+      "breakMinutes": 57
+    },
+    {
+      "id": "1756771203000",
+      "date": "2025-09-02",
+      "start": "13:34",
+      "end": "14:16",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 840,
+      "breakMinutes": 32
+    },
+    {
+      "id": "1756771204000",
+      "date": "2025-09-02",
+      "start": "14:48",
+      "end": "15:30",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 700
+    },
+    {
+      "id": "1756857600000",
+      "date": "2025-09-03",
+      "start": "09:00",
+      "end": "09:38",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 823,
+      "breakAfter": "00:22"
+    },
+    {
+      "id": "1756857601000",
+      "date": "2025-09-03",
+      "start": "10:00",
+      "end": "10:38",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 887,
+      "breakAfter": "00:17"
+    },
+    {
+      "id": "1756857602000",
+      "date": "2025-09-03",
+      "start": "10:55",
+      "end": "11:33",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 950,
+      "breakAfter": "00:29"
+    },
+    {
+      "id": "1756857603000",
+      "date": "2025-09-03",
+      "start": "12:02",
+      "end": "12:40",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 823,
+      "breakAfter": "00:24"
+    },
+    {
+      "id": "1756857604000",
+      "date": "2025-09-03",
+      "start": "13:04",
+      "end": "13:42",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 823
+    },
+    {
+      "id": "1756944000000",
+      "date": "2025-09-04",
+      "start": "10:00",
+      "end": "11:41",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 2020,
+      "breakAfter": "00:41"
+    },
+    {
+      "id": "1756944001000",
+      "date": "2025-09-04",
+      "start": "12:22",
+      "end": "14:03",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 2357,
+      "breakAfter": "00:53"
+    },
+    {
+      "id": "1756944002000",
+      "date": "2025-09-04",
+      "start": "14:56",
+      "end": "16:37",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 2525
+    },
+    {
+      "id": "1757030400000",
+      "date": "2025-09-05",
+      "start": "09:00",
+      "end": "09:43",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 1075,
+      "breakAfter": "00:25"
+    },
+    {
+      "id": "1757030401000",
+      "date": "2025-09-05",
+      "start": "10:08",
+      "end": "10:51",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 430,
+      "breakAfter": "00:30"
+    },
+    {
+      "id": "1757030402000",
+      "date": "2025-09-05",
+      "start": "11:21",
+      "end": "12:04",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 1075,
+      "breakAfter": "00:30"
+    },
+    {
+      "id": "1757030403000",
+      "date": "2025-09-05",
+      "start": "12:34",
+      "end": "13:18",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 587
+    },
+    {
+      "id": "1757203200000",
+      "date": "2025-09-07",
+      "start": "08:00",
+      "end": "09:04",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1387,
+      "breakAfter": "00:17"
+    },
+    {
+      "id": "1757203201000",
+      "date": "2025-09-07",
+      "start": "09:21",
+      "end": "10:25",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1067,
+      "breakAfter": "00:44"
+    },
+    {
+      "id": "1757203202000",
+      "date": "2025-09-07",
+      "start": "11:09",
+      "end": "12:13",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 853,
+      "breakMinutes": 48
+    },
+    {
+      "id": "1757203203000",
+      "date": "2025-09-07",
+      "start": "13:01",
+      "end": "14:05",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1387,
+      "breakMinutes": 60
+    },
+    {
+      "id": "1757203204000",
+      "date": "2025-09-07",
+      "start": "15:05",
+      "end": "16:09",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 1600
+    },
+    {
+      "id": "1757289600000",
+      "date": "2025-09-08",
+      "start": "09:00",
+      "end": "11:07",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 2963,
+      "breakMinutes": 60
+    },
+    {
+      "id": "1757289601000",
+      "date": "2025-09-08",
+      "start": "12:07",
+      "end": "14:14",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 1270,
+      "breakAfter": "00:45"
+    },
+    {
+      "id": "1757289602000",
+      "date": "2025-09-08",
+      "start": "14:59",
+      "end": "17:06",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 1270
+    },
+    {
+      "id": "1757376000000",
+      "date": "2025-09-09",
+      "start": "08:00",
+      "end": "12:59",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 2492,
+      "breakAfter": "00:35"
+    },
+    {
+      "id": "1757376001000",
+      "date": "2025-09-09",
+      "start": "13:34",
+      "end": "16:35",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 4971
+    },
+    {
+      "id": "1757462400000",
+      "date": "2025-09-10",
+      "start": "10:00",
+      "end": "12:03",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 2050,
+      "breakAfter": "00:50"
+    },
+    {
+      "id": "1757462401000",
+      "date": "2025-09-10",
+      "start": "12:53",
+      "end": "14:56",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 1025,
+      "breakAfter": "00:39"
+    },
+    {
+      "id": "1757462402000",
+      "date": "2025-09-10",
+      "start": "15:35",
+      "end": "17:38",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1640,
+      "breakAfter": "00:20"
+    },
+    {
+      "id": "1757462403000",
+      "date": "2025-09-10",
+      "start": "17:58",
+      "end": "19:49",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 2692
+    },
+    {
+      "id": "1757548800000",
+      "date": "2025-09-11",
+      "start": "08:00",
+      "end": "09:34",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 2037,
+      "breakMinutes": 51
+    },
+    {
+      "id": "1757548801000",
+      "date": "2025-09-11",
+      "start": "10:25",
+      "end": "11:59",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1880,
+      "breakAfter": "00:58"
+    },
+    {
+      "id": "1757548802000",
+      "date": "2025-09-11",
+      "start": "12:57",
+      "end": "14:32",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 950
+    },
+    {
+      "id": "1757635200000",
+      "date": "2025-09-12",
+      "start": "10:00",
+      "end": "11:15",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1000,
+      "breakMinutes": 32
+    },
+    {
+      "id": "1757635201000",
+      "date": "2025-09-12",
+      "start": "11:47",
+      "end": "13:02",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1625,
+      "breakAfter": "00:31"
+    },
+    {
+      "id": "1757635202000",
+      "date": "2025-09-12",
+      "start": "13:33",
+      "end": "14:48",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1000,
+      "breakMinutes": 43
+    },
+    {
+      "id": "1757635203000",
+      "date": "2025-09-12",
+      "start": "15:31",
+      "end": "16:46",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 750
+    },
+    {
+      "id": "1757808000000",
+      "date": "2025-09-14",
+      "start": "10:00",
+      "end": "11:13",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1703,
+      "breakMinutes": 47
+    },
+    {
+      "id": "1757808001000",
+      "date": "2025-09-14",
+      "start": "12:00",
+      "end": "13:13",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1703,
+      "breakMinutes": 44
+    },
+    {
+      "id": "1757808002000",
+      "date": "2025-09-14",
+      "start": "13:57",
+      "end": "15:10",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1460,
+      "breakMinutes": 58
+    },
+    {
+      "id": "1757808003000",
+      "date": "2025-09-14",
+      "start": "16:08",
+      "end": "17:21",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1217
+    },
+    {
+      "id": "1757894400000",
+      "date": "2025-09-15",
+      "start": "08:00",
+      "end": "13:23",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 7537
+    },
+    {
+      "id": "1757980800000",
+      "date": "2025-09-16",
+      "start": "09:00",
+      "end": "10:38",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 980,
+      "breakAfter": "00:30"
+    },
+    {
+      "id": "1757980801000",
+      "date": "2025-09-16",
+      "start": "11:08",
+      "end": "12:46",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1960,
+      "breakMinutes": 37
+    },
+    {
+      "id": "1757980802000",
+      "date": "2025-09-16",
+      "start": "13:23",
+      "end": "15:01",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 980,
+      "breakMinutes": 35
+    },
+    {
+      "id": "1757980803000",
+      "date": "2025-09-16",
+      "start": "15:36",
+      "end": "17:14",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1307,
+      "breakAfter": "00:28"
+    },
+    {
+      "id": "1757980804000",
+      "date": "2025-09-16",
+      "start": "17:42",
+      "end": "19:10",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 2455
+    },
+    {
+      "id": "1758067200000",
+      "date": "2025-09-17",
+      "start": "09:00",
+      "end": "10:17",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1283,
+      "breakAfter": "00:45"
+    },
+    {
+      "id": "1758067201000",
+      "date": "2025-09-17",
+      "start": "11:02",
+      "end": "12:19",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1797,
+      "breakMinutes": 22
+    },
+    {
+      "id": "1758067202000",
+      "date": "2025-09-17",
+      "start": "12:41",
+      "end": "13:58",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 642,
+      "breakAfter": "00:57"
+    },
+    {
+      "id": "1758067203000",
+      "date": "2025-09-17",
+      "start": "14:55",
+      "end": "16:12",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 642,
+      "breakMinutes": 40
+    },
+    {
+      "id": "1758067204000",
+      "date": "2025-09-17",
+      "start": "16:52",
+      "end": "18:09",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1027
+    },
+    {
+      "id": "1758153600000",
+      "date": "2025-09-18",
+      "start": "09:00",
+      "end": "10:55",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1917
+    },
+    {
+      "id": "1758240000000",
+      "date": "2025-09-19",
+      "start": "10:00",
+      "end": "11:49",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 2362,
+      "breakAfter": "00:47"
+    },
+    {
+      "id": "1758240001000",
+      "date": "2025-09-19",
+      "start": "12:36",
+      "end": "14:25",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1453,
+      "breakAfter": "00:29"
+    },
+    {
+      "id": "1758240002000",
+      "date": "2025-09-19",
+      "start": "14:54",
+      "end": "16:43",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 2725,
+      "breakAfter": "00:31"
+    },
+    {
+      "id": "1758240003000",
+      "date": "2025-09-19",
+      "start": "17:14",
+      "end": "19:03",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 908
+    },
+    {
+      "id": "1758499200000",
+      "date": "2025-09-22",
+      "start": "09:00",
+      "end": "11:10",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 2600,
+      "breakAfter": "00:58"
+    },
+    {
+      "id": "1758499201000",
+      "date": "2025-09-22",
+      "start": "12:08",
+      "end": "14:18",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 2817
+    },
+    {
+      "id": "1758585600000",
+      "date": "2025-09-23",
+      "start": "09:00",
+      "end": "10:11",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1183,
+      "breakMinutes": 50
+    },
+    {
+      "id": "1758585601000",
+      "date": "2025-09-23",
+      "start": "11:01",
+      "end": "12:12",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 1775,
+      "breakAfter": "00:24"
+    },
+    {
+      "id": "1758585602000",
+      "date": "2025-09-23",
+      "start": "12:36",
+      "end": "13:47",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1183,
+      "breakMinutes": 45
+    },
+    {
+      "id": "1758585603000",
+      "date": "2025-09-23",
+      "start": "14:32",
+      "end": "15:43",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 592,
+      "breakMinutes": 58
+    },
+    {
+      "id": "1758585604000",
+      "date": "2025-09-23",
+      "start": "16:41",
+      "end": "17:52",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1538
+    },
+    {
+      "id": "1758672000000",
+      "date": "2025-09-24",
+      "start": "09:00",
+      "end": "09:47",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1018,
+      "breakMinutes": 25
+    },
+    {
+      "id": "1758672001000",
+      "date": "2025-09-24",
+      "start": "10:12",
+      "end": "10:59",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 783
+    },
+    {
+      "id": "1758758400000",
+      "date": "2025-09-25",
+      "start": "09:00",
+      "end": "09:55",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 458,
+      "breakMinutes": 42
+    },
+    {
+      "id": "1758758401000",
+      "date": "2025-09-25",
+      "start": "10:37",
+      "end": "11:32",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1283
+    },
+    {
+      "id": "1758844800000",
+      "date": "2025-09-26",
+      "start": "08:00",
+      "end": "09:13",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 608,
+      "breakAfter": "00:18"
+    },
+    {
+      "id": "1758844801000",
+      "date": "2025-09-26",
+      "start": "09:31",
+      "end": "10:44",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1217,
+      "breakAfter": "00:38"
+    },
+    {
+      "id": "1758844802000",
+      "date": "2025-09-26",
+      "start": "11:22",
+      "end": "12:35",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1582,
+      "breakAfter": "00:48"
+    },
+    {
+      "id": "1758844803000",
+      "date": "2025-09-26",
+      "start": "13:23",
+      "end": "14:36",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1217
+    },
+    {
+      "id": "1758931200000",
+      "date": "2025-09-27",
+      "start": "09:00",
+      "end": "11:19",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 2780,
+      "breakMinutes": 38
+    },
+    {
+      "id": "1758931201000",
+      "date": "2025-09-27",
+      "start": "11:57",
+      "end": "14:16",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 2780
+    },
+    {
+      "id": "1759104000000",
+      "date": "2025-09-29",
+      "start": "08:00",
+      "end": "09:22",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1913,
+      "breakMinutes": 27
+    },
+    {
+      "id": "1759104001000",
+      "date": "2025-09-29",
+      "start": "09:49",
+      "end": "11:11",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 2050,
+      "breakAfter": "00:46"
+    },
+    {
+      "id": "1759104002000",
+      "date": "2025-09-29",
+      "start": "11:57",
+      "end": "13:19",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1093,
+      "breakAfter": "00:49"
+    },
+    {
+      "id": "1759104003000",
+      "date": "2025-09-29",
+      "start": "14:08",
+      "end": "15:30",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1093
+    },
+    {
+      "id": "1759190400000",
+      "date": "2025-09-30",
+      "start": "10:00",
+      "end": "10:58",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 1450,
+      "breakMinutes": 32
+    },
+    {
+      "id": "1759190401000",
+      "date": "2025-09-30",
+      "start": "11:30",
+      "end": "12:28",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1257,
+      "breakAfter": "00:37"
+    },
+    {
+      "id": "1759190402000",
+      "date": "2025-09-30",
+      "start": "13:05",
+      "end": "14:03",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 967,
+      "breakMinutes": 49
+    },
+    {
+      "id": "1759190403000",
+      "date": "2025-09-30",
+      "start": "14:52",
+      "end": "15:50",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 1450,
+      "breakMinutes": 31
+    },
+    {
+      "id": "1759190404000",
+      "date": "2025-09-30",
+      "start": "16:21",
+      "end": "17:19",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1300
+    },
+    {
+      "id": "1759276800000",
+      "date": "2025-10-01",
+      "start": "09:00",
+      "end": "10:47",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 1070,
+      "breakAfter": "00:38"
+    },
+    {
+      "id": "1759276801000",
+      "date": "2025-10-01",
+      "start": "11:25",
+      "end": "13:12",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 2318
+    },
+    {
+      "id": "1759363200000",
+      "date": "2025-10-02",
+      "start": "09:00",
+      "end": "10:15",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1750,
+      "breakMinutes": 51
+    },
+    {
+      "id": "1759363201000",
+      "date": "2025-10-02",
+      "start": "11:06",
+      "end": "12:21",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1625,
+      "breakMinutes": 52
+    },
+    {
+      "id": "1759363202000",
+      "date": "2025-10-02",
+      "start": "13:13",
+      "end": "14:28",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1250,
+      "breakAfter": "00:20"
+    },
+    {
+      "id": "1759363203000",
+      "date": "2025-10-02",
+      "start": "14:48",
+      "end": "16:03",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 750
+    },
+    {
+      "id": "1759449600000",
+      "date": "2025-10-03",
+      "start": "08:00",
+      "end": "10:16",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 2267,
+      "breakMinutes": 44
+    },
+    {
+      "id": "1759449601000",
+      "date": "2025-10-03",
+      "start": "11:00",
+      "end": "13:17",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 1370
+    },
+    {
+      "id": "1759536000000",
+      "date": "2025-10-04",
+      "start": "09:00",
+      "end": "11:37",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 3402,
+      "breakAfter": "00:35"
+    },
+    {
+      "id": "1759536001000",
+      "date": "2025-10-04",
+      "start": "12:12",
+      "end": "14:49",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 2093
+    },
+    {
+      "id": "1759708800000",
+      "date": "2025-10-06",
+      "start": "10:00",
+      "end": "11:12",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1200,
+      "breakMinutes": 28
+    },
+    {
+      "id": "1759708801000",
+      "date": "2025-10-06",
+      "start": "11:40",
+      "end": "12:52",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1560,
+      "breakAfter": "00:19"
+    },
+    {
+      "id": "1759708802000",
+      "date": "2025-10-06",
+      "start": "13:11",
+      "end": "14:23",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1200,
+      "breakAfter": "00:22"
+    },
+    {
+      "id": "1759708803000",
+      "date": "2025-10-06",
+      "start": "14:45",
+      "end": "15:57",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1440,
+      "breakMinutes": 56
+    },
+    {
+      "id": "1759708804000",
+      "date": "2025-10-06",
+      "start": "16:53",
+      "end": "18:05",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1680
+    },
+    {
+      "id": "1759795200000",
+      "date": "2025-10-07",
+      "start": "10:00",
+      "end": "10:39",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 325,
+      "breakAfter": "00:45"
+    },
+    {
+      "id": "1759795201000",
+      "date": "2025-10-07",
+      "start": "11:24",
+      "end": "12:03",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 780,
+      "breakMinutes": 34
+    },
+    {
+      "id": "1759795202000",
+      "date": "2025-10-07",
+      "start": "12:37",
+      "end": "13:16",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 845,
+      "breakAfter": "00:44"
+    },
+    {
+      "id": "1759795203000",
+      "date": "2025-10-07",
+      "start": "14:00",
+      "end": "14:39",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 390,
+      "breakMinutes": 41
+    },
+    {
+      "id": "1759795204000",
+      "date": "2025-10-07",
+      "start": "15:20",
+      "end": "15:59",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 325
+    },
+    {
+      "id": "1759881600000",
+      "date": "2025-10-08",
+      "start": "10:00",
+      "end": "12:13",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 2217,
+      "breakAfter": "00:23"
+    },
+    {
+      "id": "1759881601000",
+      "date": "2025-10-08",
+      "start": "12:36",
+      "end": "14:49",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 2882
+    },
+    {
+      "id": "1759968000000",
+      "date": "2025-10-09",
+      "start": "09:00",
+      "end": "11:27",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 1225,
+      "breakAfter": "00:46"
+    },
+    {
+      "id": "1759968001000",
+      "date": "2025-10-09",
+      "start": "12:13",
+      "end": "14:40",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 3185
+    },
+    {
+      "id": "1760054400000",
+      "date": "2025-10-10",
+      "start": "10:00",
+      "end": "10:30",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 250,
+      "breakMinutes": 40
+    },
+    {
+      "id": "1760054401000",
+      "date": "2025-10-10",
+      "start": "11:10",
+      "end": "11:40",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 250,
+      "breakMinutes": 50
+    },
+    {
+      "id": "1760054402000",
+      "date": "2025-10-10",
+      "start": "12:30",
+      "end": "13:00",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 650,
+      "breakMinutes": 30
+    },
+    {
+      "id": "1760054403000",
+      "date": "2025-10-10",
+      "start": "13:30",
+      "end": "14:00",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 700,
+      "breakMinutes": 59
+    },
+    {
+      "id": "1760054404000",
+      "date": "2025-10-10",
+      "start": "14:59",
+      "end": "15:29",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 100
+    },
+    {
+      "id": "1760140800000",
+      "date": "2025-10-11",
+      "start": "10:00",
+      "end": "10:31",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 723,
+      "breakMinutes": 26
+    },
+    {
+      "id": "1760140801000",
+      "date": "2025-10-11",
+      "start": "10:57",
+      "end": "11:28",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 310,
+      "breakMinutes": 51
+    },
+    {
+      "id": "1760140802000",
+      "date": "2025-10-11",
+      "start": "12:19",
+      "end": "12:50",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 310,
+      "breakAfter": "00:51"
+    },
+    {
+      "id": "1760140803000",
+      "date": "2025-10-11",
+      "start": "13:41",
+      "end": "14:12",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 723,
+      "breakAfter": "00:34"
+    },
+    {
+      "id": "1760140804000",
+      "date": "2025-10-11",
+      "start": "14:46",
+      "end": "15:17",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 672
+    },
+    {
+      "id": "1760313600000",
+      "date": "2025-10-13",
+      "start": "09:00",
+      "end": "10:08",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1133,
+      "breakAfter": "00:25"
+    },
+    {
+      "id": "1760313601000",
+      "date": "2025-10-13",
+      "start": "10:33",
+      "end": "11:41",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 680,
+      "breakMinutes": 15
+    },
+    {
+      "id": "1760313602000",
+      "date": "2025-10-13",
+      "start": "11:56",
+      "end": "13:04",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 567,
+      "breakMinutes": 36
+    },
+    {
+      "id": "1760313603000",
+      "date": "2025-10-13",
+      "start": "13:40",
+      "end": "14:48",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 680
+    },
+    {
+      "id": "1760400000000",
+      "date": "2025-10-14",
+      "start": "09:00",
+      "end": "09:33",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 660,
+      "breakAfter": "00:55"
+    },
+    {
+      "id": "1760400001000",
+      "date": "2025-10-14",
+      "start": "10:28",
+      "end": "11:01",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 770,
+      "breakAfter": "00:22"
+    },
+    {
+      "id": "1760400002000",
+      "date": "2025-10-14",
+      "start": "11:23",
+      "end": "11:56",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 770,
+      "breakAfter": "00:37"
+    },
+    {
+      "id": "1760400003000",
+      "date": "2025-10-14",
+      "start": "12:33",
+      "end": "13:06",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 660
+    },
+    {
+      "id": "1760486400000",
+      "date": "2025-10-15",
+      "start": "09:00",
+      "end": "10:06",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 880,
+      "breakAfter": "00:37"
+    },
+    {
+      "id": "1760486401000",
+      "date": "2025-10-15",
+      "start": "10:43",
+      "end": "11:49",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1540,
+      "breakMinutes": 53
+    },
+    {
+      "id": "1760486402000",
+      "date": "2025-10-15",
+      "start": "12:42",
+      "end": "13:48",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1540
+    },
+    {
+      "id": "1760572800000",
+      "date": "2025-10-16",
+      "start": "10:00",
+      "end": "11:23",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 2075,
+      "breakAfter": "01:00"
+    },
+    {
+      "id": "1760572801000",
+      "date": "2025-10-16",
+      "start": "12:23",
+      "end": "13:46",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1383,
+      "breakMinutes": 24
+    },
+    {
+      "id": "1760572802000",
+      "date": "2025-10-16",
+      "start": "14:10",
+      "end": "15:33",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 2075,
+      "breakAfter": "00:59"
+    },
+    {
+      "id": "1760572803000",
+      "date": "2025-10-16",
+      "start": "16:32",
+      "end": "17:55",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1107
+    },
+    {
+      "id": "1760659200000",
+      "date": "2025-10-17",
+      "start": "10:00",
+      "end": "10:30",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 250,
+      "breakMinutes": 26
+    },
+    {
+      "id": "1760659201000",
+      "date": "2025-10-17",
+      "start": "10:56",
+      "end": "11:26",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 700,
+      "breakMinutes": 45
+    },
+    {
+      "id": "1760659202000",
+      "date": "2025-10-17",
+      "start": "12:11",
+      "end": "12:41",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 400,
+      "breakAfter": "00:54"
+    },
+    {
+      "id": "1760659203000",
+      "date": "2025-10-17",
+      "start": "13:35",
+      "end": "14:05",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 600,
+      "breakAfter": "00:33"
+    },
+    {
+      "id": "1760659204000",
+      "date": "2025-10-17",
+      "start": "14:38",
+      "end": "15:08",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 250
+    },
+    {
+      "id": "1760918400000",
+      "date": "2025-10-20",
+      "start": "09:00",
+      "end": "09:33",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 660,
+      "breakMinutes": 30
+    },
+    {
+      "id": "1760918401000",
+      "date": "2025-10-20",
+      "start": "10:03",
+      "end": "10:36",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 660,
+      "breakAfter": "00:43"
+    },
+    {
+      "id": "1760918402000",
+      "date": "2025-10-20",
+      "start": "11:19",
+      "end": "11:52",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 770,
+      "breakAfter": "00:39"
+    },
+    {
+      "id": "1760918403000",
+      "date": "2025-10-20",
+      "start": "12:31",
+      "end": "13:04",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 660,
+      "breakAfter": "00:26"
+    },
+    {
+      "id": "1760918404000",
+      "date": "2025-10-20",
+      "start": "13:30",
+      "end": "14:03",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 660
+    },
+    {
+      "id": "1761004800000",
+      "date": "2025-10-21",
+      "start": "10:00",
+      "end": "18:00",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 6484
+    },
+    {
+      "id": "1761091200000",
+      "date": "2025-10-22",
+      "start": "10:00",
+      "end": "10:57",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1235,
+      "breakMinutes": 27
+    },
+    {
+      "id": "1761091201000",
+      "date": "2025-10-22",
+      "start": "11:24",
+      "end": "12:21",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 760,
+      "breakAfter": "00:21"
+    },
+    {
+      "id": "1761091202000",
+      "date": "2025-10-22",
+      "start": "12:42",
+      "end": "13:39",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1330
+    },
+    {
+      "id": "1761177600000",
+      "date": "2025-10-23",
+      "start": "08:00",
+      "end": "12:41",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 2342
+    },
+    {
+      "id": "1761264000000",
+      "date": "2025-10-24",
+      "start": "10:00",
+      "end": "18:00",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 6064
+    },
+    {
+      "id": "1761350400000",
+      "date": "2025-10-25",
+      "start": "09:00",
+      "end": "09:43",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 932,
+      "breakAfter": "00:31"
+    },
+    {
+      "id": "1761350401000",
+      "date": "2025-10-25",
+      "start": "10:14",
+      "end": "10:57",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 573,
+      "breakAfter": "00:54"
+    },
+    {
+      "id": "1761350402000",
+      "date": "2025-10-25",
+      "start": "11:51",
+      "end": "12:34",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 932
+    },
+    {
+      "id": "1761436800000",
+      "date": "2025-10-26",
+      "start": "10:00",
+      "end": "13:09",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 2520,
+      "breakAfter": "00:54"
+    },
+    {
+      "id": "1761436801000",
+      "date": "2025-10-26",
+      "start": "14:03",
+      "end": "17:12",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 3150,
+      "breakMinutes": 26
+    },
+    {
+      "id": "1761436802000",
+      "date": "2025-10-26",
+      "start": "17:38",
+      "end": "19:20",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 1581
+    },
+    {
+      "id": "1761523200000",
+      "date": "2025-10-27",
+      "start": "10:00",
+      "end": "11:00",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1000,
+      "breakMinutes": 54
+    },
+    {
+      "id": "1761523201000",
+      "date": "2025-10-27",
+      "start": "11:54",
+      "end": "12:54",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 600,
+      "breakMinutes": 21
+    },
+    {
+      "id": "1761523202000",
+      "date": "2025-10-27",
+      "start": "13:15",
+      "end": "14:15",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 800
+    },
+    {
+      "id": "1761609600000",
+      "date": "2025-10-28",
+      "start": "10:00",
+      "end": "10:30",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 300,
+      "breakAfter": "00:25"
+    },
+    {
+      "id": "1761609601000",
+      "date": "2025-10-28",
+      "start": "10:55",
+      "end": "11:25",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 300,
+      "breakMinutes": 23
+    },
+    {
+      "id": "1761609602000",
+      "date": "2025-10-28",
+      "start": "11:48",
+      "end": "12:18",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 750,
+      "breakAfter": "00:52"
+    },
+    {
+      "id": "1761609603000",
+      "date": "2025-10-28",
+      "start": "13:10",
+      "end": "13:40",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 618
+    },
+    {
+      "id": "1761696000000",
+      "date": "2025-10-29",
+      "start": "10:00",
+      "end": "14:53",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 3907
+    },
+    {
+      "id": "1761782400000",
+      "date": "2025-10-30",
+      "start": "09:00",
+      "end": "12:48",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 4560
+    },
+    {
+      "id": "1761868800000",
+      "date": "2025-10-31",
+      "start": "09:00",
+      "end": "09:59",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1180,
+      "breakMinutes": 39
+    },
+    {
+      "id": "1761868801000",
+      "date": "2025-10-31",
+      "start": "10:38",
+      "end": "11:37",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1180
+    },
+    {
+      "id": "1762041600000",
+      "date": "2025-11-02",
+      "start": "08:00",
+      "end": "09:13",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 730,
+      "breakAfter": "00:48"
+    },
+    {
+      "id": "1762041601000",
+      "date": "2025-11-02",
+      "start": "10:01",
+      "end": "11:14",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 608,
+      "breakMinutes": 60
+    },
+    {
+      "id": "1762041602000",
+      "date": "2025-11-02",
+      "start": "12:14",
+      "end": "13:27",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1582,
+      "breakAfter": "00:55"
+    },
+    {
+      "id": "1762041603000",
+      "date": "2025-11-02",
+      "start": "14:22",
+      "end": "15:35",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1703
+    },
+    {
+      "id": "1762128000000",
+      "date": "2025-11-03",
+      "start": "08:00",
+      "end": "09:30",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1200,
+      "breakMinutes": 36
+    },
+    {
+      "id": "1762128001000",
+      "date": "2025-11-03",
+      "start": "10:06",
+      "end": "11:36",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1500,
+      "breakAfter": "00:57"
+    },
+    {
+      "id": "1762128002000",
+      "date": "2025-11-03",
+      "start": "12:33",
+      "end": "14:03",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1950,
+      "breakAfter": "00:16"
+    },
+    {
+      "id": "1762128003000",
+      "date": "2025-11-03",
+      "start": "14:19",
+      "end": "15:49",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 2100,
+      "breakMinutes": 21
+    },
+    {
+      "id": "1762128004000",
+      "date": "2025-11-03",
+      "start": "16:10",
+      "end": "17:40",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 900
+    },
+    {
+      "id": "1762214400000",
+      "date": "2025-11-04",
+      "start": "08:00",
+      "end": "09:00",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 1500,
+      "breakAfter": "00:58"
+    },
+    {
+      "id": "1762214401000",
+      "date": "2025-11-04",
+      "start": "09:58",
+      "end": "10:58",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 1500,
+      "breakMinutes": 43
+    },
+    {
+      "id": "1762214402000",
+      "date": "2025-11-04",
+      "start": "11:41",
+      "end": "12:41",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1400,
+      "breakAfter": "00:17"
+    },
+    {
+      "id": "1762214403000",
+      "date": "2025-11-04",
+      "start": "12:58",
+      "end": "13:58",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 500,
+      "breakMinutes": 31
+    },
+    {
+      "id": "1762214404000",
+      "date": "2025-11-04",
+      "start": "14:29",
+      "end": "15:29",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1200
+    },
+    {
+      "id": "1762300800000",
+      "date": "2025-11-05",
+      "start": "09:00",
+      "end": "09:30",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 750,
+      "breakMinutes": 45
+    },
+    {
+      "id": "1762300801000",
+      "date": "2025-11-05",
+      "start": "10:15",
+      "end": "10:45",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 250,
+      "breakMinutes": 44
+    },
+    {
+      "id": "1762300802000",
+      "date": "2025-11-05",
+      "start": "11:29",
+      "end": "11:59",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 650,
+      "breakMinutes": 53
+    },
+    {
+      "id": "1762300803000",
+      "date": "2025-11-05",
+      "start": "12:52",
+      "end": "13:22",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 550
+    },
+    {
+      "id": "1762387200000",
+      "date": "2025-11-06",
+      "start": "08:00",
+      "end": "09:41",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 842,
+      "breakAfter": "00:25"
+    },
+    {
+      "id": "1762387201000",
+      "date": "2025-11-06",
+      "start": "10:06",
+      "end": "11:47",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1347,
+      "breakAfter": "00:47"
+    },
+    {
+      "id": "1762387202000",
+      "date": "2025-11-06",
+      "start": "12:34",
+      "end": "14:15",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1347,
+      "breakAfter": "00:45"
+    },
+    {
+      "id": "1762387203000",
+      "date": "2025-11-06",
+      "start": "15:00",
+      "end": "16:41",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1347
+    },
+    {
+      "id": "1762473600000",
+      "date": "2025-11-07",
+      "start": "10:00",
+      "end": "11:22",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1093,
+      "breakAfter": "00:58"
+    },
+    {
+      "id": "1762473601000",
+      "date": "2025-11-07",
+      "start": "12:20",
+      "end": "13:42",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1367,
+      "breakMinutes": 17
+    },
+    {
+      "id": "1762473602000",
+      "date": "2025-11-07",
+      "start": "13:59",
+      "end": "15:21",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 820
+    },
+    {
+      "id": "1762560000000",
+      "date": "2025-11-08",
+      "start": "09:00",
+      "end": "09:59",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 787,
+      "breakMinutes": 37
+    },
+    {
+      "id": "1762560001000",
+      "date": "2025-11-08",
+      "start": "10:36",
+      "end": "11:35",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 1475,
+      "breakAfter": "00:20"
+    },
+    {
+      "id": "1762560002000",
+      "date": "2025-11-08",
+      "start": "11:55",
+      "end": "12:54",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 492,
+      "breakMinutes": 49
+    },
+    {
+      "id": "1762560003000",
+      "date": "2025-11-08",
+      "start": "13:43",
+      "end": "14:42",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1377,
+      "breakAfter": "00:28"
+    },
+    {
+      "id": "1762560004000",
+      "date": "2025-11-08",
+      "start": "15:10",
+      "end": "16:09",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1377
+    },
+    {
+      "id": "1762732800000",
+      "date": "2025-11-10",
+      "start": "10:00",
+      "end": "12:34",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 3593,
+      "breakAfter": "00:31"
+    },
+    {
+      "id": "1762732801000",
+      "date": "2025-11-10",
+      "start": "13:05",
+      "end": "15:39",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 1283,
+      "breakAfter": "00:16"
+    },
+    {
+      "id": "1762732802000",
+      "date": "2025-11-10",
+      "start": "15:55",
+      "end": "18:29",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 1283
+    },
+    {
+      "id": "1762819200000",
+      "date": "2025-11-11",
+      "start": "09:00",
+      "end": "09:37",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 802,
+      "breakAfter": "00:52"
+    },
+    {
+      "id": "1762819201000",
+      "date": "2025-11-11",
+      "start": "10:29",
+      "end": "11:06",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 308,
+      "breakAfter": "00:43"
+    },
+    {
+      "id": "1762819202000",
+      "date": "2025-11-11",
+      "start": "11:49",
+      "end": "12:26",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 617,
+      "breakAfter": "00:42"
+    },
+    {
+      "id": "1762819203000",
+      "date": "2025-11-11",
+      "start": "13:08",
+      "end": "13:45",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 308
+    },
+    {
+      "id": "1762905600000",
+      "date": "2025-11-12",
+      "start": "08:00",
+      "end": "09:39",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1320,
+      "breakAfter": "00:19"
+    },
+    {
+      "id": "1762905601000",
+      "date": "2025-11-12",
+      "start": "09:58",
+      "end": "11:37",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1980,
+      "breakMinutes": 26
+    },
+    {
+      "id": "1762905602000",
+      "date": "2025-11-12",
+      "start": "12:03",
+      "end": "13:42",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1320,
+      "breakMinutes": 60
+    },
+    {
+      "id": "1762905603000",
+      "date": "2025-11-12",
+      "start": "14:42",
+      "end": "16:21",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 2475
+    },
+    {
+      "id": "1762992000000",
+      "date": "2025-11-13",
+      "start": "09:00",
+      "end": "13:13",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 5903
+    },
+    {
+      "id": "1763078400000",
+      "date": "2025-11-14",
+      "start": "09:00",
+      "end": "10:58",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 983,
+      "breakMinutes": 50
+    },
+    {
+      "id": "1763078401000",
+      "date": "2025-11-14",
+      "start": "11:48",
+      "end": "13:47",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 2777,
+      "breakAfter": "00:33"
+    },
+    {
+      "id": "1763078402000",
+      "date": "2025-11-14",
+      "start": "14:20",
+      "end": "16:19",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 2777
+    },
+    {
+      "id": "1763337600000",
+      "date": "2025-11-17",
+      "start": "09:00",
+      "end": "11:43",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 1358,
+      "breakAfter": "00:36"
+    },
+    {
+      "id": "1763337601000",
+      "date": "2025-11-17",
+      "start": "12:19",
+      "end": "15:02",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 1358
+    },
+    {
+      "id": "1763424000000",
+      "date": "2025-11-18",
+      "start": "08:00",
+      "end": "08:31",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 258,
+      "breakAfter": "00:52"
+    },
+    {
+      "id": "1763424001000",
+      "date": "2025-11-18",
+      "start": "09:23",
+      "end": "09:54",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 723,
+      "breakMinutes": 28
+    },
+    {
+      "id": "1763424002000",
+      "date": "2025-11-18",
+      "start": "10:22",
+      "end": "10:53",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 672
+    },
+    {
+      "id": "1763510400000",
+      "date": "2025-11-19",
+      "start": "09:00",
+      "end": "10:50",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 1100,
+      "breakAfter": "00:23"
+    },
+    {
+      "id": "1763510401000",
+      "date": "2025-11-19",
+      "start": "11:13",
+      "end": "13:03",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1467,
+      "breakAfter": "00:41"
+    },
+    {
+      "id": "1763510402000",
+      "date": "2025-11-19",
+      "start": "13:44",
+      "end": "15:34",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 1100
+    },
+    {
+      "id": "1763596800000",
+      "date": "2025-11-20",
+      "start": "09:00",
+      "end": "09:38",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 823,
+      "breakMinutes": 16
+    },
+    {
+      "id": "1763596801000",
+      "date": "2025-11-20",
+      "start": "09:54",
+      "end": "10:32",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 823,
+      "breakAfter": "00:20"
+    },
+    {
+      "id": "1763596802000",
+      "date": "2025-11-20",
+      "start": "10:52",
+      "end": "11:30",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 380,
+      "breakMinutes": 27
+    },
+    {
+      "id": "1763596803000",
+      "date": "2025-11-20",
+      "start": "11:57",
+      "end": "12:35",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 380,
+      "breakAfter": "00:50"
+    },
+    {
+      "id": "1763596804000",
+      "date": "2025-11-20",
+      "start": "13:25",
+      "end": "14:02",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 925
+    },
+    {
+      "id": "1763683200000",
+      "date": "2025-11-21",
+      "start": "09:00",
+      "end": "10:10",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1633,
+      "breakMinutes": 36
+    },
+    {
+      "id": "1763683201000",
+      "date": "2025-11-21",
+      "start": "10:46",
+      "end": "11:56",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 583,
+      "breakAfter": "00:44"
+    },
+    {
+      "id": "1763683202000",
+      "date": "2025-11-21",
+      "start": "12:40",
+      "end": "13:50",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1633,
+      "breakAfter": "00:57"
+    },
+    {
+      "id": "1763683203000",
+      "date": "2025-11-21",
+      "start": "14:47",
+      "end": "15:57",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 583
+    },
+    {
+      "id": "1763942400000",
+      "date": "2025-11-24",
+      "start": "10:00",
+      "end": "10:30",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 500,
+      "breakAfter": "00:43"
+    },
+    {
+      "id": "1763942401000",
+      "date": "2025-11-24",
+      "start": "11:13",
+      "end": "11:43",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 700,
+      "breakMinutes": 31
+    },
+    {
+      "id": "1763942402000",
+      "date": "2025-11-24",
+      "start": "12:14",
+      "end": "12:44",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 512
+    },
+    {
+      "id": "1764028800000",
+      "date": "2025-11-25",
+      "start": "10:00",
+      "end": "18:00",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 6691
+    },
+    {
+      "id": "1764115200000",
+      "date": "2025-11-26",
+      "start": "10:00",
+      "end": "11:59",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1983
+    },
+    {
+      "id": "1764201600000",
+      "date": "2025-11-27",
+      "start": "10:00",
+      "end": "10:30",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 750,
+      "breakMinutes": 60
+    },
+    {
+      "id": "1764201601000",
+      "date": "2025-11-27",
+      "start": "11:30",
+      "end": "12:00",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 650,
+      "breakAfter": "00:16"
+    },
+    {
+      "id": "1764201602000",
+      "date": "2025-11-27",
+      "start": "12:16",
+      "end": "12:46",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 250,
+      "breakMinutes": 42
+    },
+    {
+      "id": "1764201603000",
+      "date": "2025-11-27",
+      "start": "13:28",
+      "end": "13:58",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 467
+    },
+    {
+      "id": "1764288000000",
+      "date": "2025-11-28",
+      "start": "09:00",
+      "end": "09:51",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1105,
+      "breakAfter": "00:32"
+    },
+    {
+      "id": "1764288001000",
+      "date": "2025-11-28",
+      "start": "10:23",
+      "end": "11:14",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1105,
+      "breakMinutes": 29
+    },
+    {
+      "id": "1764288002000",
+      "date": "2025-11-28",
+      "start": "11:43",
+      "end": "12:34",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 850,
+      "breakAfter": "00:45"
+    },
+    {
+      "id": "1764288003000",
+      "date": "2025-11-28",
+      "start": "13:19",
+      "end": "14:10",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 680
+    },
+    {
+      "id": "1764374400000",
+      "date": "2025-11-29",
+      "start": "09:00",
+      "end": "10:26",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 2150,
+      "breakAfter": "00:42"
+    },
+    {
+      "id": "1764374401000",
+      "date": "2025-11-29",
+      "start": "11:08",
+      "end": "12:34",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1720,
+      "breakAfter": "01:00"
+    },
+    {
+      "id": "1764374402000",
+      "date": "2025-11-29",
+      "start": "13:34",
+      "end": "15:00",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1863,
+      "breakMinutes": 37
+    },
+    {
+      "id": "1764374403000",
+      "date": "2025-11-29",
+      "start": "15:37",
+      "end": "17:03",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 717,
+      "breakMinutes": 41
+    },
+    {
+      "id": "1764374404000",
+      "date": "2025-11-29",
+      "start": "17:44",
+      "end": "19:10",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1147
+    },
+    {
+      "id": "1764460800000",
+      "date": "2025-11-30",
+      "start": "08:00",
+      "end": "15:09",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 3575
+    },
+    {
+      "id": "1764547200000",
+      "date": "2025-12-01",
+      "start": "10:00",
+      "end": "13:06",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 4650,
+      "breakAfter": "00:44"
+    },
+    {
+      "id": "1764547201000",
+      "date": "2025-12-01",
+      "start": "13:50",
+      "end": "16:56",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 3100
+    },
+    {
+      "id": "1764633600000",
+      "date": "2025-12-02",
+      "start": "09:00",
+      "end": "17:00",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 4281
+    },
+    {
+      "id": "1764720000000",
+      "date": "2025-12-03",
+      "start": "10:00",
+      "end": "10:30",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 700,
+      "breakMinutes": 33
+    },
+    {
+      "id": "1764720001000",
+      "date": "2025-12-03",
+      "start": "11:03",
+      "end": "11:33",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 750,
+      "breakMinutes": 56
+    },
+    {
+      "id": "1764720002000",
+      "date": "2025-12-03",
+      "start": "12:29",
+      "end": "12:59",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 235
+    },
+    {
+      "id": "1764806400000",
+      "date": "2025-12-04",
+      "start": "09:00",
+      "end": "09:50",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1000,
+      "breakMinutes": 51
+    },
+    {
+      "id": "1764806401000",
+      "date": "2025-12-04",
+      "start": "10:41",
+      "end": "11:31",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 417,
+      "breakAfter": "00:27"
+    },
+    {
+      "id": "1764806402000",
+      "date": "2025-12-04",
+      "start": "11:58",
+      "end": "12:48",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1083,
+      "breakMinutes": 30
+    },
+    {
+      "id": "1764806403000",
+      "date": "2025-12-04",
+      "start": "13:18",
+      "end": "14:08",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 417,
+      "breakMinutes": 48
+    },
+    {
+      "id": "1764806404000",
+      "date": "2025-12-04",
+      "start": "14:56",
+      "end": "15:46",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 833
+    },
+    {
+      "id": "1764892800000",
+      "date": "2025-12-05",
+      "start": "10:00",
+      "end": "11:46",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 2120,
+      "breakAfter": "00:31"
+    },
+    {
+      "id": "1764892801000",
+      "date": "2025-12-05",
+      "start": "12:17",
+      "end": "14:03",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 1060
+    },
+    {
+      "id": "1765065600000",
+      "date": "2025-12-07",
+      "start": "08:00",
+      "end": "08:30",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 600,
+      "breakMinutes": 23
+    },
+    {
+      "id": "1765065601000",
+      "date": "2025-12-07",
+      "start": "08:53",
+      "end": "09:23",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 400,
+      "breakAfter": "00:33"
+    },
+    {
+      "id": "1765065602000",
+      "date": "2025-12-07",
+      "start": "09:56",
+      "end": "10:26",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 600,
+      "breakMinutes": 24
+    },
+    {
+      "id": "1765065603000",
+      "date": "2025-12-07",
+      "start": "10:50",
+      "end": "11:20",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 500,
+      "breakMinutes": 48
+    },
+    {
+      "id": "1765065604000",
+      "date": "2025-12-07",
+      "start": "12:08",
+      "end": "12:38",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 100
+    },
+    {
+      "id": "1765152000000",
+      "date": "2025-12-08",
+      "start": "08:00",
+      "end": "09:05",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 1625,
+      "breakMinutes": 60
+    },
+    {
+      "id": "1765152001000",
+      "date": "2025-12-08",
+      "start": "10:05",
+      "end": "11:10",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 1625,
+      "breakMinutes": 48
+    },
+    {
+      "id": "1765152002000",
+      "date": "2025-12-08",
+      "start": "11:58",
+      "end": "13:03",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 650,
+      "breakAfter": "00:48"
+    },
+    {
+      "id": "1765152003000",
+      "date": "2025-12-08",
+      "start": "13:51",
+      "end": "14:56",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1517
+    },
+    {
+      "id": "1765238400000",
+      "date": "2025-12-09",
+      "start": "09:00",
+      "end": "10:25",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1133,
+      "breakAfter": "00:33"
+    },
+    {
+      "id": "1765238401000",
+      "date": "2025-12-09",
+      "start": "10:58",
+      "end": "12:23",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1700,
+      "breakAfter": "00:32"
+    },
+    {
+      "id": "1765238402000",
+      "date": "2025-12-09",
+      "start": "12:55",
+      "end": "14:20",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 708,
+      "breakMinutes": 17
+    },
+    {
+      "id": "1765238403000",
+      "date": "2025-12-09",
+      "start": "14:37",
+      "end": "16:02",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1133,
+      "breakMinutes": 36
+    },
+    {
+      "id": "1765238404000",
+      "date": "2025-12-09",
+      "start": "16:38",
+      "end": "18:03",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 708
+    },
+    {
+      "id": "1765324800000",
+      "date": "2025-12-10",
+      "start": "08:00",
+      "end": "13:15",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 7350
+    },
+    {
+      "id": "1765411200000",
+      "date": "2025-12-11",
+      "start": "09:00",
+      "end": "10:12",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1200,
+      "breakAfter": "00:27"
+    },
+    {
+      "id": "1765411201000",
+      "date": "2025-12-11",
+      "start": "10:39",
+      "end": "11:51",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 960,
+      "breakAfter": "00:43"
+    },
+    {
+      "id": "1765411202000",
+      "date": "2025-12-11",
+      "start": "12:34",
+      "end": "13:46",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1440
+    },
+    {
+      "id": "1765497600000",
+      "date": "2025-12-12",
+      "start": "10:00",
+      "end": "14:11",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 4183
+    },
+    {
+      "id": "1765670400000",
+      "date": "2025-12-14",
+      "start": "10:00",
+      "end": "12:59",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 1790
+    },
+    {
+      "id": "1765756800000",
+      "date": "2025-12-15",
+      "start": "10:00",
+      "end": "11:15",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 625,
+      "breakMinutes": 51
+    },
+    {
+      "id": "1765756801000",
+      "date": "2025-12-15",
+      "start": "12:06",
+      "end": "13:21",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 1750,
+      "breakMinutes": 50
+    },
+    {
+      "id": "1765756802000",
+      "date": "2025-12-15",
+      "start": "14:11",
+      "end": "15:26",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 625,
+      "breakAfter": "00:16"
+    },
+    {
+      "id": "1765756803000",
+      "date": "2025-12-15",
+      "start": "15:42",
+      "end": "16:57",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 625
+    },
+    {
+      "id": "1765843200000",
+      "date": "2025-12-16",
+      "start": "10:00",
+      "end": "12:04",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1653
+    },
+    {
+      "id": "1765929600000",
+      "date": "2025-12-17",
+      "start": "08:00",
+      "end": "08:47",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 940,
+      "breakMinutes": 52
+    },
+    {
+      "id": "1765929601000",
+      "date": "2025-12-17",
+      "start": "09:39",
+      "end": "10:26",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1018
+    },
+    {
+      "id": "1766016000000",
+      "date": "2025-12-18",
+      "start": "08:00",
+      "end": "10:47",
+      "categoryId": "consulting",
+      "rate": 1400,
+      "earned": 3897
+    },
+    {
+      "id": "1766102400000",
+      "date": "2025-12-19",
+      "start": "09:00",
+      "end": "09:44",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 880,
+      "breakAfter": "00:54"
+    },
+    {
+      "id": "1766102401000",
+      "date": "2025-12-19",
+      "start": "10:38",
+      "end": "11:21",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 932
+    },
+    {
+      "id": "1766361600000",
+      "date": "2025-12-22",
+      "start": "08:00",
+      "end": "16:00",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 7836
+    },
+    {
+      "id": "1766448000000",
+      "date": "2025-12-23",
+      "start": "10:00",
+      "end": "11:21",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 810,
+      "breakAfter": "01:00"
+    },
+    {
+      "id": "1766448001000",
+      "date": "2025-12-23",
+      "start": "12:21",
+      "end": "13:42",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1350,
+      "breakAfter": "00:53"
+    },
+    {
+      "id": "1766448002000",
+      "date": "2025-12-23",
+      "start": "14:35",
+      "end": "15:56",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1350,
+      "breakAfter": "00:59"
+    },
+    {
+      "id": "1766448003000",
+      "date": "2025-12-23",
+      "start": "16:55",
+      "end": "18:16",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1080,
+      "breakMinutes": 8
+    },
+    {
+      "id": "1766448004000",
+      "date": "2025-12-23",
+      "start": "18:24",
+      "end": "19:45",
+      "categoryId": "development",
+      "rate": 1500,
+      "earned": 2025
+    },
+    {
+      "id": "1766534400000",
+      "date": "2025-12-24",
+      "start": "10:00",
+      "end": "11:42",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 1020,
+      "breakAfter": "00:50"
+    },
+    {
+      "id": "1766534401000",
+      "date": "2025-12-24",
+      "start": "12:32",
+      "end": "14:14",
+      "categoryId": "other",
+      "rate": 1000,
+      "earned": 1700,
+      "breakMinutes": 26
+    },
+    {
+      "id": "1766534402000",
+      "date": "2025-12-24",
+      "start": "14:40",
+      "end": "16:22",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 1020
+    },
+    {
+      "id": "1766620800000",
+      "date": "2025-12-25",
+      "start": "10:00",
+      "end": "11:15",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 625,
+      "breakMinutes": 34
+    },
+    {
+      "id": "1766620801000",
+      "date": "2025-12-25",
+      "start": "11:49",
+      "end": "13:04",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1625,
+      "breakMinutes": 22
+    },
+    {
+      "id": "1766620802000",
+      "date": "2025-12-25",
+      "start": "13:26",
+      "end": "14:41",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1625
+    },
+    {
+      "id": "1766707200000",
+      "date": "2025-12-26",
+      "start": "10:00",
+      "end": "14:11",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 2510
+    },
+    {
+      "id": "1766966400000",
+      "date": "2025-12-29",
+      "start": "08:00",
+      "end": "10:24",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1920,
+      "breakMinutes": 54
+    },
+    {
+      "id": "1766966401000",
+      "date": "2025-12-29",
+      "start": "11:18",
+      "end": "13:42",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 2880,
+      "breakMinutes": 54
+    },
+    {
+      "id": "1766966402000",
+      "date": "2025-12-29",
+      "start": "14:36",
+      "end": "17:01",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 3142
+    },
+    {
+      "id": "1767052800000",
+      "date": "2025-12-30",
+      "start": "08:00",
+      "end": "09:26",
+      "categoryId": "management",
+      "rate": 1300,
+      "earned": 1863,
+      "breakAfter": "00:19"
+    },
+    {
+      "id": "1767052801000",
+      "date": "2025-12-30",
+      "start": "09:45",
+      "end": "11:11",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 1147,
+      "breakMinutes": 15
+    },
+    {
+      "id": "1767052802000",
+      "date": "2025-12-30",
+      "start": "11:26",
+      "end": "12:52",
+      "categoryId": "design",
+      "rate": 1200,
+      "earned": 1720
+    },
+    {
+      "id": "1767139200000",
+      "date": "2025-12-31",
+      "start": "08:00",
+      "end": "10:40",
+      "categoryId": "teaching",
+      "rate": 800,
+      "earned": 2133,
+      "breakAfter": "00:54"
+    },
+    {
+      "id": "1767139201000",
+      "date": "2025-12-31",
+      "start": "11:34",
+      "end": "14:14",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 1333,
+      "breakMinutes": 34
+    },
+    {
+      "id": "1767139202000",
+      "date": "2025-12-31",
+      "start": "14:48",
+      "end": "17:28",
+      "categoryId": "remix",
+      "rate": 500,
+      "earned": 1333,
+      "breakAfter": "00:43"
+    },
+    {
+      "id": "1767139203000",
+      "date": "2025-12-31",
+      "start": "18:11",
+      "end": "18:41",
+      "categoryId": "marketing",
+      "rate": 600,
+      "earned": 1585
+    }
+  ]
+}

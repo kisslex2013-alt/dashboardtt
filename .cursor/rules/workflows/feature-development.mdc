@@ -14,9 +14,89 @@ alwaysApply: false
 - "Создай [компонент/страницу/модуль]"
 - "Нужна возможность [что-то делать]"
 
+**ПРИНУДИТЕЛЬНАЯ АКТИВАЦИЯ:**
+Если пользователь использует триггерные фразы ("по правилам", "структурированно", "с планированием", "workflow"), ОБЯЗАТЕЛЬНО:
+1. ✅ Создать план разработки
+2. ✅ Создать задачи в Beads (эпик + подзадачи)
+3. ✅ Запустить проверку качества (`npm run quality:check`)
+4. ✅ Следовать всем этапам workflow
+5. ✅ Записать уроки после завершения
+
 ## Этапы разработки фичи
 
-### Этап 0: Создание плана (ОБЯЗАТЕЛЬНО)
+### Этап 0: Создание плана и задач в Beads (ОБЯЗАТЕЛЬНО)
+
+**Перед началом работы:**
+
+1. **Создай задачи в Beads** (для структурированного отслеживания)
+2. **Создай детальный план** (текстовый)
+
+#### Шаг 1: Создание задач в Beads
+
+**Всегда создавай задачи в Beads для новых фич:**
+
+```bash
+# 1. Создать эпик для фичи
+EPIC_ID=$(bd create "[Название фичи]" -t epic -p 1 --json | jq -r '.id')
+
+# 2. Создать подзадачи для каждого этапа
+TASK_ANALYSIS=$(bd create "Анализ и планирование" -t task -p 1 --json | jq -r '.id')
+TASK_STRUCTURE=$(bd create "Создание структуры файлов" -t task -p 1 --json | jq -r '.id')
+TASK_TYPES=$(bd create "Создание TypeScript типов" -t task -p 1 --json | jq -r '.id')
+TASK_STORE=$(bd create "Создание Zustand store" -t task -p 1 --json | jq -r '.id')
+TASK_COMPONENTS=$(bd create "Создание React компонентов" -t task -p 1 --json | jq -r '.id')
+TASK_TESTS=$(bd create "Написание тестов" -t task -p 2 --json | jq -r '.id')
+TASK_DOCS=$(bd create "Обновление документации" -t task -p 2 --json | jq -r '.id')
+
+# 3. Настроить зависимости (последовательность выполнения)
+bd dep add $TASK_STRUCTURE $TASK_ANALYSIS --type blocks
+bd dep add $TASK_TYPES $TASK_STRUCTURE --type blocks
+bd dep add $TASK_STORE $TASK_TYPES --type blocks
+bd dep add $TASK_COMPONENTS $TASK_STORE --type blocks
+bd dep add $TASK_TESTS $TASK_COMPONENTS --type blocks
+bd dep add $TASK_DOCS $TASK_TESTS --type blocks
+
+# 4. Показать план пользователю
+bd dep tree $EPIC_ID
+bd ready --json
+```
+
+**Начать с первой готовой задачи:**
+
+```bash
+# Получить первую готовую задачу
+READY_TASK=$(bd ready --limit 1 --json | jq -r '.[0].id')
+
+# Обновить статус
+bd update $READY_TASK --status in_progress
+
+echo "Начинаем с задачи: $READY_TASK"
+```
+
+**При обнаружении бага или дополнительной работы:**
+
+```bash
+# Создать задачу-баг
+BUG_ID=$(bd create "Баг: [описание]" -t bug -p 0 --json | jq -r '.id')
+
+# Или дополнительную задачу
+EXTRA_TASK=$(bd create "Дополнительно: [описание]" -t task -p 2 --json | jq -r '.id')
+
+# Связать с текущей задачей
+bd dep add $BUG_ID $CURRENT_TASK --type discovered-from
+```
+
+**При завершении задачи:**
+
+```bash
+# Закрыть задачу
+bd close $TASK_ID --reason "Готово: [краткое описание]"
+
+# Показать следующую готовую задачу
+bd ready --json
+```
+
+#### Шаг 2: Создание детального плана (текстовый)
 
 **Перед началом работы создай детальный план:**
 
@@ -54,7 +134,20 @@ alwaysApply: false
 
 **Правило:** План должен быть создан ДО начала написания кода. Если в процессе работы план нужно изменить - обнови его и объясни причину.
 
+**Интеграция с Beads:**
+- После создания плана покажи пользователю дерево задач: `bd dep tree $EPIC_ID`
+- Начни с первой готовой задачи: `bd ready --limit 1 --json`
+- Обновляй статус задач по мере выполнения: `bd update $TASK_ID --status in_progress`
+- При завершении шага: `bd close $TASK_ID --reason "Готово"`
+
 ### Этап 1: Анализ и планирование (5-10 минут)
+
+**Обнови статус задачи в Beads:**
+
+```bash
+# Если еще не обновлен, обнови статус задачи анализа
+bd update $TASK_ANALYSIS --status in_progress
+```
 
 **Задай уточняющие вопросы:**
 

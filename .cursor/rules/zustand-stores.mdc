@@ -1,6 +1,6 @@
 ---
 description: Правила для Zustand stores - атомарные селекторы и организация
-globs: ["**/store/**/*.js", "**/stores/**/*.js"]
+globs: ["**/store/**/*.{js,ts}", "**/stores/**/*.{js,ts}"]
 ---
 
 # Zustand Stores: Правила организации

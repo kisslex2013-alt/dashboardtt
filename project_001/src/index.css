@@ -1,0 +1,364 @@
+/* ✅ ОПТИМИЗАЦИЯ: Self-hosted Inter Font */
+/* Локальные шрифты вместо внешнего Google Fonts для ускорения загрузки */
+/* ✅ ОПТИМИЗАЦИЯ: WOFF2 формат для уменьшения размера на 65% с fallback на TTF */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src:
+    url('/fonts/inter-400.woff2') format('woff2'),
+    url('/fonts/inter-400.ttf') format('truetype'); /* Fallback для старых браузеров */
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src:
+    url('/fonts/inter-500.woff2') format('woff2'),
+    url('/fonts/inter-500.ttf') format('truetype'); /* Fallback для старых браузеров */
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src:
+    url('/fonts/inter-600.woff2') format('woff2'),
+    url('/fonts/inter-600.ttf') format('truetype'); /* Fallback для старых браузеров */
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src:
+    url('/fonts/inter-700.woff2') format('woff2'),
+    url('/fonts/inter-700.ttf') format('truetype'); /* Fallback для старых браузеров */
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Glass effect для модальных окон */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  transition: background 0.3s, border-color 0.3s;
+}
+
+.dark .glass-effect {
+  background: rgba(30, 30, 30, 0.9);
+  border-color: rgba(75, 85, 99, 0.3);
+}
+
+/* Shimmer анимация */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+}
+
+/* ============================================
+   📐 TYPOGRAPHY SCALE SYSTEM
+   Система размеров шрифтов для консистентного дизайна
+   ============================================ */
+
+@layer base {
+  :root {
+    /* ====== FONT SIZES ====== */
+    /* Основано на модульной шкале 1.125 (Major Second) */
+    --font-size-xs: 0.75rem; /* 12px - Captions, labels */
+    --font-size-sm: 0.875rem; /* 14px - Small text, secondary info */
+    --font-size-base: 1rem; /* 16px - Body text, paragraphs */
+    --font-size-lg: 1.125rem; /* 18px - Large body, lead paragraphs */
+    --font-size-xl: 1.25rem; /* 20px - Small headings, card titles */
+    --font-size-2xl: 1.5rem; /* 24px - Section headings */
+    --font-size-3xl: 1.875rem; /* 30px - Page headings */
+    --font-size-4xl: 2.25rem; /* 36px - Hero headings */
+    --font-size-5xl: 3rem; /* 48px - Display headings */
+
+    /* ====== LINE HEIGHTS ====== */
+    /* Оптимальные значения для читаемости */
+    --leading-none: 1; /* 1 - Tight, для заголовков */
+    --leading-tight: 1.25; /* 1.25 - Для больших заголовков */
+    --leading-snug: 1.375; /* 1.375 - Для средних заголовков */
+    --leading-normal: 1.5; /* 1.5 - Для основного текста */
+    --leading-relaxed: 1.625; /* 1.625 - Для длинного текста */
+    --leading-loose: 2; /* 2 - Для очень расслабленного текста */
+
+    /* ====== FONT WEIGHTS ====== */
+    /* Inter font поддерживает 400-700 */
+    --font-light: 300; /* Light - редко используется */
+    --font-normal: 400; /* Normal - основной текст */
+    --font-medium: 500; /* Medium - акценты */
+    --font-semibold: 600; /* Semibold - подзаголовки */
+    --font-bold: 700; /* Bold - заголовки */
+
+    /* ====== LETTER SPACING ====== */
+    /* Для различных размеров текста */
+    --tracking-tighter: -0.05em; /* -0.05em - Для больших заголовков */
+    --tracking-tight: -0.025em; /* -0.025em - Для заголовков */
+    --tracking-normal: 0; /* 0 - Для основного текста */
+    --tracking-wide: 0.025em; /* 0.025em - Для кнопок, меток */
+    --tracking-wider: 0.05em; /* 0.05em - Для uppercase текста */
+    --tracking-widest: 0.1em; /* 0.1em - Для акцентов */
+
+    /* ====== TEXT COLORS ====== */
+    /* Семантические цвета текста (светлая тема) */
+    --text-primary: rgb(17, 24, 39); /* gray-900 - Основной текст */
+    --text-secondary: rgb(75, 85, 99); /* gray-600 - Второстепенный текст */
+    --text-tertiary: rgb(156, 163, 175); /* gray-400 - Вспомогательный текст */
+    --text-disabled: rgb(209, 213, 219); /* gray-300 - Отключенный текст */
+    --text-link: rgb(59, 130, 246); /* blue-500 - Ссылки */
+    --text-link-hover: rgb(37, 99, 235); /* blue-600 - Ссылки при наведении */
+  }
+
+  /* Темная тема */
+  .dark {
+    --text-primary: rgb(243, 244, 246); /* gray-100 - Основной текст */
+    --text-secondary: rgb(209, 213, 219); /* gray-300 - Второстепенный текст */
+    --text-tertiary: rgb(107, 114, 128); /* gray-500 - Вспомогательный текст */
+    --text-disabled: rgb(75, 85, 99); /* gray-600 - Отключенный текст */
+    --text-link: rgb(96, 165, 250); /* blue-400 - Ссылки */
+    --text-link-hover: rgb(59, 130, 246); /* blue-500 - Ссылки при наведении */
+  }
+}
+
+/* ============================================
+   📝 TYPOGRAPHY UTILITY CLASSES
+   Готовые классы для типографики
+   ============================================ */
+
+@layer utilities {
+  /* ====== HEADING CLASSES ====== */
+  .heading-1 {
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-bold);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-tight);
+    color: var(--text-primary);
+  }
+
+  .heading-2 {
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-bold);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-tight);
+    color: var(--text-primary);
+  }
+
+  .heading-3 {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-semibold);
+    line-height: var(--leading-snug);
+    letter-spacing: var(--tracking-tight);
+    color: var(--text-primary);
+  }
+
+  .heading-4 {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-semibold);
+    line-height: var(--leading-snug);
+    color: var(--text-primary);
+  }
+
+  .heading-5 {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-semibold);
+    line-height: var(--leading-normal);
+    color: var(--text-primary);
+  }
+
+  .heading-6 {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-semibold);
+    line-height: var(--leading-normal);
+    color: var(--text-primary);
+  }
+
+  /* ====== BODY TEXT CLASSES ====== */
+  .body-large {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-normal);
+    line-height: var(--leading-relaxed);
+    color: var(--text-primary);
+  }
+
+  .body-base {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-normal);
+    line-height: var(--leading-normal);
+    color: var(--text-primary);
+  }
+
+  .body-small {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-normal);
+    line-height: var(--leading-normal);
+    color: var(--text-secondary);
+  }
+
+  .body-xs {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-normal);
+    line-height: var(--leading-normal);
+    color: var(--text-tertiary);
+  }
+
+  /* ====== SPECIALIZED CLASSES ====== */
+  .text-label {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-medium);
+    line-height: var(--leading-normal);
+    letter-spacing: var(--tracking-wide);
+    color: var(--text-secondary);
+  }
+
+  .text-caption {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-normal);
+    line-height: var(--leading-normal);
+    color: var(--text-tertiary);
+  }
+
+  .text-overline {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-semibold);
+    line-height: var(--leading-normal);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+
+  .text-button {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-medium);
+    line-height: var(--leading-normal);
+    letter-spacing: var(--tracking-wide);
+  }
+
+  .text-link {
+    color: var(--text-link);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .text-link:hover {
+    color: var(--text-link-hover);
+  }
+
+  /* ====== TEXT COLOR UTILITIES ====== */
+  .text-color-primary {
+    color: var(--text-primary);
+  }
+
+  .text-color-secondary {
+    color: var(--text-secondary);
+  }
+
+  .text-color-tertiary {
+    color: var(--text-tertiary);
+  }
+
+  .text-color-disabled {
+    color: var(--text-disabled);
+  }
+
+  /* ====== RESPONSIVE TYPOGRAPHY ====== */
+  @media (max-width: 640px) {
+    .heading-1 {
+      font-size: var(--font-size-3xl);
+    }
+
+    .heading-2 {
+      font-size: var(--font-size-2xl);
+    }
+
+    .heading-3 {
+      font-size: var(--font-size-xl);
+    }
+  }
+}
+
+/* ✅ ОПТИМИЗАЦИЯ: Smooth scroll для всего приложения */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ✅ ОПТИМИЗАЦИЯ: Улучшенная производительность скролла */
+@media (prefers-reduced-motion: no-preference) {
+  * {
+    scroll-behavior: smooth;
+  }
+}
+
+/* ✅ ОПТИМИЗАЦИЯ: Уважение к настройкам пользователя */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-in {
+  animation: slideUp 0.3s ease-out;
+}
+
+/* Скрытие AM/PM в полях времени (24-часовой формат) */
+input[type='time'] {
+  /* Скрываем календарную иконку и спиннеры */
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+  font-variant-numeric: tabular-nums;
+}
+
+input[type='time']::-webkit-calendar-picker-indicator {
+  display: none !important;
+}
+
+input[type='time']::-webkit-inner-spin-button,
+input[type='time']::-webkit-outer-spin-button {
+  display: none !important;
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Принудительно используем 24-часовой формат через CSS */
+input[type='time']::-webkit-datetime-edit-ampm-field {
+  display: none !important;
+}
+
+input[type='time']::-moz-datetime-edit-ampm-field {
+  display: none !important;
+}

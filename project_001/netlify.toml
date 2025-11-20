@@ -1,0 +1,54 @@
+# Netlify конфигурация для Time Tracker Dashboard
+# Этот файл настраивает автоматическое развертывание на Netlify
+
+[build]
+  # Команда для сборки проекта
+  command = "npm run build"
+  
+  # Папка с собранными файлами (для публикации)
+  publish = "dist"
+  
+  # Версия Node.js для сборки (рекомендуется 18+)
+  [build.environment]
+    NODE_VERSION = "18"
+
+# Redirects для Single Page Application (SPA)
+# Все запросы должны возвращать index.html для корректной работы React Router
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Headers для безопасности и производительности
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Кеширование статических файлов
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Кеширование HTML файлов
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Кеширование шрифтов
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Кеширование звуков
+[[headers]]
+  for = "/sounds/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+

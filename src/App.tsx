@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, lazy, Suspense, useCallback } from 'react'
+import React, { useState, useEffect, useRef, lazy, Suspense, useCallback, useMemo } from 'react'
 import { Header } from './components/layout/Header/index'
 import { Footer } from './components/layout/Footer'
 
@@ -51,6 +51,11 @@ const FloatingPanelSettingsModal = lazy(() =>
     default: module.FloatingPanelSettingsModal,
   }))
 )
+const NotificationsDisplayModal = lazy(() =>
+  import('./components/modals/NotificationsDisplayModal').then(module => ({
+    default: module.NotificationsDisplayModal,
+  }))
+)
 
 import { NotificationContainer } from './components/ui/NotificationContainer'
 import { IconSelect } from './components/ui/IconSelect'
@@ -63,7 +68,14 @@ import { useAppSelectors } from './hooks/useAppSelectors'
 import { DashboardSkeleton } from './components/layout/DashboardSkeleton'
 // ✅ ОПТИМИЗАЦИЯ: useSettingsStore используется только в exportToJSON, можно оставить статический импорт
 // (динамический импорт в useEntriesStore используется только для бэкапов)
-import { useSettingsStore, usePomodoroSettings, useColorScheme, useSetColorScheme } from './store/useSettingsStore'
+import {
+  useSettingsStore,
+  usePomodoroSettings,
+  useColorScheme,
+  useSetColorScheme,
+  useDailyHours,
+  DEFAULT_EXPORT_REMINDER_SETTINGS,
+} from './store/useSettingsStore'
 import { useShowWarning } from './store/useUIStore'
 import { usePomodoro } from './hooks/usePomodoro'
 import { useHotkeys } from './hooks/useHotkeys'
@@ -74,6 +86,8 @@ import { useOvertimeAlerts } from './hooks/useOvertimeAlerts'
 import { exportToJSON } from './utils/exportImport'
 import { logger } from './utils/logger'
 import { getTodayString } from './utils/dateHelpers'
+import { calculateDuration } from './utils/calculations'
+import { format } from 'date-fns'
 import { useDelayedUnmount } from './hooks/useDelayedUnmount'
 import { useClearEntries, useEntriesStore } from './store/useEntriesStore'
 import { loadDemoData } from './utils/loadDemoData'
@@ -258,7 +272,7 @@ function App() {
     if (!alreadyMigrated) {
       updateCategoryColors()
       localStorage.setItem(migrationKey, 'true')
-      showSuccess('🎨 Цвета категорий обновлены!')
+      showSuccess('Цвета категорий обновлены!')
     }
   }, [updateCategoryColors, showSuccess])
 
@@ -327,6 +341,7 @@ function App() {
   // ✅ ОПТИМИЗАЦИЯ: Задержка размонтирования для lazy-loaded модальных окон
   // Это позволяет анимации исчезновения завершиться до размонтирования компонента
   const shouldRenderEditEntry = useDelayedUnmount(modals.editEntry?.isOpen ?? false, 350)
+  const shouldRenderNotificationsDisplay = useDelayedUnmount(modals.notificationsDisplay?.isOpen ?? false, 350)
   const shouldRenderImport = useDelayedUnmount(modals.import?.isOpen ?? false, 350)
   const shouldRenderWorkSchedule = useDelayedUnmount(modals.workSchedule?.isOpen ?? false, 350)
   const shouldRenderPaymentDatesSettings = useDelayedUnmount(
@@ -448,10 +463,13 @@ function App() {
     s: handleTimerToggle,
     'ctrl+z': handleUndo,
     'ctrl+y': handleRedo,
+    'ctrl+alt+n': () => openModal('notificationsDisplay'),
     // ✅ ОТКЛЮЧЕНО: Горячая клавиша для тестового вызова модалки обновления
     // 'ctrl+alt+u': () => {
     //   setTestUpdateModal(true)
     // },
+  }, {
+    ignoreInputs: false, // Разрешаем хоткей даже в input полях для CTRL+ALT+N
   })
 
   const handleSaveEntry = useCallback(
@@ -488,8 +506,10 @@ function App() {
     [openModal]
   )
 
-  // ✅ Умное напоминание об экспорте - флаг для отслеживания показа напоминания
+  // ✅ Умное напоминание об экспорте - флаги и таймеры
   const reminderShownRef = useRef(false)
+  const lastReminderDateRef = useRef<string | null>(null)
+  const lastReminderTimestampRef = useRef<number | null>(null)
 
   const handleExport = useCallback(() => {
     try {
@@ -548,8 +568,10 @@ function App() {
       }
       localStorage.setItem('lastExportInfo', JSON.stringify(exportInfo))
       
-      // Сбрасываем флаг напоминания, чтобы оно могло появиться снова при необходимости
+      // Сбрасываем флаги напоминаний, чтобы они могли появиться снова при необходимости
       reminderShownRef.current = false
+      lastReminderDateRef.current = null
+      lastReminderTimestampRef.current = null
       
       showSuccess(`Данные успешно экспортированы (${allEntries.length} записей)`)
       logger.log(`✅ Экспорт завершен. Экспортировано ${allEntries.length} записей`)
@@ -561,59 +583,130 @@ function App() {
     }
   }, [categories, showSuccess, showError])
 
+  // ✅ Настройки напоминаний об экспорте
+  const exportReminderSettingsFromStore = useSettingsStore(state => state.notifications?.exportReminder)
+  const exportReminderSettings = useMemo(
+    () => ({
+      ...DEFAULT_EXPORT_REMINDER_SETTINGS,
+      ...(exportReminderSettingsFromStore || {}),
+    }),
+    [exportReminderSettingsFromStore]
+  )
+
   // ✅ Умное напоминание об экспорте при переключении вкладки
+  // Теперь проверяет переработку и не показывает слишком часто
+  const dailyHours = useDailyHours()
   useEffect(() => {
     let visibilityTimer = null
 
     const checkExportReminder = () => {
-      // Пропускаем, если напоминание уже было показано в этой сессии
-      if (reminderShownRef.current) return
+      const {
+        enabled,
+        showWhenNeverExported,
+        minEntriesForReminder,
+        enableOvertimeReminder,
+        enableTimeBasedReminder,
+        remindAfterDays,
+        showOncePerDay,
+        minIntervalMinutes,
+      } = exportReminderSettings
+
+      if (!enabled) {
+        return
+      }
+
+      const now = Date.now()
+      const today = format(new Date(), 'yyyy-MM-dd')
+      const minEntriesThreshold = Math.max(0, minEntriesForReminder || 0)
+      const minIntervalMs = Math.max(0, (minIntervalMinutes || 0) * 60 * 1000)
+
+      if (reminderShownRef.current) {
+        if (showOncePerDay) {
+          if (lastReminderDateRef.current === today) {
+            return
+          }
+          reminderShownRef.current = false
+        } else if (minIntervalMs === 0) {
+          reminderShownRef.current = false
+        } else if (lastReminderTimestampRef.current && now - lastReminderTimestampRef.current >= minIntervalMs) {
+          reminderShownRef.current = false
+        } else {
+          return
+        }
+      }
+
+      if (showOncePerDay && lastReminderDateRef.current === today) {
+        return
+      }
 
       try {
-        // Получаем информацию о последнем экспорте
         const lastExportInfoStr = localStorage.getItem('lastExportInfo')
         const currentEntries = useEntriesStore.getState().entries
         const currentEntriesCount = currentEntries.length
 
-        // Если никогда не экспортировали
+        if (currentEntriesCount < minEntriesThreshold) {
+          return
+        }
+
+        const showReminder = (message: string, duration = 7000) => {
+          reminderShownRef.current = true
+          lastReminderTimestampRef.current = now
+          if (showOncePerDay) {
+            lastReminderDateRef.current = today
+          } else {
+            lastReminderDateRef.current = null
+          }
+          showWarning(message, duration)
+        }
+
         if (!lastExportInfoStr) {
-          if (currentEntriesCount > 0) {
-            reminderShownRef.current = true
-            showWarning(
-              '💾 Не забудьте экспортировать данные для безопасности! Нажмите кнопку "Экспорт" в шапке.',
-              6000
-            )
+          if (showWhenNeverExported) {
+            showReminder('Не забудьте экспортировать данные для безопасности! Нажмите кнопку "Экспорт" в шапке.', 6000)
           }
           return
         }
 
         const lastExportInfo = JSON.parse(lastExportInfoStr)
         const lastExportTime = lastExportInfo.timestamp
-        const lastExportEntriesCount = lastExportInfo.entriesCount || 0
 
-        // Проверяем, прошло ли больше 3 дней с последнего экспорта
-        const daysSinceExport = (Date.now() - lastExportTime) / (1000 * 60 * 60 * 24)
-        const shouldRemindByTime = daysSinceExport > 3
+        const daysSinceExport = (now - lastExportTime) / (1000 * 60 * 60 * 24)
+        const shouldRemindByTime =
+          enableTimeBasedReminder && remindAfterDays > 0 && daysSinceExport > remindAfterDays
 
-        // Проверяем, появилось ли много новых записей (больше 10)
-        const newEntriesCount = currentEntriesCount - lastExportEntriesCount
-        const shouldRemindByEntries = newEntriesCount > 10
+        const dailyHoursNum = Number(dailyHours) || 8
+        const todayStr = today
+        const todayEntries = currentEntries.filter(entry => {
+          if (!entry || !entry.date) return false
+          const entryDateStr = entry.date.split('T')[0]
+          return entryDateStr === todayStr
+        })
 
-        // Показываем напоминание, если выполняется одно из условий
-        if (shouldRemindByTime || shouldRemindByEntries) {
-          reminderShownRef.current = true
-          
-          let message = '💾 Рекомендуем экспортировать данные: '
-          if (shouldRemindByTime && shouldRemindByEntries) {
-            message += `прошло ${Math.floor(daysSinceExport)} дней и добавлено ${newEntriesCount} новых записей`
-          } else if (shouldRemindByTime) {
-            message += `прошло ${Math.floor(daysSinceExport)} дней с последнего экспорта`
-          } else {
-            message += `добавлено ${newEntriesCount} новых записей`
+        let totalHoursToday = 0
+        todayEntries.forEach(entry => {
+          if (entry.duration) {
+            totalHoursToday += parseFloat(entry.duration) || 0
+          } else if (entry.start && entry.end) {
+            const duration = calculateDuration(entry.start, entry.end)
+            totalHoursToday += Number.isFinite(duration) ? duration : 0
           }
-          message += '. Нажмите кнопку "Экспорт" в шапке.'
+        })
+        totalHoursToday = Number.isFinite(totalHoursToday) ? totalHoursToday : 0
 
-          showWarning(message, 7000)
+        const hasOvertime = totalHoursToday > dailyHoursNum
+
+        if (enableOvertimeReminder && hasOvertime && totalHoursToday > 0) {
+          const overtimeHours = totalHoursToday - dailyHoursNum
+          const message = `Рекомендуем экспортировать данные: переработка ${overtimeHours.toFixed(1)} ${
+            overtimeHours === 1 ? 'час' : overtimeHours < 5 ? 'часа' : 'часов'
+          } (${totalHoursToday.toFixed(1)}ч / норма: ${dailyHoursNum}ч). Нажмите кнопку "Экспорт" в шапке.`
+
+          showReminder(message, 7000)
+        } else if (shouldRemindByTime) {
+          const message = `Рекомендуем экспортировать данные: прошло ${Math.floor(
+            daysSinceExport
+          )} дней с последнего экспорта. Нажмите кнопку "Экспорт" в шапке.`
+
+          showReminder(message, 7000)
         }
       } catch (error) {
         logger.error('❌ Ошибка при проверке напоминания об экспорте:', error)
@@ -621,23 +714,17 @@ function App() {
     }
 
     const handleVisibilityChange = () => {
-      // Показываем напоминание при переключении вкладки (когда вкладка становится видимой)
       if (document.visibilityState === 'visible') {
-        // Очищаем предыдущий таймер, если он есть
         if (visibilityTimer) {
           clearTimeout(visibilityTimer)
         }
-        
-        // Небольшая задержка, чтобы не показывать сразу при открытии
+
         visibilityTimer = setTimeout(() => {
           checkExportReminder()
-        }, 2000) // 2 секунды после возврата на вкладку
-      } else {
-        // Очищаем таймер при скрытии вкладки
-        if (visibilityTimer) {
-          clearTimeout(visibilityTimer)
-          visibilityTimer = null
-        }
+        }, 2000)
+      } else if (visibilityTimer) {
+        clearTimeout(visibilityTimer)
+        visibilityTimer = null
       }
     }
 
@@ -649,7 +736,7 @@ function App() {
         clearTimeout(visibilityTimer)
       }
     }
-  }, [showWarning])
+  }, [showWarning, dailyHours, exportReminderSettings])
 
   const handleImport = async (data, mode) => {
     try {
@@ -1044,6 +1131,13 @@ function App() {
           <FloatingPanelSettingsModal
             isOpen={modals.floatingPanelSettings?.isOpen ?? false}
             onClose={() => closeModal('floatingPanelSettings')}
+          />
+        )}
+
+        {shouldRenderNotificationsDisplay && (
+          <NotificationsDisplayModal
+            isOpen={modals.notificationsDisplay?.isOpen ?? false}
+            onClose={() => closeModal('notificationsDisplay')}
           />
         )}
       </Suspense>
