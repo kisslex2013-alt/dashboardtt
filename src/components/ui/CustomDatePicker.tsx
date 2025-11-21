@@ -236,7 +236,14 @@ export function CustomDatePicker({
   const calendarContent = (
     <div
       ref={calendarRef}
-      className={`fixed glass-effect rounded-xl border border-gray-300 dark:border-gray-600 shadow-xl z-[999999] p-4 min-w-[320px] ${
+      data-calendar-picker="true"
+      onClick={(e) => {
+        e.stopPropagation()
+      }}
+      onMouseDown={(e) => {
+        e.stopPropagation()
+      }}
+      className={`fixed glass-effect rounded-xl border border-gray-300 dark:border-gray-600 shadow-xl z-[9999999] p-4 min-w-[320px] ${
         !isAnimating && !isExiting ? 'opacity-0 translate-y-4' : ''
       } ${isAnimating ? 'animate-slide-up' : ''} ${isExiting ? 'animate-slide-out' : ''}`}
       style={{
@@ -253,7 +260,11 @@ export function CustomDatePicker({
           </h3>
         </div>
         <button
-          onClick={handleClose}
+          onClick={(e) => {
+            e.stopPropagation()
+            e.preventDefault()
+            handleClose()
+          }}
           className="p-1 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors touch-manipulation"
           style={{ minWidth: isMobile ? '44px' : 'auto', minHeight: isMobile ? '44px' : 'auto' }}
           aria-label="Закрыть"
@@ -265,7 +276,11 @@ export function CustomDatePicker({
       {/* Навигация по месяцам */}
       <div className="flex items-center justify-between mb-3">
         <button
-          onClick={handlePrevMonth}
+          onClick={(e) => {
+            e.stopPropagation()
+            e.preventDefault()
+            handlePrevMonth()
+          }}
           className="p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors touch-manipulation"
           style={{ minWidth: isMobile ? '44px' : 'auto', minHeight: isMobile ? '44px' : 'auto' }}
           aria-label="Предыдущий месяц"
@@ -273,7 +288,9 @@ export function CustomDatePicker({
           <ChevronLeft className={isMobile ? 'w-6 h-6' : 'w-5 h-5'} />
         </button>
         <button
-          onClick={() => {
+          onClick={(e) => {
+            e.stopPropagation()
+            e.preventDefault()
             const today = new Date()
             setCurrentMonth(today)
             handleDateSelect(today)
@@ -284,7 +301,11 @@ export function CustomDatePicker({
           Сегодня
         </button>
         <button
-          onClick={handleNextMonth}
+          onClick={(e) => {
+            e.stopPropagation()
+            e.preventDefault()
+            handleNextMonth()
+          }}
           className="p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors touch-manipulation"
           style={{ minWidth: isMobile ? '44px' : 'auto', minHeight: isMobile ? '44px' : 'auto' }}
           aria-label="Следующий месяц"
@@ -315,7 +336,13 @@ export function CustomDatePicker({
           return (
             <button
               key={format(date, 'yyyy-MM-dd')}
-              onClick={() => isCurrentMonth && handleDateSelect(date)}
+              onClick={(e) => {
+                e.stopPropagation()
+                e.preventDefault()
+                if (isCurrentMonth) {
+                  handleDateSelect(date)
+                }
+              }}
               disabled={!isCurrentMonth}
               className={`
                 ${isMobile ? 'w-12 h-12' : 'w-10 h-10'} rounded-lg ${isMobile ? 'text-base' : 'text-sm'} transition-normal hover-lift-scale touch-manipulation

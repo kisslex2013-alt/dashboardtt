@@ -215,8 +215,12 @@ export function BaseModal({
       // Проверяем, есть ли у target или его родителя класс с z-[9999999] (вложенное модальное окно)
       const isNestedModal = target.closest('[class*="z-[9999999]"]') !== null
       
-      // Если клик на дочернем модальном окне - не блокируем
-      if (isNestedModal) {
+      // ✅ ИСПРАВЛЕНО: Проверяем, не находится ли клик на календаре (CustomDatePicker)
+      // Календарь рендерится через portal и должен быть доступен для кликов
+      const isCalendarPicker = target.closest('[data-calendar-picker="true"]') !== null
+      
+      // Если клик на дочернем модальном окне или календаре - не блокируем
+      if (isNestedModal || isCalendarPicker) {
         return // Позволяем событию продолжить
       }
       

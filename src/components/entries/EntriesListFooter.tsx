@@ -180,8 +180,9 @@ export function EntriesListFooter({
                         : ''
                     }
                     onFocus={() => setIsStartDatePickerOpen(true)}
+                    onClick={() => setIsStartDatePickerOpen(true)}
                     readOnly
-                    className="px-3 py-1.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 glass-effect w-32"
+                    className="px-3 py-1.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 glass-effect w-32 cursor-pointer"
                     placeholder="дд/мм/гггг"
                   />
                   {isStartDatePickerOpen && (
@@ -210,8 +211,9 @@ export function EntriesListFooter({
                       customDateRange.end ? customDateRange.end.split('-').reverse().join('/') : ''
                     }
                     onFocus={() => setIsEndDatePickerOpen(true)}
+                    onClick={() => setIsEndDatePickerOpen(true)}
                     readOnly
-                    className="px-3 py-1.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 glass-effect w-32"
+                    className="px-3 py-1.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 glass-effect w-32 cursor-pointer"
                     placeholder="дд/мм/гггг"
                   />
                   {isEndDatePickerOpen && (
