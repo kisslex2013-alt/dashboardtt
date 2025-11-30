@@ -102,6 +102,7 @@ export function CategoriesModal({ isOpen, onClose, autoOpenAddForm = false, onCa
   const nameInputRef = useRef(null)
 
   // Обработчик для блокировки глобальных hotkey при фокусе на input полях
+  // Дополнительная защита на уровне input элемента
   const handleInputKeyDown = useCallback((e) => {
     // Список клавиш, которые используются как глобальные hotkey
     const globalHotkeys = ['s', 'n', 't', 'h']
@@ -110,8 +111,10 @@ export function CategoriesModal({ isOpen, onClose, autoOpenAddForm = false, onCa
     if (!e.ctrlKey && !e.altKey && !e.metaKey && !e.shiftKey) {
       const key = e.key.toLowerCase()
       if (globalHotkeys.includes(key)) {
-        // Останавливаем всплытие, чтобы глобальные hotkey не срабатывали
+        // ✅ КРИТИЧНО: Полностью останавливаем событие на уровне input
+        e.preventDefault()
         e.stopPropagation()
+        e.stopImmediatePropagation()
       }
     }
   }, [])
@@ -122,33 +125,63 @@ export function CategoriesModal({ isOpen, onClose, autoOpenAddForm = false, onCa
 
     const handleKeyDownCapture = (e) => {
       const activeElement = document.activeElement
-      const tagName = activeElement?.tagName?.toLowerCase()
       
-      // Проверяем, находится ли фокус на input, textarea или select внутри модального окна
-      if (['input', 'textarea', 'select'].includes(tagName)) {
-        // Проверяем, что активный элемент находится внутри этого модального окна
-        const modalElement = document.querySelector('[role="dialog"]')
-        if (modalElement && modalElement.contains(activeElement)) {
-          // Список клавиш, которые используются как глобальные hotkey
-          const globalHotkeys = ['s', 'n', 't', 'h']
+      // ✅ КРИТИЧНО: Проверяем, что фокус на поле ввода
+      if (!activeElement) return
+      
+      const tagName = activeElement.tagName?.toLowerCase()
+      const isInputField = ['input', 'textarea', 'select'].includes(tagName) ||
+                          activeElement.contentEditable === 'true'
+      
+      if (!isInputField) {
+        return // Не блокируем, если фокус не на поле ввода
+      }
+      
+      // ✅ КРИТИЧНО: Проверяем, что активный элемент находится внутри модального окна
+      // Используем closest для поиска ближайшего модального окна
+      const modalElement = activeElement.closest('[role="dialog"]')
+      
+      if (!modalElement) {
+        return // Не блокируем, если не в модальном окне
+      }
+      
+      // ✅ КРИТИЧНО: Список клавиш, которые используются как глобальные hotkey
+      const globalHotkeys = ['s', 'n', 't', 'h']
+      
+      // Если нажата клавиша без модификаторов и она в списке глобальных hotkey
+      if (!e.ctrlKey && !e.altKey && !e.metaKey && !e.shiftKey) {
+        const key = e.key?.toLowerCase()
+        if (key && globalHotkeys.includes(key)) {
+          // ✅ КРИТИЧНО: Полностью останавливаем событие
+          // preventDefault() - предотвращает стандартное поведение
+          // stopPropagation() - останавливает всплытие события
+          // stopImmediatePropagation() - останавливает все последующие обработчики
+          e.preventDefault()
+          e.stopPropagation()
+          e.stopImmediatePropagation()
           
-          // Если нажата клавиша без модификаторов и она в списке глобальных hotkey
-          if (!e.ctrlKey && !e.altKey && !e.metaKey && !e.shiftKey) {
-            const key = e.key.toLowerCase()
-            if (globalHotkeys.includes(key)) {
-              // Останавливаем распространение события в capture phase
-              e.stopPropagation()
-            }
+          // Логируем только в dev режиме для отладки
+          if (import.meta.env.DEV) {
+            console.log(`🚫 Заблокирован глобальный hotkey "${key}" при вводе в модальном окне`, {
+              activeElement: activeElement.tagName,
+              inputType: activeElement.type,
+              value: activeElement.value?.substring(0, 20),
+            })
           }
+          
+          return false // Дополнительная защита
         }
       }
     }
 
-    // Добавляем обработчик в capture phase для перехвата событий до их обработки useHotkeys
-    window.addEventListener('keydown', handleKeyDownCapture, true)
+    // ✅ КРИТИЧНО: Используем document вместо window для перехвата до useHotkeys
+    // useHotkeys слушает события на document, поэтому мы должны перехватывать там же
+    // capture: true гарантирует, что наш обработчик выполнится ПЕРЕД useHotkeys
+    // passive: false позволяет вызывать preventDefault()
+    document.addEventListener('keydown', handleKeyDownCapture, { capture: true, passive: false })
 
     return () => {
-      window.removeEventListener('keydown', handleKeyDownCapture, true)
+      document.removeEventListener('keydown', handleKeyDownCapture, { capture: true })
     }
   }, [isOpen])
 

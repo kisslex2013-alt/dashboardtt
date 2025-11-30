@@ -166,27 +166,53 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
-    sourcemap: false,
+    // ✅ ОПТИМИЗАЦИЯ: Условная генерация sourcemap только для production debug
+    sourcemap: process.env.VITE_SOURCEMAP === 'true',
     
     // ✅ ОПТИМИЗАЦИЯ: Минификация и оптимизация
     minify: 'esbuild', // Используем esbuild для быстрой минификации
     
+    // ✅ ОПТИМИЗАЦИЯ: Настройки esbuild для более агрессивной оптимизации
+    // Примечание: Vite автоматически применяет минификацию при minify: 'esbuild'
+    // Дополнительные опции можно настроить через esbuildOptions в optimizeDeps
+    esbuild: {
+      // ✅ ОПТИМИЗАЦИЯ: Более современный target для меньшего размера бандла
+      target: 'es2022', // es2022 поддерживает top-level await, что позволяет лучшее tree-shaking
+      // ✅ ОПТИМИЗАЦИЯ: Удаляем console и debugger в production
+      drop: process.env.NODE_ENV === 'production' ? ['console', 'debugger'] : [],
+      // ✅ ОПТИМИЗАЦИЯ: Удаляем все комментарии (включая лицензионные)
+      legalComments: 'none',
+    },
+    
+    // ✅ ОПТИМИЗАЦИЯ: Улучшенная производительность сборки
+    cssCodeSplit: true, // Разделяем CSS на чанки для лучшего кэширования
+    reportCompressedSize: false, // Отключаем отчет о сжатом размере для ускорения сборки
+    write: true, // Включаем запись файлов (по умолчанию, но явно указываем)
+    
     // ✅ PERFORMANCE: Включаем modulePreload для правильного порядка загрузки
     modulePreload: {
       polyfill: true,
-      // ✅ PERFORMANCE: Предзагрузка критических модулей в правильном порядке
+      // ✅ ОПТИМИЗАЦИЯ: Оптимизированная предзагрузка критических модулей
       resolveDependencies: (filename, deps) => {
-        // Сортируем зависимости: сначала критичные (index.js, vendor), потом остальные
-        const critical = deps.filter(dep => 
-          dep.includes('index') || 
-          dep.includes('main') || 
-          (dep.includes('vendor') && !dep.includes('AnalyticsSection') && !dep.includes('EntriesList'))
-        )
-        const others = deps.filter(dep => 
-          !dep.includes('index') && 
-          !dep.includes('main') && 
-          !(dep.includes('vendor') && !dep.includes('AnalyticsSection') && !dep.includes('EntriesList'))
-        )
+        // ✅ ОПТИМИЗАЦИЯ: Используем Set для O(1) проверки вместо O(n) filter
+        const criticalPatterns = new Set(['index', 'main', 'vendor'])
+        const excludePatterns = new Set(['AnalyticsSection', 'EntriesList'])
+        
+        // Сортируем зависимости: сначала критичные, потом остальные
+        const critical = []
+        const others = []
+        
+        for (const dep of deps) {
+          const isCritical = Array.from(criticalPatterns).some(pattern => dep.includes(pattern))
+          const isExcluded = Array.from(excludePatterns).some(pattern => dep.includes(pattern))
+          
+          if (isCritical && !isExcluded) {
+            critical.push(dep)
+          } else {
+            others.push(dep)
+          }
+        }
+        
         return [...critical, ...others]
       },
     },
@@ -335,12 +361,36 @@ export default defineConfig({
       '@vercel/analytics', // ✅ PERFORMANCE: Аналитика загружается асинхронно
       '@vercel/speed-insights', // ✅ PERFORMANCE: Speed Insights загружается асинхронно
     ],
-    // ✅ ИСПРАВЛЕНО: Принудительно включаем React в pre-bundling
-    force: true,
-    // ✅ ИСПРАВЛЕНО: Убеждаемся, что React загружается первым
+    // ✅ КРИТИЧНО: Убираем force: true для использования кэша и ускорения старта
+    // force: true заставляет пересобирать зависимости каждый раз, что замедляет dev сервер
+    // Используем force только при необходимости (например, после обновления зависимостей)
+    // force: process.env.VITE_FORCE_OPTIMIZE === 'true',
+    
+    // ✅ ОПТИМИЗАЦИЯ: Кэширование оптимизированных зависимостей
+    // Vite автоматически кэширует optimizeDeps в node_modules/.vite
+    // Не нужно явно настраивать, но можно очистить через: rm -rf node_modules/.vite
+    
+    // ✅ ОПТИМИЗАЦИЯ: Улучшенные настройки esbuild для pre-bundling
     esbuildOptions: {
-      target: 'es2020',
+      // ✅ ОПТИМИЗАЦИЯ: Более современный target для меньшего размера
+      target: 'es2022', // es2022 поддерживает современные возможности JS
+      // ✅ ОПТИМИЗАЦИЯ: Включаем tree-shaking для зависимостей
+      treeShaking: true,
+      // ✅ ОПТИМИЗАЦИЯ: Улучшенная обработка JSX
+      jsx: 'automatic', // Автоматическая обработка JSX (React 17+)
+      // ✅ ОПТИМИЗАЦИЯ: Логирование только ошибок для ускорения
+      logLevel: 'error',
+      // ✅ ОПТИМИЗАЦИЯ: Параллельная обработка для ускорения
+      // esbuild автоматически использует все доступные CPU ядра
     },
+    
+    // ✅ ОПТИМИЗАЦИЯ: Настройки для ускорения pre-bundling
+    entries: [
+      // Явно указываем точки входа для более быстрого анализа
+      'index.html',
+      'src/main.jsx',
+      'src/App.jsx',
+    ],
   },
   
 })

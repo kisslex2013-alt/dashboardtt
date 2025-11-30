@@ -72,15 +72,57 @@ export function useHotkeys(keyMap, options = {}) {
     event => {
       if (!isEnabledRef.current) return true
 
-      if (ignoreInputs) {
-        const activeElement = document.activeElement
-        const tagName = activeElement?.tagName?.toLowerCase()
+      const activeElement = document.activeElement
+      if (!activeElement) return false
 
-        // Игнорируем если фокус на input, textarea, select или элементе с contenteditable
-        if (
-          ['input', 'textarea', 'select'].includes(tagName) ||
-          activeElement?.contentEditable === 'true'
-        ) {
+      const tagName = activeElement.tagName?.toLowerCase()
+      const isInputField = ['input', 'textarea', 'select'].includes(tagName) ||
+                          activeElement.contentEditable === 'true'
+
+      // ✅ КРИТИЧНО: Если фокус на поле ввода
+      if (isInputField) {
+        // ✅ КРИТИЧНО: Проверяем, находится ли поле ввода внутри модального окна
+        // Используем несколько способов поиска модального окна для надежности
+        let modalElement = activeElement.closest('[role="dialog"]')
+        
+        // Если не нашли через closest, ищем через поиск всех модальных окон
+        if (!modalElement) {
+          const allModals = document.querySelectorAll('[role="dialog"]')
+          for (const modal of allModals) {
+            if (modal.contains(activeElement)) {
+              modalElement = modal
+              break
+            }
+          }
+        }
+        
+        if (modalElement) {
+          // ✅ КРИТИЧНО: Если поле ввода в модальном окне, игнорируем простые hotkey
+          // Но разрешаем комбинации с модификаторами (например, Ctrl+Alt+N)
+          const hasModifiers = event.ctrlKey || event.altKey || event.metaKey || event.shiftKey
+          
+          // Если нет модификаторов - блокируем (это простые hotkey типа 's', 'n', 't')
+          if (!hasModifiers) {
+            // Логируем только в dev режиме для отладки
+            if (import.meta.env.DEV) {
+              logger.log(`🚫 useHotkeys: Игнорирован hotkey "${event.key}" в input внутри модального окна`, {
+                tagName: tagName,
+                inputType: activeElement.type,
+                modalFound: !!modalElement,
+                key: event.key,
+              })
+            }
+            return true
+          }
+          
+          // Если есть модификаторы - разрешаем только определенные комбинации
+          // Например, разрешаем Ctrl+Alt+N даже в модальном окне
+          // Но блокируем остальные комбинации в input полях модального окна
+          if (ignoreInputs) {
+            return true // Если ignoreInputs=true, блокируем все комбинации в input
+          }
+        } else if (ignoreInputs) {
+          // Если ignoreInputs=true и не в модальном окне - блокируем
           return true
         }
       }
