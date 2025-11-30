@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import {
   Edit2,
   Trash2,
@@ -100,6 +100,57 @@ export function CategoriesModal({ isOpen, onClose, autoOpenAddForm = false, onCa
   const [editingId, setEditingId] = useState(null)
   const [error, setError] = useState('')
   const nameInputRef = useRef(null)
+
+  // Обработчик для блокировки глобальных hotkey при фокусе на input полях
+  const handleInputKeyDown = useCallback((e) => {
+    // Список клавиш, которые используются как глобальные hotkey
+    const globalHotkeys = ['s', 'n', 't', 'h']
+    
+    // Если нажата клавиша без модификаторов и она в списке глобальных hotkey
+    if (!e.ctrlKey && !e.altKey && !e.metaKey && !e.shiftKey) {
+      const key = e.key.toLowerCase()
+      if (globalHotkeys.includes(key)) {
+        // Останавливаем всплытие, чтобы глобальные hotkey не срабатывали
+        e.stopPropagation()
+      }
+    }
+  }, [])
+
+  // Блокировка глобальных hotkey при фокусе на input полях внутри модального окна
+  useEffect(() => {
+    if (!isOpen) return
+
+    const handleKeyDownCapture = (e) => {
+      const activeElement = document.activeElement
+      const tagName = activeElement?.tagName?.toLowerCase()
+      
+      // Проверяем, находится ли фокус на input, textarea или select внутри модального окна
+      if (['input', 'textarea', 'select'].includes(tagName)) {
+        // Проверяем, что активный элемент находится внутри этого модального окна
+        const modalElement = document.querySelector('[role="dialog"]')
+        if (modalElement && modalElement.contains(activeElement)) {
+          // Список клавиш, которые используются как глобальные hotkey
+          const globalHotkeys = ['s', 'n', 't', 'h']
+          
+          // Если нажата клавиша без модификаторов и она в списке глобальных hotkey
+          if (!e.ctrlKey && !e.altKey && !e.metaKey && !e.shiftKey) {
+            const key = e.key.toLowerCase()
+            if (globalHotkeys.includes(key)) {
+              // Останавливаем распространение события в capture phase
+              e.stopPropagation()
+            }
+          }
+        }
+      }
+    }
+
+    // Добавляем обработчик в capture phase для перехвата событий до их обработки useHotkeys
+    window.addEventListener('keydown', handleKeyDownCapture, true)
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDownCapture, true)
+    }
+  }, [isOpen])
 
   // Автоматически открываем форму и фокусируемся на поле ввода
   useEffect(() => {
@@ -286,6 +337,8 @@ export function CategoriesModal({ isOpen, onClose, autoOpenAddForm = false, onCa
                       onChange={e => setFormData({ ...formData, name: e.target.value })}
                       className="w-full px-2 py-1.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-200 dark:focus:ring-blue-800 outline-none"
                       onKeyDown={e => {
+                        // Блокируем глобальные hotkey при вводе текста
+                        handleInputKeyDown(e)
                         if (e.key === 'Enter') {
                           editingId ? handleSaveEdit() : handleAdd()
                         }
@@ -311,6 +364,7 @@ export function CategoriesModal({ isOpen, onClose, autoOpenAddForm = false, onCa
                         onChange={e => setFormData({ ...formData, color: e.target.value })}
                         className="w-20 px-1.5 py-1.5 text-xs rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-200 dark:focus:ring-blue-800 outline-none font-mono uppercase"
                         maxLength={7}
+                        onKeyDown={handleInputKeyDown}
                       />
                     </div>
                   </div>
