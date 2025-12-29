@@ -1,6 +1,6 @@
 /**
  * 🔘 Компонент переключателя (Toggle Switch)
- * 
+ *
  * Компактный переключатель в стиле проекта
  */
 
@@ -12,9 +12,9 @@ interface ToggleProps {
   className?: string
 }
 
-export function Toggle({ 
-  checked, 
-  onChange, 
+export function Toggle({
+  checked,
+  onChange,
   disabled = false,
   size = 'sm',
   className = ''
@@ -23,12 +23,12 @@ export function Toggle({
     sm: 'h-6 w-11',
     md: 'h-6 w-11'
   }
-  
+
   const thumbSizeClasses = {
     sm: 'h-5 w-5',
     md: 'h-5 w-5'
   }
-  
+
   const thumbTranslateClasses = {
     sm: checked ? 'translate-x-5' : 'translate-x-0.5',
     md: checked ? 'translate-x-5' : 'translate-x-0.5'

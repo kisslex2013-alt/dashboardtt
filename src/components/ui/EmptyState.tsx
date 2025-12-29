@@ -7,21 +7,26 @@ import { Button } from './Button'
  * Красивый компонент для отображения пустых состояний
  * Улучшает UX, предоставляя понятные инструкции пользователю
  *
- * ✅ ОПТИМИЗАЦИЯ: Обернут в React.memo для предотвращения лишних ре-рендеров
- *
- * @param {Object} props
- * @param {React.Component} props.icon - Иконка для отображения
- * @param {React.Component} props.illustration - SVG-иллюстрация для отображения
- * @param {string} props.title - Заголовок пустого состояния
- * @param {string} props.description - Описание и инструкции
- * @param {Object} props.action - Опциональное действие (кнопка)
- * @param {string} props.action.label - Текст кнопки
- * @param {Function} props.action.onClick - Обработчик клика
  * @param {string} props.variant - Вариант отображения ('default', 'compact', 'large')
  * @param {string} props.className - Дополнительные CSS классы
  */
+import { ComponentType, SVGProps } from 'react'
+
+export interface EmptyStateProps {
+  icon?: ComponentType<any>
+  illustration?: ComponentType<{ className?: string, animated?: boolean, style?: any }>
+  title: string
+  description?: string
+  action?: {
+    label: string
+    onClick: () => void
+  }
+  variant?: 'default' | 'compact' | 'large'
+  className?: string
+}
+
 export const EmptyState = memo(
-  ({ icon: Icon, illustration: Illustration, title, description, action, variant = 'default', className = '' }) => {
+  ({ icon: Icon, illustration: Illustration, title, description, action, variant = 'default', className = '' }: EmptyStateProps) => {
     const [shouldAnimate, setShouldAnimate] = useState(true)
 
     // Отключаем анимацию после первого рендера

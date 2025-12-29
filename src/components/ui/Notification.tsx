@@ -123,7 +123,7 @@ export const Notification = memo(({ notification, onClose }) => {
  * Отображает уведомления в правом верхнем углу экрана
  *
  * ✨ УЛУЧШЕНИЕ: z-index увеличен до 9999999 чтобы быть поверх модальных окон (z-[999999])
- * 
+ *
  * ПРИМЕЧАНИЕ: Этот компонент дублируется в NotificationContainer.tsx
  * Используйте NotificationContainer.tsx вместо этого компонента
  */

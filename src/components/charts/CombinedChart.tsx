@@ -238,9 +238,9 @@ export function CombinedChart({
     const currentData = payload[0].payload
     const earnedPayload = payload.find(item => item.dataKey === 'earned')
     const ratePayload = payload.find(item => item.dataKey === 'avgRate')
-    
+
     const currentEarned = earnedPayload?.value || 0
-    const currentIndex = chartData.findIndex(d => 
+    const currentIndex = chartData.findIndex(d =>
       (dateFilter === 'today' ? d.time === label : d.dateLabel === label)
     )
 

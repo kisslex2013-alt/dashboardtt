@@ -38,7 +38,7 @@ export function CustomDatePicker({
   value,
   onChange,
   onClose,
-  placeholder = 'дд/мм/гггг',
+  placeholder = 'день.месяц.год',
   inputRef,
 }: CustomDatePickerProps) {
   const isMobile = useIsMobile()
@@ -123,7 +123,7 @@ export function CustomDatePicker({
 
         // Используем getBoundingClientRect напрямую без scrollY для правильного позиционирования в порталах
         let top = rect.bottom + offset
-        let left = rect.left
+        let {left} = rect
 
         // Проверяем, помещается ли календарь снизу
         const spaceBelow = viewportHeight - rect.bottom

@@ -13,7 +13,7 @@
 /* Кастомный scrollbar для виртуализированных списков */
 .custom-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: rgb(156, 163, 175) transparent;
+  scrollbar-color: var(--text-tertiary) transparent;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
@@ -22,12 +22,12 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: rgb(156, 163, 175);
+  background-color: var(--text-tertiary);
   border-radius: 4px;
 }
 
 .dark .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: rgb(75, 85, 99);
+  background-color: var(--text-disabled);
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
@@ -169,23 +169,18 @@ html {
 }
 
 body {
-  background-color: #f3f4f6;
-  color: #111827;
+  background-color: var(--bg-main);
+  color: var(--text-primary);
   transition:
     background-color 0.3s ease,
     color 0.3s ease;
 }
 
-.dark body {
-  background-color: #111827;
-  color: #f9fafb;
-}
-
 /* Glass effects */
 .glass-effect {
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--bg-glass);
   backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--border-light);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   border-radius: 12px;
   transition:
@@ -195,8 +190,8 @@ body {
 }
 
 .dark .glass-effect {
-  background: rgba(31, 41, 55, 0.95);
-  border: 1px solid rgba(75, 85, 99, 0.2);
+  background: var(--bg-glass);
+  border: 1px solid var(--border-light);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
@@ -207,18 +202,18 @@ body {
 
 /* Card preset using glass-effect visuals */
 .glass-card {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--bg-card);
   backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--border-light);
   border-radius: 12px;
   padding: 16px; /* fallback if no Tailwind padding present */
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .dark .glass-card {
-  background: rgba(17, 24, 39, 0.7);
+  background: var(--bg-card);
   backdrop-filter: blur(24px) saturate(200%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-light);
   box-shadow:
     0 8px 32px rgba(0, 0, 0, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
@@ -230,8 +225,8 @@ body {
   box-shadow:
     0 12px 40px rgba(0, 0, 0, 0.5),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
-  background: rgba(17, 24, 39, 0.8);
+  border-color: var(--border-medium);
+  background: var(--bg-card-hover);
 }
 
 /* Glow effects для разных цветов */
@@ -352,7 +347,7 @@ body {
   position: relative;
   overflow: hidden;
   backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid var(--border-light);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
   border-radius: 8px;
@@ -360,7 +355,7 @@ body {
 
 .dark .glass-button {
   /* Keep transparent background; only adjust border and shadow for dark theme */
-  border: 1px solid rgba(75, 85, 99, 0.3);
+  border: 1px solid var(--border-light);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
@@ -702,35 +697,34 @@ details[open] > summary .chevron-icon {
 
 .overflow-y-auto::-webkit-scrollbar-track,
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.05);
-  border-radius: 4px;
+  background: transparent;
 }
 
 .dark .overflow-y-auto::-webkit-scrollbar-track,
 .dark .custom-scrollbar::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
+  background: transparent;
 }
 
 .overflow-y-auto::-webkit-scrollbar-thumb,
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(59, 130, 246, 0.5);
+  background: var(--text-tertiary);
   border-radius: 4px;
   transition: background 0.3s;
 }
 
 .overflow-y-auto::-webkit-scrollbar-thumb:hover,
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(59, 130, 246, 0.8);
+  background: var(--text-secondary);
 }
 
 .dark .overflow-y-auto::-webkit-scrollbar-thumb,
 .dark .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(59, 130, 246, 0.6);
+  background: var(--text-disabled);
 }
 
 .dark .overflow-y-auto::-webkit-scrollbar-thumb:hover,
 .dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(59, 130, 246, 0.9);
+  background: var(--text-tertiary);
 }
 
 /* Debug utilities */

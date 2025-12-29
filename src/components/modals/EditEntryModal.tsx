@@ -50,11 +50,11 @@ export function EditEntryModal({ isOpen, onClose, entry, onSave }: EditEntryModa
   // Это гарантирует, что мы используем актуальные данные после обновления записи через updateEntry
   const syncedEntry = useMemo(() => {
     if (!entry?.id || !isOpen) return entry
-    
+
     // Ищем актуальную запись в store по ID
     const entryIdString = String(entry.id)
     const storeEntry = entries.find(e => String(e.id) === entryIdString)
-    
+
     // Используем запись из store, если она найдена (она содержит актуальные данные)
     // Иначе используем переданную entry (fallback)
     return storeEntry || entry
@@ -132,16 +132,16 @@ export function EditEntryModal({ isOpen, onClose, entry, onSave }: EditEntryModa
     // ✅ ИСПРАВЛЕНО: Учитываем только сохраненные записи за день
     // Записи с isManual: false (созданные таймером) не учитываются до сохранения пользователем
     // После сохранения они получают isManual: true и начинают учитываться
-    
+
     // Получаем все записи за день, исключая записи из таймера (isManual: false)
     // Эти записи еще не сохранены пользователем и не должны учитываться в заработке
     const dayEntries = entries.filter(e => e.date === dateToCheck && e.isManual !== false)
 
     // ✅ ИСПРАВЛЕНО: Если редактируем существующую сохраненную запись, используем значение из formData
     const excludeIdString = effectiveEntry?.id ? String(effectiveEntry.id) : null
-    
+
     // Суммируем заработок из всех сохраненных записей за день
-    let totalEarned = dayEntries.reduce(
+    const totalEarned = dayEntries.reduce(
       (sum, e) => {
         // Если это текущая редактируемая запись, используем значение из formData (если есть)
         // Иначе используем сохраненное значение

@@ -130,7 +130,7 @@ export function EntriesListFooter({
                 onClearDatabase()
                 showSuccess(`Удалено ${entriesCount} записей. База данных очищена.`)
               } catch (error) {
-                showError('Ошибка при очистке базы: ' + error.message)
+                showError(`Ошибка при очистке базы: ${  error.message}`)
               }
             },
             confirmText: 'ДА, УДАЛИТЬ ВСЁ',

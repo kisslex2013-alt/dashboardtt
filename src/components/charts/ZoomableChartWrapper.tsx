@@ -7,7 +7,7 @@ import { IconButton } from '../ui/IconButton'
  */
 interface ZoomableChartWrapperProps {
   /** Контент графика */
-  children: ReactNode
+  children: ReactNode | ((state: ZoomState) => ReactNode)
   /** Начальный индекс для зума */
   initialStartIndex?: number
   /** Начальный конечный индекс для зума */

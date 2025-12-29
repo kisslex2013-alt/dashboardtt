@@ -1,0 +1,598 @@
+:root {
+    --bg-dark: #0f1115;
+    --text-main: #ffffff;
+    --text-muted: #a0a0a5;
+    --accent-blue: #4f46e5;
+    --accent-purple: #9333ea;
+    --accent-cyan: #06b6d4;
+    --accent-success: #10b981;
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-highlight: rgba(255, 255, 255, 0.2);
+    --font-primary: 'Inter', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: var(--font-primary);
+    overflow-x: hidden;
+    line-height: 1.6;
+}
+
+/* --- Confetti Canvas --- */
+#confetti-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+/* --- Aurora Background --- */
+.aurora-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    overflow: hidden;
+    background: #000;
+}
+
+.aurora-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.4;
+    animation: float 20s infinite alternate;
+}
+
+.blob-1 {
+    top: -10%;
+    left: -10%;
+    width: 50vw;
+    height: 50vw;
+    background: var(--accent-blue);
+    animation-delay: 0s;
+}
+
+.blob-2 {
+    bottom: -10%;
+    right: -10%;
+    width: 60vw;
+    height: 60vw;
+    background: var(--accent-purple);
+    animation-delay: -5s;
+}
+
+.blob-3 {
+    top: 40%;
+    left: 40%;
+    width: 40vw;
+    height: 40vw;
+    background: var(--accent-cyan);
+    animation-delay: -10s;
+}
+
+@keyframes float {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(30px, 50px) scale(1.1); }
+    100% { transform: translate(-20px, -30px) scale(0.9); }
+}
+
+/* --- Navigation --- */
+.glass-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+    background: linear-gradient(to bottom, rgba(0,0,0,0.2), transparent);
+}
+
+.logo {
+    font-weight: 700;
+    font-size: 1.5rem;
+    letter-spacing: -0.02em;
+}
+
+.nav-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    margin: 0 1.5rem;
+    transition: color 0.3s;
+    font-size: 0.95rem;
+}
+
+.nav-links a:hover {
+    color: var(--text-main);
+}
+
+.btn-primary-glass {
+    background: var(--glass-highlight);
+    border: 1px solid var(--glass-border);
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 99px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    backdrop-filter: blur(4px);
+}
+
+.btn-primary-glass:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255,255,255,0.1);
+}
+
+/* --- Hero Section --- */
+.hero-section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    padding-top: 80px;
+}
+
+.hero-content h1 {
+    font-size: 4rem;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.03em;
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero-content p {
+    font-size: 1.25rem;
+    color: var(--text-muted);
+    max-width: 600px;
+    margin: 0 auto 3rem;
+}
+
+/* Mini Timer in Hero */
+.mini-timer-container {
+    display: flex;
+    justify-content: center;
+}
+
+.mini-timer {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--glass-border);
+    padding: 1rem 2rem;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+.timer-display {
+    font-family: 'Courier New', monospace;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.timer-btn {
+    background: var(--accent-blue);
+    border: none;
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.2s, background 0.3s;
+}
+
+.timer-btn:hover {
+    background: #4338ca;
+    transform: scale(1.05);
+}
+
+/* --- Story Section (Scrollytelling) --- */
+.story-section {
+    padding: 4rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.story-step {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4rem;
+    opacity: 0.2; /* Initially dim, lit up by JS */
+    transition: opacity 0.8s ease, transform 0.8s ease;
+    transform: translateY(30px);
+}
+
+.story-step.in-view {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.story-step:nth-child(even) {
+    flex-direction: row-reverse;
+}
+
+.story-content {
+    flex: 1;
+}
+
+.story-visual {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    perspective: 1000px; /* For 3D Tilt */
+}
+
+.time-badge {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--accent-cyan);
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.story-content h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.story-content p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+}
+
+.hint-text {
+    font-size: 0.9rem;
+    color: var(--accent-cyan) !important;
+    margin-top: 1rem;
+    opacity: 0.8;
+}
+
+/* Glass Card Generic */
+.glass-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+    transition: transform 0.1s ease, box-shadow 0.3s ease; /* Optimized for tilt */
+}
+
+.story-visual .glass-card {
+    padding: 2rem;
+    width: 300px;
+    cursor: pointer; /* Clickable */
+}
+
+.story-visual .glass-card:hover {
+    border-color: var(--glass-highlight);
+}
+
+/* Visuals specific styles */
+.task-card {
+    border-left: 4px solid var(--accent-purple);
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Task Completed State */
+.task-card.completed {
+    background: rgba(16, 185, 129, 0.2); /* Green tint */
+    border-color: var(--accent-success);
+    border-left-color: var(--accent-success);
+    transform: scale(1.05) rotate(2deg) !important; /* Override floating */
+    animation: none;
+}
+
+.task-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    position: relative;
+}
+
+.task-title {
+    transition: color 0.3s;
+}
+
+.task-card.completed .task-title {
+    text-decoration: line-through;
+    color: var(--accent-success);
+}
+
+.task-check-icon {
+    margin-left: auto;
+    opacity: 0;
+    transform: scale(0);
+    color: var(--accent-success);
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+}
+
+.task-card.completed .task-check-icon {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.task-icon {
+    font-size: 1.5rem;
+}
+
+.progress-bar {
+    height: 6px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 3px;
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-bar::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 60%;
+    background: var(--accent-purple);
+    border-radius: 3px;
+    transition: width 0.5s ease, background-color 0.5s ease;
+    animation: loading 2s ease-in-out infinite;
+}
+
+.task-card.completed .progress-bar::after {
+    width: 100%;
+    background: var(--accent-success);
+    animation: none;
+}
+
+@keyframes loading {
+    0% { width: 0%; transform: translateX(-10%); }
+    50% { width: 100%; }
+    100% { width: 0%; transform: translateX(110%); }
+}
+
+.floating {
+    animation: floatCard 6s ease-in-out infinite;
+}
+
+@keyframes floatCard {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+    100% { transform: translateY(0); }
+}
+
+/* Project Switcher */
+.project-item {
+    padding: 0.8rem 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+    background: rgba(255,255,255,0.02);
+}
+
+.project-item:hover {
+    background: rgba(255,255,255,0.08);
+}
+
+.project-item.active {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.1);
+    transform: scale(1.02);
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+.dot.blue { background: var(--accent-blue); }
+.dot.purple { background: var(--accent-purple); }
+.dot.green { background: var(--accent-cyan); }
+
+
+/* Stats Box */
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.stat-row strong {
+    font-size: 1.5rem;
+    color: var(--accent-cyan);
+}
+
+.stat-chart {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    height: 60px;
+    gap: 8px;
+}
+
+.bar {
+    flex: 1;
+    background: rgba(255,255,255,0.1);
+    border-radius: 4px;
+    transition: height 0.5s;
+}
+
+.bar.active {
+    background: var(--accent-cyan);
+    box-shadow: 0 0 10px var(--accent-cyan);
+}
+
+/* --- Features Bento Grid --- */
+.features-section {
+    padding: 6rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.section-title {
+    font-size: 3rem;
+    margin-bottom: 4rem;
+    background: linear-gradient(to right, #fff, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.bento-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    grid-auto-rows: minmax(200px, auto);
+    perspective: 1000px; /* For 3D Tilt */
+}
+
+.bento-card {
+    padding: 2rem;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transform-style: preserve-3d; /* For Tilt */
+    will-change: transform;
+}
+
+/* Hover effect handled by JS Tilt or simple CSS fallback */
+.bento-card:hover {
+    /* transform: translateY(-5px); fallback if JS fails */
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.bento-card.large {
+    grid-column: span 2;
+}
+
+.bento-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: #fff;
+}
+
+.bento-card p {
+    color: var(--text-muted);
+}
+
+.blur-demo {
+    margin-top: 1rem;
+    background: rgba(255,255,255,0.1);
+    padding: 0.5rem;
+    border-radius: 4px;
+    filter: blur(4px);
+    font-family: monospace;
+    opacity: 0.7;
+}
+
+/* --- Footer --- */
+.glass-footer {
+    text-align: center;
+    padding: 6rem 2rem 2rem;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+}
+
+.glass-footer h2 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+}
+
+.copyright {
+    margin-top: 4rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+/* --- Animations Utility --- */
+.fade-in-up {
+    animation: fadeInUp 0.8s ease-out forwards;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.delay-1 { animation-delay: 0.2s; }
+.delay-2 { animation-delay: 0.4s; }
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .hero-content h1 {
+        font-size: 2.5rem;
+    }
+    
+    .story-step, .story-step:nth-child(even) {
+        flex-direction: column;
+        text-align: center;
+        gap: 2rem;
+        /* Disable 3D effects on mobile for performance */
+        perspective: none;
+    }
+    
+    .story-content.left, .story-content.right, .story-visual.left, .story-visual.right {
+        order: unset;
+        width: 100%;
+    }
+    
+    .glass-card {
+        width: 100%;
+        max-width: 350px;
+        margin: 0 auto;
+    }
+
+    .bento-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .bento-card.large {
+        grid-column: span 1;
+    }
+}

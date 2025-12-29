@@ -104,7 +104,7 @@ export function RateDistributionChart({ entries }) {
   // Кастомный tooltip с адаптивным размером для мобильных
   const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
-      const value = payload[0].value
+      const {value} = payload[0]
       return (
         <div className={`glass-effect rounded-lg shadow-lg ${isMobile ? 'p-4' : 'p-3'}`}>
           <p className={`font-semibold ${isMobile ? 'text-base mb-3' : 'text-sm mb-2'}`}>

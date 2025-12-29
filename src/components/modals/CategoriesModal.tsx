@@ -106,7 +106,7 @@ export function CategoriesModal({ isOpen, onClose, autoOpenAddForm = false, onCa
   const handleInputKeyDown = useCallback((e) => {
     // Список клавиш, которые используются как глобальные hotkey
     const globalHotkeys = ['s', 'n', 't', 'h']
-    
+
     // Если нажата клавиша без модификаторов и она в списке глобальных hotkey
     if (!e.ctrlKey && !e.altKey && !e.metaKey && !e.shiftKey) {
       const key = e.key.toLowerCase()
@@ -124,30 +124,30 @@ export function CategoriesModal({ isOpen, onClose, autoOpenAddForm = false, onCa
     if (!isOpen) return
 
     const handleKeyDownCapture = (e) => {
-      const activeElement = document.activeElement
-      
+      const {activeElement} = document
+
       // ✅ КРИТИЧНО: Проверяем, что фокус на поле ввода
       if (!activeElement) return
-      
+
       const tagName = activeElement.tagName?.toLowerCase()
       const isInputField = ['input', 'textarea', 'select'].includes(tagName) ||
                           activeElement.contentEditable === 'true'
-      
+
       if (!isInputField) {
         return // Не блокируем, если фокус не на поле ввода
       }
-      
+
       // ✅ КРИТИЧНО: Проверяем, что активный элемент находится внутри модального окна
       // Используем closest для поиска ближайшего модального окна
       const modalElement = activeElement.closest('[role="dialog"]')
-      
+
       if (!modalElement) {
         return // Не блокируем, если не в модальном окне
       }
-      
+
       // ✅ КРИТИЧНО: Список клавиш, которые используются как глобальные hotkey
       const globalHotkeys = ['s', 'n', 't', 'h']
-      
+
       // Если нажата клавиша без модификаторов и она в списке глобальных hotkey
       if (!e.ctrlKey && !e.altKey && !e.metaKey && !e.shiftKey) {
         const key = e.key?.toLowerCase()
@@ -159,7 +159,7 @@ export function CategoriesModal({ isOpen, onClose, autoOpenAddForm = false, onCa
           e.preventDefault()
           e.stopPropagation()
           e.stopImmediatePropagation()
-          
+
           // Логируем только в dev режиме для отладки
           if (import.meta.env.DEV) {
             console.log(`🚫 Заблокирован глобальный hotkey "${key}" при вводе в модальном окне`, {
@@ -168,7 +168,7 @@ export function CategoriesModal({ isOpen, onClose, autoOpenAddForm = false, onCa
               value: activeElement.value?.substring(0, 20),
             })
           }
-          
+
           return false // Дополнительная защита
         }
       }

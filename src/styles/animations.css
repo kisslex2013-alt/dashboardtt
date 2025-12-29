@@ -27,6 +27,18 @@
   }
 }
 
+/* Ripple эффект - Material Design */
+@keyframes ripple-expand {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
 /* Исчезновение - fade out */
 @keyframes fadeOut {
   from {

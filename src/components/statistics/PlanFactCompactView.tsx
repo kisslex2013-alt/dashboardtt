@@ -51,24 +51,24 @@ export function PlanFactCompactView({ shouldAnimate = true, shouldShow = true })
   const customWorkDates = useCustomWorkDates()
   const paymentDates = usePaymentDates()
   const openModal = useOpenModal()
-  
+
   // Проверяем первый визит и режим инкогнито для подсветки кнопок
   const isFirstVisit = useFirstVisit()
   const isIncognito = useIncognitoMode()
-  
+
   // ✅ ИСПРАВЛЕНО: Отдельные флаги для каждой кнопки
   const [workScheduleButtonHighlighted, setWorkScheduleButtonHighlighted] = useState(() => {
     if (typeof window === 'undefined') return false
     const highlightKey = 'work_schedule_button_highlight_shown'
     return !localStorage.getItem(highlightKey)
   })
-  
+
   const [paymentsButtonHighlighted, setPaymentsButtonHighlighted] = useState(() => {
     if (typeof window === 'undefined') return false
     const highlightKey = 'payments_button_highlight_shown'
     return !localStorage.getItem(highlightKey)
   })
-  
+
   // Останавливаем подсветку если не первый визит и не инкогнито
   useEffect(() => {
     if (!isFirstVisit && !isIncognito) {
@@ -76,16 +76,16 @@ export function PlanFactCompactView({ shouldAnimate = true, shouldShow = true })
       setPaymentsButtonHighlighted(false)
     }
   }, [isFirstVisit, isIncognito])
-  
+
   const shouldHighlightWorkSchedule = (isFirstVisit || isIncognito) && workScheduleButtonHighlighted
   const shouldHighlightPayments = (isFirstVisit || isIncognito) && paymentsButtonHighlighted
-  
+
   const handleWorkScheduleClick = () => {
     setWorkScheduleButtonHighlighted(false)
     localStorage.setItem('work_schedule_button_highlight_shown', 'true')
     openModal('soundSettings', { activeTab: 'workSchedule' })
   }
-  
+
   const handlePaymentsClick = () => {
     setPaymentsButtonHighlighted(false)
     localStorage.setItem('payments_button_highlight_shown', 'true')
@@ -398,7 +398,7 @@ export function PlanFactCompactView({ shouldAnimate = true, shouldShow = true })
                   onClick={handleWorkScheduleClick}
                   className={`p-1.5 rounded-lg hover:bg-black/10 transition-normal hover-lift-scale click-shrink text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white ${shouldHighlightWorkSchedule ? 'animate-button-highlight' : ''}`}
                   title="Настройка рабочего графика"
-                  style={shouldHighlightWorkSchedule ? { 
+                  style={shouldHighlightWorkSchedule ? {
                     animation: 'buttonHighlight 1.5s ease-in-out infinite',
                     position: 'relative',
                     zIndex: 1
@@ -545,7 +545,7 @@ export function PlanFactCompactView({ shouldAnimate = true, shouldShow = true })
                 onClick={handlePaymentsClick}
                 className={`p-1.5 rounded-lg hover:bg-black/10 transition-normal hover-lift-scale click-shrink text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white ${shouldHighlightPayments ? 'animate-button-highlight' : ''}`}
                 title="Настройка дат выплат"
-                style={shouldHighlightPayments ? { 
+                style={shouldHighlightPayments ? {
                   animation: 'buttonHighlight 1.5s ease-in-out infinite',
                   position: 'relative',
                   zIndex: 1

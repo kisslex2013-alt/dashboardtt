@@ -15,14 +15,14 @@ import { useState, useEffect } from 'react'
  * function SearchComponent() {
  *   const [searchQuery, setSearchQuery] = useState('')
  *   const debouncedSearch = useDebounce(searchQuery, 300)
- * 
+ *
  *   useEffect(() => {
  *     // Выполняется только через 300мс после остановки ввода
  *     if (debouncedSearch) {
  *       performSearch(debouncedSearch)
  *     }
  *   }, [debouncedSearch])
- * 
+ *
  *   return (
  *     <input
  *       value={searchQuery}

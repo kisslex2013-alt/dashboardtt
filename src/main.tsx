@@ -6,6 +6,7 @@ import { ErrorBoundary } from './components/ui/ErrorBoundary'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/react'
 import { registerSW } from 'virtual:pwa-register'
+import './styles/tokens.css'  // КРИТИЧНО: Загружаем токены первыми!
 import './index.css'
 import './custom.css'
 import './styles/animations.css'

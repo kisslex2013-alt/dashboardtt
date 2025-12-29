@@ -210,20 +210,20 @@ export function BaseModal({
 
       const target = e.target as HTMLElement
       if (!target) return
-      
+
       // ✅ ИСПРАВЛЕНО: Проверяем, не находится ли клик на дочернем модальном окне
       // Проверяем, есть ли у target или его родителя класс с z-[9999999] (вложенное модальное окно)
       const isNestedModal = target.closest('[class*="z-[9999999]"]') !== null
-      
+
       // ✅ ИСПРАВЛЕНО: Проверяем, не находится ли клик на календаре (CustomDatePicker)
       // Календарь рендерится через portal и должен быть доступен для кликов
       const isCalendarPicker = target.closest('[data-calendar-picker="true"]') !== null
-      
+
       // Если клик на дочернем модальном окне или календаре - не блокируем
       if (isNestedModal || isCalendarPicker) {
         return // Позволяем событию продолжить
       }
-      
+
       // ✅ ИСПРАВЛЕНО: Проверяем, был ли клик на интерактивном элементе (кнопка, ссылка, input)
       // Если клик на интерактивном элементе внутри панели - не блокируем
       const isInteractiveElement = (
@@ -432,8 +432,8 @@ export function BaseModal({
           {/* Контент */}
           <div
             className={`modal-content flex-1 min-h-0 overflow-x-hidden ${
-              disableContentScroll 
-                ? 'overflow-hidden' 
+              disableContentScroll
+                ? 'overflow-hidden'
                 : fixedHeight
                   ? 'overflow-y-auto custom-scrollbar'
                   : 'overflow-y-auto max-h-[calc(90vh-180px)] custom-scrollbar'
@@ -446,8 +446,8 @@ export function BaseModal({
 
           {/* Футер (опционально) */}
           {footer && (
-            <div 
-              className="mt-0 pt-4 border-t border-gray-200 dark:border-gray-700"
+            <div
+              className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 flex-shrink-0"
               onClick={(e) => e.stopPropagation()}
               onMouseDown={(e) => e.stopPropagation()}
             >

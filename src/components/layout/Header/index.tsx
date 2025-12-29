@@ -79,7 +79,7 @@ export function Header({
 
                     // Переходим на промо-страницу после анимации
                     setTimeout(() => {
-                      window.location.href = '/promo/time-tracker-promo-variant-2.html'
+                      window.location.href = '/promo/time-tracker-promo-variant-3.html'
                     }, 500)
                   }}
                   className="glass-button p-1.5 sm:p-2 rounded-lg transition-normal hover-lift-scale click-shrink touch-manipulation"

@@ -6,18 +6,18 @@ import { TrendingUp, TrendingDown, Target, Clock, DollarSign } from '../../utils
 
 /**
  * 🎨 Улучшенный Tooltip для графиков
- * 
+ *
  * Показывает:
  * - Основные данные с цветовым кодированием
  * - Сравнение с предыдущим значением (если доступно)
  * - Достижение цели (если доступно)
  * - Дополнительный контекст
- * 
+ *
  * Phase 1: Quick Wins
  */
-export function EnhancedTooltip({ 
-  active, 
-  payload, 
+export function EnhancedTooltip({
+  active,
+  payload,
   label,
   formatters = {},
   showComparison = false,
@@ -32,7 +32,7 @@ export function EnhancedTooltip({
     if (!active || !payload || payload.length === 0) return null
 
     const data = payload[0]?.payload || {}
-    const formattedLabel = formatters.label 
+    const formattedLabel = formatters.label
       ? formatters.label(label, data)
       : label
 
@@ -40,14 +40,14 @@ export function EnhancedTooltip({
     const formattedValues = payload.map(item => {
       const dataKey = item.dataKey || item.name
       const formatter = formatters[dataKey] || formatters[item.name]
-      
+
       return {
         name: item.name || dataKey || 'Значение',
         value: item.value,
         color: item.color || item.fill || item.stroke || '#6366F1',
-        formatted: formatter 
+        formatted: formatter
           ? formatter(item.value, data)
-          : typeof item.value === 'number' 
+          : typeof item.value === 'number'
             ? item.value.toLocaleString('ru-RU')
             : item.value,
         unit: item.unit || unit || '',
@@ -59,7 +59,7 @@ export function EnhancedTooltip({
     if (showComparison && previousValue !== null && formattedValues[0]?.value) {
       const currentValue = formattedValues[0].value
       const diff = currentValue - previousValue
-      const percentChange = previousValue !== 0 
+      const percentChange = previousValue !== 0
         ? ((diff / previousValue) * 100).toFixed(1)
         : null
 
@@ -76,7 +76,7 @@ export function EnhancedTooltip({
       const currentValue = formattedValues[0].value
       const isAchieved = currentValue >= goalValue
       const remaining = Math.max(0, goalValue - currentValue)
-      const progress = goalValue > 0 
+      const progress = goalValue > 0
         ? ((currentValue / goalValue) * 100).toFixed(1)
         : 0
 
@@ -112,7 +112,7 @@ export function EnhancedTooltip({
         {tooltipData.values.map((item, index) => (
           <div key={`tooltip-value-${item.name || item.dataKey || index}-${index}`} className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-2">
-              <div 
+              <div
                 className="w-3 h-3 rounded-full flex-shrink-0"
                 style={{ backgroundColor: item.color }}
               />
@@ -120,7 +120,7 @@ export function EnhancedTooltip({
                 {item.name}:
               </span>
             </div>
-            <span 
+            <span
               className="text-sm font-semibold"
               style={{ color: item.color }}
             >
@@ -149,7 +149,7 @@ export function EnhancedTooltip({
                 : 'text-red-700 dark:text-red-300'
             }`}>
               {tooltipData.comparison.isPositive ? '+' : ''}
-              {tooltipData.comparison.value.toFixed(2)} 
+              {tooltipData.comparison.value.toFixed(2)}
               {tooltipData.comparison.percent && ` (${tooltipData.comparison.percent}%)`}
             </span>
           </div>
@@ -179,7 +179,7 @@ export function EnhancedTooltip({
           </div>
           {!tooltipData.goalStatus.isAchieved && (
             <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 mt-1">
-              <div 
+              <div
                 className="bg-yellow-500 h-1.5 rounded-full transition-all"
                 style={{ width: `${Math.min(tooltipData.goalStatus.progress, 100)}%` }}
               />

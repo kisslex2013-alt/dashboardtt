@@ -8,12 +8,14 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 import { Play, Pause, RotateCcw, SkipForward, Maximize2, Minimize2 } from '../../utils/icons'
 import { usePomodoro } from '../../hooks/usePomodoro'
 import { usePomodoroPomodorosUntilLongBreak } from '../../store/usePomodoroStore'
+import { usePomodoroSettings } from '../../store/useSettingsStore'
 import { useIsMobile } from '../../hooks/useIsMobile'
 
 /**
  * Компонент плавающей панели Pomodoro
  */
 export function FloatingPomodoroPanel() {
+  const { enabled } = usePomodoroSettings()
   const {
     mode,
     timeLeft,
@@ -37,6 +39,9 @@ export function FloatingPomodoroPanel() {
   const [position, setPosition] = useState({ x: 20, y: 20 })
   const [isExpanded, setIsExpanded] = useState(true)
   const panelRef = useRef<HTMLDivElement>(null)
+
+  // Если Pomodoro отключен в настройках - не рендерим
+  if (!enabled) return null
 
   // Определяем цвета и текст в зависимости от режима
   const getModeInfo = () => {

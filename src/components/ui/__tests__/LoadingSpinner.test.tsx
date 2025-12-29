@@ -19,7 +19,7 @@ describe('LoadingSpinner', () => {
     let spinner = container.querySelector('svg')
     expect(spinner).toBeInTheDocument()
     expect(spinner?.getAttribute('class') || '').toContain('w-4')
-    
+
     rerender(<LoadingSpinner size="lg" />)
     spinner = container.querySelector('svg')
     expect(spinner?.getAttribute('class') || '').toContain('w-12')

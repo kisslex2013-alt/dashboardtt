@@ -120,8 +120,8 @@ export const useSettingsStore = create<SettingsState>()(
             cleanup: { enabled: true, types: { success: true, error: true, warning: true, info: true } },
             colors: { enabled: true, types: { success: true, error: true, warning: true, info: true } },
             validation: { enabled: true, types: { success: false, error: true, warning: true, info: false } }, // Ошибки валидации всегда показывать
-            overtime: { 
-              enabled: true, 
+            overtime: {
+              enabled: true,
               types: { success: false, error: false, warning: true, info: false },
               conditions: {
                 threshold: 1.0, // Порог предупреждения (коэффициент)
@@ -133,8 +133,8 @@ export const useSettingsStore = create<SettingsState>()(
                 minInterval: 60, // Минимальный интервал между показами (минуты)
               },
             },
-            breaks: { 
-              enabled: true, 
+            breaks: {
+              enabled: true,
               types: { success: false, error: false, warning: true, info: true },
               conditions: {
                 minDurationMinutes: 0, // Минимальная длительность работы (минуты)
@@ -392,11 +392,11 @@ export const useSettingsStore = create<SettingsState>()(
        */
       updateCategoryColors: () => {
         const currentCategories = get().categories
-        
+
         const updatedCategories = currentCategories.map(cat => {
           const name = cat.name.toLowerCase()
           let newColor = cat.color
-          
+
           // Определяем семантический цвет по названию категории
           if (name.includes('remix') || name.includes('development') || name.includes('разработ')) {
             newColor = SEMANTIC_COLORS.deepWork
@@ -411,10 +411,10 @@ export const useSettingsStore = create<SettingsState>()(
           } else if (name.includes('other') || name.includes('другое')) {
             newColor = SEMANTIC_COLORS.other
           }
-          
+
           return { ...cat, color: newColor }
         })
-        
+
         set({ categories: updatedCategories })
         return updatedCategories
       },
@@ -668,8 +668,8 @@ export const useSettingsStore = create<SettingsState>()(
       version: 2, // ✅ Увеличили версию для миграции цветов
       // Миграция для существующих пользователей
       migrate: (persistedState, version) => {
-        let newState = { ...persistedState }
-        
+        const newState = { ...persistedState }
+
         // Миграция v0 → v1: добавляем paymentDates если их нет
         if (version < 1) {
           if (
@@ -700,13 +700,13 @@ export const useSettingsStore = create<SettingsState>()(
             ]
           }
         }
-        
+
         // 🎨 Миграция v1 → v2: обновляем цвета категорий на семантические (Phase 1: Quick Wins)
         if (version < 2 && newState.categories) {
           newState.categories = newState.categories.map(cat => {
             const name = cat.name.toLowerCase()
             let newColor = cat.color
-            
+
             // Определяем семантический цвет по названию категории
             if (name.includes('remix') || name.includes('development') || name.includes('разработ')) {
               newColor = SEMANTIC_COLORS.deepWork
@@ -721,13 +721,13 @@ export const useSettingsStore = create<SettingsState>()(
             } else if (name.includes('other') || name.includes('другое')) {
               newColor = SEMANTIC_COLORS.other
             }
-            
+
             return { ...cat, color: newColor }
           })
-          
+
           console.log('🎨 Цвета категорий обновлены на семантические!')
         }
-        
+
         return newState
       },
     }

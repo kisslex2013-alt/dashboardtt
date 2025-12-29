@@ -43,15 +43,15 @@ export function ConfirmModal({
       closeOnOverlayClick={false}
       nested={true}
       footer={
-        <div 
+        <div
           className="flex gap-2"
           onClick={(e) => e.stopPropagation()}
           onMouseDown={(e) => e.stopPropagation()}
         >
-          <Button 
-            variant="secondary" 
-            onClick={handleCancel} 
-            className="flex-1" 
+          <Button
+            variant="secondary"
+            onClick={handleCancel}
+            className="flex-1"
             iconId="confirm-cancel"
             type="button"
           >

@@ -35,14 +35,14 @@ export function UpdateModal({
   const [testProgress, setTestProgress] = useState(0)
   const contentRef = useRef<HTMLDivElement>(null)
   const arrowRef = useRef<SVGSVGElement>(null)
-  
+
   // Таймер для тестового режима
   useEffect(() => {
     if (!isTestMode) return
-    
+
     const interval = setInterval(() => {
       if (isPaused) return
-      
+
       setTestCountdown(prev => {
         if (prev <= 1) {
           clearInterval(interval)
@@ -51,17 +51,17 @@ export function UpdateModal({
         return prev - 1
       })
     }, 1000)
-    
+
     return () => clearInterval(interval)
   }, [isTestMode, isPaused])
-  
+
   // Прогресс для тестового режима
   useEffect(() => {
     if (!isTestMode) return
     const completed = ((10 - testCountdown) / 10) * 100
     setTestProgress(Math.max(0, Math.min(100, completed)))
   }, [testCountdown, isTestMode])
-  
+
   // Блокировка прокрутки фона при открытой модалке
   useEffect(() => {
     document.body.style.overflow = 'hidden'
@@ -69,7 +69,7 @@ export function UpdateModal({
       document.body.style.overflow = ''
     }
   }, [])
-  
+
   // Управление паузой при наведении
   const handleMouseEnter = () => {
     setIsPaused(true)
@@ -77,14 +77,14 @@ export function UpdateModal({
       onPauseChange(true)
     }
   }
-  
+
   const handleMouseLeave = () => {
     setIsPaused(false)
     if (onPauseChange) {
       onPauseChange(false)
     }
   }
-  
+
   // Извлекаем только версию (убираем build строку)
   const extractVersion = (versionString: string): string => {
     if (!versionString) return '1.3.0'
@@ -98,7 +98,7 @@ export function UpdateModal({
     }
     return versionString
   }
-  
+
   const displayCurrentVersion = extractVersion(currentVersion)
   const displayCountdown = isTestMode ? testCountdown : countdown
   const displayProgress = isTestMode ? testProgress : progress

@@ -22,13 +22,13 @@ export function DashboardSkeleton() {
         <div className="glass-effect rounded-xl p-4 sm:p-6 mb-6 relative overflow-hidden">
           {/* Shimmer эффект */}
           <div className="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white/10 to-transparent dark:via-white/5" />
-          
+
           {/* Верхняя строка с логотипом и кнопками */}
           <div className="flex items-center justify-between mb-4 sm:mb-6">
             <div className="flex items-center gap-2 sm:gap-4 flex-1 min-w-0">
               {/* Логотип */}
               <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-gray-300 dark:bg-gray-700 animate-pulse" />
-              
+
               {/* Название и описание */}
               <div className="flex-1 min-w-0">
                 <div className="h-6 sm:h-8 bg-gray-300 dark:bg-gray-700 rounded w-48 sm:w-64 mb-2 animate-pulse" />
@@ -97,7 +97,7 @@ export function DashboardSkeleton() {
         {/* Entries List Skeleton */}
         <div className="glass-effect rounded-xl p-6 relative overflow-hidden">
           <div className="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white/10 to-transparent dark:via-white/5" />
-          
+
           {/* Заголовок списка */}
           <div className="flex items-center justify-between mb-6">
             <div className="h-6 bg-gray-300 dark:bg-gray-700 rounded w-32 animate-pulse" />

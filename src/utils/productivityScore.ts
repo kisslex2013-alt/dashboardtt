@@ -7,26 +7,39 @@
  * - Consistency (25%) - регулярность работы
  * - Focus Time (20%) - время фокуса (длинные сессии)
  * - Break Balance (15%) - баланс перерывов
- *
- * @example
- * const score = calculateProductivityScore(entries, dailyGoal, dailyHours)
- * // { score: 85, factors: { goalCompletion: 0.9, consistency: 0.8, ... } }
  */
 
 import { timeToMinutes } from './dateHelpers'
+import type { TimeEntry } from '../types'
+
+interface FactorResult {
+  value: number
+  max: number
+  percentage: number
+}
+
+interface ProductivityScoreResult {
+  score: number
+  factors: {
+    goalCompletion: FactorResult
+    consistency: FactorResult
+    focusTime: FactorResult
+    breakBalance: FactorResult
+  }
+}
 
 /**
  * Рассчитывает длительность записи в часах
  */
-function getEntryDuration(entry) {
+function getEntryDuration(entry: TimeEntry): number {
   if (entry.duration) {
-    return parseFloat(entry.duration)
+    return parseFloat(String(entry.duration))
   }
   if (entry.start && entry.end) {
     const [startH, startM] = entry.start.split(':').map(Number)
     const [endH, endM] = entry.end.split(':').map(Number)
-    const startMinutes = startH * 60 + startM
-    let endMinutes = endH * 60 + endM
+    const startMinutes = (startH || 0) * 60 + (startM || 0)
+    let endMinutes = (endH || 0) * 60 + (endM || 0)
     if (endMinutes < startMinutes) endMinutes += 24 * 60
     return (endMinutes - startMinutes) / 60
   }
@@ -35,30 +48,25 @@ function getEntryDuration(entry) {
 
 /**
  * Рассчитывает фактор Goal Completion (40% веса)
- * Оценивает выполнение дневных целей по заработку
  */
-function calculateGoalCompletion(entries, dailyGoal) {
-  if (!dailyGoal || dailyGoal <= 0) return 1.0 // Если цель не установлена, считаем 100%
+function calculateGoalCompletion(entries: TimeEntry[], dailyGoal: number): number {
+  if (!dailyGoal || dailyGoal <= 0) return 1.0
 
-  // Группируем записи по дням
-  const entriesByDay = {}
+  const entriesByDay: Record<string, TimeEntry[]> = {}
   entries.forEach(entry => {
-    const date = entry.date
+    const {date} = entry
     if (!entriesByDay[date]) {
       entriesByDay[date] = []
     }
     entriesByDay[date].push(entry)
   })
 
-  // Рассчитываем выполнение цели для каждого дня
   const dayScores = Object.keys(entriesByDay).map(date => {
-    const dayEntries = entriesByDay[date]
-    const dayEarned = dayEntries.reduce((sum, e) => sum + (parseFloat(e.earned) || 0), 0)
-    // Ограничиваем до 150% (если перевыполнили, все равно максимум 1.0)
+    const dayEntries = entriesByDay[date] ?? []
+    const dayEarned = dayEntries.reduce((sum, e) => sum + (parseFloat(String(e.earned)) || 0), 0)
     return Math.min(dayEarned / dailyGoal, 1.5) / 1.5
   })
 
-  // Средний процент выполнения цели
   if (dayScores.length === 0) return 0
   const avgScore = dayScores.reduce((sum, score) => sum + score, 0) / dayScores.length
   return Math.min(avgScore, 1.0)
@@ -66,32 +74,26 @@ function calculateGoalCompletion(entries, dailyGoal) {
 
 /**
  * Рассчитывает фактор Consistency (25% веса)
- * Оценивает регулярность работы (сколько дней работал из возможных)
  */
-function calculateConsistency(entries, periodDays = 30) {
+function calculateConsistency(entries: TimeEntry[], periodDays: number = 30): number {
   if (entries.length === 0) return 0
 
-  // Получаем уникальные даты с записями
   const workedDays = new Set(entries.map(e => e.date))
   const daysWorked = workedDays.size
 
-  // Рассчитываем процент дней с работой
-  // Если работали больше дней, чем период, считаем 100%
   const consistency = Math.min(daysWorked / periodDays, 1.0)
   return consistency
 }
 
 /**
  * Рассчитывает фактор Focus Time (20% веса)
- * Оценивает время фокуса (длинные непрерывные сессии без перерывов)
  */
-function calculateFocusTime(entries) {
+function calculateFocusTime(entries: TimeEntry[]): number {
   if (entries.length === 0) return 0
 
-  // Группируем записи по дням
-  const entriesByDay = {}
+  const entriesByDay: Record<string, TimeEntry[]> = {}
   entries.forEach(entry => {
-    const date = entry.date
+    const {date} = entry
     if (!entriesByDay[date]) {
       entriesByDay[date] = []
     }
@@ -101,19 +103,17 @@ function calculateFocusTime(entries) {
   let totalFocusTime = 0
   let totalTime = 0
 
-  // Для каждого дня находим самую длинную непрерывную сессию
   Object.keys(entriesByDay).forEach(date => {
-    const dayEntries = entriesByDay[date]
+    const dayEntries = (entriesByDay[date] ?? [])
       .filter(e => e.start && e.end)
       .sort((a, b) => {
-        const aMinutes = timeToMinutes(a.start)
-        const bMinutes = timeToMinutes(b.start)
+        const aMinutes = timeToMinutes(a.start!)
+        const bMinutes = timeToMinutes(b.start!)
         return aMinutes - bMinutes
       })
 
     if (dayEntries.length === 0) return
 
-    // Находим самую длинную сессию
     let maxSessionDuration = 0
     dayEntries.forEach(entry => {
       const duration = getEntryDuration(entry)
@@ -122,11 +122,7 @@ function calculateFocusTime(entries) {
       }
     })
 
-    // Рассчитываем общее время за день
     const dayTotalTime = dayEntries.reduce((sum, e) => sum + getEntryDuration(e), 0)
-
-    // Focus Time = доля самой длинной сессии от общего времени
-    // Идеал: одна длинная сессия (100% focus time)
     const focusRatio = dayTotalTime > 0 ? maxSessionDuration / dayTotalTime : 0
     totalFocusTime += focusRatio
     totalTime += 1
@@ -138,15 +134,13 @@ function calculateFocusTime(entries) {
 
 /**
  * Рассчитывает фактор Break Balance (15% веса)
- * Оценивает баланс перерывов (оптимальные перерывы между сессиями)
  */
-function calculateBreakBalance(entries) {
-  if (entries.length <= 1) return 1.0 // Если одна запись или нет записей, идеальный баланс
+function calculateBreakBalance(entries: TimeEntry[]): number {
+  if (entries.length <= 1) return 1.0
 
-  // Группируем записи по дням
-  const entriesByDay = {}
+  const entriesByDay: Record<string, TimeEntry[]> = {}
   entries.forEach(entry => {
-    const date = entry.date
+    const {date} = entry
     if (!entriesByDay[date]) {
       entriesByDay[date] = []
     }
@@ -157,54 +151,47 @@ function calculateBreakBalance(entries) {
   let daysWithBreaks = 0
 
   Object.keys(entriesByDay).forEach(date => {
-    const dayEntries = entriesByDay[date]
+    const dayEntries = (entriesByDay[date] ?? [])
       .filter(e => e.start && e.end)
       .sort((a, b) => {
-        const aMinutes = timeToMinutes(a.start)
-        const bMinutes = timeToMinutes(b.start)
+        const aMinutes = timeToMinutes(a.start!)
+        const bMinutes = timeToMinutes(b.start!)
         return aMinutes - bMinutes
       })
 
     if (dayEntries.length <= 1) {
-      totalBreakScore += 1.0 // Одна запись = идеальный баланс
+      totalBreakScore += 1.0
       daysWithBreaks += 1
       return
     }
 
-    // Рассчитываем перерывы между сессиями
     let optimalBreaks = 0
     let totalBreaks = 0
 
     for (let i = 1; i < dayEntries.length; i++) {
-      const prevEnd = timeToMinutes(dayEntries[i - 1].end)
-      const currentStart = timeToMinutes(dayEntries[i].start)
+      const prevEnd = timeToMinutes(dayEntries[i - 1].end!)
+      const currentStart = timeToMinutes(dayEntries[i].start!)
       let breakMinutes = currentStart - prevEnd
 
-      // Если перерыв через полночь
       if (breakMinutes < 0) {
         breakMinutes = 24 * 60 - prevEnd + currentStart
       }
 
-      // Игнорируем перерывы больше 12 часов (это не перерывы, а другой день)
       if (breakMinutes > 0 && breakMinutes < 12 * 60) {
         totalBreaks += 1
 
-        // Оптимальный перерыв: 5-30 минут (короткий отдых)
-        // Хороший перерыв: 30-90 минут (обед)
-        // Приемлемый: 1-3 часа (длинный перерыв)
         if (breakMinutes >= 5 && breakMinutes <= 30) {
-          optimalBreaks += 1.0 // Идеальный перерыв
+          optimalBreaks += 1.0
         } else if (breakMinutes > 30 && breakMinutes <= 90) {
-          optimalBreaks += 0.8 // Хороший перерыв
+          optimalBreaks += 0.8
         } else if (breakMinutes > 90 && breakMinutes <= 180) {
-          optimalBreaks += 0.5 // Приемлемый перерыв
+          optimalBreaks += 0.5
         } else {
-          optimalBreaks += 0.2 // Слишком короткий или длинный перерыв
+          optimalBreaks += 0.2
         }
       }
     }
 
-    // Рассчитываем средний балл перерывов за день
     const dayBreakScore = totalBreaks > 0 ? optimalBreaks / totalBreaks : 1.0
     totalBreakScore += dayBreakScore
     daysWithBreaks += 1
@@ -216,46 +203,43 @@ function calculateBreakBalance(entries) {
 
 /**
  * Основная функция расчета Productivity Score
- * @param {Array} entries - массив записей времени
- * @param {number} dailyGoal - дневная цель по заработку (₽)
- * @param {number} dailyHours - дневная норма часов
- * @param {number} periodDays - период для расчета консистентности (по умолчанию 30 дней)
- * @returns {Object} объект с общим score и разбивкой по факторам
  */
-export function calculateProductivityScore(entries, dailyGoal, dailyHours = 8, periodDays = 30) {
-  // Рассчитываем каждый фактор
+export function calculateProductivityScore(
+  entries: TimeEntry[],
+  dailyGoal: number,
+  _dailyHours: number = 8,
+  periodDays: number = 30
+): ProductivityScoreResult {
   const goalCompletion = calculateGoalCompletion(entries, dailyGoal)
   const consistency = calculateConsistency(entries, periodDays)
   const focusTime = calculateFocusTime(entries)
   const breakBalance = calculateBreakBalance(entries)
 
-  // Взвешенная сумма факторов
   const score =
     goalCompletion * 0.4 + consistency * 0.25 + focusTime * 0.2 + breakBalance * 0.15
 
-  // Преобразуем в проценты (0-100)
   const scorePercent = Math.round(score * 100)
 
   return {
     score: scorePercent,
     factors: {
       goalCompletion: {
-        value: Math.round(goalCompletion * 40), // Максимум 40 баллов
+        value: Math.round(goalCompletion * 40),
         max: 40,
         percentage: Math.round(goalCompletion * 100),
       },
       consistency: {
-        value: Math.round(consistency * 25), // Максимум 25 баллов
+        value: Math.round(consistency * 25),
         max: 25,
         percentage: Math.round(consistency * 100),
       },
       focusTime: {
-        value: Math.round(focusTime * 20), // Максимум 20 баллов
+        value: Math.round(focusTime * 20),
         max: 20,
         percentage: Math.round(focusTime * 100),
       },
       breakBalance: {
-        value: Math.round(breakBalance * 15), // Максимум 15 баллов
+        value: Math.round(breakBalance * 15),
         max: 15,
         percentage: Math.round(breakBalance * 100),
       },
@@ -265,23 +249,18 @@ export function calculateProductivityScore(entries, dailyGoal, dailyHours = 8, p
 
 /**
  * Получает цвет для отображения score
- * @param {number} score - значение score (0-100)
- * @returns {string} цвет в формате Tailwind класса
  */
-export function getScoreColor(score) {
+export function getScoreColor(score: number): string {
   if (score >= 80) return 'text-green-500'
   if (score >= 60) return 'text-blue-500'
   if (score >= 40) return 'text-yellow-500'
-  // ✅ A11Y: Улучшаем контраст для темной темы
   return 'text-red-500 dark:text-red-400'
 }
 
 /**
  * Получает цвет фона для кругового индикатора
- * @param {number} score - значение score (0-100)
- * @returns {string} цвет в формате Tailwind класса
  */
-export function getScoreBgColor(score) {
+export function getScoreBgColor(score: number): string {
   if (score >= 80) return 'bg-green-500'
   if (score >= 60) return 'bg-blue-500'
   if (score >= 40) return 'bg-yellow-500'
@@ -289,25 +268,19 @@ export function getScoreBgColor(score) {
 }
 
 /**
- * Получает цвет прогресс-бара для фактора в зависимости от процента выполнения
- * @param {number} percentage - процент выполнения (0-100)
- * @returns {string} цвет в формате Tailwind класса
+ * Получает цвет прогресс-бара для фактора
  */
-export function getFactorProgressColor(percentage) {
+export function getFactorProgressColor(percentage: number): string {
   if (percentage >= 80) return 'bg-green-500'
   if (percentage >= 50) return 'bg-yellow-500'
   return 'bg-red-500'
 }
 
 /**
- * Получает цвет текста для значения фактора в зависимости от процента выполнения
- * @param {number} percentage - процент выполнения (0-100)
- * @returns {string} цвет в формате Tailwind класса
+ * Получает цвет текста для значения фактора
  */
-export function getFactorTextColor(percentage) {
+export function getFactorTextColor(percentage: number): string {
   if (percentage >= 80) return 'text-green-500'
   if (percentage >= 50) return 'text-yellow-500'
-  // ✅ A11Y: Улучшаем контраст для темной темы
   return 'text-red-500 dark:text-red-400'
 }
-

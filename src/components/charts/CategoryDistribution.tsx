@@ -76,7 +76,7 @@ export function CategoryDistribution({ entries: entriesProp }) {
       const categoryData = categories.find(
         cat => cat.name === category || cat.id === category || cat.name.toLowerCase() === category.toLowerCase()
       )
-      
+
       return {
         originalName: category, // Сохраняем оригинальное название для поиска
         name: categoryData?.name || category, // Используем русское название из настроек

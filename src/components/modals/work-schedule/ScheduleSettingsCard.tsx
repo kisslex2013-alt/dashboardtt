@@ -20,7 +20,7 @@ export const ScheduleSettingsCard = memo(
     onDailyPlanChange,
     onWeekStartChange,
     getIconColorClasses,
-  }) => {
+  }: any) => {
     return (
       <div
         key="settings"

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, memo } from 'react'
 import {
   LineChart,
   Line,
@@ -34,6 +34,7 @@ import { EnhancedTooltip } from './EnhancedTooltip'
 import { ru } from 'date-fns/locale'
 import { useDailyGoal } from '../../store/useSettingsStore'
 import { ZoomableChartWrapper } from './ZoomableChartWrapper'
+import { ChartContainer } from './ChartContainer'
 
 /**
  * 📊 График динамики заработка по дням
@@ -52,17 +53,25 @@ import { ZoomableChartWrapper } from './ZoomableChartWrapper'
  * @param {string} dateFilter - Фильтр периода ('today', 'month', 'year', 'all', 'custom')
  * @param {Object} customDateRange - Кастомный диапазон дат (для 'custom')
  */
-export function DynamicsChart({
+import type { TimeEntry } from '../../types'
+
+interface DynamicsChartProps {
+  entries: TimeEntry[]
+  dateFilter?: string
+  customDateRange?: { start: string; end: string }
+}
+
+export const DynamicsChart = memo(({
   entries,
   dateFilter = 'month',
   customDateRange = { start: '', end: '' },
-}) {
+}: DynamicsChartProps) => {
   // ✅ ОПТИМИЗАЦИЯ: Используем атомарные селекторы для минимизации ре-рендеров
   const theme = useTheme()
   const dailyGoal = useDailyGoal()
   const isMobile = useIsMobile()
   const chartHeight = useResponsiveChartHeight(350, 280)
-  const [chartType, setChartType] = useState('line')
+  const [chartType, setChartType] = useState<'line' | 'bar' | 'area'>('line')
 
   // Подготовка данных для графика
   const prepareChartData = () => {
@@ -82,7 +91,7 @@ export function DynamicsChart({
         days = eachDayOfInterval({ start: todayStart, end: todayEnd })
 
         // Для сегодняшнего дня создаем данные по часам
-        const hourlyData = []
+        const hourlyData: any[] = []
         for (let hour = 0; hour < 24; hour++) {
           hourlyData.push({
             time: `${hour.toString().padStart(2, '0')}:00`,
@@ -94,8 +103,8 @@ export function DynamicsChart({
         // Заполняем данные из entries
         entries.forEach(entry => {
           if (entry.date === format(today, 'yyyy-MM-dd')) {
-            const startHour = entry.start ? parseInt(entry.start.split(':')[0]) : 0
-            const earned = parseFloat(entry.earned) || 0
+            const startHour = entry.start ? parseInt(String(entry.start).split(':')[0]) : 0
+            const earned = parseFloat(String(entry.earned)) || 0
 
             if (hourlyData[startHour]) {
               hourlyData[startHour].earned += earned
@@ -132,7 +141,7 @@ export function DynamicsChart({
 
       case 'all': {
         // Находим самый ранний и поздний день из записей
-        const entryDates = entries.map(e => new Date(e.date))
+        const entryDates = entries.map(e => new Date(e.date).getTime())
         startDate = new Date(Math.min(...entryDates))
         endDate = new Date(Math.max(...entryDates))
         break
@@ -171,7 +180,7 @@ export function DynamicsChart({
       const dayIndex = data.findIndex(d => d.date === entryDate)
 
       if (dayIndex !== -1) {
-        const earned = parseFloat(entry.earned) || 0
+        const earned = parseFloat(String(entry.earned)) || 0
         data[dayIndex].earned += earned
       }
     })
@@ -181,34 +190,17 @@ export function DynamicsChart({
 
   const chartData = prepareChartData()
 
-  // ВИЗУАЛ: Empty State для графика
-  if (chartData.length === 0 || chartData.every(day => day.earned === 0)) {
-    return (
-      <div className="glass-effect rounded-xl p-6 mb-6">
-        <div className="flex justify-between items-center mb-4">
-          <div className="flex items-center gap-2">
-            <h2 className="text-xl font-bold">Динамика доходов</h2>
-            <InfoTooltip text="Показывает ваш ежедневный заработок за выбранный период." />
-          </div>
-          <ChartTypeSwitcher currentType={chartType} onChange={setChartType} />
-        </div>
-        <EmptyState
-          illustration={ChartIllustration}
-          title="Нет данных за выбранный период"
-          description="Добавьте записи времени за этот период, чтобы увидеть динамику дохода"
-          variant="compact"
-        />
-      </div>
-    )
-  }
+  // ВИЗУАЛ: Empty State обрабатывается в ChartContainer (empty prop)
+  const isEmpty = chartData.length === 0 || chartData.every(day => day.earned === 0)
 
   // Улучшенный tooltip с сравнением и проверкой цели
-  const EnhancedCustomTooltip = ({ active, payload, label }) => {
+  const EnhancedCustomTooltip = ({ active, payload, label }: any) => {
     if (!active || !payload || payload.length === 0) return null
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const currentData = payload[0].payload
     const currentValue = payload[0].value || 0
-    const currentIndex = chartData.findIndex(d => 
+    const currentIndex = chartData.findIndex(d =>
       (dateFilter === 'today' ? d.time === label : d.dateLabel === label)
     )
 
@@ -221,14 +213,14 @@ export function DynamicsChart({
     return (
       <EnhancedTooltip
         active={active}
-        payload={payload.map(item => ({
+        payload={payload.map((item: any) => ({
           ...item,
           unit: '₽',
         }))}
         label={label}
         formatters={{
-          label: (label) => label,
-          earned: (value) => value.toLocaleString('ru-RU'),
+          label: (label: string) => label,
+          earned: (value: number) => value.toLocaleString('ru-RU'),
         }}
         showComparison={currentIndex > 0}
         previousValue={previousValue}
@@ -243,15 +235,14 @@ export function DynamicsChart({
   const xAxisDataKey = dateFilter === 'today' ? 'time' : 'dateLabel'
 
   return (
-    <div className="glass-effect rounded-xl p-6 mb-6">
-      <div className="flex justify-between items-center mb-4">
-        <div className="flex items-center gap-2">
-          <h2 className="text-xl font-bold">Динамика доходов</h2>
-          <InfoTooltip text="Показывает ваш ежедневный заработок за выбранный период." />
-        </div>
-        <ChartTypeSwitcher currentType={chartType} onChange={setChartType} />
-      </div>
-
+    <ChartContainer
+      title="Динамика доходов"
+      tooltip="Показывает ваш ежедневный заработок за выбранный период."
+      rightControls={<ChartTypeSwitcher currentType={chartType} onChange={setChartType} />}
+      empty={isEmpty}
+      emptyTitle="Нет данных за выбранный период"
+      emptyDescription="Добавьте записи времени за этот период, чтобы увидеть динамику дохода"
+    >
       {/* 🔍 NEW: Зум и панорамирование для больших наборов данных */}
       <ZoomableChartWrapper
         dataLength={chartData.length}
@@ -343,6 +334,6 @@ export function DynamicsChart({
           )
         }}
       </ZoomableChartWrapper>
-    </div>
+    </ChartContainer>
   )
-}
+})

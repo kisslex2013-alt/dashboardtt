@@ -22,13 +22,13 @@ function rgbToHex(rgb) {
   const b = parseInt(match[3], 10)
 
   return (
-    '#' +
+    `#${
     [r, g, b]
       .map(x => {
         const hex = x.toString(16)
-        return hex.length === 1 ? '0' + hex : hex
+        return hex.length === 1 ? `0${  hex}` : hex
       })
-      .join('')
+      .join('')}`
   )
 }
 
@@ -116,7 +116,7 @@ function normalizeColorForComparison(color) {
  * @param {React.ReactNode} children - содержимое кнопки
  * @param {Object} props - остальные пропсы передаются в button элемент
  */
-export function IconButton({ iconId, defaultIcon: DefaultIcon, children, ...props }) {
+export function IconButton({ iconId, defaultIcon: DefaultIcon, children = null, ...props }) {
   // Получаем замену иконки из store - подписываемся на весь объект для правильной реактивности
   // Используем shallow сравнение, чтобы перерисовка происходила только при реальных изменениях
   const iconReplacements = useIconEditorStore(state => state.iconReplacements, shallow)

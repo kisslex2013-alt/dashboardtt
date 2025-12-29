@@ -163,6 +163,6 @@ export function createLogger(componentName: string) {
 }
 
 // Экспорт отдельных функций для обратной совместимости
-export const log = logger.log
-export const error = logger.error
-export const warn = logger.warn
+export const {log} = logger
+export const {error} = logger
+export const {warn} = logger

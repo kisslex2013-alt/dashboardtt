@@ -17,7 +17,7 @@ export const ScheduleTemplateCard = memo(
     getIconColorClasses,
     getEfficiencyColor,
     animationDelay,
-  }) => {
+  }: any) => {
     const Icon = template.icon
 
     return (

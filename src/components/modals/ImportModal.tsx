@@ -88,7 +88,7 @@ export function ImportModal({ isOpen, onClose, onImport }: ImportModalProps) {
           try {
             const jsonString = e.target.result
             const { isValid, data, error: validationError } = importFromJSON(jsonString)
-            
+
             // Проверяем валидность данных перед импортом
             if (!isValid || !data) {
               const errorMsg = validationError || 'Некорректный формат файла'
@@ -96,7 +96,7 @@ export function ImportModal({ isOpen, onClose, onImport }: ImportModalProps) {
               reject(new Error(errorMsg))
               return
             }
-            
+
             await onImport(data, importMode)
             handleClose()
             resolve()
@@ -207,7 +207,7 @@ export function ImportModal({ isOpen, onClose, onImport }: ImportModalProps) {
       {/* Выбор файла */}
       <div className="mb-4">
         <label className="block text-sm font-medium mb-2">Выберите JSON файл</label>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 relative z-10">
           <input
             ref={fileInputRef}
             type="file"
@@ -218,7 +218,7 @@ export function ImportModal({ isOpen, onClose, onImport }: ImportModalProps) {
           />
           <label
             htmlFor="import-file-input"
-            className="glass-button px-4 py-2 rounded-lg flex items-center gap-2 flex-1"
+            className="glass-button px-4 py-2 rounded-lg flex items-center gap-2 flex-1 cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
           >
             <FileJson className="w-4 h-4" />
             <span className="text-sm truncate">

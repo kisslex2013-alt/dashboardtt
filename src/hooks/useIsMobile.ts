@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { BREAKPOINTS, MEDIA_QUERIES } from '../styles/breakpoints'
 
 /**
  * 🎯 Хук для определения типа устройства (мобильное/десктоп)
@@ -6,7 +7,7 @@ import { useState, useEffect } from 'react'
  * 🎓 ПОЯСНЕНИЕ ДЛЯ НАЧИНАЮЩИХ:
  *
  * Этот хук определяет, является ли устройство мобильным или десктопным.
- * Он использует размер экрана для определения типа устройства.
+ * Использует централизованные breakpoints из styles/breakpoints.ts
  *
  * Использует matchMedia API для эффективного отслеживания изменений размера экрана.
  * Автоматически обновляется при изменении размера окна браузера.
@@ -25,13 +26,13 @@ import { useState, useEffect } from 'react'
  *   )
  * }
  * ```
- * 
+ *
  * @example
  * ```tsx
  * function ResponsiveChart() {
  *   const isMobile = useIsMobile()
  *   const chartHeight = isMobile ? 200 : 400
- * 
+ *
  *   return <Chart height={chartHeight} />
  * }
  * ```
@@ -40,12 +41,12 @@ export function useIsMobile(): boolean {
   const [isMobile, setIsMobile] = useState<boolean>(() => {
     // SSR-safe: проверяем наличие window
     if (typeof window === 'undefined') return false
-    return window.innerWidth < 768
+    return window.innerWidth < BREAKPOINTS.md
   })
 
   useEffect(() => {
     // Используем matchMedia для более точного определения
-    const mediaQuery = window.matchMedia('(max-width: 767px)')
+    const mediaQuery = window.matchMedia(MEDIA_QUERIES.isTabletOrSmaller)
 
     // Функция обновления состояния
     const updateIsMobile = (e: MediaQueryListEvent | MediaQueryList) => {
@@ -64,9 +65,8 @@ export function useIsMobile(): boolean {
       mediaQuery.addListener(updateIsMobile)
     }
 
-    // Также слушаем resize для дополнительной надежности
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 768)
+      setIsMobile(window.innerWidth < BREAKPOINTS.md)
     }
 
     window.addEventListener('resize', handleResize)

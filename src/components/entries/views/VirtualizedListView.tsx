@@ -225,16 +225,16 @@ export function VirtualizedListView({
               const newHeight = getItemSize(index, {})
               if (newHeight) {
                 dynamicRowHeight.setRowHeight(index, newHeight)
-                
+
                 // ✅ ОПТИМИЗАЦИЯ: Прокручиваем к открытому элементу если он не виден
                 if (!wasOpen && listRef.current) {
                   const scrollElement = listRef.current
                   const rowElement = scrollElement.querySelector(`[data-row-index="${index}"]`)
                   if (rowElement) {
                     const rowTop = rowElement.offsetTop
-                    const scrollTop = scrollElement.scrollTop
+                    const {scrollTop} = scrollElement
                     const viewportHeight = scrollElement.clientHeight
-                    
+
                     // Прокручиваем только если элемент не полностью виден
                     if (rowTop < scrollTop || rowTop + newHeight > scrollTop + viewportHeight) {
                       scrollElement.scrollTo({

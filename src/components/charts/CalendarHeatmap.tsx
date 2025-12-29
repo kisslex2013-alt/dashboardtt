@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useMemo } from 'react'
+import { useState, useRef, useEffect, useMemo, memo } from 'react'
 import { createPortal } from 'react-dom'
 import { ChevronLeft, ChevronRight } from '../../utils/icons'
 import {
@@ -31,7 +31,7 @@ import { getDayStatus } from '../../utils/dayMetrics'
  *
  * @param {Array} entries - Отфильтрованные записи
  */
-export function CalendarHeatmap({ entries }) {
+export const CalendarHeatmap = memo(({ entries }) => {
   // ✅ ОПТИМИЗАЦИЯ: Используем атомарные селекторы для минимизации ре-рендеров
   const theme = useTheme()
   const workScheduleTemplate = useWorkScheduleTemplate()
@@ -659,4 +659,4 @@ export function CalendarHeatmap({ entries }) {
         )}
     </div>
   )
-}
+})

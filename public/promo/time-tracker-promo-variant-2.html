@@ -29,7 +29,7 @@
             position: fixed;
             width: 500px;
             height: 500px;
-            background: radial-gradient(circle, #6366f1 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.4) 0%, transparent 70%);
             top: -250px;
             right: -250px;
             animation: pulse 4s ease-in-out infinite;
@@ -40,7 +40,7 @@
             position: fixed;
             width: 400px;
             height: 400px;
-            background: radial-gradient(circle, #ec4899 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.3) 0%, transparent 70%);
             bottom: -200px;
             left: -200px;
             animation: pulse 4s ease-in-out infinite 2s;
@@ -65,7 +65,7 @@
         .logo {
             font-size: 26px;
             font-weight: 700;
-            background: linear-gradient(135deg, #6366f1, #ec4899);
+            background: linear-gradient(135deg, #3b82f6, #60a5fa);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -97,7 +97,7 @@
         }
         
         .hero {
-            padding: 100px 0;
+            padding: 60px 0;
             text-align: center;
         }
         
@@ -105,8 +105,8 @@
             background: rgba(255,255,255,0.03);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 30px;
-            padding: 80px 60px;
+            border-radius: 24px;
+            padding: 50px 40px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.5);
             animation: slideUp 1s ease;
         }
@@ -136,7 +136,7 @@
         }
         
         .gradient-text {
-            background: linear-gradient(135deg, #6366f1, #ec4899, #f59e0b);
+            background: linear-gradient(135deg, #3b82f6, #60a5fa);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -165,7 +165,7 @@
         }
         
         .primary-btn {
-            background: linear-gradient(135deg, #6366f1, #ec4899);
+            background: #3b82f6;
             color: white;
             padding: 18px 40px;
             border-radius: 15px;
@@ -173,12 +173,14 @@
             font-weight: 700;
             font-size: 18px;
             transition: all 0.3s ease;
-            box-shadow: 0 10px 30px rgba(99,102,241,0.4);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+            border: 1px solid rgba(96, 165, 250, 0.5);
         }
         
         .primary-btn:hover {
+            background: #2563eb;
             transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(99,102,241,0.6);
+            box-shadow: 0 15px 40px rgba(59, 130, 246, 0.4);
         }
         
         .secondary-btn {
@@ -200,7 +202,7 @@
         }
         
         .features-section {
-            margin-top: 100px;
+            margin-top: 50px;
         }
         
         .section-title {
@@ -208,7 +210,7 @@
             font-size: 48px;
             font-weight: 900;
             margin-bottom: 60px;
-            background: linear-gradient(135deg, #6366f1, #ec4899);
+            background: linear-gradient(135deg, #3b82f6, #60a5fa);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -217,8 +219,8 @@
         .features-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-            margin-bottom: 80px;
+            gap: 20px;
+            margin-bottom: 40px;
         }
         
         .feature-card {
@@ -240,9 +242,9 @@
         
         .feature-card:hover {
             background: rgba(255,255,255,0.06);
-            transform: translateY(-5px);
-            border-color: rgba(255,255,255,0.2);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            transform: translateY(-5px) scale(1.02);
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.15);
         }
         
         .feature-header {
@@ -272,8 +274,8 @@
         .stats {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            margin-top: 80px;
+            gap: 20px;
+            margin-top: 40px;
         }
         
         .stat-card {
@@ -294,14 +296,15 @@
         
         .stat-card:hover {
             background: rgba(255,255,255,0.06);
-            transform: translateY(-5px);
-            border-color: rgba(255,255,255,0.2);
+            transform: translateY(-5px) scale(1.05);
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 15px 35px rgba(59, 130, 246, 0.2);
         }
         
         .stat-number {
             font-size: 48px;
             font-weight: 900;
-            background: linear-gradient(135deg, #6366f1, #ec4899);
+            background: linear-gradient(135deg, #3b82f6, #60a5fa);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -313,10 +316,10 @@
             font-size: 16px;
         }
         
-        /* Demo Sections */
+        /* Demo Sections - reduced spacing */
         .demo-section {
-            margin: 100px 0;
-            padding: 60px 0;
+            margin: 50px 0;
+            padding: 30px 0;
         }
         
         .demo-title {
@@ -324,7 +327,7 @@
             font-size: 42px;
             font-weight: 900;
             margin-bottom: 50px;
-            background: linear-gradient(135deg, #6366f1, #ec4899);
+            background: linear-gradient(135deg, #3b82f6, #60a5fa);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -333,8 +336,8 @@
         .metrics-cards {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 60px;
+            gap: 16px;
+            margin-bottom: 30px;
         }
         
         .metric-card {
@@ -350,8 +353,9 @@
         
         .metric-card:hover {
             background: rgba(255,255,255,0.06);
-            transform: translateY(-5px);
-            border-color: rgba(255,255,255,0.2);
+            transform: translateY(-5px) scale(1.03);
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 12px 30px rgba(59, 130, 246, 0.2);
         }
         
         .metric-card::before {
@@ -379,7 +383,7 @@
             font-weight: 900;
             margin-bottom: 8px;
             line-height: 1;
-            background: linear-gradient(135deg, #6366f1, #ec4899);
+            background: linear-gradient(135deg, #3b82f6, #60a5fa);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -456,7 +460,7 @@
         .plan-fact-amount {
             font-size: 28px;
             font-weight: 800;
-            background: linear-gradient(135deg, #6366f1, #ec4899);
+            background: linear-gradient(135deg, #10b981, #34d399);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -602,47 +606,77 @@
         .insights-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 15px;
-            margin-top: 40px;
+            gap: 12px;
+            margin-top: 30px;
         }
         
         .insight-card {
             background: rgba(255,255,255,0.03);
             backdrop-filter: blur(20px);
-            border-radius: 12px;
-            padding: 18px;
-            border-left: 3px solid;
+            border-radius: 16px;
+            padding: 16px;
+            border: 1px solid rgba(255,255,255,0.08);
             position: relative;
             overflow: hidden;
             transition: all 0.3s ease;
+            min-height: 100px;
         }
         
         .insight-card:hover {
             background: rgba(255,255,255,0.06);
-            transform: translateY(-3px);
+            transform: translateY(-4px) scale(1.02);
         }
         
-        .insight-card::before {
-            content: '';
+        .insight-card.glow-blue:hover {
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+            border-color: rgba(59, 130, 246, 0.5);
+        }
+        
+        .insight-card.glow-purple:hover {
+            box-shadow: 0 8px 25px rgba(168, 85, 247, 0.3);
+            border-color: rgba(168, 85, 247, 0.5);
+        }
+        
+        .insight-card.glow-green:hover {
+            box-shadow: 0 8px 25px rgba(34, 197, 94, 0.3);
+            border-color: rgba(34, 197, 94, 0.5);
+        }
+        
+        .insight-card.glow-orange:hover {
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3);
+            border-color: rgba(245, 158, 11, 0.5);
+        }
+        
+        .insight-card.glow-red:hover {
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3);
+            border-color: rgba(239, 68, 68, 0.5);
+        }
+        
+        .insight-icon {
             position: absolute;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            opacity: 0.05;
-            top: -30px;
-            right: -30px;
+            right: 8px;
+            bottom: 8px;
+            font-size: 48px;
+            opacity: 0.15;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+        
+        .insight-card:hover .insight-icon {
+            opacity: 0.35;
+            transform: scale(1.1);
         }
         
         .insight-title {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
         
         .insight-text {
             font-size: 12px;
-            line-height: 1.5;
-            color: #a0a0a0;
+            line-height: 1.4;
+            color: #d1d5db;
         }
         
         .insight-highlight {
@@ -651,7 +685,7 @@
         }
         
         .tech-stack {
-            margin-top: 100px;
+            margin-top: 50px;
             text-align: center;
         }
         
@@ -745,8 +779,8 @@
         
         /* View Modes Section */
         .view-modes-section {
-            margin: 100px 0;
-            padding: 60px 0;
+            margin: 40px 0;
+            padding: 30px 0;
         }
         
         .view-modes-container {
@@ -766,7 +800,7 @@
             font-size: 32px;
             font-weight: 900;
             margin-bottom: 15px;
-            background: linear-gradient(135deg, #6366f1, #ec4899);
+            background: linear-gradient(135deg, #3b82f6, #60a5fa);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -799,11 +833,11 @@
         }
         
         .view-mode-tab.active {
-            background: linear-gradient(135deg, #6366f1, #ec4899);
-            border-color: transparent;
+            background: #3b82f6;
+            border-color: rgba(96, 165, 250, 0.5);
             color: white;
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(99,102,241,0.4);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
         }
         
         .view-mode-tab:hover:not(.active) {
@@ -861,7 +895,7 @@
             top: 0;
             bottom: 0;
             width: 2px;
-            background: linear-gradient(180deg, #6366f1, #ec4899);
+            background: linear-gradient(180deg, #3b82f6, #10b981);
         }
         
         .timeline-dot {
@@ -870,7 +904,7 @@
             width: 16px;
             height: 16px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #6366f1, #ec4899);
+            background: linear-gradient(135deg, #3b82f6, #60a5fa);
             border: 3px solid #0a0a0a;
         }
         
@@ -1115,7 +1149,7 @@
                         <div class="horizontal-bar-item">
                             <div class="bar-label">Дизайн</div>
                             <div class="bar-container">
-                                <div class="horizontal-bar" id="bar-design" style="width: 0%; background: linear-gradient(90deg, #ec4899, #f472b6);">
+                                <div class="horizontal-bar" id="bar-design" style="width: 0%; background: linear-gradient(90deg, #06b6d4, #22d3ee);">
                                     <span id="design-percent">0</span>%
                                 </div>
                             </div>
@@ -1148,44 +1182,49 @@
         <div class="demo-section">
             <h2 class="demo-title">💡 Умные инсайты</h2>
             <div class="insights-grid">
-                <div class="insight-card" style="border-left-color: #3b82f6;">
+                <div class="insight-card glow-blue">
+                    <span class="insight-icon">📅</span>
                     <div class="insight-title" style="color: #3b82f6;">Лучший день</div>
                     <div class="insight-text">
-                        <span class="insight-highlight" style="color: #3b82f6;" id="best-day">Пн</span> — 
-                        <span class="insight-highlight" style="color: #3b82f6;" id="best-day-amount">0</span>₽/день
+                        <span class="insight-highlight" style="color: #60a5fa;" id="best-day">Чт</span> — 
+                        <span class="insight-highlight" style="color: #60a5fa;" id="best-day-amount">3 909</span>₽/день
                     </div>
                 </div>
                 
-                <div class="insight-card" style="border-left-color: #a855f7;">
+                <div class="insight-card glow-purple">
+                    <span class="insight-icon">⚡</span>
                     <div class="insight-title" style="color: #a855f7;">Пик продуктивности</div>
                     <div class="insight-text">
-                        <span class="insight-highlight" style="color: #a855f7;" id="peak-time">19:00-20:00</span> — 
-                        <span class="insight-highlight" style="color: #a855f7;" id="peak-rate">0</span>₽/ч
+                        <span class="insight-highlight" style="color: #c084fc;" id="peak-time">19:00-20:00</span> — 
+                        <span class="insight-highlight" style="color: #c084fc;" id="peak-rate">1 089</span>₽/ч
                     </div>
                 </div>
                 
-                <div class="insight-card" style="border-left-color: #22c55e;">
+                <div class="insight-card glow-green">
+                    <span class="insight-icon">📈</span>
                     <div class="insight-title" style="color: #22c55e;">Тренд</div>
                     <div class="insight-text">
-                        Заработок <span class="insight-highlight" style="color: #22c55e;" id="trend-direction">растёт</span> 
-                        <span class="insight-highlight" style="color: #22c55e;" id="trend-percent">+0</span>%
+                        Заработок <span class="insight-highlight" style="color: #4ade80;" id="trend-direction">падает</span> 
+                        <span class="insight-highlight" style="color: #4ade80;" id="trend-percent">-9</span>%
                     </div>
                 </div>
                 
-                <div class="insight-card" style="border-left-color: #f59e0b;">
+                <div class="insight-card glow-orange">
+                    <span class="insight-icon">🔥</span>
                     <div class="insight-title" style="color: #f59e0b;">Макс. сессия</div>
                     <div class="insight-text">
-                        <span class="insight-highlight" style="color: #f59e0b;" id="max-session">0</span>ч 
-                        (<span id="max-session-earned">0</span>₽)
+                        <span class="insight-highlight" style="color: #fbbf24;" id="max-session">12</span>ч 
+                        (<span id="max-session-earned" style="color: #fbbf24;">5 938</span>₽)
                     </div>
                 </div>
                 
-                <div class="insight-card" style="border-left-color: #22c55e;">
-                    <div class="insight-title" style="color: #22c55e;">Аномалия сегодня</div>
+                <div class="insight-card glow-red">
+                    <span class="insight-icon">📊</span>
+                    <div class="insight-title" style="color: #ef4444;">Аномалия сегодня</div>
                     <div class="insight-text">
-                        Вы заработали <span class="insight-highlight" style="color: #22c55e;" id="anomaly-direction">выше</span> 
-                        среднего на <span class="insight-highlight" style="color: #22c55e;" id="anomaly-percent">0</span>% 
-                        (<span id="anomaly-amount">0</span>₽)
+                        Вы заработали <span class="insight-highlight" style="color: #f87171;" id="anomaly-direction">ниже</span> 
+                        среднего на <span class="insight-highlight" style="color: #f87171;" id="anomaly-percent">47</span>% 
+                        (<span id="anomaly-amount" style="color: #f87171;">4 948</span>₽)
                     </div>
                 </div>
             </div>
@@ -1411,7 +1450,7 @@
         
         <div class="hero" style="padding: 100px 0;">
             <div class="glass-card">
-                <h2 style="font-size: 48px; margin-bottom: 30px; font-weight: 900; background: linear-gradient(135deg, #6366f1, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Готовы начать?</h2>
+                <h2 style="font-size: 48px; margin-bottom: 30px; font-weight: 900; background: linear-gradient(135deg, #3b82f6, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Готовы начать?</h2>
                 <p class="description description-nowrap" style="margin-bottom: 40px;">Присоединяйтесь к пользователям, которые уже экономят время и контролируют свой заработок</p>
                 <div class="cta-group">
                     <a href="/" class="primary-btn">Начать работу сейчас</a>

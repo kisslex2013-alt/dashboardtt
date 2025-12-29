@@ -8,10 +8,10 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 /**
  * 🚀 Quick Start Panel - Панель быстрого запуска таймера
- * 
+ *
  * Позволяет запустить таймер одним кликом по категории
  * Показывает самые часто используемые категории
- * 
+ *
  * Phase 1: Quick Wins
  */
 export function QuickStartPanel() {
@@ -30,7 +30,7 @@ export function QuickStartPanel() {
       // Если таймер уже запущен, не делаем ничего
       return
     }
-    
+
     start(categoryName)
   }
 

@@ -48,18 +48,18 @@ export const StatCard = memo(
     // Определяем inline style для иконки с нужной прозрачностью
     const iconColor =
       accentClass === 'blue-500'
-        ? 'rgba(59, 130, 246, ' + iconOpacity + ')'
+        ? `rgba(59, 130, 246, ${  iconOpacity  })`
         : accentClass === 'teal-500'
-          ? 'rgba(20, 184, 166, ' + iconOpacity + ')'
+          ? `rgba(20, 184, 166, ${  iconOpacity  })`
           : accentClass === 'green-500'
-            ? 'rgba(16, 185, 129, ' + iconOpacity + ')'
+            ? `rgba(16, 185, 129, ${  iconOpacity  })`
             : accentClass === 'purple-500'
-              ? 'rgba(139, 92, 246, ' + iconOpacity + ')'
+              ? `rgba(139, 92, 246, ${  iconOpacity  })`
               : accentClass === 'orange-500'
-                ? 'rgba(249, 115, 22, ' + iconOpacity + ')'
+                ? `rgba(249, 115, 22, ${  iconOpacity  })`
                 : accentClass === 'yellow-500'
-                  ? 'rgba(251, 191, 36, ' + iconOpacity + ')'
-                  : 'rgba(156, 163, 175, ' + iconOpacity + ')'
+                  ? `rgba(251, 191, 36, ${  iconOpacity  })`
+                  : `rgba(156, 163, 175, ${  iconOpacity  })`
 
     // Поддержка обратной совместимости: если передано value (строка), парсим его
     let finalNumericValue = numericValue

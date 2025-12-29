@@ -16,6 +16,7 @@ import {
   List,
   Grid,
   Clock,
+  Calendar,
   Plus,
   Play,
   Square,
@@ -147,6 +148,24 @@ export function EntriesListHeader({
             >
               <Clock className={isMobile ? 'w-5 h-5' : 'w-4 h-4'} />
             </button>
+
+            <button
+              onClick={() => setListView('calendar')}
+              className={`${isMobile ? 'p-2.5' : 'p-2'} rounded-lg transition-normal hover-lift-scale click-shrink touch-manipulation ${
+                listView === 'calendar'
+                  ? 'text-blue-500 bg-blue-500/10'
+                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-500/10'
+              }`}
+              style={{
+                minWidth: isMobile ? '44px' : 'auto',
+                minHeight: isMobile ? '44px' : 'auto',
+              }}
+              title="Календарь"
+              aria-label="Вид календарём"
+              data-icon-id="view-calendar"
+            >
+              <Calendar className={isMobile ? 'w-5 h-5' : 'w-4 h-4'} />
+            </button>
           </div>
         </div>
 
@@ -234,7 +253,7 @@ export function EntriesListHeader({
                   Таймер
                 </span>
               </IconButton>
-              
+
               {/* ✅ ИНТЕГРАЦИЯ: Индикатор одновременной работы таймеров */}
               {timer.isRunning && pomodoroIsRunning && (
                 <div className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-yellow-100 dark:bg-yellow-900/30 border border-yellow-300 dark:border-yellow-700 animate-pulse">
@@ -253,7 +272,7 @@ export function EntriesListHeader({
             <IconButton
               aria-label="Импорт данных"
               onClick={onImport}
-              className="glass-button h-10 min-w-[2.5rem] px-2.5 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg overflow-hidden group relative transition-normal hover-lift-scale click-shrink flex items-center justify-center"
+              className="glass-button h-10 min-w-[2.5rem] px-2.5 rounded-lg overflow-hidden group relative transition-normal hover-lift-scale click-shrink flex items-center justify-center"
               title="Импорт из JSON"
               style={{ width: 'auto' }}
               iconId="header-import"
@@ -268,7 +287,7 @@ export function EntriesListHeader({
             <IconButton
               aria-label="Экспорт данных"
               onClick={onExport}
-              className="glass-button h-10 min-w-[2.5rem] px-2.5 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg overflow-hidden group relative transition-normal hover-lift-scale click-shrink flex items-center justify-center"
+              className="glass-button h-10 min-w-[2.5rem] px-2.5 rounded-lg overflow-hidden group relative transition-normal hover-lift-scale click-shrink flex items-center justify-center"
               title="Экспорт в JSON"
               style={{ width: 'auto' }}
               iconId="header-export"
@@ -283,7 +302,7 @@ export function EntriesListHeader({
             <IconButton
               aria-label="Управление категориями"
               onClick={onOpenCategories}
-              className="glass-button h-10 min-w-[2.5rem] px-2.5 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg overflow-hidden group relative transition-normal hover-lift-scale click-shrink flex items-center justify-center"
+              className="glass-button h-10 min-w-[2.5rem] px-2.5 rounded-lg overflow-hidden group relative transition-normal hover-lift-scale click-shrink flex items-center justify-center"
               title="Управление категориями"
               style={{ width: 'auto' }}
               iconId="header-categories"
@@ -298,7 +317,7 @@ export function EntriesListHeader({
             <IconButton
               aria-label="Управление резервными копиями"
               onClick={onOpenBackups}
-              className="glass-button h-10 min-w-[2.5rem] px-2.5 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg overflow-hidden group relative transition-normal hover-lift-scale click-shrink flex items-center justify-center"
+              className="glass-button h-10 min-w-[2.5rem] px-2.5 rounded-lg overflow-hidden group relative transition-normal hover-lift-scale click-shrink flex items-center justify-center"
               title="Управление резервными копиями"
               style={{ width: 'auto' }}
               iconId="header-backups"

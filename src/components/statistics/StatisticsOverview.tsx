@@ -24,11 +24,11 @@ export const StatisticsOverview = memo(() => {
   const [isExpanded, setIsExpanded] = useState(false) // По умолчанию свернуто
   const headerRef = useRef(null)
   const contentRef = useRef(null)
-  
+
   // Данные для Productivity Score
   const entries = useEntries()
   const dailyGoal = useDailyGoal()
-  
+
   const scoreData = useMemo(() => {
     if (entries.length === 0) {
       return {
@@ -43,10 +43,10 @@ export const StatisticsOverview = memo(() => {
     }
     return calculateProductivityScore(entries, dailyGoal)
   }, [entries, dailyGoal])
-  
+
   const { score, factors } = scoreData
   const scoreColor = getScoreColor(score)
-  
+
   // Сокращенные названия факторов
   const factorShortLabels = {
     goalCompletion: 'Цели',
@@ -54,7 +54,7 @@ export const StatisticsOverview = memo(() => {
     focusTime: 'Фокус',
     breakBalance: 'Перерывы',
   }
-  
+
   const factorDescriptions = {
     goalCompletion:
       'Выполнение дневных целей по заработку. Оценивается средний процент выполнения цели за все дни с записями. Максимум 40 баллов.',
@@ -126,7 +126,7 @@ export const StatisticsOverview = memo(() => {
   }, [isExitingContent])
 
   return (
-    <div className="mb-6 relative z-10 -mt-6">
+    <div className="mb-6 relative z-10">
       {/* Заголовок секции с кнопкой сворачивания */}
       <div
         ref={headerRef}
@@ -143,7 +143,7 @@ export const StatisticsOverview = memo(() => {
               Статистика и аналитика
             </h2>
           </div>
-          
+
           {/* Компактный Productivity Score - занимает все свободное пространство */}
           <div className="flex items-center gap-2 flex-1 justify-between group">
             <SimpleTooltip
@@ -180,19 +180,19 @@ export const StatisticsOverview = memo(() => {
                 )
               })()}
             </SimpleTooltip>
-            
+
             {/* Разделитель */}
             <div className="w-px h-6 bg-gray-300 dark:bg-gray-600 flex-shrink-0"></div>
-            
+
             {/* Факторы с названиями */}
             <div className="flex items-center gap-2 flex-1 justify-around">
               {Object.keys(factors).map((factorKey, index) => {
                 const factor = factors[factorKey]
                 const shortLabel = factorShortLabels[factorKey]
-                const percentage = factor.percentage
+                const {percentage} = factor
                 const progressColor = getFactorProgressColor(percentage)
                 const textColor = getFactorTextColor(percentage)
-                
+
                 // Определяем цвет hover эффектов на основе progressColor
                 const getFactorHoverBorder = () => {
                   if (progressColor.includes('green')) return 'hover:border-green-500 dark:hover:border-green-400'
@@ -212,7 +212,7 @@ export const StatisticsOverview = memo(() => {
                   if (progressColor.includes('red')) return 'group-hover:shadow-lg group-hover:shadow-red-500/50'
                   return 'group-hover:shadow-lg group-hover:shadow-gray-500/50'
                 }
-                
+
                 return (
                   <SimpleTooltip
                     key={factorKey}
@@ -245,7 +245,7 @@ export const StatisticsOverview = memo(() => {
               })}
             </div>
           </div>
-          
+
           <button
             onClick={handleToggleExpanded}
             className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-normal hover-lift-scale click-shrink focus:outline-none focus:ring-2 focus:ring-blue-500 flex-shrink-0"
@@ -289,7 +289,7 @@ export const StatisticsOverview = memo(() => {
               )}
             </button>
           </div>
-          
+
           {/* Productivity Score как отдельный блок на mobile */}
           <div className="glass-effect rounded-xl p-3">
             <div className="flex flex-col gap-3">
@@ -323,10 +323,10 @@ export const StatisticsOverview = memo(() => {
                 {Object.keys(factors).map((factorKey, index) => {
                   const factor = factors[factorKey]
                   const shortLabel = factorShortLabels[factorKey]
-                  const percentage = factor.percentage
+                  const {percentage} = factor
                   const progressColor = getFactorProgressColor(percentage)
                   const textColor = getFactorTextColor(percentage)
-                  
+
                   return (
                     <SimpleTooltip
                       key={factorKey}

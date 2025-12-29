@@ -83,7 +83,7 @@ export function InsightsPanel({ shouldAnimate = true }) {
         setIsDataLoaded(true)
       }
     }, 200)
-    
+
     return () => clearTimeout(timer)
   }, [entries]) // ✅ ИСПРАВЛЕНО: Зависимость от entries - реагируем на изменения данных
 

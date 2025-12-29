@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TimeTracker - Твой Поток</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="variant-6-flow-story.css">
+</head>
+<body>
+    <div class="aurora-background">
+        <div class="aurora-blob blob-1"></div>
+        <div class="aurora-blob blob-2"></div>
+        <div class="aurora-blob blob-3"></div>
+    </div>
+
+    <!-- Canvas for Confetti -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <nav class="glass-nav">
+        <div class="logo">TimeTracker</div>
+        <div class="nav-links">
+            <a href="#features">Возможности</a>
+            <a href="#story">Как это работает</a>
+            <a href="#pricing">Цены</a>
+        </div>
+        <button class="btn-primary-glass">Начать бесплатно</button>
+    </nav>
+
+    <main>
+        <!-- Section 1: Zen Hero -->
+        <section class="hero-section" id="hero">
+            <div class="hero-content">
+                <h1 class="fade-in-up">Управляй временем.<br>Поймай свой <span class="gradient-text">Поток</span>.</h1>
+                <p class="fade-in-up delay-1">Тайм-трекер для творческих людей. Никаких отвлечений, только фокус.</p>
+                
+                <div class="mini-timer-container fade-in-up delay-2">
+                    <div class="mini-timer" id="heroTimer">
+                        <div class="timer-display">00:00:00</div>
+                        <button class="timer-btn" id="heroTimerBtn">
+                            <span class="icon-play">▶</span> Фокус
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Scrollytelling Story -->
+        <section class="story-section" id="story">
+            <div class="story-track">
+                <div class="story-step" id="step-morning">
+                    <div class="story-content left">
+                        <span class="time-badge">09:00</span>
+                        <h2>Режим Погружения</h2>
+                        <p>Начни день с ясности. Один клик, чтобы войти в состояние потока. Отвлечения исчезают.</p>
+                        <p class="hint-text">💡 Кликни на карточку задачи!</p>
+                    </div>
+                    <div class="story-visual right">
+                        <div class="glass-card task-card floating" id="interactive-task-card">
+                            <div class="task-header">
+                                <div class="task-icon">🎨</div>
+                                <span class="task-title">Design System</span>
+                                <div class="task-check-icon">✓</div>
+                            </div>
+                            <div class="task-progress">
+                                <div class="progress-bar"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="story-step" id="step-afternoon">
+                    <div class="story-content right">
+                        <span class="time-badge">14:00</span>
+                        <h2>Смена Контекста</h2>
+                        <p>Легко переключайся между проектами. TimeTracker адаптируется к твоему ритму.</p>
+                        <p class="hint-text">💡 Попробуй переключить проект!</p>
+                    </div>
+                    <div class="story-visual left">
+                        <div class="glass-card project-switcher" id="interactive-project-switcher">
+                            <div class="project-item active" data-color="blue">
+                                <span class="dot blue"></span> Проект A
+                            </div>
+                            <div class="project-item" data-color="purple">
+                                <span class="dot purple"></span> Проект B
+                            </div>
+                            <div class="project-item" data-color="green">
+                                <span class="dot green"></span> Проект C
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="story-step" id="step-evening">
+                    <div class="story-content left">
+                        <span class="time-badge">18:00</span>
+                        <h2>Итоги Дня</h2>
+                        <p>Посмотри, куда ушло время. Визуализируй продуктивность без чувства вины.</p>
+                    </div>
+                    <div class="story-visual right">
+                        <div class="glass-card stats-preview tilt-card">
+                            <div class="stat-row">
+                                <span>Время в фокусе</span>
+                                <strong>6ч 24м</strong>
+                            </div>
+                            <div class="stat-chart">
+                                <!-- Simple CSS Chart bars -->
+                                <div class="bar" style="height: 40%"></div>
+                                <div class="bar" style="height: 70%"></div>
+                                <div class="bar" style="height: 50%"></div>
+                                <div class="bar active" style="height: 90%"></div>
+                                <div class="bar" style="height: 60%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Features Bento Grid -->
+        <section class="features-section" id="features">
+            <h2 class="section-title">Всё что нужно. <br>Ничего лишнего.</h2>
+            <div class="bento-grid">
+                <div class="bento-card large glass-card tilt-card">
+                    <h3>NDA Режим</h3>
+                    <p>Размывай чувствительные данные одним кликом для демонстрации экрана.</p>
+                    <div class="feature-visual blur-demo">Конфиденциальные Данные</div>
+                </div>
+                <div class="bento-card glass-card tilt-card">
+                    <h3>Умные Отчеты</h3>
+                    <p>Красивые PDF и Excel отчеты для клиентов.</p>
+                </div>
+                <div class="bento-card glass-card tilt-card">
+                    <h3>Командный Синк</h3>
+                    <p>Смотри, кто над чем работает в реальном времени.</p>
+                </div>
+                <div class="bento-card large glass-card tilt-card">
+                    <h3>Кроссплатформенность</h3>
+                    <p>Mac, Windows, Linux, Mobile. Всегда синхронизировано.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Footer -->
+        <footer class="glass-footer">
+            <h2>Готов вернуть своë время?</h2>
+            <button class="btn-primary-glass large">Начать бесплатно</button>
+            <p class="copyright">© 2025 TimeTracker. Создано для потока.</p>
+        </footer>
+    </main>
+
+    <script src="variant-6-flow-story.js"></script>
+</body>
+</html>

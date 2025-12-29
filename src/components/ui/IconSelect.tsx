@@ -35,6 +35,7 @@ import {
   Filter,
 } from '../../utils/icons'
 import { Icon } from '@iconify/react'
+import { useModal, useAnimationState } from '../../hooks'
 import type { IconSelectProps } from '../../types'
 
 /**
@@ -45,21 +46,23 @@ import type { IconSelectProps } from '../../types'
  * - Поиск по Iconify API (100,000+ иконок)
  */
 export function IconSelect({ value, onChange, color = '#3B82F6' }: IconSelectProps) {
-  const [isOpen, setIsOpen] = useState(false)
-  const [shouldMount, setShouldMount] = useState(false)
-  const [isAnimating, setIsAnimating] = useState(false)
-  const [isExiting, setIsExiting] = useState(false)
+  const { isOpen, toggle, close } = useModal(false)
+  const { shouldMount, isAnimating, isExiting } = useAnimationState({
+    isOpen,
+    duration: 200,
+  })
+
   const [position, setPosition] = useState({ top: 0, left: 0, width: 0 })
-  const selectRef = useRef(null)
-  const dropdownRef = useRef(null)
-  const searchInputRef = useRef(null)
+  const selectRef = useRef<HTMLDivElement>(null)
+  const dropdownRef = useRef<HTMLDivElement>(null)
+  const searchInputRef = useRef<HTMLInputElement>(null)
 
   // Состояния для поиска по Iconify API
   const [searchQuery, setSearchQuery] = useState('')
   const [searchResults, setSearchResults] = useState([])
   const [isSearching, setIsSearching] = useState(false)
-  const searchTimeoutRef = useRef(null)
-  const abortControllerRef = useRef(null)
+  const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const abortControllerRef = useRef<AbortController | null>(null)
 
   // Используем useTransition для отложенного обновления UI при поиске
   const [isPending, startTransition] = useTransition()
@@ -256,32 +259,8 @@ export function IconSelect({ value, onChange, color = '#3B82F6' }: IconSelectPro
         )
       : selectedIconDisplay.component || Folder
 
-  // Логика открытия
-  useEffect(() => {
-    if (isOpen) {
-      setShouldMount(true)
-      setIsExiting(false)
-      const rafId = requestAnimationFrame(() => {
-        setIsAnimating(true)
-      })
-      return () => cancelAnimationFrame(rafId)
-    }
-  }, [isOpen])
-
-  // Логика закрытия
-  useEffect(() => {
-    if (!isOpen && shouldMount) {
-      setIsExiting(true)
-      setIsAnimating(false)
-      const timer = setTimeout(() => {
-        setShouldMount(false)
-        setIsExiting(false)
-        setSearchQuery('')
-        setSearchResults([])
-      }, 200)
-      return () => clearTimeout(timer)
-    }
-  }, [isOpen, shouldMount])
+  // Логика открытия вынесена в useAnimationState
+  // Логика закрытия тоже там
 
   // Позиционирование dropdown
   useEffect(() => {
@@ -293,7 +272,7 @@ export function IconSelect({ value, onChange, color = '#3B82F6' }: IconSelectPro
         width: rect.width,
       })
     }
-  }, [shouldMount, isOpen])
+  }, [shouldMount])
 
   // Фокус на поле поиска при открытии dropdown
   useEffect(() => {
@@ -312,22 +291,22 @@ export function IconSelect({ value, onChange, color = '#3B82F6' }: IconSelectPro
     const handleClickOutside = e => {
       if (
         selectRef.current &&
-        !selectRef.current.contains(e.target) &&
+        !selectRef.current.contains(e.target as Node) &&
         dropdownRef.current &&
-        !dropdownRef.current.contains(e.target)
+        !dropdownRef.current.contains(e.target as Node)
       ) {
-        setIsOpen(false)
+        close()
       }
     }
 
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [isOpen])
+  }, [isOpen, close])
 
   const handleSelect = useCallback(
     iconName => {
       onChange(iconName)
-      setIsOpen(false)
+      close()
       setSearchQuery('')
       setSearchResults([])
     },
@@ -347,7 +326,7 @@ export function IconSelect({ value, onChange, color = '#3B82F6' }: IconSelectPro
       <div ref={selectRef} className="relative">
         <button
           type="button"
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={toggle}
           className="flex-1 px-2 py-1.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 flex items-center gap-1.5 hover:border-blue-500 transition-colors"
         >
           {selectedIconDisplay.type === 'iconify' ? (
@@ -409,7 +388,7 @@ export function IconSelect({ value, onChange, color = '#3B82F6' }: IconSelectPro
                   maxLength={50}
                   onKeyDown={e => {
                     if (e.key === 'Escape') {
-                      setIsOpen(false)
+                      close()
                     }
                   }}
                 />
@@ -476,8 +455,16 @@ export function IconSelect({ value, onChange, color = '#3B82F6' }: IconSelectPro
   )
 }
 
+interface IconButtonProps {
+  option: any // Using specific type if available, otherwise any for now to resolve error
+  isSelected: boolean
+  isIconify: boolean
+  color: string
+  onSelect: (name: string) => void
+}
+
 // Мемоизированный компонент иконки
-const IconButton = memo(({ option, isSelected, isIconify, color, onSelect }) => {
+const IconButton = memo(({ option, isSelected, isIconify, color, onSelect }: IconButtonProps) => {
   return (
     <button
       type="button"

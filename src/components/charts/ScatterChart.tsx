@@ -71,7 +71,7 @@ export function HoursVsEarningsChart({ entries }) {
 
     // Группируем записи по дате (каждая точка = один день)
     const dailyData = entries.reduce((acc, entry) => {
-      const date = entry.date
+      const {date} = entry
 
       if (!acc[date]) {
         acc[date] = { date, hours: 0, earned: 0 }

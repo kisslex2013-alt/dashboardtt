@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Tracker Dashboard - Аналитика рабочего времени</title>
+    <meta name="description" content="Современный дашборд для учёта рабочего времени с автоматическим расчётом заработка и детальной аналитикой">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: rgba(255,255,255,0.03);
+            --border-subtle: rgba(255,255,255,0.06);
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-purple: #8b5cf6;
+            --accent-orange: #f59e0b;
+        }
+        
+        html {
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Scroll Snap Sections */
+        .snap-section {
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+            min-height: 100vh;
+        }
+        
+        /* Scroll Animation Base */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .stagger-1 { transition-delay: 0.1s; }
+        .stagger-2 { transition-delay: 0.2s; }
+        .stagger-3 { transition-delay: 0.3s; }
+        .stagger-4 { transition-delay: 0.4s; }
+        .stagger-5 { transition-delay: 0.5s; }
+        
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 16px 0;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        
+        .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .logo-icon {
+            font-size: 24px;
+        }
+        
+        .nav-btn {
+            background: var(--accent-blue);
+            color: white;
+            padding: 10px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+        
+        .nav-btn:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 100px 0 60px;
+        }
+        
+        .hero-content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            color: var(--accent-blue);
+            margin-bottom: 24px;
+        }
+        
+        .hero h1 {
+            font-size: clamp(36px, 6vw, 56px);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+        
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--accent-blue), #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 32px;
+        }
+        
+        .hero-cta {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn-primary {
+            background: var(--accent-blue);
+            color: white;
+            padding: 14px 32px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-secondary);
+            padding: 14px 32px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            border: 1px solid var(--border-subtle);
+            transition: all 0.2s ease;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.05);
+            color: var(--text-primary);
+            border-color: rgba(255,255,255,0.15);
+        }
+        
+        /* Bento Grid */
+        .bento-section {
+            padding: 40px 0;
+        }
+        
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            grid-template-rows: auto;
+            gap: 16px;
+        }
+        
+        .bento-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .bento-card:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.1);
+            transform: translateY(-2px);
+        }
+        
+        /* Bento Card Sizes */
+        .bento-lg {
+            grid-column: span 8;
+        }
+        
+        .bento-md {
+            grid-column: span 4;
+        }
+        
+        .bento-sm {
+            grid-column: span 3;
+        }
+        
+        .bento-full {
+            grid-column: span 12;
+        }
+        
+        /* Metric Cards */
+        .metric-bento {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 140px;
+        }
+        
+        .metric-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+        
+        .metric-value {
+            font-size: 32px;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+        
+        .metric-value.blue { color: var(--accent-blue); }
+        .metric-value.green { color: var(--accent-green); }
+        .metric-value.purple { color: var(--accent-purple); }
+        .metric-value.orange { color: var(--accent-orange); }
+        
+        .metric-trend {
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .trend-up { color: var(--accent-green); }
+        .trend-down { color: #ef4444; }
+        
+        /* Demo Preview Card */
+        .demo-preview {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
+            min-height: 280px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .demo-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .demo-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+        
+        .demo-badge {
+            font-size: 11px;
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--accent-green);
+            padding: 4px 10px;
+            border-radius: 12px;
+        }
+        
+        .demo-chart {
+            flex: 1;
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            padding-top: 20px;
+        }
+        
+        .chart-bar {
+            flex: 1;
+            background: linear-gradient(180deg, var(--accent-blue), rgba(59, 130, 246, 0.3));
+            border-radius: 6px 6px 0 0;
+            min-height: 20px;
+            transition: height 0.8s ease;
+        }
+        
+        /* Insights Grid */
+        .insights-bento {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+        }
+        
+        .insight-mini {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 16px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .insight-mini:hover {
+            background: rgba(255,255,255,0.04);
+            transform: translateY(-2px);
+        }
+        
+        .insight-mini.glow-blue:hover { box-shadow: 0 8px 20px rgba(59, 130, 246, 0.2); }
+        .insight-mini.glow-purple:hover { box-shadow: 0 8px 20px rgba(139, 92, 246, 0.2); }
+        .insight-mini.glow-green:hover { box-shadow: 0 8px 20px rgba(16, 185, 129, 0.2); }
+        .insight-mini.glow-orange:hover { box-shadow: 0 8px 20px rgba(245, 158, 11, 0.2); }
+        
+        .insight-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+        
+        .insight-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            margin-bottom: 4px;
+        }
+        
+        .insight-value {
+            font-size: 14px;
+            font-weight: 700;
+        }
+        
+        /* Features Section */
+        .features-section {
+            padding: 60px 0;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+        
+        .section-title {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+        
+        .section-subtitle {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+        
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 28px;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(59, 130, 246, 0.3);
+            transform: translateY(-3px);
+        }
+        
+        .feature-icon {
+            font-size: 28px;
+            margin-bottom: 16px;
+        }
+        
+        .feature-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .feature-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .cta-card {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 24px;
+            padding: 60px 40px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .cta-title {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+        
+        .cta-subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+        
+        /* Footer */
+        footer {
+            padding: 40px 0;
+            border-top: 1px solid var(--border-subtle);
+        }
+        
+        .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .footer-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        .tech-badges {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .tech-badge {
+            font-size: 12px;
+            padding: 6px 12px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border-subtle);
+            border-radius: 6px;
+            color: var(--text-secondary);
+        }
+        
+        /* Interactive Timer Demo */
+        .timer-demo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 200px;
+        }
+        
+        .timer-display {
+            font-size: 48px;
+            font-weight: 800;
+            font-variant-numeric: tabular-nums;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+        }
+        
+        .timer-controls {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .timer-btn {
+            padding: 12px 24px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+        
+        .timer-btn-start {
+            background: var(--accent-green);
+            color: white;
+        }
+        
+        .timer-btn-start:hover {
+            background: #059669;
+            transform: translateY(-1px);
+        }
+        
+        .timer-btn-stop {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .timer-btn-stop:hover {
+            background: #dc2626;
+            transform: translateY(-1px);
+        }
+        
+        .timer-btn-reset {
+            background: rgba(255,255,255,0.1);
+            color: var(--text-secondary);
+        }
+        
+        .timer-btn-reset:hover {
+            background: rgba(255,255,255,0.15);
+            color: var(--text-primary);
+        }
+        
+        .timer-earning {
+            margin-top: 16px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        .timer-earning span {
+            color: var(--accent-green);
+            font-weight: 700;
+        }
+        
+        /* View Modes Demo */
+        .view-modes-demo {
+            min-height: 220px;
+        }
+        
+        .view-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .view-tab {
+            padding: 8px 16px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+        
+        .view-tab:hover {
+            background: rgba(255,255,255,0.08);
+            color: var(--text-primary);
+        }
+        
+        .view-tab.active {
+            background: var(--accent-blue);
+            border-color: var(--accent-blue);
+            color: white;
+        }
+        
+        .view-content {
+            display: none;
+            animation: fadeInUp 0.3s ease;
+        }
+        
+        .view-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* List View */
+        .list-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            transition: all 0.2s ease;
+        }
+        
+        .list-item:hover {
+            background: rgba(255,255,255,0.05);
+        }
+        
+        .list-item-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .list-item-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+        
+        .list-item-time {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        .list-item-amount {
+            font-weight: 600;
+            color: var(--accent-green);
+        }
+        
+        /* Grid View */
+        .grid-view {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+        
+        .grid-item {
+            background: rgba(255,255,255,0.02);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+        
+        .grid-item:hover {
+            background: rgba(255,255,255,0.05);
+            transform: scale(1.03);
+        }
+        
+        .grid-item-day {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+        
+        .grid-item-amount {
+            font-size: 14px;
+            font-weight: 700;
+        }
+        
+        /* Timeline View */
+        .timeline-view {
+            position: relative;
+            padding-left: 20px;
+        }
+        
+        .timeline-view::before {
+            content: '';
+            position: absolute;
+            left: 4px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--accent-blue), var(--accent-purple));
+            border-radius: 1px;
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding: 8px 0 8px 16px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -16px;
+            top: 14px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--accent-blue);
+        }
+        
+        .timeline-time {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+        
+        .timeline-desc {
+            font-size: 13px;
+            margin-top: 2px;
+        }
+        
+        /* Plan/Fact Demo */
+        .plan-fact-demo {
+            min-height: 180px;
+        }
+        
+        .plan-fact-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .plan-fact-value {
+            font-size: 24px;
+            font-weight: 800;
+        }
+        
+        .plan-fact-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+        
+        .progress-bar-container {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            height: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 10px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-green));
+            transition: width 1.5s ease;
+            position: relative;
+        }
+        
+        .progress-bar-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .progress-label {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+            font-weight: 700;
+            color: white;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        .plan-fact-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 16px;
+        }
+        
+        .pf-stat {
+            text-align: center;
+        }
+        
+        .pf-stat-value {
+            font-size: 18px;
+            font-weight: 700;
+        }
+        
+        .pf-stat-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .bento-lg { grid-column: span 12; }
+            .bento-md { grid-column: span 6; }
+            .bento-sm { grid-column: span 6; }
+            .features-grid { grid-template-columns: repeat(2, 1fr); }
+            .insights-bento { grid-template-columns: repeat(3, 1fr); }
+        }
+        
+        @media (max-width: 768px) {
+            .bento-md { grid-column: span 12; }
+            .bento-sm { grid-column: span 12; }
+            .features-grid { grid-template-columns: 1fr; }
+            .insights-bento { grid-template-columns: repeat(2, 1fr); }
+            .hero h1 { font-size: 32px; }
+            .hero-subtitle { font-size: 16px; }
+            .footer-inner { flex-direction: column; gap: 20px; text-align: center; }
+        }
+        
+        @media (max-width: 480px) {
+            .insights-bento { grid-template-columns: 1fr; }
+            .hero-cta { flex-direction: column; }
+            .btn-primary, .btn-secondary { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-inner">
+            <div class="logo">
+                <span class="logo-icon">⏱️</span>
+                <span>Time Tracker</span>
+            </div>
+            <a href="/" class="nav-btn">Открыть Dashboard</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero -->
+        <section class="hero snap-section">
+            <div class="container">
+                <div class="hero-content animate-on-scroll">
+                    <div class="hero-badge">
+                        <span>✨</span>
+                        <span>Бесплатно • Локально • Приватно</span>
+                    </div>
+                    <h1>Аналитика рабочего времени <span>нового поколения</span></h1>
+                    <p class="hero-subtitle">Отслеживайте время, считайте заработок и получайте инсайты — всё в одном современном дашборде</p>
+                    <div class="hero-cta">
+                        <a href="/" class="btn-primary">
+                            <span>Начать работу</span>
+                            <span>→</span>
+                        </a>
+                        <a href="#features" class="btn-secondary">Возможности</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bento Grid -->
+        <section class="bento-section snap-section">
+            <div class="container">
+                <div class="bento-grid">
+                    <!-- Metrics Row -->
+                    <div class="bento-card bento-sm metric-bento animate-on-scroll stagger-1">
+                        <div class="metric-label">Отработано</div>
+                        <div class="metric-value blue" id="hours-val">1 210</div>
+                        <div class="metric-trend trend-up">↑ часов за всё время</div>
+                    </div>
+                    
+                    <div class="bento-card bento-sm metric-bento animate-on-scroll stagger-2">
+                        <div class="metric-label">Заработано</div>
+                        <div class="metric-value green" id="earned-val">839 189 ₽</div>
+                        <div class="metric-trend trend-up">↑ +2.3% к прошлому месяцу</div>
+                    </div>
+                    
+                    <div class="bento-card bento-sm metric-bento animate-on-scroll stagger-3">
+                        <div class="metric-label">Средняя ставка</div>
+                        <div class="metric-value purple">859 ₽/ч</div>
+                        <div class="metric-trend">— стабильно</div>
+                    </div>
+                    
+                    <div class="bento-card bento-sm metric-bento animate-on-scroll stagger-4">
+                        <div class="metric-label">Стоимость</div>
+                        <div class="metric-value orange">0 ₽</div>
+                        <div class="metric-trend">Навсегда бесплатно</div>
+                    </div>
+                    
+                    <!-- Demo Preview -->
+                    <div class="bento-card bento-lg demo-preview animate-on-scroll">
+                        <div class="demo-header">
+                            <span class="demo-title">📊 Распределение по категориям</span>
+                            <span class="demo-badge">Live Demo</span>
+                        </div>
+                        <div class="demo-chart" id="demo-chart">
+                            <div class="chart-bar" style="height: 85%;"></div>
+                            <div class="chart-bar" style="height: 45%;"></div>
+                            <div class="chart-bar" style="height: 62%;"></div>
+                            <div class="chart-bar" style="height: 38%;"></div>
+                            <div class="chart-bar" style="height: 55%;"></div>
+                            <div class="chart-bar" style="height: 72%;"></div>
+                            <div class="chart-bar" style="height: 48%;"></div>
+                            <div class="chart-bar" style="height: 65%;"></div>
+                            <div class="chart-bar" style="height: 42%;"></div>
+                            <div class="chart-bar" style="height: 58%;"></div>
+                            <div class="chart-bar" style="height: 35%;"></div>
+                            <div class="chart-bar" style="height: 78%;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="bento-card bento-md animate-on-scroll">
+                        <div class="demo-header">
+                            <span class="demo-title">💡 Умные инсайты</span>
+                        </div>
+                        <div style="margin-top: 16px;">
+                            <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border-subtle);">
+                                <span style="color: var(--text-secondary); font-size: 13px;">Лучший день</span>
+                                <span style="font-weight: 600; color: var(--accent-blue);">Чт — 3 909₽</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border-subtle);">
+                                <span style="color: var(--text-secondary); font-size: 13px;">Пик активности</span>
+                                <span style="font-weight: 600; color: var(--accent-purple);">19:00-20:00</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border-subtle);">
+                                <span style="color: var(--text-secondary); font-size: 13px;">Тренд</span>
+                                <span style="font-weight: 600; color: var(--accent-green);">↑ +12%</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 12px 0;">
+                                <span style="color: var(--text-secondary); font-size: 13px;">Макс. сессия</span>
+                                <span style="font-weight: 600; color: var(--accent-orange);">12ч (5 938₽)</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Interactive Timer Demo -->
+                    <div class="bento-card bento-md timer-demo animate-on-scroll">
+                        <div class="demo-header" style="width: 100%; margin-bottom: 16px;">
+                            <span class="demo-title">⏱️ Живой таймер</span>
+                            <span class="demo-badge">Попробуй!</span>
+                        </div>
+                        <div class="timer-display" id="timer-display">00:00:00</div>
+                        <div class="timer-controls">
+                            <button class="timer-btn timer-btn-start" id="timer-start">▶ Старт</button>
+                            <button class="timer-btn timer-btn-stop" id="timer-stop" style="display: none;">⏸ Стоп</button>
+                            <button class="timer-btn timer-btn-reset" id="timer-reset">↺ Сброс</button>
+                        </div>
+                        <div class="timer-earning">Заработано: <span id="timer-earned">0 ₽</span></div>
+                    </div>
+                    
+                    <!-- View Modes Demo -->
+                    <div class="bento-card bento-lg view-modes-demo animate-on-scroll">
+                        <div class="demo-header">
+                            <span class="demo-title">👁️ Три режима отображения</span>
+                        </div>
+                        <div class="view-tabs">
+                            <button class="view-tab active" data-view="list">📋 Список</button>
+                            <button class="view-tab" data-view="grid">⊞ Сетка</button>
+                            <button class="view-tab" data-view="timeline">📅 Таймлайн</button>
+                        </div>
+                        
+                        <!-- List View -->
+                        <div class="view-content active" id="view-list">
+                            <div class="list-item">
+                                <div class="list-item-info">
+                                    <div class="list-item-dot" style="background: var(--accent-blue);"></div>
+                                    <span>Разработка</span>
+                                    <span class="list-item-time">4ч 30м</span>
+                                </div>
+                                <span class="list-item-amount">3 870 ₽</span>
+                            </div>
+                            <div class="list-item">
+                                <div class="list-item-info">
+                                    <div class="list-item-dot" style="background: var(--accent-purple);"></div>
+                                    <span>Дизайн</span>
+                                    <span class="list-item-time">2ч 15м</span>
+                                </div>
+                                <span class="list-item-amount">1 935 ₽</span>
+                            </div>
+                            <div class="list-item">
+                                <div class="list-item-info">
+                                    <div class="list-item-dot" style="background: var(--accent-green);"></div>
+                                    <span>Митинги</span>
+                                    <span class="list-item-time">1ч 00м</span>
+                                </div>
+                                <span class="list-item-amount">860 ₽</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Grid View -->
+                        <div class="view-content" id="view-grid">
+                            <div class="grid-view">
+                                <div class="grid-item"><div class="grid-item-day">Пн</div><div class="grid-item-amount" style="color: var(--accent-blue);">2 580 ₽</div></div>
+                                <div class="grid-item"><div class="grid-item-day">Вт</div><div class="grid-item-amount" style="color: var(--accent-green);">3 440 ₽</div></div>
+                                <div class="grid-item"><div class="grid-item-day">Ср</div><div class="grid-item-amount" style="color: var(--accent-purple);">1 720 ₽</div></div>
+                                <div class="grid-item"><div class="grid-item-day">Чт</div><div class="grid-item-amount" style="color: var(--accent-orange);">3 909 ₽</div></div>
+                                <div class="grid-item"><div class="grid-item-day">Пт</div><div class="grid-item-amount" style="color: var(--accent-blue);">2 150 ₽</div></div>
+                                <div class="grid-item"><div class="grid-item-day">Сб</div><div class="grid-item-amount" style="color: var(--text-secondary);">—</div></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Timeline View -->
+                        <div class="view-content" id="view-timeline">
+                            <div class="timeline-view">
+                                <div class="timeline-item">
+                                    <div class="timeline-time">09:00 — 12:30</div>
+                                    <div class="timeline-desc">Разработка • <span style="color: var(--accent-green);">3 010 ₽</span></div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-time">13:00 — 14:00</div>
+                                    <div class="timeline-desc">Митинг • <span style="color: var(--accent-green);">860 ₽</span></div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-time">14:30 — 18:00</div>
+                                    <div class="timeline-desc">Дизайн • <span style="color: var(--accent-green);">3 010 ₽</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Plan/Fact Demo -->
+                    <div class="bento-card bento-md plan-fact-demo animate-on-scroll">
+                        <div class="demo-header">
+                            <span class="demo-title">📊 План / Факт</span>
+                        </div>
+                        <div class="plan-fact-header">
+                            <div>
+                                <div class="plan-fact-value" style="color: var(--accent-green);" id="pf-fact">67 890 ₽</div>
+                                <div class="plan-fact-label">Заработано</div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div class="plan-fact-value" style="color: var(--text-secondary);">100 000 ₽</div>
+                                <div class="plan-fact-label">Цель</div>
+                            </div>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill" id="pf-bar" style="width: 0%;"></div>
+                            <span class="progress-label" id="pf-percent">0%</span>
+                        </div>
+                        <div class="plan-fact-stats">
+                            <div class="pf-stat">
+                                <div class="pf-stat-value" style="color: var(--accent-blue);">79ч</div>
+                                <div class="pf-stat-label">Отработано</div>
+                            </div>
+                            <div class="pf-stat">
+                                <div class="pf-stat-value" style="color: var(--accent-purple);">859 ₽/ч</div>
+                                <div class="pf-stat-label">Ставка</div>
+                            </div>
+                            <div class="pf-stat">
+                                <div class="pf-stat-value" style="color: var(--accent-orange);">14 дней</div>
+                                <div class="pf-stat-label">Осталось</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Income Calculator Demo -->
+                    <div class="bento-card bento-md animate-on-scroll" style="min-height: 200px;">
+                        <div class="demo-header">
+                            <span class="demo-title">🧮 Калькулятор дохода</span>
+                        </div>
+                        <div style="margin-top: 16px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                                <span style="color: var(--text-secondary); font-size: 13px;">Часов в неделю</span>
+                                <span style="font-weight: 700; color: var(--accent-blue); font-size: 18px;" id="calc-hours">40</span>
+                            </div>
+                            <input type="range" id="hours-slider" min="10" max="80" value="40" 
+                                style="width: 100%; height: 6px; border-radius: 3px; background: linear-gradient(90deg, var(--accent-blue) 50%, rgba(255,255,255,0.1) 50%); appearance: none; cursor: pointer; margin-bottom: 20px;">
+                            
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                                <span style="color: var(--text-secondary); font-size: 13px;">Ставка ₽/час</span>
+                                <span style="font-weight: 700; color: var(--accent-purple); font-size: 18px;" id="calc-rate">859</span>
+                            </div>
+                            <input type="range" id="rate-slider" min="300" max="3000" value="859" step="50"
+                                style="width: 100%; height: 6px; border-radius: 3px; background: linear-gradient(90deg, var(--accent-purple) 18.6%, rgba(255,255,255,0.1) 18.6%); appearance: none; cursor: pointer; margin-bottom: 24px;">
+                            
+                            <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 12px; padding: 16px; text-align: center;">
+                                <div style="font-size: 12px; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 4px;">В месяц</div>
+                                <div style="font-size: 28px; font-weight: 800; color: var(--accent-green);" id="calc-monthly">137 440 ₽</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Activity History Demo -->
+                    <div class="bento-card bento-md animate-on-scroll" style="min-height: 200px;">
+                        <div class="demo-header">
+                            <span class="demo-title">📜 История активности</span>
+                            <span class="demo-badge">Сегодня</span>
+                        </div>
+                        <div style="margin-top: 16px; display: flex; flex-direction: column; gap: 12px;">
+                            <div style="display: flex; align-items: center; gap: 16px; padding: 12px; background: rgba(16, 185, 129, 0.1); border-radius: 10px; animation: fadeInActivity 0.5s ease;">
+                                <div style="width: 40px; height: 40px; background: var(--accent-green); border-radius: 10px; display: flex; align-items: center; justify-content: center;">✓</div>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 600; font-size: 14px;">Сессия завершена</div>
+                                    <div style="color: var(--text-secondary); font-size: 12px;">Разработка • 4ч 30м • 3 870 ₽</div>
+                                </div>
+                                <div style="color: var(--text-secondary); font-size: 12px;">10:34</div>
+                            </div>
+                            
+                            <div style="display: flex; align-items: center; gap: 16px; padding: 12px; background: rgba(59, 130, 246, 0.1); border-radius: 10px;">
+                                <div style="width: 40px; height: 40px; background: var(--accent-blue); border-radius: 10px; display: flex; align-items: center; justify-content: center;">▶</div>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 600; font-size: 14px;">Таймер запущен</div>
+                                    <div style="color: var(--text-secondary); font-size: 12px;">Дизайн • активно</div>
+                                </div>
+                                <div style="color: var(--accent-blue); font-size: 12px; font-weight: 600;">сейчас</div>
+                            </div>
+                            
+                            <div style="display: flex; align-items: center; gap: 16px; padding: 12px; background: rgba(139, 92, 246, 0.1); border-radius: 10px;">
+                                <div style="width: 40px; height: 40px; background: var(--accent-purple); border-radius: 10px; display: flex; align-items: center; justify-content: center;">🎯</div>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 600; font-size: 14px;">Цель достигнута!</div>
+                                    <div style="color: var(--text-secondary); font-size: 12px;">Дневной план +15%</div>
+                                </div>
+                                <div style="color: var(--text-secondary); font-size: 12px;">09:15</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Footer (Features + CTA + Footer) -->
+        <section class="snap-section" style="min-height: 100vh; display: flex; flex-direction: column;">
+            <!-- Features -->
+            <div class="features-section" id="features" style="padding: 40px 0;">
+                <div class="container">
+                    <div class="section-header animate-on-scroll">
+                        <h2 class="section-title">Всё что нужно для учёта времени</h2>
+                        <p class="section-subtitle">Простые инструменты для сложных задач</p>
+                    </div>
+                    
+                    <div class="features-grid">
+                        <div class="feature-card animate-on-scroll stagger-1">
+                            <div class="feature-icon">⏱️</div>
+                            <h3 class="feature-title">Таймер</h3>
+                            <p class="feature-desc">Запускайте таймер одним кликом. Плавающая панель всегда под рукой.</p>
+                        </div>
+                        
+                        <div class="feature-card animate-on-scroll stagger-2">
+                            <div class="feature-icon">📊</div>
+                            <h3 class="feature-title">11 графиков</h3>
+                            <p class="feature-desc">От простых диаграмм до прогнозов заработка и календаря доходов.</p>
+                        </div>
+                        
+                        <div class="feature-card animate-on-scroll stagger-3">
+                            <div class="feature-icon">💰</div>
+                            <h3 class="feature-title">Авто-расчёт</h3>
+                            <p class="feature-desc">Система сама посчитает заработок, ставки и выполнение плана.</p>
+                        </div>
+                        
+                        <div class="feature-card animate-on-scroll stagger-4">
+                            <div class="feature-icon">📅</div>
+                            <h3 class="feature-title">Графики работы</h3>
+                            <p class="feature-desc">Сменные 2/2, 3/3, стандартный 5/2 или свой кастомный вариант.</p>
+                        </div>
+                        
+                        <div class="feature-card animate-on-scroll stagger-5">
+                            <div class="feature-icon">🔔</div>
+                            <h3 class="feature-title">Уведомления</h3>
+                            <p class="feature-desc">Звуковые напоминания и отслеживание периодов выплат.</p>
+                        </div>
+                        
+                        <div class="feature-card animate-on-scroll">
+                            <div class="feature-icon">💾</div>
+                            <h3 class="feature-title">Экспорт/Импорт</h3>
+                            <p class="feature-desc">Бэкапы в JSON, автосохранение и полная история изменений.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA -->
+            <div class="cta-section" style="padding: 40px 0; flex: 1; display: flex; align-items: center;">
+                <div class="container" style="text-align: center;">
+                    <div class="cta-card animate-on-scroll">
+                        <h2 class="cta-title">Готовы начать?</h2>
+                        <p class="cta-subtitle">Никакой регистрации. Данные хранятся только на вашем устройстве.</p>
+                        <a href="/" class="btn-primary">
+                            <span>Открыть Dashboard</span>
+                            <span>→</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Footer -->
+            <footer style="margin-top: auto;">
+                <div class="container footer-inner">
+                    <div class="footer-text">Построено на современных технологиях</div>
+                    <div class="tech-badges">
+                        <span class="tech-badge">React 18</span>
+                        <span class="tech-badge">TypeScript</span>
+                        <span class="tech-badge">Zustand</span>
+                        <span class="tech-badge">Recharts</span>
+                        <span class="tech-badge">Vite</span>
+                    </div>
+                </div>
+            </footer>
+        </section>
+    </main>
+
+    <script>
+        // Scroll Animation Observer
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+        
+        // Number Animation
+        function animateNumber(el, target, suffix = '') {
+            const duration = 1500;
+            const start = 0;
+            const startTime = performance.now();
+            
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+                const current = Math.floor(start + (target - start) * easeOut);
+                el.textContent = current.toLocaleString('ru-RU') + suffix;
+                
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                }
+            }
+            
+            requestAnimationFrame(update);
+        }
+        
+        // Animate metrics when visible
+        const metricsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const hoursEl = document.getElementById('hours-val');
+                    const earnedEl = document.getElementById('earned-val');
+                    
+                    if (hoursEl && !hoursEl.dataset.animated) {
+                        animateNumber(hoursEl, 1210, '');
+                        hoursEl.dataset.animated = 'true';
+                    }
+                    if (earnedEl && !earnedEl.dataset.animated) {
+                        animateNumber(earnedEl, 839189, ' ₽');
+                        earnedEl.dataset.animated = 'true';
+                    }
+                }
+            });
+        }, { threshold: 0.5 });
+        
+        document.querySelectorAll('.metric-bento').forEach(el => {
+            metricsObserver.observe(el);
+        });
+        
+        // Chart bar animation
+        const chartObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const bars = entry.target.querySelectorAll('.chart-bar');
+                    bars.forEach((bar, i) => {
+                        const height = bar.style.height;
+                        bar.style.height = '0%';
+                        setTimeout(() => {
+                            bar.style.height = height;
+                        }, i * 80);
+                    });
+                }
+            });
+        }, { threshold: 0.3 });
+        
+        const demoChart = document.getElementById('demo-chart');
+        if (demoChart) {
+            chartObserver.observe(demoChart);
+        }
+        
+        // ===== Interactive Timer Demo =====
+        let timerInterval = null;
+        let timerSeconds = 0;
+        const hourlyRate = 859;
+        
+        const timerDisplay = document.getElementById('timer-display');
+        const timerEarned = document.getElementById('timer-earned');
+        const timerStart = document.getElementById('timer-start');
+        const timerStop = document.getElementById('timer-stop');
+        const timerReset = document.getElementById('timer-reset');
+        
+        function formatTime(seconds) {
+            const h = Math.floor(seconds / 3600);
+            const m = Math.floor((seconds % 3600) / 60);
+            const s = seconds % 60;
+            return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        }
+        
+        function updateTimer() {
+            timerSeconds++;
+            timerDisplay.textContent = formatTime(timerSeconds);
+            const earned = Math.floor((timerSeconds / 3600) * hourlyRate);
+            timerEarned.textContent = earned.toLocaleString('ru-RU') + ' ₽';
+        }
+        
+        timerStart?.addEventListener('click', () => {
+            if (!timerInterval) {
+                timerInterval = setInterval(updateTimer, 1000);
+                timerStart.style.display = 'none';
+                timerStop.style.display = 'inline-block';
+            }
+        });
+        
+        timerStop?.addEventListener('click', () => {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+                timerStop.style.display = 'none';
+                timerStart.style.display = 'inline-block';
+            }
+        });
+        
+        timerReset?.addEventListener('click', () => {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            timerSeconds = 0;
+            timerDisplay.textContent = '00:00:00';
+            timerEarned.textContent = '0 ₽';
+            timerStop.style.display = 'none';
+            timerStart.style.display = 'inline-block';
+        });
+        
+        // ===== View Modes Switcher =====
+        const viewTabs = document.querySelectorAll('.view-tab');
+        const viewContents = document.querySelectorAll('.view-content');
+        
+        viewTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const viewId = 'view-' + tab.dataset.view;
+                
+                viewTabs.forEach(t => t.classList.remove('active'));
+                viewContents.forEach(c => c.classList.remove('active'));
+                
+                tab.classList.add('active');
+                document.getElementById(viewId)?.classList.add('active');
+            });
+        });
+        
+        // ===== Plan/Fact Progress Animation =====
+        const pfBar = document.getElementById('pf-bar');
+        const pfPercent = document.getElementById('pf-percent');
+        
+        const pfObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !pfBar.dataset.animated) {
+                    pfBar.dataset.animated = 'true';
+                    let progress = 0;
+                    const target = 67.89;
+                    const duration = 1500;
+                    const startTime = performance.now();
+                    
+                    function animatePF(currentTime) {
+                        const elapsed = currentTime - startTime;
+                        const progressRatio = Math.min(elapsed / duration, 1);
+                        const easeOut = 1 - Math.pow(1 - progressRatio, 3);
+                        progress = target * easeOut;
+                        
+                        pfBar.style.width = progress + '%';
+                        pfPercent.textContent = Math.floor(progress) + '%';
+                        
+                        if (progressRatio < 1) {
+                            requestAnimationFrame(animatePF);
+                        }
+                    }
+                    
+                    requestAnimationFrame(animatePF);
+                }
+            });
+        }, { threshold: 0.5 });
+        
+        if (pfBar) {
+            pfObserver.observe(pfBar.parentElement);
+        }
+        
+        // ===== Chart Bar Hover Effects =====
+        document.querySelectorAll('.chart-bar').forEach(bar => {
+            bar.style.cursor = 'pointer';
+            bar.addEventListener('mouseenter', () => {
+                bar.style.filter = 'brightness(1.2)';
+                bar.style.transform = 'scaleY(1.05)';
+            });
+            bar.addEventListener('mouseleave', () => {
+                bar.style.filter = 'brightness(1)';
+                bar.style.transform = 'scaleY(1)';
+            });
+        });
+        
+        // ===== Income Calculator =====
+        const hoursSlider = document.getElementById('hours-slider');
+        const rateSlider = document.getElementById('rate-slider');
+        const calcHours = document.getElementById('calc-hours');
+        const calcRate = document.getElementById('calc-rate');
+        const calcMonthly = document.getElementById('calc-monthly');
+        
+        function updateCalculator() {
+            const hours = parseInt(hoursSlider.value);
+            const rate = parseInt(rateSlider.value);
+            const monthly = hours * 4 * rate;
+            
+            calcHours.textContent = hours;
+            calcRate.textContent = rate;
+            calcMonthly.textContent = monthly.toLocaleString('ru-RU') + ' ₽';
+            
+            // Update slider track backgrounds
+            const hoursPercent = ((hours - 10) / 70) * 100;
+            const ratePercent = ((rate - 300) / 2700) * 100;
+            hoursSlider.style.background = `linear-gradient(90deg, var(--accent-blue) ${hoursPercent}%, rgba(255,255,255,0.1) ${hoursPercent}%)`;
+            rateSlider.style.background = `linear-gradient(90deg, var(--accent-purple) ${ratePercent}%, rgba(255,255,255,0.1) ${ratePercent}%)`;
+        }
+        
+        hoursSlider?.addEventListener('input', updateCalculator);
+        rateSlider?.addEventListener('input', updateCalculator);
+    </script>
+</body>
+</html>

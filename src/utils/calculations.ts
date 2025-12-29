@@ -12,26 +12,18 @@
 import { safeParseDate } from './dateHelpers'
 import { startOfDay, endOfDay } from 'date-fns'
 import { processArrayInChunks } from './yieldToMain'
-import type {
-  TimeEntry,
-  PeriodStats,
-  CategoryGrouping,
-  Efficiency,
-  Trend,
-  WeeklyProductivity,
-  OptimalTime,
-  HourlyData,
-  TimeRecommendation,
-  EarningsForecast,
-  WorkScheduleSettings,
-} from '../types'
+import type { TimeEntry } from '../types'
 
 /**
  * Рассчитывает длительность работы в часах
  */
 export function calculateDuration(startTime: string, endTime: string): string {
-  const [startHours, startMinutes] = startTime.split(':').map(Number)
-  const [endHours, endMinutes] = endTime.split(':').map(Number)
+  const startParts = startTime.split(':').map(Number)
+  const endParts = endTime.split(':').map(Number)
+  const startHours = startParts[0] ?? 0
+  const startMinutes = startParts[1] ?? 0
+  const endHours = endParts[0] ?? 0
+  const endMinutes = endParts[1] ?? 0
 
   const startTotalMinutes = startHours * 60 + startMinutes
   const endTotalMinutes = endHours * 60 + endMinutes
@@ -46,8 +38,8 @@ export function calculateDuration(startTime: string, endTime: string): string {
  * @param {number|string} rate - ставка за час в рублях
  * @returns {string} заработок с 2 десятичными знаками
  */
-export function calculateEarned(duration, rate) {
-  return (parseFloat(duration) * parseFloat(rate)).toFixed(2)
+export function calculateEarned(duration: number | string, rate: number | string): string {
+  return (parseFloat(String(duration)) * parseFloat(String(rate))).toFixed(2)
 }
 
 /**
@@ -56,7 +48,7 @@ export function calculateEarned(duration, rate) {
  * @param {number} roundTo - до скольких минут округлять (по умолчанию 15)
  * @returns {number} округленное количество минут
  */
-export function roundTime(minutes, roundTo = 15) {
+export function roundTime(minutes: number, roundTo: number = 15): number {
   return Math.round(minutes / roundTo) * roundTo
 }
 
@@ -160,7 +152,7 @@ export function groupByCategory(entries) {
         },
         100 // chunk size
       )
-      
+
       // Рассчитываем средние ставки после обработки всех записей
       Object.keys(result).forEach(category => {
         if (result[category].hours > 0) {
@@ -169,11 +161,11 @@ export function groupByCategory(entries) {
           ).toFixed(2)
         }
       })
-      
+
       return result
     })()
   }
-  
+
   // Синхронная версия для небольших массивов
   return entries.reduce((acc, entry) => {
     if (!acc[entry.category]) {
@@ -396,7 +388,7 @@ export function calculateEarningsForecast(entries, daysAhead = 7) {
   // Группируем записи по дням
   const dailyEarnings = {}
   entries.forEach(entry => {
-    const date = entry.date
+    const {date} = entry
     if (!dailyEarnings[date]) {
       dailyEarnings[date] = 0
     }

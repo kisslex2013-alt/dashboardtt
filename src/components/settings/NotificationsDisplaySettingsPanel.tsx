@@ -1,6 +1,6 @@
 /**
  * 🎯 Панель настройки отображения уведомлений
- * 
+ *
  * Позволяет пользователю настраивать, какие уведомления показывать
  * по категориям и типам (success, error, warning, info)
  */
@@ -73,8 +73,8 @@ const getDefaultCategories = (): NotificationDisplaySettings['categories'] => ({
   cleanup: { enabled: true, types: { success: true, error: true, warning: true, info: true } },
   colors: { enabled: true, types: { success: true, error: true, warning: true, info: true } },
   validation: { enabled: true, types: { success: false, error: true, warning: true, info: false } },
-  overtime: { 
-    enabled: true, 
+  overtime: {
+    enabled: true,
     types: { success: false, error: false, warning: true, info: false },
     conditions: {
       threshold: 1.0,
@@ -86,8 +86,8 @@ const getDefaultCategories = (): NotificationDisplaySettings['categories'] => ({
       minInterval: 60,
     },
   },
-  breaks: { 
-    enabled: true, 
+  breaks: {
+    enabled: true,
     types: { success: false, error: false, warning: true, info: true },
     conditions: {
       minDurationMinutes: 0,
@@ -104,7 +104,7 @@ const getDefaultCategories = (): NotificationDisplaySettings['categories'] => ({
 export function NotificationsDisplaySettingsPanel() {
   const notifications = useNotificationsSettings()
   const updateSettings = useUpdateSettings()
-  
+
   // Инициализируем настройки с дефолтными категориями, если их нет
   const displaySettings = useMemo(() => {
     if (!notifications.display) {
@@ -113,18 +113,18 @@ export function NotificationsDisplaySettingsPanel() {
         categories: getDefaultCategories(),
       }
     }
-    
+
     // Убеждаемся, что все категории инициализированы
     const defaultCategories = getDefaultCategories()
     const categories = { ...defaultCategories }
-    
+
     // Заполняем существующие категории из store
     Object.keys(defaultCategories).forEach(key => {
       if (notifications.display?.categories?.[key]) {
         categories[key] = notifications.display.categories[key]
       }
     })
-    
+
     return {
       enabled: notifications.display.enabled ?? true,
       categories,

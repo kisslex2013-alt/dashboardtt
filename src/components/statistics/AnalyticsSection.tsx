@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useMemo, useCallback, memo } from 'react'
-import { parseISO, startOfDay } from 'date-fns'
+import { parseISO, startOfDay, format } from 'date-fns'
 import { ChevronDown as ChevronDownIcon, ChevronUp, BarChart3, Pin, Settings } from '../../utils/icons'
 import { CategoryDistribution } from '../charts/CategoryDistribution'
 import { WeekdayAnalysisChart } from '../charts/WeekdayAnalysisChart'
@@ -12,6 +12,7 @@ import { ForecastChart } from '../charts/ForecastChart'
 import { CalendarHeatmap } from '../charts/CalendarHeatmap'
 import { CategoryEfficiencyChart } from '../charts/CategoryEfficiencyChart'
 import { CombinedChart } from '../charts/CombinedChart'
+import { CustomDatePicker } from '../ui/CustomDatePicker'
 import {
   useDefaultAnalyticsFilter,
   useSetDefaultAnalyticsFilter,
@@ -178,8 +179,14 @@ const AnalyticsSectionComponent = memo(() => {
   const [isAnimatingFilterDropdown, setIsAnimatingFilterDropdown] = useState(false)
   const [isExitingFilterDropdown, setIsExitingFilterDropdown] = useState(false)
   // ИСПРАВЛЕНО: Убраны состояния позиции - больше не нужны при absolute позиционировании
-  const dropdownRef = useRef(null)
-  const buttonRef = useRef(null)
+  const dropdownRef = useRef<HTMLDivElement>(null)
+  const buttonRef = useRef<HTMLButtonElement>(null)
+
+  // Refs и состояния для кастомных date pickers
+  const startDateInputRef = useRef<HTMLInputElement>(null)
+  const endDateInputRef = useRef<HTMLInputElement>(null)
+  const [isStartDatePickerOpen, setIsStartDatePickerOpen] = useState(false)
+  const [isEndDatePickerOpen, setIsEndDatePickerOpen] = useState(false)
 
   // Логика открытия visibility menu
   // ИСПРАВЛЕНО: упрощена логика - убрана необходимость вычисления позиции (absolute позиционирование)
@@ -794,26 +801,64 @@ const AnalyticsSectionComponent = memo(() => {
               <div className="flex-1">
                 <label className="block text-sm font-medium mb-1">С даты:</label>
                 <input
-                  type="date"
-                  value={customDateRange.start}
-                  onChange={e => setCustomDateRange({ ...customDateRange, start: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  ref={startDateInputRef}
+                  type="text"
+                  value={customDateRange.start ? format(new Date(customDateRange.start), 'dd.MM.yyyy') : ''}
+                  onClick={() => {
+                    setIsEndDatePickerOpen(false)
+                    setIsStartDatePickerOpen(true)
+                  }}
+                  readOnly
+                  className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+                  placeholder="день.месяц.год"
                 />
+                {isStartDatePickerOpen && (
+                  <CustomDatePicker
+                    value={customDateRange.start}
+                    onChange={(value) => {
+                      setCustomDateRange({ ...customDateRange, start: value })
+                      setIsStartDatePickerOpen(false)
+                    }}
+                    onClose={() => setIsStartDatePickerOpen(false)}
+                    inputRef={startDateInputRef}
+                    placeholder="день.месяц.год"
+                  />
+                )}
               </div>
               <div className="flex-1">
                 <label className="block text-sm font-medium mb-1">По дату:</label>
                 <input
-                  type="date"
-                  value={customDateRange.end}
-                  onChange={e => setCustomDateRange({ ...customDateRange, end: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  ref={endDateInputRef}
+                  type="text"
+                  value={customDateRange.end ? format(new Date(customDateRange.end), 'dd.MM.yyyy') : ''}
+                  onClick={() => {
+                    setIsStartDatePickerOpen(false)
+                    setIsEndDatePickerOpen(true)
+                  }}
+                  readOnly
+                  className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+                  placeholder="день.месяц.год"
                 />
+                {isEndDatePickerOpen && (
+                  <CustomDatePicker
+                    value={customDateRange.end}
+                    onChange={(value) => {
+                      setCustomDateRange({ ...customDateRange, end: value })
+                      setIsEndDatePickerOpen(false)
+                    }}
+                    onClose={() => setIsEndDatePickerOpen(false)}
+                    inputRef={endDateInputRef}
+                    placeholder="день.месяц.год"
+                  />
+                )}
               </div>
               <button
                 onClick={() => {
                   setCustomDateRange({ start: '', end: '' })
                   setShowDatePicker(false)
                   setDateFilter('Все записи')
+                  setIsStartDatePickerOpen(false)
+                  setIsEndDatePickerOpen(false)
                 }}
                 className="glass-button px-4 py-2 rounded-lg"
               >

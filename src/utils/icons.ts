@@ -1,9 +1,9 @@
 /**
  * 🎨 Централизованный экспорт всех иконок из lucide-react
- * 
+ *
  * ✅ ОПТИМИЗАЦИЯ: Используются только named imports для tree-shaking
  * Все иконки импортируются в одном месте, что упрощает управление и оптимизацию бандла
- * 
+ *
  * Использование:
  * import { Moon, Sun, Info } from '@/utils/icons'
  */
@@ -16,7 +16,7 @@ export { Play, Pause, RotateCcw, SkipForward, Timer } from 'lucide-react'
 
 // UI иконки
 export { X, Plus, Edit2, Trash2, Save, Check, Copy } from 'lucide-react'
-export { Calendar, Clock, DollarSign, Settings, TestTube } from 'lucide-react'
+export { Calendar, Clock, DollarSign, Settings, TestTube, CreditCard } from 'lucide-react'
 export { AlertCircle, AlertTriangle, CheckCircle, CheckCircle2, XCircle } from 'lucide-react'
 export { Search, Filter, FilterX, Eye, EyeOff } from 'lucide-react'
 export { Loader2, MoreHorizontal, RefreshCw, Home } from 'lucide-react'

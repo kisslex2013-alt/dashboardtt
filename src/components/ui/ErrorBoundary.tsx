@@ -96,7 +96,7 @@ export class ErrorBoundary extends Component {
       // ✅ A11Y: Улучшаем accessibility ErrorBoundary
       return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center p-4">
-          <div 
+          <div
             className="glass-effect rounded-xl p-8 max-w-2xl w-full border-2 border-red-200 dark:border-red-800"
             role="alert"
             aria-live="assertive"

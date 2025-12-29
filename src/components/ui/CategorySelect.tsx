@@ -1,8 +1,10 @@
+
 import { useState, useRef, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { ChevronDown } from '../../utils/icons'
 import { getIcon } from '../../utils/iconHelper'
 import type { CategorySelectProps } from '../../types'
+import { useModal, useAnimationState } from '../../hooks'
 
 /**
  * 🎯 Кастомный select для категорий с иконками
@@ -18,72 +20,18 @@ export function CategorySelect({
   placeholder = 'Выберите категорию',
   error,
 }: CategorySelectProps) {
-  // ✅ ИСПРАВЛЕНО: Добавлено состояние isOpen для контроля открытия/закрытия
-  const [isOpen, setIsOpen] = useState(false)
-  // Три состояния для контроля анимаций (Three-State Animation Control)
-  const [shouldMount, setShouldMount] = useState(false)
-  const [isAnimating, setIsAnimating] = useState(false)
-  const [isExiting, setIsExiting] = useState(false)
+  // ✅ ИСПРАВЛЕНО: Используем хуки для управления состоянием и анимациями
+  const { isOpen, toggle, close } = useModal(false)
+  const { shouldMount, isAnimating, isExiting } = useAnimationState({
+    isOpen,
+    duration: 200,
+  })
+
   const [position, setPosition] = useState({ top: 0, left: 0, width: 0 })
-  const selectRef = useRef(null)
-  const dropdownRef = useRef(null)
+  const selectRef = useRef<HTMLDivElement>(null)
+  const dropdownRef = useRef<HTMLDivElement>(null)
 
   const selectedCategory = options.find(c => c.name === value)
-
-  // Логика открытия
-  useEffect(() => {
-    if (isOpen) {
-      setShouldMount(true)
-      setIsExiting(false)
-      // Для portal элементов используем один RAF - двойной вызывает задваивание
-      const rafId = requestAnimationFrame(() => {
-        setIsAnimating(true)
-      })
-      return () => cancelAnimationFrame(rafId)
-    }
-  }, [isOpen])
-
-  // Логика закрытия
-  useEffect(() => {
-    if (!isOpen && shouldMount && !isExiting) {
-      setIsAnimating(false)
-      // RAF для синхронизации перед началом exit анимации
-      const rafId = requestAnimationFrame(() => {
-        setIsExiting(true)
-      })
-      return () => cancelAnimationFrame(rafId)
-    }
-  }, [isOpen, shouldMount, isExiting])
-
-  // Слушатель окончания анимации исчезновения
-  useEffect(() => {
-    if (isExiting && dropdownRef.current) {
-      const handleAnimationEnd = e => {
-        // Проверяем, что это именно наша exit анимация
-        if (
-          e.animationName === 'slideDownOut' ||
-          e.animationName === 'slideUpOut' ||
-          e.animationName.includes('slideOut')
-        ) {
-          setIsExiting(false)
-          setShouldMount(false)
-        }
-      }
-
-      // Fallback на случай, если событие не сработает
-      const fallbackTimer = setTimeout(() => {
-        setIsExiting(false)
-        setShouldMount(false)
-      }, 300) // Немного больше длительности анимации (200ms)
-
-      dropdownRef.current.addEventListener('animationend', handleAnimationEnd)
-
-      return () => {
-        clearTimeout(fallbackTimer)
-        dropdownRef.current?.removeEventListener('animationend', handleAnimationEnd)
-      }
-    }
-  }, [isExiting])
 
   // Вычисление позиции dropdown
   useEffect(() => {
@@ -97,7 +45,7 @@ export function CategorySelect({
 
         // Используем getBoundingClientRect напрямую без scrollY для правильного позиционирования в порталах
         let top = rect.bottom + offset
-        let left = rect.left
+        let {left} = rect
 
         // Проверяем, помещается ли dropdown снизу
         const spaceBelow = viewportHeight - rect.bottom
@@ -160,22 +108,22 @@ export function CategorySelect({
           dropdownRef.current &&
           !dropdownRef.current.contains(event.target)
         ) {
-          setIsOpen(false)
+          close()
         }
       }, 0)
     }
 
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [shouldMount, isOpen])
+  }, [shouldMount, close])
 
   const handleSelect = categoryName => {
     if (categoryName === '__add_new__') {
-      setIsOpen(false)
+      close()
       onAddNew && onAddNew()
     } else {
       onChange(categoryName)
-      setIsOpen(false)
+      close()
     }
   }
 
@@ -184,7 +132,7 @@ export function CategorySelect({
       <div ref={selectRef} className="relative">
         <button
           type="button"
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={toggle}
           className={`
             w-full px-4 py-2 pl-10 glass-effect rounded-lg border-2 
             ${error ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}

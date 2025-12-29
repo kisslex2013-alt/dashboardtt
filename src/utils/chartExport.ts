@@ -30,8 +30,8 @@ export async function exportChartAsPNG(
 
     // Получаем размеры
     const bbox = svgElement.getBoundingClientRect()
-    const width = bbox.width
-    const height = bbox.height
+    const {width} = bbox
+    const {height} = bbox
 
     // Устанавливаем размеры для клонированного SVG
     clonedSvg.setAttribute('width', String(width * scale))

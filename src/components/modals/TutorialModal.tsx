@@ -36,7 +36,7 @@ export function TutorialModal({ isOpen, onClose, onClearDemoData }) {
   const [currentStep, setCurrentStep] = useState(0)
   const [direction, setDirection] = useState(0)
   const [hasDemoData, setHasDemoData] = useState(false)
-  
+
   // Загружаем новые возможности из changelog.md
   const { features: newFeatures, isLoading: isLoadingFeatures } = useChangelogFeatures('1.3.0')
 

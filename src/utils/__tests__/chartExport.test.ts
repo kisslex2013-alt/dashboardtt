@@ -10,14 +10,14 @@ describe('chartExport', () => {
     // Мокаем DOM API
     global.URL.createObjectURL = vi.fn(() => 'blob:mock-url')
     global.URL.revokeObjectURL = vi.fn()
-    
+
     // Правильно мокаем XMLSerializer как класс
     global.XMLSerializer = class {
       serializeToString(element: any) {
         return '<svg></svg>'
       }
     } as any
-    
+
     // Мокаем document.createElement
     const mockLink = {
       href: '',
@@ -49,7 +49,7 @@ describe('chartExport', () => {
       }
       return {} as any
     })
-    
+
     global.document.body.appendChild = vi.fn()
     global.document.body.removeChild = vi.fn()
   })
@@ -66,7 +66,7 @@ describe('chartExport', () => {
         onload: null as any,
         src: '',
       }
-      
+
       const mockSvg = {
         cloneNode: vi.fn(() => ({
           setAttribute: vi.fn(),

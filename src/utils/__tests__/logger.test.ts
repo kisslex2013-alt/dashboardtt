@@ -100,10 +100,10 @@ describe('logger', () => {
     it('should create different loggers for different modules', () => {
       const logger1 = createLogger('Module1')
       const logger2 = createLogger('Module2')
-      
+
       logger1.log('message 1')
       logger2.log('message 2')
-      
+
       expect(console.log).toHaveBeenCalledTimes(2)
       expect(console.log).toHaveBeenNthCalledWith(
         1,

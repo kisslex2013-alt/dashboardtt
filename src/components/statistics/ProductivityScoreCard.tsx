@@ -141,7 +141,7 @@ export function ProductivityScoreCard() {
           {Object.keys(factors).map((factorKey, index) => {
             const factor = factors[factorKey]
             const shortLabel = factorShortLabels[factorKey]
-            const percentage = factor.percentage
+            const {percentage} = factor
             const progressColor = getFactorProgressColor(percentage)
             const textColor = getFactorTextColor(percentage)
             const animationDelay = 0.2 + index * 0.05

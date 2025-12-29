@@ -21,6 +21,7 @@ import { ConfirmModal } from '../modals/ConfirmModal'
 import { ListView } from './views/ListView'
 import { GridView } from './views/GridView'
 import { TimelineView } from './views/TimelineView'
+import { EntriesCalendarView } from './views/EntriesCalendarView'
 import { lazy, Suspense } from 'react'
 import { BulkActionsPanel } from './BulkActionsPanel'
 
@@ -61,12 +62,12 @@ export function EntriesList({
   const bulkUpdateCategory = useBulkUpdateCategory()
   const bulkDeleteEntries = useBulkDeleteEntries()
   const getEntriesByIds = useGetEntriesByIds()
-  
+
   const listView = useListView()
   const setListView = useSetListView()
   const defaultEntriesFilter = useDefaultEntriesFilter()
   const setDefaultEntriesFilter = useSetDefaultEntriesFilter()
-  
+
   const { categories } = useCategory() // ✅ ОПТИМИЗАЦИЯ: Используем централизованный хук
   const showSuccess = useShowSuccess()
   const showError = useShowError()
@@ -398,6 +399,18 @@ export function EntriesList({
                 onToggleSelection={toggleSelection}
               />
             )}
+          </div>
+        )}
+
+        {/* Календарь рендерится отдельно, вне условия filteredEntries */}
+        {listView === 'calendar' && (
+          <div className="animate-fade-in">
+            <EntriesCalendarView
+              entries={entries}
+              onDaySelect={() => {}}
+              selectedDate={null}
+              onEditEntry={onEditEntry}
+            />
           </div>
         )}
 

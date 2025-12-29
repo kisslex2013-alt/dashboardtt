@@ -84,6 +84,8 @@ interface AINotificationsState {
   clearTestNotifications: () => void
   /** Обновить статистику тестов */
   updateTestStats: () => void
+  /** Отметить тип уведомления как показанный (для контроля частоты) */
+  markAsShown: (type: string) => void
 
   /** Получить непрочитанные уведомления */
   getUnreadNotifications: () => AINotification[]
@@ -247,6 +249,15 @@ export const useAINotificationsStore = create<AINotificationsState>()(
             },
           }
         }),
+
+      // Отмечаем тип уведомления как показанный (для контроля частоты)
+      markAsShown: (type) =>
+        set((state) => ({
+          lastShownDates: {
+            ...state.lastShownDates,
+            [type]: new Date().toISOString(),
+          },
+        })),
 
       // ============ ГЕТТЕРЫ ============
       getUnreadNotifications: () => {

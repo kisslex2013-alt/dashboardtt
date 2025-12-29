@@ -340,10 +340,10 @@ export function getStaggeredDelayStyle(index, delayMs = 50) {
 /**
  * Все константы и функции уже экспортируются как named exports выше.
  * Default export удален в пользу named exports для лучшей tree-shaking поддержки.
- * 
+ *
  * Для импорта используйте:
  * import { ANIMATION_DURATIONS, getTransition } from './utils/animations'
- * 
+ *
  * Или для импорта всех:
  * import * as animations from './utils/animations'
  */

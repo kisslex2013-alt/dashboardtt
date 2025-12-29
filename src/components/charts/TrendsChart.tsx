@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, memo } from 'react'
 import {
   LineChart,
   Line,
@@ -29,6 +29,8 @@ import { InfoTooltip } from '../ui/InfoTooltip'
 import { EmptyState } from '../ui/EmptyState'
 import { ChartIllustration } from '../ui/illustrations'
 import { ZoomableChartWrapper } from './ZoomableChartWrapper'
+import { ChartContainer } from './ChartContainer'
+import { useTheme } from '../../store/useSettingsStore'
 import type { TrendsChartProps } from '../../types'
 
 /**
@@ -40,12 +42,13 @@ import type { TrendsChartProps } from '../../types'
  *
  * АДАПТИВНОСТЬ: На мобильных устройствах уменьшена высота графика и упрощена легенда
  */
-export function TrendsChart({
+export const TrendsChart = memo(({
   entries: entriesProp,
   dateFilter = 'month',
   customDateRange = { start: '', end: '' },
-}: TrendsChartProps) {
+}: TrendsChartProps) => {
   // ✅ ОПТИМИЗАЦИЯ: Используем атомарный селектор для минимизации ре-рендеров
+  const theme = useTheme()
   const entriesStore = useEntries()
   const isMobile = useIsMobile()
   const chartHeight = useResponsiveChartHeight(350, 280)
@@ -74,7 +77,7 @@ export function TrendsChart({
         days = eachDayOfInterval({ start: startDate, end: endDate })
 
         // Для сегодняшнего дня создаем данные по часам
-        const hourlyData = []
+        const hourlyData: any[] = []
         for (let hour = 0; hour < 24; hour++) {
           hourlyData.push({
             date: `${hour.toString().padStart(2, '0')}:00`,
@@ -88,9 +91,9 @@ export function TrendsChart({
 
         entries.forEach(entry => {
           if (entry.date === format(today, 'yyyy-MM-dd')) {
-            const startHour = entry.start ? parseInt(entry.start.split(':')[0]) : 0
-            const earned = parseFloat(entry.earned) || 0
-            const duration = parseFloat(entry.duration) || 0
+            const startHour = entry.start ? parseInt(String(entry.start).split(':')[0]) : 0
+            const earned = parseFloat(String(entry.earned)) || 0
+            const duration = parseFloat(String(entry.duration)) || 0
 
             if (hourlyData[startHour]) {
               hourlyData[startHour].earned += earned
@@ -121,7 +124,7 @@ export function TrendsChart({
       }
 
       case 'all': {
-        const entryDates = entries.map(e => parseISO(e.date))
+        const entryDates = entries.map(e => parseISO(e.date).getTime())
         startDate = new Date(Math.min(...entryDates))
         endDate = new Date(Math.max(...entryDates))
         break
@@ -164,8 +167,8 @@ export function TrendsChart({
       const dayIndex = data.findIndex(d => d.fullDate === entryDate)
 
       if (dayIndex !== -1) {
-        const earned = parseFloat(entry.earned) || 0
-        const duration = parseFloat(entry.duration) || 0
+        const earned = parseFloat(String(entry.earned)) || 0
+        const duration = parseFloat(String(entry.duration)) || 0
 
         data[dayIndex].earned += earned
         data[dayIndex].hours += duration
@@ -202,23 +205,11 @@ export function TrendsChart({
     }
   }
 
-  // ВИЗУАЛ: Empty State для графика
-  if (chartData.every(day => day.earned === 0 && day.hours === 0)) {
-    return (
-      <div className="glass-effect rounded-xl p-6 mb-6">
-        <h2 className="text-xl font-bold mb-4">{getChartTitle()}</h2>
-        <EmptyState
-          illustration={ChartIllustration}
-          title={`Нет данных за выбранный период`}
-          description="Добавьте записи времени, чтобы увидеть тренды"
-          variant="compact"
-        />
-      </div>
-    )
-  }
+  // ВИЗУАЛ: Empty State обрабатывается в ChartContainer (empty prop)
+  const isEmpty = chartData.every(day => day.earned === 0 && day.hours === 0)
 
   // Переключатель метрик
-  const toggleMetric = metric => {
+  const toggleMetric = (metric: keyof typeof visibleMetrics) => {
     setVisibleMetrics(prev => ({
       ...prev,
       [metric]: !prev[metric],
@@ -226,12 +217,12 @@ export function TrendsChart({
   }
 
   // Кастомный tooltip с адаптивным размером для мобильных
-  const CustomTooltip = ({ active, payload, label }) => {
+  const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
         <div className={`glass-effect rounded-lg shadow-lg ${isMobile ? 'p-4' : 'p-3'}`}>
           <p className={`font-semibold ${isMobile ? 'text-base mb-3' : 'text-sm mb-2'}`}>{label}</p>
-          {payload.map((item, index) => (
+          {payload.map((item: any, index: number) => (
             <div
               key={`${item.dataKey || item.name}-${item.color || index}`}
               className={`flex justify-between gap-4 ${isMobile ? 'text-base' : 'text-sm'}`}
@@ -251,48 +242,48 @@ export function TrendsChart({
   }
 
   return (
-    <div className="glass-effect rounded-xl p-6 mb-6">
-      <div className="flex justify-between items-center mb-4">
-        <div className="flex items-center gap-2">
-          <h2 className="text-xl font-bold">{getChartTitle()}</h2>
-          <InfoTooltip text="Совмещенный график дохода, часов работы и почасовой ставки для сравнения трендов за выбранный период." />
+    <ChartContainer
+      title={getChartTitle()}
+      empty={isEmpty}
+      emptyTitle="Нет данных за выбранный период"
+      emptyDescription="Добавьте записи времени, чтобы увидеть тренды"
+      rightControls={
+        <div className="flex items-center gap-4">
+          {!isMobile && (
+            <div className="flex gap-2">
+              <label className="flex items-center gap-1 text-sm cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={visibleMetrics.earned}
+                  onChange={() => toggleMetric('earned')}
+                  className="w-4 h-4 text-blue-500 rounded focus:ring-blue-500"
+                />
+                <span className="text-gray-700 dark:text-gray-300">Заработок</span>
+              </label>
+              <label className="flex items-center gap-1 text-sm cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={visibleMetrics.hours}
+                  onChange={() => toggleMetric('hours')}
+                  className="w-4 h-4 text-green-500 rounded focus:ring-green-500"
+                />
+                <span className="text-gray-700 dark:text-gray-300">Часы</span>
+              </label>
+              <label className="flex items-center gap-1 text-sm cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={visibleMetrics.rate}
+                  onChange={() => toggleMetric('rate')}
+                  className="w-4 h-4 text-yellow-500 rounded focus:ring-yellow-500"
+                />
+                <span className="text-gray-700 dark:text-gray-300">Ставка</span>
+              </label>
+            </div>
+          )}
         </div>
-
-        {/* Переключатель метрик - скрыт на мобильных, так как есть чекбоксы выше */}
-        {!isMobile && (
-          <div className="flex gap-2">
-            <label className="flex items-center gap-1 text-sm">
-              <input
-                type="checkbox"
-                checked={visibleMetrics.earned}
-                onChange={() => toggleMetric('earned')}
-                className="w-4 h-4 text-blue-500"
-              />
-              <span className="text-blue-500">Заработок</span>
-            </label>
-            <label className="flex items-center gap-1 text-sm">
-              <input
-                type="checkbox"
-                checked={visibleMetrics.hours}
-                onChange={() => toggleMetric('hours')}
-                className="w-4 h-4 text-green-500"
-              />
-              <span className="text-green-500">Часы</span>
-            </label>
-            <label className="flex items-center gap-1 text-sm">
-              <input
-                type="checkbox"
-                checked={visibleMetrics.rate}
-                onChange={() => toggleMetric('rate')}
-                className="w-4 h-4 text-yellow-500"
-              />
-              <span className="text-yellow-500">Ставка</span>
-            </label>
-          </div>
-        )}
-      </div>
-
-      {/* 🔍 NEW: Зум и панорамирование для больших наборов данных */}
+      }
+      tooltip="Совмещенный график дохода, часов работы и почасовой ставки для сравнения трендов за выбранный период."
+    >
       <ZoomableChartWrapper
         dataLength={chartData.length}
         minDataPoints={5}
@@ -301,70 +292,73 @@ export function TrendsChart({
         {({ startIndex, endIndex }) => (
           <ResponsiveContainer width="100%" height={chartHeight}>
             <LineChart data={chartData.slice(startIndex, endIndex)}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-          <XAxis
-            dataKey="date"
-            stroke="#6B7280"
-            style={{ fontSize: '11px' }}
-            interval="preserveStartEnd"
-          />
-          <YAxis
-            yAxisId="left"
-            stroke="#6B7280"
-            style={{ fontSize: '12px' }}
-            label={{ value: '₽ / ч', angle: -90, position: 'insideLeft' }}
-          />
-          <YAxis
-            yAxisId="right"
-            orientation="right"
-            stroke="#6B7280"
-            style={{ fontSize: '12px' }}
-          />
-          <Tooltip content={<CustomTooltip />} />
-          {!isMobile && <Legend wrapperStyle={{ fontSize: '12px' }} iconType="line" />}
+              <CartesianGrid strokeDasharray="3 3" stroke={theme === 'dark' ? '#374151' : '#E5E7EB'} />
+              <XAxis
+                dataKey="date"
+                stroke="#6B7280"
+                style={{ fontSize: '11px' }}
+                interval="preserveStartEnd"
+              />
+              <YAxis
+                yAxisId="left"
+                stroke="#6B7280"
+                style={{ fontSize: '12px' }}
+                label={{ value: '₽ / ч', angle: -90, position: 'insideLeft' }}
+              />
+              <YAxis
+                yAxisId="right"
+                orientation="right"
+                stroke="#6B7280"
+                style={{ fontSize: '12px' }}
+              />
+              <Tooltip content={<CustomTooltip />} />
+              {!isMobile && <Legend wrapperStyle={{ fontSize: '12px' }} iconType="line" />}
 
-          {visibleMetrics.earned && (
-            <Line
-              yAxisId="left"
-              type="monotone"
-              dataKey="earned"
-              stroke="#3B82F6"
-              strokeWidth={2}
-              name="Заработок (₽)"
-              dot={{ fill: '#3B82F6', r: 3 }}
-              activeDot={{ r: 5 }}
-            />
-          )}
+              {visibleMetrics.earned && (
+                <Line
+                  yAxisId="left"
+                  type="monotone"
+                  dataKey="earned"
+                  stroke="#3B82F6"
+                  strokeWidth={2}
+                  name="Заработок (₽)"
+                  dot={{ fill: '#3B82F6', r: 3 }}
+                  activeDot={{ r: 5 }}
+                  animationDuration={1000}
+                />
+              )}
 
-          {visibleMetrics.hours && (
-            <Line
-              yAxisId="right"
-              type="monotone"
-              dataKey="hours"
-              stroke="#10B981"
-              strokeWidth={2}
-              name="Часы работы"
-              dot={{ fill: '#10B981', r: 3 }}
-              activeDot={{ r: 5 }}
-            />
-          )}
+              {visibleMetrics.hours && (
+                <Line
+                  yAxisId="right"
+                  type="monotone"
+                  dataKey="hours"
+                  stroke="#10B981"
+                  strokeWidth={2}
+                  name="Часы работы"
+                  dot={{ fill: '#10B981', r: 3 }}
+                  activeDot={{ r: 5 }}
+                  animationDuration={1000}
+                />
+              )}
 
-          {visibleMetrics.rate && (
-            <Line
-              yAxisId="left"
-              type="monotone"
-              dataKey="rate"
-              stroke="#F59E0B"
-              strokeWidth={2}
-              name="Средняя ставка (₽/ч)"
-              dot={{ fill: '#F59E0B', r: 3 }}
-              activeDot={{ r: 5 }}
-            />
-          )}
-        </LineChart>
-      </ResponsiveContainer>
+              {visibleMetrics.rate && (
+                <Line
+                  yAxisId="left"
+                  type="monotone"
+                  dataKey="rate"
+                  stroke="#F59E0B"
+                  strokeWidth={2}
+                  name="Средняя ставка (₽/ч)"
+                  dot={{ fill: '#F59E0B', r: 3 }}
+                  activeDot={{ r: 5 }}
+                  animationDuration={1000}
+                />
+              )}
+            </LineChart>
+          </ResponsiveContainer>
         )}
       </ZoomableChartWrapper>
-    </div>
+    </ChartContainer>
   )
-}
+})

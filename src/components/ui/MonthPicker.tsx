@@ -24,9 +24,9 @@ const MONTH_NAMES = [
  * ИСПРАВЛЕНО: Заменяет нативный input type="month"
  */
 export function MonthPicker({ value, onChange, onClose, inputRef }: MonthPickerProps) {
-  const [selectedDate, setSelectedDate] = useState(value ? parseISO(value + '-01') : new Date())
+  const [selectedDate, setSelectedDate] = useState(value ? parseISO(`${value  }-01`) : new Date())
   const [currentYear, setCurrentYear] = useState(
-    value ? parseISO(value + '-01').getFullYear() : new Date().getFullYear()
+    value ? parseISO(`${value  }-01`).getFullYear() : new Date().getFullYear()
   )
   const [isOpen, setIsOpen] = useState(true)
   // Три состояния для контроля анимаций (Three-State Animation Control)
@@ -102,7 +102,7 @@ export function MonthPicker({ value, onChange, onClose, inputRef }: MonthPickerP
         const viewportWidth = window.innerWidth
 
         let top = rect.bottom + offset
-        let left = rect.left
+        let {left} = rect
 
         const spaceBelow = viewportHeight - rect.bottom
         const spaceAbove = rect.top

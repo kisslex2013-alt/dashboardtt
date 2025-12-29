@@ -6,6 +6,7 @@ import { backupManager } from '../../utils/backupManager'
 import { useCreateManualBackup, useRestoreFromBackup } from '../../store/useEntriesStore'
 import { useShowSuccess, useShowError } from '../../store/useUIStore'
 import { Button } from '../ui/Button'
+import { SkeletonList } from '../ui/Skeleton'
 import { logger } from '../../utils/logger'
 import { useConfirmModal } from '../../hooks/useConfirmModal'
 import { ConfirmModal } from './ConfirmModal'
@@ -262,8 +263,8 @@ export function BackupModal({ isOpen, onClose }) {
       <AnimatedModalContent contentKey={backups.length}>
         <div className="flex-1 overflow-y-auto pr-2">
           {loading ? (
-            <div className="flex items-center justify-center py-8">
-              <div className="text-gray-500 dark:text-gray-400">Загрузка...</div>
+            <div className="py-4">
+              <SkeletonList count={3} />
             </div>
           ) : backups.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-8 text-center">

@@ -186,12 +186,12 @@ export function AboutModal({ isOpen, onClose }) {
     // ВАРИАНТ 3: Автоматическая генерация QR кода через API (используется по умолчанию)
     // Формируем данные для QR кода на основе Тинькофф (первая карта)
     // ИСПРАВЛЕНО: Используем данные карты Тинькофф для QR кода
-    //const tinkoffCardNumber = '2200701005889560'; // Без пробелов для QR кода
-    //const sbpData = `ST00012|Name=Алексей С.|PersonalAcc=${tinkoffCardNumber}|Sum=0000000000`;
+    // const tinkoffCardNumber = '2200701005889560'; // Без пробелов для QR кода
+    // const sbpData = `ST00012|Name=Алексей С.|PersonalAcc=${tinkoffCardNumber}|Sum=0000000000`;
 
     // Генерируем QR код через API
-    //const qrData = encodeURIComponent(sbpData);
-    //return `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${qrData}&bgcolor=ffffff&color=000000&margin=1`;
+    // const qrData = encodeURIComponent(sbpData);
+    // return `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${qrData}&bgcolor=ffffff&color=000000&margin=1`;
   }
 
   // Копирование номера карты в буфер обмена (без пробелов для удобства)
