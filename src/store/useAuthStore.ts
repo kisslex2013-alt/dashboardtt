@@ -39,6 +39,7 @@ interface AuthState {
   
   updateProfile: (data: Partial<User>) => Promise<void>
   resetPassword: (email: string) => Promise<void>
+  resendConfirmation: (email: string) => Promise<void>
   setSyncing: (isSyncing: boolean) => void
   setLastSyncTime: (time: number) => void
   
@@ -246,6 +247,17 @@ export const useAuthStore = create<AuthState>()(
       resetPassword: async (email) => {
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
           redirectTo: window.location.origin + '/auth/update-password',
+        })
+        if (error) throw error
+      },
+
+      resendConfirmation: async (email) => {
+        const { error } = await supabase.auth.resend({
+          type: 'signup',
+          email,
+          options: {
+            emailRedirectTo: window.location.origin
+          }
         })
         if (error) throw error
       },

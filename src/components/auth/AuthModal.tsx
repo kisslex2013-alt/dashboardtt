@@ -12,12 +12,14 @@ import { supabaseService } from '../../services/supabase'
 
 const AuthModal = () => {
   const { modals, closeModal, showSuccess, showError } = useUIStore()
-  const { login, register, isAuthenticated, user, logout } = useAuthStore()
+  const { login, register, isAuthenticated, user, logout, resetPassword, resendConfirmation } = useAuthStore()
   const [isLoginMode, setIsLoginMode] = useState(true)
+  const [isResetMode, setIsResetMode] = useState(false) // Новый режим
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [syncStatus, setSyncStatus] = useState<string | null>(null)
+  const [showResend, setShowResend] = useState(false) // Показать кнопку повторной отправки
 
   const isOpen = modals.auth.isOpen
 
@@ -25,39 +27,65 @@ const AuthModal = () => {
     e.preventDefault()
     setIsLoading(true)
     setSyncStatus(null)
+    setShowResend(false)
 
     try {
       let success = false
-      if (isLoginMode) {
+      
+      if (isResetMode) {
+        await resetPassword(email)
+        showSuccess('Ссылка для сброса отправлена на почту')
+        setIsResetMode(false)
+        setIsLoginMode(true)
+      } else if (isLoginMode) {
         await login({ email, password })
         success = true
       } else {
         await register({ email, password })
         success = true
+        // После регистрации сразу предлагаем повторную отправку, если что
+        setShowResend(true) 
       }
 
       if (success) {
-        showSuccess(isLoginMode ? 'Успешный вход' : 'Регистрация успешна')
-        
-        // После успешного входа - пробуем синхронизировать данные
-        // Сценарий: Скачиваем данные с сервера
-        await handleInitialSync()
-        
-        closeModal('auth')
-      } else {
-        showError('Ошибка. Проверьте данные или соединение.')
-      }
+        if (!isResetMode) {
+             showSuccess(isLoginMode ? 'Успешный вход' : 'Регистрация успешна')
+             // После успешного входа - пробуем синхронизировать данные
+             await handleInitialSync()
+             closeModal('auth')
+        }
+      } 
     } catch (e: any) {
       console.error('Auth Error Details:', e)
       let msg = 'Произошла ошибка'
       if (typeof e === 'string') msg = e
-      else if (e?.message) msg = e.message
+      else if (e?.message) {
+         msg = e.message
+         // Если ошибка "Email not confirmed", показываем кнопку
+         if (msg.includes('Email not confirmed') || msg.includes('confirmer votre adresse')) {
+             setShowResend(true)
+             msg = 'Email не подтвержден. Проверьте почту.'
+         }
+      }
       else if (e?.error_description) msg = e.error_description
       else if (typeof e === 'object') msg = JSON.stringify(e)
       
       showError(msg)
     } finally {
       setIsLoading(false)
+    }
+  }
+
+  const handleResend = async () => {
+    try {
+        setIsLoading(true)
+        await resendConfirmation(email)
+        showSuccess('Письмо отправлено повторно')
+        setShowResend(false)
+    } catch (e: any) {
+        showError(e.message || 'Ошибка отправки')
+    } finally {
+        setIsLoading(false)
     }
   }
 
@@ -209,7 +237,7 @@ const AuthModal = () => {
                </div>
                <div className="flex justify-between items-center mb-8">
                   <Dialog.Title className="text-2xl font-bold text-white">
-                      {isLoginMode ? 'Вход' : 'Регистрация'}
+                      {isResetMode ? 'Сброс пароля' : (isLoginMode ? 'Вход' : 'Регистрация')}
                   </Dialog.Title>
                   <button onClick={() => closeModal('auth')} className="text-white/40 hover:text-white transition-colors">
                       <X className="w-6 h-6" />
@@ -229,18 +257,20 @@ const AuthModal = () => {
                       />
                   </div>
                   
-                  <div>
-                       <label className="block text-sm font-medium text-white/60 mb-1">Пароль</label>
-                      <input 
-                          type="password" 
-                          required
-                          minLength={8}
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                          className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-blue-500 transition-colors"
-                          placeholder="••••••••"
-                      />
-                  </div>
+                  {!isResetMode && (
+                    <div>
+                        <label className="block text-sm font-medium text-white/60 mb-1">Пароль</label>
+                        <input 
+                            type="password" 
+                            required
+                            minLength={8}
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-blue-500 transition-colors"
+                            placeholder="••••••••"
+                        />
+                    </div>
+                  )}
 
                   {syncStatus && (
                       <div className="text-xs text-blue-400 text-center animate-pulse">
@@ -256,19 +286,58 @@ const AuthModal = () => {
                       {isLoading ? (
                           <Loader2 className="w-5 h-5 animate-spin" />
                       ) : (
+                          isResetMode ? 'Отправить ссылку' :
                           isLoginMode ? <><LogIn className="w-5 h-5" /> Войти</> : <><UserPlus className="w-5 h-5" /> Создать аккаунт</>
                       )}
                   </button>
+
+                  {/* Кнопка повторной отправки */}
+                  {showResend && !isResetMode && (
+                      <button
+                        type="button"
+                        onClick={handleResend}
+                        disabled={isLoading}
+                        className="w-full py-2 rounded-xl bg-white/5 hover:bg-white/10 text-blue-400 font-medium transition-all text-sm mt-2"
+                      >
+                         Не пришло письмо? Отправить повторно
+                      </button>
+                  )}
               </form>
 
-              <div className="mt-6 text-center">
-                  <button 
-                      onClick={() => setIsLoginMode(!isLoginMode)}
+                  <div className="mt-6 flex flex-col items-center gap-3">
+                      <button 
+                          onClick={() => setIsLoginMode(!isLoginMode)}
+                          className="text-sm text-white/40 hover:text-white transition-colors"
+                      >
+                          {isLoginMode ? 'Нет аккаунта? Зарегистрироваться' : 'Есть аккаунт? Войти'}
+                      </button>
+
+                      {isLoginMode && (
+                        <button
+                          onClick={() => {
+                            // Переключаемся в режим восстановления (пока просто через prompt или доп. стейт, 
+                            // но для простоты добавим состояние isResetMode)
+                            setIsResetMode(true)
+                          }}
+                          className="text-xs text-blue-400 hover:text-blue-300 transition-colors"
+                        >
+                          Забыли пароль?
+                        </button>
+                      )}
+                  </div>
+
+              {/* Режим восстановления пароля */}
+              {isResetMode && !isAuthenticated && (
+                 <div className="mt-6 text-center">
+                    <button
+                      onClick={() => setIsResetMode(false)}
                       className="text-sm text-white/40 hover:text-white transition-colors"
-                  >
-                      {isLoginMode ? 'Нет аккаунта? Зарегистрироваться' : 'Есть аккаунт? Войти'}
-                  </button>
-              </div>
+                    >
+                      Вернуться к входу
+                    </button>
+                 </div>
+              )}
+
               
 
 
