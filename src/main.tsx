@@ -9,7 +9,11 @@ import { registerSW } from 'virtual:pwa-register'
 import './styles/tokens.css'  // КРИТИЧНО: Загружаем токены первыми!
 import './index.css'
 import './custom.css'
+import { migrationService } from './services/migrationService'
 import './styles/animations.css'
+
+// ✅ ИНИЦИАЛИЗАЦИЯ: Проверяем и восстанавливаем старые данные
+migrationService.init()
 
 // КРИТИЧНО: Глобальная защита от перезагрузок в первые секунды
 const PAGE_LOAD_TIME = Date.now()
