@@ -2,7 +2,7 @@ import { ReactNode } from 'react'
 import { InfoTooltip } from '../ui/InfoTooltip'
 import { EmptyState } from '../ui/EmptyState'
 import { ChartIllustration } from '../ui/illustrations'
-import { LoadingSpinner } from '../ui/LoadingSpinner'
+import { Skeleton } from '../ui/Skeleton'
 
 interface ChartContainerProps {
   title: string
@@ -76,8 +76,31 @@ export function ChartContainer({
 
       <div className="relative min-h-[300px]">
         {loading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-white/50 dark:bg-gray-900/50 z-10 rounded-lg backdrop-blur-sm">
-            <LoadingSpinner />
+          <div className="absolute inset-0 flex flex-col gap-4 p-4 bg-white/50 dark:bg-gray-900/50 z-10 rounded-lg backdrop-blur-sm">
+            {/* Skeleton легенды */}
+            <div className="flex gap-4 justify-center">
+              <Skeleton variant="text" width={60} height={16} />
+              <Skeleton variant="text" width={60} height={16} />
+              <Skeleton variant="text" width={60} height={16} />
+            </div>
+            {/* Skeleton области графика */}
+            <div className="flex-1 flex items-end gap-2 px-4">
+              <Skeleton variant="rect" width="12%" height="60%" />
+              <Skeleton variant="rect" width="12%" height="80%" />
+              <Skeleton variant="rect" width="12%" height="45%" />
+              <Skeleton variant="rect" width="12%" height="90%" />
+              <Skeleton variant="rect" width="12%" height="70%" />
+              <Skeleton variant="rect" width="12%" height="55%" />
+              <Skeleton variant="rect" width="12%" height="85%" />
+            </div>
+            {/* Skeleton оси X */}
+            <div className="flex gap-4 justify-around px-4">
+              <Skeleton variant="text" width={30} height={12} />
+              <Skeleton variant="text" width={30} height={12} />
+              <Skeleton variant="text" width={30} height={12} />
+              <Skeleton variant="text" width={30} height={12} />
+              <Skeleton variant="text" width={30} height={12} />
+            </div>
           </div>
         )}
         {children}

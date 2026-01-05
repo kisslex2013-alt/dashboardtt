@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AnimatedList Demo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --bg-main: rgb(243, 244, 246);
+      --bg-card: rgba(255, 255, 255, 0.95);
+      --text-primary: rgb(17, 24, 39);
+      --text-secondary: rgb(75, 85, 99);
+      --text-tertiary: rgb(156, 163, 175);
+      --primary: rgb(59, 130, 246);
+      --border-light: rgba(229, 231, 235, 0.8);
+    }
+    .dark {
+      --bg-main: rgb(15, 23, 42);
+      --bg-card: rgba(30, 41, 59, 0.95);
+      --text-primary: rgb(249, 250, 251);
+      --text-secondary: rgb(229, 231, 235);
+      --text-tertiary: rgb(156, 163, 175);
+      --primary: rgb(96, 165, 250);
+      --border-light: rgba(71, 85, 105, 0.5);
+    }
+    body { background: var(--bg-main); color: var(--text-primary); }
+    .card { background: var(--bg-card); border-color: var(--border-light); }
+    .text-secondary { color: var(--text-secondary); }
+    .text-tertiary { color: var(--text-tertiary); }
+    .btn-primary { background: var(--primary); }
+
+    /* Animations */
+    @keyframes slideUp {
+      0% { opacity: 0; transform: translateY(20px) scale(0.95); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes slideOut {
+      0% { opacity: 1; transform: translateY(0) scale(1); }
+      100% { opacity: 0; transform: translateY(-20px) scale(0.95); }
+    }
+    .animate-in {
+      animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+    .animate-out {
+      animation: slideOut 0.3s ease-out forwards;
+    }
+    .notification-item {
+      opacity: 0;
+    }
+  </style>
+</head>
+<body class="min-h-screen p-8 transition-colors">
+  <div class="max-w-md mx-auto">
+    <!-- Theme Toggle -->
+    <button id="themeToggle" class="fixed top-4 right-4 p-2 rounded-lg card border hover:opacity-80">
+      🌙
+    </button>
+
+    <!-- Header -->
+    <div class="mb-8 text-center">
+      <h1 class="text-2xl font-bold mb-2">AnimatedList Demo</h1>
+      <p class="text-secondary">Компонент в стиле Magic UI для анимированных списков</p>
+    </div>
+
+    <!-- Controls -->
+    <div class="flex gap-3 mb-6">
+      <button id="addBtn" class="flex-1 px-4 py-2 btn-primary text-white rounded-lg hover:opacity-90 transition-opacity font-medium">
+        + Добавить
+      </button>
+      <button id="clearBtn" class="px-4 py-2 card border rounded-lg hover:opacity-80 transition-opacity text-secondary">
+        Очистить
+      </button>
+    </div>
+
+    <!-- Animated List -->
+    <ul id="notificationList" class="space-y-3"></ul>
+
+    <!-- Empty State -->
+    <div id="emptyState" class="text-center py-12 text-tertiary">
+      <svg class="w-12 h-12 mx-auto mb-4 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+      </svg>
+      <p>Нет уведомлений</p>
+      <p class="text-sm mt-1">Нажмите "Добавить" чтобы увидеть анимацию</p>
+    </div>
+
+    <!-- Info -->
+    <div class="mt-8 p-4 card rounded-xl border">
+      <h2 class="font-medium mb-2">Как это работает:</h2>
+      <ul class="text-sm text-secondary space-y-1">
+        <li>• Элементы появляются с <strong>spring-анимацией</strong></li>
+        <li>• Удаление с плавным fade-out</li>
+        <li>• Последовательная задержка: <strong>100ms</strong></li>
+        <li>• Наведите на карточку → кнопка удаления</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    const notifications = [
+      { title: "Задача завершена", desc: "Запись времени успешно сохранена", time: "только что", icon: "✅", color: "text-emerald-500" },
+      { title: "Новое сообщение", desc: "У вас 3 непрочитанных уведомления", time: "2 мин назад", icon: "🔔", color: "text-blue-500" },
+      { title: "Внимание", desc: "Вы работаете уже 4 часа без перерыва", time: "5 мин назад", icon: "⚠️", color: "text-amber-500" },
+      { title: "Цель достигнута!", desc: "Вы выполнили дневной план на 100%", time: "10 мин назад", icon: "🎉", color: "text-purple-500" },
+    ];
+
+    let items = [];
+    let nextId = 1;
+    const list = document.getElementById('notificationList');
+    const emptyState = document.getElementById('emptyState');
+
+    function updateEmptyState() {
+      emptyState.style.display = items.length === 0 ? 'block' : 'none';
+    }
+
+    function createNotificationElement(item, delay = 0) {
+      const div = document.createElement('li');
+      div.className = 'notification-item flex items-start gap-4 p-4 card rounded-xl border group relative';
+      div.dataset.id = item.id;
+      div.innerHTML = `
+        <div class="flex-shrink-0 text-xl">${item.icon}</div>
+        <div class="flex-1 min-w-0">
+          <p class="font-medium">${item.title}</p>
+          <p class="text-sm text-secondary truncate">${item.desc}</p>
+          <p class="text-xs text-tertiary mt-1">${item.time}</p>
+        </div>
+        <button class="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-red-500/10 rounded-lg remove-btn" aria-label="Удалить">
+          <svg class="w-4 h-4 text-tertiary hover:text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      `;
+
+      // Apply animation with delay
+      setTimeout(() => {
+        div.classList.add('animate-in');
+      }, delay);
+
+      // Remove button handler
+      div.querySelector('.remove-btn').addEventListener('click', () => removeItem(item.id));
+
+      return div;
+    }
+
+    function addItem() {
+      const template = notifications[Math.floor(Math.random() * notifications.length)];
+      const item = { ...template, id: nextId++, time: 'только что' };
+      items.unshift(item);
+
+      const el = createNotificationElement(item, 0);
+      list.insertBefore(el, list.firstChild);
+      updateEmptyState();
+    }
+
+    function removeItem(id) {
+      const el = list.querySelector(`[data-id="${id}"]`);
+      if (el) {
+        el.classList.remove('animate-in');
+        el.classList.add('animate-out');
+        el.addEventListener('animationend', () => {
+          el.remove();
+          items = items.filter(i => i.id !== id);
+          updateEmptyState();
+        });
+      }
+    }
+
+    function clearAll() {
+      const allItems = list.querySelectorAll('.notification-item');
+      allItems.forEach((el, i) => {
+        setTimeout(() => {
+          el.classList.add('animate-out');
+          el.addEventListener('animationend', () => el.remove());
+        }, i * 50);
+      });
+      setTimeout(() => {
+        items = [];
+        updateEmptyState();
+      }, allItems.length * 50 + 300);
+    }
+
+    // Initial load
+    setTimeout(() => {
+      notifications.slice(0, 3).forEach((n, i) => {
+        const item = { ...n, id: nextId++ };
+        items.push(item);
+        const el = createNotificationElement(item, i * 100);
+        list.appendChild(el);
+      });
+      updateEmptyState();
+    }, 300);
+
+    // Event listeners
+    document.getElementById('addBtn').addEventListener('click', addItem);
+    document.getElementById('clearBtn').addEventListener('click', clearAll);
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+      document.getElementById('themeToggle').textContent = 
+        document.body.classList.contains('dark') ? '☀️' : '🌙';
+    });
+  </script>
+</body>
+</html>

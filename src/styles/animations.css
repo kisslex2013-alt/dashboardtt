@@ -342,10 +342,9 @@
   transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Стандартные переходы (300ms) */
-/* ИСПРАВЛЕНО: Уменьшена скорость анимации в 3 раза (300ms -> 900ms) */
+/* Стандартные переходы (250ms) - баланс между плавностью и отзывчивостью */
 .transition-normal {
-  transition: all 900ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 250ms cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 /* Медленные переходы (500ms) */
@@ -443,31 +442,27 @@
   transform: scale(1.1);
 }
 
-/* Click shrink - унифицированное уменьшение при active */
-/* ИСПРАВЛЕНО: Уменьшена скорость анимации в 3 раза (150ms -> 450ms) */
+/* Click shrink - мгновенная обратная связь при клике */
 .click-shrink {
-  transition: transform 450ms ease-in;
+  transition: transform 100ms cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .click-shrink:active {
-  transform: scale(0.95);
+  transform: scale(0.97);
 }
 
 /* ============================================
    Комбинированные эффекты
    ============================================ */
 
-/* Hover lift + scale для кнопок */
-/* ИСПРАВЛЕНО: Уменьшена скорость анимации в 3 раза (300ms -> 900ms) */
+/* Hover lift + scale для кнопок - плавный но отзывчивый */
 .hover-lift-scale {
   transition:
-    transform 900ms cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow 900ms cubic-bezier(0.4, 0, 0.2, 1),
-    border-color 900ms cubic-bezier(0.4, 0, 0.2, 1);
-  /* ИСПРАВЛЕНО: Убрали scale для предотвращения размытия текста */
+    transform 200ms cubic-bezier(0.25, 0.1, 0.25, 1),
+    box-shadow 200ms cubic-bezier(0.25, 0.1, 0.25, 1),
+    border-color 200ms cubic-bezier(0.25, 0.1, 0.25, 1);
   transform: translateY(0) translateZ(0);
-  will-change: transform;
-  /* Принудительное сглаживание текста без размытия */
+  will-change: transform, box-shadow;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -741,6 +736,38 @@ img.logo-data-pulse,
 }
 
 /* ============================================
+   Neon Glow уведомления - shimmer и pulse эффекты
+   ============================================ */
+
+/* Shimmer анимация - бегущий блик */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+}
+
+/* Subtle pulse для неоновых элементов */
+@keyframes pulse-subtle {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 1.5s infinite ease-in-out;
+}
+
+/* ============================================
    Медиа-запросы для мобильных устройств
    ============================================ */
 
@@ -759,3 +786,4 @@ img.logo-data-pulse,
     animation: none !important;
   }
 }
+

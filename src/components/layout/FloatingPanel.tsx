@@ -321,8 +321,13 @@ export function FloatingPanel() {
         {/* Заголовок с таймером */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 flex-1 min-w-0">
-            {/* Индикатор статуса */}
-            <div className="w-2 h-2 rounded-full bg-green-500 flex-shrink-0" />
+            {/* Индикатор статуса с пульсацией */}
+            <div className="relative w-3 h-3 flex-shrink-0">
+              {/* Внешний пульсирующий круг */}
+              <div className="absolute inset-0 rounded-full bg-green-400 animate-ping opacity-75" />
+              {/* Основной индикатор */}
+              <div className="relative w-3 h-3 rounded-full bg-green-500 animate-pulse shadow-lg shadow-green-500/50" />
+            </div>
 
             {/* Время таймера */}
             <div className="flex flex-col min-w-0">

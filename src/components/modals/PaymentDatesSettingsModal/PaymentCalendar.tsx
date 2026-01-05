@@ -101,11 +101,12 @@ export function PaymentCalendar({
           textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
         }
       } else if (inPeriod) {
-        dayClasses += ' text-gray-900 dark:text-white font-medium'
+        dayClasses += ' text-white font-semibold'
         dayStyles = {
-          background: `${inPeriod.color}20`,
-          border: `1px solid ${inPeriod.color}40`,
-          textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
+          background: `${inPeriod.color}`,
+          opacity: 0.85,
+          border: `2px solid ${inPeriod.color}`,
+          textShadow: '0 1px 3px rgba(0, 0, 0, 0.3)',
         }
       } else {
         dayClasses +=

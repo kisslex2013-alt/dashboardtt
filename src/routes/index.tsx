@@ -19,7 +19,7 @@ import { SkeletonCard, SkeletonList } from '../components/ui/SkeletonCard'
 /**
  * Типы виртуальных роутов
  */
-export type VirtualRoute = 'statistics' | 'analytics' | 'entries' | 'pomodoro'
+export type VirtualRoute = 'statistics' | 'analytics' | 'predictive' | 'comparative' | 'entries' | 'pomodoro'
 
 /**
  * Lazy-loaded компоненты для каждой секции
@@ -35,6 +35,12 @@ export const StatisticsRoute = lazy(() =>
 
 // ✅ ROUTE-BASED SPLITTING: Analytics route chunk
 export const AnalyticsRoute = lazy(() => import('../components/statistics/AnalyticsSection'))
+
+// ✅ ROUTE-BASED SPLITTING: Predictive Analytics route chunk
+export const PredictiveAnalyticsRoute = lazy(() => import('../components/statistics/PredictiveAnalyticsSection'))
+
+// ✅ ROUTE-BASED SPLITTING: Comparative Analytics route chunk
+export const ComparativeAnalyticsRoute = lazy(() => import('../components/statistics/ComparativeAnalyticsSection'))
 
 // ✅ ROUTE-BASED SPLITTING: Entries route chunk
 export const EntriesRoute = lazy(() =>
@@ -70,6 +76,12 @@ const RouteFallbacks: Record<VirtualRoute, ReactNode> = {
       </div>
     </div>
   ),
+  predictive: (
+     <div className="mb-6 glass-effect rounded-xl p-6 h-48 animate-pulse bg-gray-100 dark:bg-gray-800" />
+  ),
+  comparative: (
+    <div className="mb-6 glass-effect rounded-xl p-6 h-48 animate-pulse bg-gray-100 dark:bg-gray-800" />
+  ),
   entries: (
     <div className="glass-effect rounded-xl p-6">
       <SkeletonList count={3} variant="listItem" />
@@ -103,7 +115,7 @@ export function useRouteComponent(route: VirtualRoute): ComponentType<any> {
     case 'entries':
       return EntriesRoute
     case 'pomodoro':
-      return PomodoroRoute
+      return FloatingPomodoroRoute
     default:
       return StatisticsRoute
   }

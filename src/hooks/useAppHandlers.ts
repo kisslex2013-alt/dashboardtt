@@ -45,6 +45,9 @@ export function useAppHandlers() {
   const reminderShownRef = useRef(false)
   const lastReminderDateRef = useRef<string | null>(null)
   const lastReminderTimestampRef = useRef<number | null>(null)
+  
+  // Ref to prevent duplicate demo data loading (StrictMode + useCallback recreation)
+  const demoLoadingRef = useRef(false)
 
   // ========================================
   // Modal Handlers
@@ -301,37 +304,59 @@ export function useAppHandlers() {
 
   const loadDemo = useCallback(async () => {
     const demoDataCleared = localStorage.getItem('demo_data_cleared') === 'true'
-    if (entries.length === 0 && !localStorage.getItem('demo_data_loaded') && !demoDataCleared) {
+    const demoDataLoaded = localStorage.getItem('demo_data_loaded') === 'true'
+    const demoDataLoading = localStorage.getItem('demo_data_loading') === 'true'
+    
+    // Читаем entries напрямую из store чтобы получить актуальное значение после гидратации
+    const currentEntries = useEntriesStore.getState().entries
+    
+    if (currentEntries.length === 0 && !demoDataLoaded && !demoDataCleared && !demoDataLoading) {
+      // Устанавливаем флаг загрузки СРАЗУ в localStorage (синхронно для всех экземпляров)
+      localStorage.setItem('demo_data_loading', 'true')
+      
       try {
         logger.log('📥 Начинаем загрузку тестовых данных...')
 
         const demoEntries = await loadDemoData()
 
         if (demoEntries && demoEntries.length > 0) {
-          importEntries(demoEntries)
+          // Set localStorage BEFORE importing
           localStorage.setItem('demo_data_loaded', 'true')
+          localStorage.removeItem('demo_data_loading')
+          
+          importEntries(demoEntries)
 
           logger.log(`✅ Загружено ${demoEntries.length} тестовых записей`)
           showSuccess(
             `Загружено ${demoEntries.length} демонстрационных записей для ознакомления с функционалом`
           )
+        } else {
+          localStorage.removeItem('demo_data_loading')
         }
       } catch (error) {
+        // Reset flag on error to allow retry
+        localStorage.removeItem('demo_data_loading')
         const errorMessage = handleError(error, { operation: 'Загрузка тестовых данных' })
         logger.error('❌ Ошибка загрузки тестовых данных:', error)
         showError(errorMessage)
       }
     }
-  }, [entries.length, importEntries, showSuccess, showError])
+  }, [importEntries, showSuccess, showError])
 
   // ========================================
   // Auto-load Demo Data on Mount
   // ========================================
 
   useEffect(() => {
-    // Автоматически загружаем демо данные при первом запуске
-    loadDemo()
-  }, [loadDemo])
+    // Ждем гидратации Zustand persist (чтобы entries успели загрузиться из localStorage)
+    // Небольшая задержка гарантирует, что persist middleware завершил работу
+    const timer = setTimeout(() => {
+      loadDemo()
+    }, 100)
+    
+    return () => clearTimeout(timer)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []) // Пустой массив зависимостей - вызываем только 1 раз при mount
 
   return {
     // Modal handlers

@@ -1,6 +1,6 @@
 # 💡 Предложения по оптимизации
 
-> Обновлено: 27.12.2025
+> Обновлено: 29.12.2025
 
 ---
 
@@ -72,6 +72,7 @@
 |-------------|----------|---------|--------|
 | **React.memo** | Лишние ререндеры в списках | Мемоизация EntryItem, ChartComponent | В планах |
 | **Virtual scrolling** | Уже есть, проверить все списки | Аудит VirtualizedListView | В планах |
+| ✅ **AI Analysis Worker** | Анализ блокировал main thread | Web Worker + кэширование | **Сделано** |
 | ✅ **Lazy loading** | Некоторые модалки грузятся сразу | Реализовано в App.tsx (AppModals) | **Сделано** |
 | ✅ **Bundle size** | route-analytics 658KB | Route-based Code splitting реализован | **Сделано** |
 

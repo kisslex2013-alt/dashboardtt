@@ -14,7 +14,14 @@ import { useNotifications } from '../../hooks/useNotifications'
  * @param {boolean} props.isDragging - флаг активного перетаскивания
  * @param {string} [props.position='right'] - позиция разделителя ('left' | 'right')
  */
-export const GridColumnDivider = memo(({ column, onDragStart, isDragging, position = 'right' }) => {
+interface DividerProps {
+  column: string
+  onDragStart: (mode: 'grid' | 'table', column: string, startX: number) => void
+  isDragging: boolean
+  position?: 'left' | 'right'
+}
+
+export const GridColumnDivider = memo(({ column, onDragStart, isDragging, position = 'right' }: DividerProps) => {
   const handleMouseDown = e => {
     e.preventDefault()
     e.stopPropagation()
@@ -58,7 +65,7 @@ export const GridColumnDivider = memo(({ column, onDragStart, isDragging, positi
  * @param {string} [props.position='right'] - позиция разделителя ('left' | 'right')
  */
 export const TableColumnDivider = memo(
-  ({ column, onDragStart, isDragging, position = 'right' }) => {
+  ({ column, onDragStart, isDragging, position = 'right' }: DividerProps) => {
     const handleMouseDown = e => {
       e.preventDefault()
       e.stopPropagation()
@@ -99,7 +106,13 @@ export const TableColumnDivider = memo(
  * @param {Function} props.onReset - функция сброса настроек
  * @param {Function} props.onSaveAsDefaults - функция сохранения как дефолтных значений
  */
-export const ResizeModeIndicator = memo(({ isVisible, onReset, onSaveAsDefaults }) => {
+interface IndicatorProps {
+  isVisible: boolean
+  onReset: () => void
+  onSaveAsDefaults: () => boolean
+}
+
+export const ResizeModeIndicator = memo(({ isVisible, onReset, onSaveAsDefaults }: IndicatorProps) => {
   const [showConfirm, setShowConfirm] = useState(false)
   const { showNotification } = useNotifications()
 

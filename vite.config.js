@@ -25,6 +25,9 @@ export default defineConfig({
 
   // ✅ ИСПРАВЛЕНИЕ: Резолв TypeScript файлов
   resolve: {
+    alias: {
+      '@': join(process.cwd(), 'src'),
+    },
     extensions: ['.mjs', '.js', '.mts', '.ts', '.jsx', '.tsx', '.json'],
   },
 

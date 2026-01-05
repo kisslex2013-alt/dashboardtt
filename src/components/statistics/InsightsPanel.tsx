@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState, useEffect } from 'react'
+import { useMemo, useRef, useState, useEffect, ReactNode, ComponentType } from 'react'
 import {
   Calendar,
   Clock,
@@ -10,6 +10,7 @@ import {
   BarChart2,
 } from '../../utils/icons'
 import { useEntries, useEntriesStore } from '../../store/useEntriesStore'
+import { TimeEntry } from '../../types'
 import { InfoTooltip } from '../ui/InfoTooltip'
 import { InsightCard } from './InsightCard'
 import { EmptyState } from '../ui/EmptyState'
@@ -38,7 +39,23 @@ import { SkeletonList } from '../ui/SkeletonCard'
  *
  * @param {boolean} shouldAnimate - Запускать ли анимацию при раскрытии аккордеона
  */
-export function InsightsPanel({ shouldAnimate = true }) {
+interface InsightsPanelProps {
+  shouldAnimate?: boolean
+}
+
+interface InsightItem {
+  id: string
+  title: string
+  description: string | ReactNode
+  icon: ComponentType<any>
+  gradient: string
+  borderColor: string
+  iconColor: string
+  glowClass: string
+  highlightColorClass: string
+}
+
+export function InsightsPanel({ shouldAnimate = true }: InsightsPanelProps) {
   // ✅ ОПТИМИЗАЦИЯ: Используем атомарный селектор для минимизации ре-рендеров
   const entries = useEntries()
 
@@ -96,8 +113,8 @@ export function InsightsPanel({ shouldAnimate = true }) {
 
   // ✅ ИСПРАВЛЕНО: Отслеживаем предыдущие завершенные записи для предотвращения лишних пересчетов
   // Сравниваем по ID завершенных записей, а не по ссылке на массив
-  const previousCompletedIdsRef = useRef(null)
-  const previousCompletedEntriesRef = useRef(null)
+  const previousCompletedIdsRef = useRef<string | null>(null)
+  const previousCompletedEntriesRef = useRef<TimeEntry[] | null>(null)
   const stableCompletedEntries = useMemo(() => {
     if (!completedEntries || completedEntries.length === 0) {
       previousCompletedIdsRef.current = null
@@ -128,24 +145,24 @@ export function InsightsPanel({ shouldAnimate = true }) {
   const shouldUseWorker = stableCompletedEntries && stableCompletedEntries.length > 500
   const { result: workerBestWeekday, isLoading: workerBestWeekdayLoading } = useWorkerCalculation(
     shouldUseWorker ? stableCompletedEntries : [],
-    'bestWeekday',
-    'all'
+    'bestWeekday' as any,
+    'all' as any
   )
   const { result: workerPeakProductivity, isLoading: workerPeakProductivityLoading } =
-    useWorkerCalculation(shouldUseWorker ? stableCompletedEntries : [], 'peakProductivity', 'all')
+    useWorkerCalculation(shouldUseWorker ? stableCompletedEntries : [], 'peakProductivity' as any, 'all')
   const { result: workerEarningsTrend, isLoading: workerEarningsTrendLoading } = useWorkerCalculation(
     shouldUseWorker ? stableCompletedEntries : [],
-    'earningsTrend',
-    'all'
+    'earningsTrend' as any,
+    'all' as any
   )
   const { result: workerLongestSession, isLoading: workerLongestSessionLoading } = useWorkerCalculation(
     shouldUseWorker ? stableCompletedEntries : [],
-    'longestSession',
-    'all'
+    'longestSession' as any,
+    'all' as any
   )
 
   // Генерация всех инсайтов с мемоизацией
-  const insights = useMemo(() => {
+  const insights = useMemo<InsightItem[] | 'loading' | null>(() => {
     // Показываем инсайты только при >= 30 завершенных записях
     if (!stableCompletedEntries || stableCompletedEntries.length < 30) {
       return null
@@ -162,10 +179,10 @@ export function InsightsPanel({ shouldAnimate = true }) {
       return 'loading'
     }
 
-    const insightsArray = []
+    const insightsArray: InsightItem[] = []
 
     // 1️⃣ Лучший день недели
-    const bestDay =
+    const bestDay: any =
       shouldUseWorker && workerBestWeekday
         ? workerBestWeekday
         : calculateBestWeekday(stableCompletedEntries)
@@ -183,7 +200,7 @@ export function InsightsPanel({ shouldAnimate = true }) {
     })
 
     // 2️⃣ Пик продуктивности
-    const peak =
+    const peak: any =
       shouldUseWorker && workerPeakProductivity
         ? workerPeakProductivity
         : calculatePeakProductivity(stableCompletedEntries)
@@ -201,7 +218,7 @@ export function InsightsPanel({ shouldAnimate = true }) {
     })
 
     // 3️⃣ Тренд заработка
-    const trend =
+    const trend: any =
       shouldUseWorker && workerEarningsTrend
         ? workerEarningsTrend
         : calculateEarningsTrend(stableCompletedEntries)
@@ -272,7 +289,7 @@ export function InsightsPanel({ shouldAnimate = true }) {
     })
 
     // 4️⃣ Самая длинная сессия
-    const longest =
+    const longest: any =
       shouldUseWorker && workerLongestSession
         ? workerLongestSession
         : calculateLongestSession(stableCompletedEntries)
@@ -373,7 +390,7 @@ export function InsightsPanel({ shouldAnimate = true }) {
   ])
 
   // ✅ ИСПРАВЛЕНО: Отслеживаем предыдущие инсайты для предотвращения повторной анимации
-  const previousInsightsRef = useRef(null)
+  const previousInsightsRef = useRef<InsightItem[] | 'loading' | null>(null)
   const shouldTriggerAnimation = useMemo(() => {
     if (!insights || insights === 'loading') {
       previousInsightsRef.current = insights

@@ -41,6 +41,22 @@ import { useMemo, useEffect, useState, useRef } from 'react'
  * // Часы с 2 знаками после запятой
  * <AnimatedCounter value={8.5} decimals={2} suffix=" ч." />
  */
+interface AnimatedCounterProps {
+  value: number | string
+  format?: string
+  formatter?: (value: number) => string
+  locale?: string
+  springConfig?: { duration: number; tension: number; friction: number }
+  className?: string
+  decimals?: number
+  suffix?: string
+  prefix?: string
+  style?: React.CSSProperties
+  immediate?: boolean
+  duration?: number
+  resetAnimation?: boolean | string
+}
+
 export function AnimatedCounter({
   value,
   format = 'number',
@@ -55,7 +71,7 @@ export function AnimatedCounter({
   immediate: forceImmediate = false,
   duration = 0.8,
   resetAnimation = false,
-}) {
+}: AnimatedCounterProps) {
   // ✅ Парсим значение один раз через useMemo для оптимизации
   const numericValue = useMemo(() => {
     if (typeof value === 'number') return value

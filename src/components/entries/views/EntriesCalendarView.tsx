@@ -16,18 +16,9 @@ import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInte
 import { ru } from 'date-fns/locale'
 import { getDayMetrics } from '../../../utils/dayMetrics'
 import { useDailyGoal } from '../../../store/useSettingsStore'
+import { TimeEntry } from '../../../types'
 
-interface TimeEntry {
-  id: string
-  date: string
-  start?: string
-  end?: string
-  duration?: number
-  earned?: number
-  description?: string
-  categoryId?: string
-  category?: string
-}
+
 
 interface EntriesCalendarViewProps {
   entries: TimeEntry[]
@@ -45,29 +36,6 @@ export function EntriesCalendarView({
   const [currentMonth, setCurrentMonth] = useState(new Date())
   const [slideDirection, setSlideDirection] = useState<'left' | 'right' | null>(null)
   const dailyGoal = useDailyGoal()
-
-  // Навигация по месяцам (упрощенные обработчики)
-  const goToPreviousMonth = (e: React.MouseEvent) => {
-    console.log('⬅️ Клик на стрелку ВЛЕВО')
-    e.preventDefault()
-    e.stopPropagation()
-    setCurrentMonth(prev => {
-      const newMonth = subMonths(prev, 1)
-      console.log('Новый месяц:', newMonth)
-      return newMonth
-    })
-  }
-
-  const goToNextMonth = (e: React.MouseEvent) => {
-    console.log('➡️ Клик на стрелку ВПРАВО')
-    e.preventDefault()
-    e.stopPropagation()
-    setCurrentMonth(prev => {
-      const newMonth = addMonths(prev, 1)
-      console.log('Новый месяц:', newMonth)
-      return newMonth
-    })
-  }
 
   // Keyboard navigation - клавиши ← и →
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
@@ -112,6 +80,7 @@ export function EntriesCalendarView({
       totalBreaks: string
       totalEarned: number
       count: number
+      status: { status: 'success' | 'warning' | 'danger' | null; color: string | null; label: string | null } | null
     }>()
 
     entriesByDay.forEach((dayEntries, dateKey) => {
@@ -120,7 +89,8 @@ export function EntriesCalendarView({
         totalHours: metrics.totalHours,
         totalBreaks: metrics.totalBreaks,
         totalEarned: metrics.totalEarned,
-        count: dayEntries.length
+        count: dayEntries.length,
+        status: metrics.status
       })
     })
 
@@ -164,18 +134,11 @@ export function EntriesCalendarView({
       <div className="flex items-center justify-between mb-6 px-2 relative z-50">
         <button
           type="button"
-          style={{ pointerEvents: 'auto' }}
-          onClick={(e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            console.log('⬅️ PREV clicked!')
-            alert('Клик на стрелку ВЛЕВО')
-            setCurrentMonth(subMonths(currentMonth, 1))
-          }}
-          className="group w-10 h-10 flex items-center justify-center rounded-lg bg-gray-200 dark:bg-gray-800/50 hover:bg-gray-300 dark:hover:bg-gray-700/50 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer z-50"
+          onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
+          className="group w-10 h-10 flex items-center justify-center rounded-lg bg-gray-200 dark:bg-gray-800/50 hover:bg-gray-300 dark:hover:bg-gray-700/50 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer"
           aria-label="Предыдущий месяц"
         >
-          <ChevronLeft className="w-5 h-5 transition-transform duration-200 group-hover:scale-110 pointer-events-none" />
+          <ChevronLeft className="w-5 h-5 transition-transform duration-200 group-hover:scale-110" />
         </button>
 
         <h3 className="text-xl font-bold text-gray-900 dark:text-white capitalize">
@@ -184,18 +147,11 @@ export function EntriesCalendarView({
 
         <button
           type="button"
-          style={{ pointerEvents: 'auto' }}
-          onClick={(e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            console.log('➡️ NEXT clicked!')
-            alert('Клик на стрелку ВПРАВО')
-            setCurrentMonth(addMonths(currentMonth, 1))
-          }}
-          className="group w-10 h-10 flex items-center justify-center rounded-lg bg-gray-200 dark:bg-gray-800/50 hover:bg-gray-300 dark:hover:bg-gray-700/50 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer z-50"
+          onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
+          className="group w-10 h-10 flex items-center justify-center rounded-lg bg-gray-200 dark:bg-gray-800/50 hover:bg-gray-300 dark:hover:bg-gray-700/50 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer"
           aria-label="Следующий месяц"
         >
-          <ChevronRight className="w-5 h-5 transition-transform duration-200 group-hover:scale-110 pointer-events-none" />
+          <ChevronRight className="w-5 h-5 transition-transform duration-200 group-hover:scale-110" />
         </button>
       </div>
 
@@ -228,22 +184,33 @@ export function EntriesCalendarView({
           const isToday = isSameDay(day, new Date())
           const isWeekendDay = isWeekend(day)
           const hasData = metrics && metrics.totalHours > 0
+          const dayStatus = metrics?.status?.status
 
-          // Определяем стиль ячейки - light/dark theme support
+          // Определяем стиль ячейки по статусу дня
           let cellStyle = 'bg-gray-100 dark:bg-gray-800/30 border-gray-200 dark:border-gray-700/50'
 
           if (hasData) {
-            cellStyle = 'bg-emerald-100 dark:bg-emerald-900/40 border-emerald-300 dark:border-emerald-600/60 hover:bg-emerald-200 dark:hover:bg-emerald-800/50'
+            // Цвет по статусу выполнения цели
+            if (dayStatus === 'success') {
+              cellStyle = 'bg-green-100 dark:bg-green-900/40 border-green-300 dark:border-green-600/60 hover:bg-green-200 dark:hover:bg-green-800/50'
+            } else if (dayStatus === 'warning') {
+              cellStyle = 'bg-yellow-100 dark:bg-yellow-900/40 border-yellow-300 dark:border-yellow-600/60 hover:bg-yellow-200 dark:hover:bg-yellow-800/50'
+            } else if (dayStatus === 'danger') {
+              cellStyle = 'bg-red-100 dark:bg-red-900/40 border-red-300 dark:border-red-600/60 hover:bg-red-200 dark:hover:bg-red-800/50'
+            } else {
+              // Нет цели — нейтральный цвет
+              cellStyle = 'bg-emerald-100 dark:bg-emerald-900/40 border-emerald-300 dark:border-emerald-600/60 hover:bg-emerald-200 dark:hover:bg-emerald-800/50'
+            }
           } else if (isWeekendDay) {
             cellStyle = 'bg-gray-200 dark:bg-gray-900/50 border-gray-300 dark:border-gray-700/30'
           }
 
           if (isSelected) {
-            cellStyle = 'bg-emerald-300 dark:bg-emerald-700/60 border-emerald-500 dark:border-emerald-400 ring-2 ring-emerald-400/50'
+            cellStyle = 'bg-blue-300 dark:bg-blue-700/60 border-blue-500 dark:border-blue-400 ring-2 ring-blue-400/50'
           }
 
           if (isToday && !isSelected) {
-            cellStyle += ' ring-2 ring-emerald-500/70 ring-offset-1 ring-offset-white dark:ring-offset-gray-900'
+            cellStyle += ' ring-2 ring-blue-500/70 ring-offset-1 ring-offset-white dark:ring-offset-gray-900'
           }
 
           return (
@@ -259,15 +226,23 @@ export function EntriesCalendarView({
               <div className="absolute top-2 right-2">
                 <span className={`
                   text-lg font-bold
-                  ${isToday ? 'text-emerald-600 dark:text-emerald-400' : hasData ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'}
+                  ${isToday ? 'text-blue-600 dark:text-blue-400' : hasData ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'}
                 `}>
                   {format(day, 'd')}
                 </span>
               </div>
 
-              {/* Количество записей за день (без зеленой подложки) */}
+              {/* Количество записей + статус дня */}
               {hasData && (
-                <div className="absolute top-2 left-2 flex items-center gap-1">
+                <div className="absolute top-2 left-2 flex items-center gap-1.5">
+                  {/* Индикатор статуса */}
+                  {dayStatus && (
+                    <span className={`w-2 h-2 rounded-full flex-shrink-0 ${
+                      dayStatus === 'success' ? 'bg-green-500' :
+                      dayStatus === 'warning' ? 'bg-yellow-500' :
+                      dayStatus === 'danger' ? 'bg-red-500' : 'bg-gray-400'
+                    }`} />
+                  )}
                   <span className="text-xs font-medium text-gray-600 dark:text-gray-300">
                     {metrics.count} {formatEntriesWord(metrics.count)}
                   </span>
@@ -310,15 +285,23 @@ export function EntriesCalendarView({
       {/* Легенда */}
       <div className="flex flex-wrap items-center justify-center gap-4 mt-6 py-4 border-t border-gray-200 dark:border-gray-700/50">
         <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-          <div className="w-4 h-4 rounded bg-emerald-100 dark:bg-emerald-900/40 border border-emerald-300 dark:border-emerald-600/60" />
-          <span>Рабочий день</span>
+          <div className="w-4 h-4 rounded bg-green-100 dark:bg-green-900/40 border border-green-300 dark:border-green-600/60" />
+          <span>Цель выполнена</span>
+        </div>
+        <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+          <div className="w-4 h-4 rounded bg-yellow-100 dark:bg-yellow-900/40 border border-yellow-300 dark:border-yellow-600/60" />
+          <span>Близко к цели</span>
+        </div>
+        <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+          <div className="w-4 h-4 rounded bg-red-100 dark:bg-red-900/40 border border-red-300 dark:border-red-600/60" />
+          <span>Ниже цели</span>
         </div>
         <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
           <div className="w-4 h-4 rounded bg-gray-200 dark:bg-gray-900/50 border border-gray-300 dark:border-gray-700/30" />
-          <span>Выходной</span>
+          <span>Нет данных</span>
         </div>
         <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-          <div className="w-4 h-4 rounded border-2 border-emerald-500/70" />
+          <div className="w-4 h-4 rounded border-2 border-blue-500/70" />
           <span>Сегодня</span>
         </div>
       </div>

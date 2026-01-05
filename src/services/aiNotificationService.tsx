@@ -19,6 +19,7 @@ import {
   Trophy,
   BarChart3,
   AlertCircle,
+  Calendar,
 } from '../utils/icons'
 import type {
   AINotification,
@@ -35,6 +36,7 @@ import type {
   EfficiencyAnalysis,
   AnomalyAnalysis,
   AchievementData,
+  MonthSummaryData,
 } from './aiNotificationAnalyzer'
 
 /**
@@ -64,6 +66,7 @@ const getIcon = (type: NotificationType) => {
     'achievement': <Trophy className="w-5 h-5" />,
     'weekly-insight': <BarChart3 className="w-5 h-5" />,
     'anomaly': <AlertCircle className="w-5 h-5" />,
+    'month-summary': <Calendar className="w-5 h-5" />,
   }
   return iconMap[type] || <AlertCircle className="w-5 h-5" />
 }
@@ -81,6 +84,7 @@ const getTypeLabel = (type: NotificationType): string => {
     'achievement': 'Достижение',
     'weekly-insight': 'Еженедельный инсайт',
     'anomaly': 'Аномалия',
+    'month-summary': 'Итоги месяца',
   }
   return labels[type]
 }
@@ -99,7 +103,7 @@ const getTestNotificationData = (
     'burnout-warning': {
       type: 'burnout-warning',
       priority: 'critical',
-      title: '🔥 Риск выгорания!',
+      title: 'Риск выгорания!',
       preview:
         'Вы работаете 12+ часов в день последние 5 дней. Рекомендуем снизить нагрузку.',
       content: (
@@ -133,7 +137,7 @@ const getTestNotificationData = (
     'goal-risk': {
       type: 'goal-risk',
       priority: 'high',
-      title: '⚠️ Риск не достичь цели',
+      title: 'Риск не достичь цели',
       preview:
         'При текущем темпе вы заработаете 78,000₽ вместо целевых 100,000₽.',
       content: (
@@ -172,7 +176,7 @@ const getTestNotificationData = (
     'monthly-forecast': {
       type: 'monthly-forecast',
       priority: 'normal',
-      title: '📊 Прогноз месяца',
+      title: 'Прогноз месяца',
       preview: 'При текущем темпе вы заработаете ~125,000₽ (+25% к цели).',
       content: (
         <div>
@@ -207,7 +211,7 @@ const getTestNotificationData = (
     'productivity-pattern': {
       type: 'productivity-pattern',
       priority: 'normal',
-      title: '💡 Обнаружен паттерн продуктивности',
+      title: 'Обнаружен паттерн продуктивности',
       preview:
         'Вы наиболее продуктивны с 10:00 до 13:00. Планируйте сложные задачи на это время.',
       content: (
@@ -243,7 +247,7 @@ const getTestNotificationData = (
     'inefficient-category': {
       type: 'inefficient-category',
       priority: 'normal',
-      title: '⏱️ Неэффективная категория',
+      title: 'Неэффективная категория',
       preview:
         'Категория "Встречи" занимает 30% времени, но приносит только 12% дохода.',
       content: (
@@ -285,7 +289,7 @@ const getTestNotificationData = (
     'achievement': {
       type: 'achievement',
       priority: 'normal',
-      title: '🏆 Достижение разблокировано!',
+      title: 'Достижение разблокировано!',
       preview: 'Вы достигли цели месяца за 20 дней! Новый личный рекорд.',
       content: (
         <div>
@@ -322,7 +326,7 @@ const getTestNotificationData = (
     'weekly-insight': {
       type: 'weekly-insight',
       priority: 'normal',
-      title: '💡 Еженедельный инсайт',
+      title: 'Еженедельный инсайт',
       preview:
         'На этой неделе вы заработали 28,000₽ за 32 часа работы. Средняя ставка: 875₽/ч.',
       content: (
@@ -364,7 +368,7 @@ const getTestNotificationData = (
     'anomaly': {
       type: 'anomaly',
       priority: 'high',
-      title: '🔍 Обнаружена аномалия',
+      title: 'Обнаружена аномалия',
       preview:
         'Вчера вы заработали 15,000₽ за 4 часа (3,750₽/ч) - в 4 раза выше обычного!',
       content: (
@@ -399,6 +403,46 @@ const getTestNotificationData = (
         'Проанализируйте, какие задачи выполнялись',
         'Попробуйте повторить успешный паттерн',
         'Подумайте о повышении базовой ставки',
+      ],
+    },
+    'month-summary': {
+      type: 'month-summary',
+      priority: 'normal',
+      title: 'Итоги месяца',
+      preview: '89% от цели (89 000₽ из 100 000₽). Отличный результат!',
+      content: (
+        <div>
+          <p className="mb-3">Подводим итоги месяца:</p>
+          <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg mb-3">
+            <p className="text-sm">
+              <strong>Заработано:</strong> 89 000₽
+              <br />
+              <strong>Цель:</strong> 100 000₽
+              <br />
+              <strong>Выполнение:</strong> 89%
+              <br />
+              <strong>Осталось дней:</strong> 1
+              <br />
+              <strong>До цели:</strong> 11 000₽
+            </p>
+          </div>
+          <p className="text-sm text-yellow-600 dark:text-yellow-400">
+            💪 Ещё можно успеть! Нужно 11 000₽ в день.
+          </p>
+        </div>
+      ),
+      icon: getIcon('month-summary'),
+      data: {
+        currentEarned: 89000,
+        goalAmount: 100000,
+        percentComplete: 89,
+        daysRemaining: 1,
+        status: 'behind',
+      },
+      recommendations: [
+        'Сфокусируйтесь на высокооплачиваемых задачах',
+        'Рассмотрите дополнительные проекты',
+        'Проанализируйте причины отставания',
       ],
     },
   }
@@ -499,42 +543,42 @@ export class AINotificationService {
     return [
       {
         value: 'burnout-warning',
-        label: '🔥 Предупреждение о выгорании',
+        label: 'Предупреждение о выгорании',
         description: 'Критическое: работа без перерывов',
       },
       {
         value: 'goal-risk',
-        label: '⚠️ Риск недостижения цели',
+        label: 'Риск недостижения цели',
         description: 'Высокий: не достигнете цели месяца',
       },
       {
         value: 'monthly-forecast',
-        label: '📊 Прогноз месяца',
+        label: 'Прогноз месяца',
         description: 'Обычный: прогноз на конец месяца',
       },
       {
         value: 'productivity-pattern',
-        label: '💡 Паттерн продуктивности',
+        label: 'Паттерн продуктивности',
         description: 'Обычный: обнаружен пик продуктивности',
       },
       {
         value: 'inefficient-category',
-        label: '⏱️ Неэффективная категория',
+        label: 'Неэффективная категория',
         description: 'Обычный: низкая отдача от категории',
       },
       {
         value: 'achievement',
-        label: '🏆 Достижение',
+        label: 'Достижение',
         description: 'Обычный: цель достигнута',
       },
       {
         value: 'weekly-insight',
-        label: '💡 Еженедельный инсайт',
+        label: 'Еженедельный инсайт',
         description: 'Обычный: итоги недели',
       },
       {
         value: 'anomaly',
-        label: '🔍 Аномалия',
+        label: 'Аномалия',
         description: 'Высокий: необычное событие',
       },
     ]
@@ -565,7 +609,7 @@ export class AINotificationService {
       id: generateId('burnout-warning'),
       type: 'burnout-warning',
       priority: 'critical',
-      title: '🔥 Риск выгорания!',
+      title: 'Риск выгорания!',
       preview: `Вы работаете ${data.avgHoursPerDay}+ часов в день последние ${data.consecutiveDays} дней. Рекомендуем снизить нагрузку.`,
       content: (
         <div>
@@ -611,7 +655,7 @@ export class AINotificationService {
       id: generateId('goal-risk'),
       type: 'goal-risk',
       priority: 'high',
-      title: '⚠️ Риск не достичь цели',
+      title: 'Риск не достичь цели',
       preview: `При текущем темпе вы заработаете ${data.forecast.toLocaleString('ru')}₽ вместо целевых ${data.goalAmount.toLocaleString('ru')}₽.`,
       content: (
         <div>
@@ -884,6 +928,99 @@ export class AINotificationService {
         'Используйте время для обучения новым навыкам',
         'Поставьте новую растянутую цель (+30%)',
       ],
+      isRead: false,
+      isTest: false,
+      createdAt: new Date().toISOString(),
+    }
+  }
+
+  /**
+   * Генерирует уведомление об итогах месяца
+   */
+  static generateMonthSummaryNotification(data: MonthSummaryData): AINotification {
+    const statusConfig = {
+      exceeded: {
+        emoji: '🎉',
+        title: 'Месячная цель перевыполнена!',
+        color: 'green',
+      },
+      'on-track': {
+        emoji: '✅',
+        title: 'Цель месяца достигнута!',
+        color: 'blue',
+      },
+      behind: {
+        emoji: '⚠️',
+        title: 'Цель почти достигнута',
+        color: 'yellow',
+      },
+      failed: {
+        emoji: '📊',
+        title: 'Итоги месяца',
+        color: 'gray',
+      },
+    }
+
+    const config = statusConfig[data.status]
+    const remaining = data.goalAmount - data.currentEarned
+
+    return {
+      id: generateId('month-summary'),
+      type: 'month-summary',
+      priority: data.status === 'exceeded' || data.status === 'on-track' ? 'normal' : 'high',
+      title: `${config.emoji} ${config.title}`,
+      preview: `${data.percentComplete}% от цели (${data.currentEarned.toLocaleString('ru')}₽ из ${data.goalAmount.toLocaleString('ru')}₽)`,
+      content: (
+        <div>
+          <p className="mb-3">Подводим итоги месяца:</p>
+          <div className={`bg-${config.color}-50 dark:bg-${config.color}-900/20 p-3 rounded-lg mb-3`}>
+            <p className="text-sm">
+              <strong>Заработано:</strong> {data.currentEarned.toLocaleString('ru')}₽
+              <br />
+              <strong>Цель:</strong> {data.goalAmount.toLocaleString('ru')}₽
+              <br />
+              <strong>Выполнение:</strong> {data.percentComplete}%
+              <br />
+              <strong>Осталось дней:</strong> {data.daysRemaining}
+              {remaining > 0 && (
+                <>
+                  <br />
+                  <strong>До цели:</strong> {remaining.toLocaleString('ru')}₽
+                </>
+              )}
+            </p>
+          </div>
+          {data.status === 'behind' && (
+            <p className="text-sm text-yellow-600 dark:text-yellow-400">
+              💪 Ещё можно успеть! Нужно {Math.round(remaining / Math.max(1, data.daysRemaining)).toLocaleString('ru')}₽ в день.
+            </p>
+          )}
+          {data.status === 'exceeded' && (
+            <p className="text-sm text-green-600 dark:text-green-400">
+              🎊 Превосходный результат! Отличная работа!
+            </p>
+          )}
+        </div>
+      ),
+      icon: getIcon('month-summary'),
+      data: {
+        currentEarned: data.currentEarned,
+        goalAmount: data.goalAmount,
+        percentComplete: data.percentComplete,
+        daysRemaining: data.daysRemaining,
+        status: data.status,
+      },
+      recommendations: data.status === 'behind' 
+        ? [
+            'Сфокусируйтесь на высокооплачиваемых задачах',
+            'Рассмотрите дополнительные проекты',
+            'Проанализируйте причины отставания',
+          ]
+        : [
+            'Подведите итоги продуктивности',
+            'Поставьте новые цели на следующий месяц',
+            'Наградите себя за проделанную работу',
+          ],
       isRead: false,
       isTest: false,
       createdAt: new Date().toISOString(),

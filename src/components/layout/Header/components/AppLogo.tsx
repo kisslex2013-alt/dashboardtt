@@ -1,13 +1,13 @@
 /**
  * Компонент логотипа приложения с анимацией Data Pulse
  */
-export function AppLogo() {
+export function AppLogo({ className }: { className?: string }) {
   return (
     <div className="flex-shrink-0 logo-wrapper logo-animation-1">
       <svg
         viewBox="0 0 200 200"
         xmlns="http://www.w3.org/2000/svg"
-        className="w-8 h-8 sm:w-12 sm:h-12 object-contain logo-data-pulse"
+        className={`object-contain logo-data-pulse ${className || 'w-8 h-8 sm:w-12 sm:h-12'}`}
         aria-label="Time Tracker Logo"
       >
         <defs>

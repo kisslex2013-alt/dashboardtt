@@ -1,6 +1,14 @@
 import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 import { shouldShowNotification } from '../utils/notificationHelpers'
 import { useSettingsStore } from './useSettingsStore'
+import type {
+  UIState,
+  Notification,
+  NotificationInput,
+  ModalsState,
+  SortField,
+} from './types/uiStore.types'
 
 /**
  * 🎓 ПОЯСНЕНИЕ ДЛЯ НАЧИНАЮЩИХ:
@@ -14,7 +22,10 @@ import { useSettingsStore } from './useSettingsStore'
  * НЕ сохраняется в localStorage, так как это временное состояние UI.
  */
 
-export const useUIStore = create((set, get) => ({
+export const useUIStore = create<UIState>()(
+  persist(
+    (set, get) => ({
+
   // Массив активных уведомлений
   notifications: [],
 
@@ -34,6 +45,8 @@ export const useUIStore = create((set, get) => ({
     floatingPanelSettings: { isOpen: false },
     paymentDatesSettings: { isOpen: false },
     soundSettings: { isOpen: false, activeTab: null },
+    commandPalette: { isOpen: false },
+    auth: { isOpen: false },
   },
 
   // Состояние загрузки
@@ -55,7 +68,9 @@ export const useUIStore = create((set, get) => ({
   // Состояние поиска и фильтров
   filters: {
     searchQuery: '',
-    dateRange: { start: null, end: null },
+    dateRange: { start: null, end: null }, // Legacy?
+    activeFilter: 'Месяц', // 'Сегодня', 'Месяц' и т.д.
+    customDateRange: { start: '', end: '' },
     categories: [],
     showManualOnly: false,
     showTimerOnly: false,
@@ -151,6 +166,8 @@ export const useUIStore = create((set, get) => ({
     floatingPanelSettings: { isOpen: false },
         paymentDatesSettings: { isOpen: false },
         notificationsDisplay: { isOpen: false },
+        commandPalette: { isOpen: false },
+        auth: { isOpen: false },
       }
 
       // Возвращаем модальное окно к начальному состоянию
@@ -167,12 +184,25 @@ export const useUIStore = create((set, get) => ({
    * Закрывает все модальные окна
    */
   closeAllModals: () =>
-    set(state => {
-      const closedModals = {}
-      Object.keys(state.modals).forEach(key => {
-        closedModals[key] = { isOpen: false }
-      })
-      return { modals: closedModals }
+    set({
+      modals: {
+        editEntry: { isOpen: false, entry: null },
+        import: { isOpen: false },
+        tutorial: { isOpen: false },
+        about: { isOpen: false },
+        workSchedule: { isOpen: false },
+        categoryManager: { isOpen: false },
+        confirmModal: { isOpen: false, title: '', message: '', onConfirm: null },
+        batchEdit: { isOpen: false, selectedEntries: [] },
+        backup: { isOpen: false },
+        settings: { isOpen: false, activeTab: 'general' },
+        notificationsDisplay: { isOpen: false },
+        floatingPanelSettings: { isOpen: false },
+        paymentDatesSettings: { isOpen: false },
+        soundSettings: { isOpen: false, activeTab: null },
+        commandPalette: { isOpen: false },
+        auth: { isOpen: false },
+      },
     }),
 
   /**
@@ -234,6 +264,8 @@ export const useUIStore = create((set, get) => ({
       filters: {
         searchQuery: '',
         dateRange: { start: null, end: null },
+        activeFilter: 'Месяц',
+        customDateRange: { start: '', end: '' },
         categories: [],
         showManualOnly: false,
         showTimerOnly: false,
@@ -402,18 +434,28 @@ export const useUIStore = create((set, get) => ({
    * @param {string} message - сообщение
    * @param {number} duration - длительность показа
    */
-  showInfo: (message, duration = 3000, context) => {
-    const displaySettings = useSettingsStore.getState().notifications.display
-    if (!shouldShowNotification(message, 'info', displaySettings, context)) {
-      return null
+      showInfo: (message, duration = 3000, context) => {
+        const displaySettings = useSettingsStore.getState().notifications.display
+        if (!shouldShowNotification(message, 'info', displaySettings, context)) {
+          return null
+        }
+        return get().addNotification({
+          message,
+          type: 'info',
+          duration,
+        })
+      },
+    }),
+    {
+      name: 'time-tracker-ui-state',
+      partialize: (state) => ({
+        filters: state.filters,
+        sorting: state.sorting,
+        selectedEntries: state.selectedEntries,
+      }),
     }
-    return get().addNotification({
-      message,
-      type: 'info',
-      duration,
-    })
-  },
-}))
+  )
+)
 
 // ===== Атомарные селекторы (рекомендуемое использование) =====
 // ✅ КРИТИЧНО: Используй эти селекторы вместо прямого доступа к store

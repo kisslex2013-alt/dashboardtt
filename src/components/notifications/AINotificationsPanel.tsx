@@ -82,18 +82,18 @@ export const AINotificationsPanel = forwardRef<HTMLDivElement, AINotificationsPa
         exit={{ opacity: 0, y: -10, scale: 0.95 }}
         transition={{ duration: 0.2, ease: 'easeOut' }}
         className={`
-          fixed z-[999999]
+          fixed z-[999999] flex flex-col
           glass-effect rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700
           ${isMobile ? 'w-[calc(100vw-1rem)] left-4 right-4' : 'w-96'}
         `}
         style={{
           top: `${position.top}px`,
           right: `${position.right}px`,
-          maxHeight: isMobile ? 'calc(100vh - 100px)' : '600px',
+          maxHeight: isMobile ? 'calc(100vh - 100px)' : '500px',
         }}
       >
-      {/* Header */}
-      <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+      {/* Header - фиксированный */}
+      <div className="flex-shrink-0 p-4 border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-lg font-bold text-gray-900 dark:text-white">
             AI-уведомления
@@ -124,13 +124,8 @@ export const AINotificationsPanel = forwardRef<HTMLDivElement, AINotificationsPa
         </div>
       </div>
 
-      {/* Список уведомлений */}
-      <div
-        className="overflow-y-auto p-4"
-        style={{
-          maxHeight: isMobile ? 'calc(100vh - 250px)' : '450px',
-        }}
-      >
+      {/* Список уведомлений - скроллящийся */}
+      <div className="flex-1 overflow-y-auto p-4 min-h-0">
         {unreadNotifications.length === 0 ? (
           <EmptyState
             title="Нет новых уведомлений"
@@ -223,25 +218,18 @@ export const AINotificationsPanel = forwardRef<HTMLDivElement, AINotificationsPa
         )}
       </div>
 
-      {/* Footer */}
-      {unreadNotifications.length > 0 && (
-        <div className="p-4 border-t border-gray-200 dark:border-gray-700">
-          <button
-            onClick={handleMarkAllAsRead}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors text-sm font-medium"
-          >
-            <CheckCircle className="w-4 h-4" />
-            Отметить всё как прочитанное
-          </button>
-        </div>
-      )}
-
-      {/* Подсказка о клавише */}
-      <div className="px-4 pb-3">
-        <p className="text-xs text-gray-400 dark:text-gray-500 text-center">
-          Нажмите <kbd className="px-1.5 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-xs">Alt+N</kbd> для открытия
-        </p>
-      </div>
+        {/* Footer with Mark All button - фиксированный */}
+        {unreadNotifications.length > 0 && (
+          <div className="flex-shrink-0 p-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+            <button
+              onClick={handleMarkAllAsRead}
+              className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-lg transition-all text-sm font-medium shadow-lg shadow-blue-500/25"
+            >
+              <CheckCircle className="w-4 h-4" />
+              Прочитано всё
+            </button>
+          </div>
+        )}
 
       {/* Модалки - рендерим только когда открыты, чтобы не подписываться на store */}
       {selectedNotification && (

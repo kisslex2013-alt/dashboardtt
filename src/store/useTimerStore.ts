@@ -24,7 +24,36 @@ import { persist } from 'zustand/middleware'
  * - timerEntryId: ID записи, созданной при старте таймера
  */
 
-export const useTimerStore = create(
+/** Интерфейс состояния Timer store */
+interface TimerState {
+  // State
+  activeTimer: string | null
+  startTime: number | null
+  elapsedTime: number
+  lastUpdateTime: number | null
+  isPaused: boolean
+  timerEntryId: string | null
+  lastHourAlert: number
+
+  // Actions
+  startTimer: (category: string) => void
+  stopTimer: () => number
+  setTimerEntryId: (entryId: string | null) => void
+  pauseTimer: () => void
+  resumeTimer: () => void
+  updateElapsed: () => void
+  getCurrentElapsed: () => number
+  formatTime: (seconds: number) => string
+  getFormattedTime: () => string
+  isRunning: () => boolean
+  getIsPaused: () => boolean
+  getHours: () => number
+  shouldShowHourlyAlert: () => boolean
+  resetTimer: () => void
+}
+
+export const useTimerStore = create<TimerState>()(
+
   persist(
     (set, get) => ({
   // Текущая активная категория таймера (null если не запущен)
@@ -104,7 +133,7 @@ export const useTimerStore = create(
     if (!startTime || get().isPaused) return
 
     // Обновляем elapsedTime с учетом времени с последнего обновления
-    const currentElapsed = elapsedTime + (Date.now() - lastUpdateTime) / 1000
+    const currentElapsed = elapsedTime + (lastUpdateTime ? (Date.now() - lastUpdateTime) / 1000 : 0)
 
     set({
       elapsedTime: currentElapsed,
@@ -136,7 +165,7 @@ export const useTimerStore = create(
     if (!startTime || isPaused) return
 
     const now = Date.now()
-    const currentElapsed = elapsedTime + (now - lastUpdateTime) / 1000
+    const currentElapsed = elapsedTime + (lastUpdateTime ? (now - lastUpdateTime) / 1000 : 0)
 
     set({
       elapsedTime: currentElapsed,
@@ -157,7 +186,7 @@ export const useTimerStore = create(
       return elapsedTime
     }
 
-    return elapsedTime + (Date.now() - lastUpdateTime) / 1000
+    return elapsedTime + (lastUpdateTime ? (Date.now() - lastUpdateTime) / 1000 : 0)
   },
 
   /**

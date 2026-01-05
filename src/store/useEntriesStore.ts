@@ -2,12 +2,14 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { useHistoryStore } from './useHistoryStore'
 import { useSettingsStore } from './useSettingsStore'
+import { useAuthStore } from './useAuthStore'
+import { supabaseService } from '../services/supabase'
 import { backupManager } from '../utils/backupManager'
 import { logger } from '../utils/logger'
 import { generateUUID } from '../utils/uuid'
 import { handleError, checkStorageSpace } from '../utils/errorHandler'
 import { syncManager, SyncMessageType } from '../utils/syncManager'
-import type { EntriesState, TimeEntry, BackupResult } from '../types'
+import type { EntriesState, TimeEntry, BackupResult, BackupData } from '../types'
 
 /**
  * 🎓 ПОЯСНЕНИЕ ДЛЯ НАЧИНАЮЩИХ:
@@ -67,14 +69,31 @@ export const useEntriesStore = create<EntriesState>()(
             const settings = useSettingsStore.getState()
 
             // Создаем бэкап с записями и настройками
-            await backupManager.saveBackup({
+            // Создаем бэкап с записями и настройками
+            const backupData: BackupData = {
               entries,
               categories: settings.categories,
               dailyGoal: settings.dailyGoal,
               dailyHours: settings.dailyHours,
               theme: settings.theme,
               timestamp: Date.now(),
-            })
+              version: 1,
+            }
+
+            // Создаем локальный бэкап
+            await backupManager.saveBackup(backupData)
+
+            // ✅ CLOUD SYNC: Если пользователь авторизован, отправляем бэкап в облако
+            const { user, setLastSyncTime } = useAuthStore.getState()
+            if (user) {
+              supabaseService.uploadBackup(user.id, backupData)
+                .then(() => {
+                    setLastSyncTime(Date.now())
+                })
+                .catch(err => {
+                    console.error('Cloud backup failed:', err)
+                })
+            }
 
             // Очищаем ссылку на таймер после выполнения
             backupTimeouts.set(storeInstance, null)
@@ -362,6 +381,40 @@ export const useEntriesStore = create<EntriesState>()(
         },
 
         /**
+         * Обновляет детали категории во всех связанных записях
+         * @param {string} categoryId - ID категории
+         * @param {string} newName - новое название
+         * @param {string} [oldName] - старое название (для поиска legacy записей)
+         */
+        updateEntryCategoryDetails: (categoryId, newName, oldName) => {
+          const currentEntries = get().entries
+          // Не создаем undo если изменений нет, но тут всегда могут быть
+          // Можно проверить есть ли что менять, но проще записать в историю
+          useHistoryStore.getState().pushToUndo(currentEntries, `Обновление категории "${newName}"`)
+
+          set(state => ({
+            entries: state.entries.map(entry => {
+              // 1. Если есть совпадение по ID - обновляем имя
+              if (String(entry.categoryId) === String(categoryId)) {
+                return { ...entry, category: newName, updatedAt: new Date().toISOString() }
+              }
+              // 2. Если ID нет или не совпадает, но совпадает старое имя - обновляем имя и проставляем ID
+              if (oldName && entry.category === oldName) {
+                return { 
+                  ...entry, 
+                  category: newName, 
+                  categoryId: categoryId, 
+                  updatedAt: new Date().toISOString() 
+                }
+              }
+              return entry
+            }),
+          }))
+
+          scheduleBackup()
+        },
+
+        /**
          * Создает резервную копию вручную
          * @returns {Promise<{success: boolean, timestamp?: number}>}
          */
@@ -395,6 +448,102 @@ export const useEntriesStore = create<EntriesState>()(
             const errorMessage = handleError(error, { operation: 'Ручной бэкап' })
             return { success: false, error: errorMessage }
           }
+        },
+
+        /**
+         * Синхронизирует записи с текущими категориями по названию
+         * (Восстанавливает потерянные связи categoryId)
+         * @param {Array} categories - список актуальных категорий
+         * @returns {number} количество обновленных записей
+         */
+        syncCategories: categories => {
+          const { entries } = get()
+          let updatedCount = 0
+          
+          // Создаем карту для быстрого поиска: Имя (lowercase) -> ID
+          const nameToId = new Map()
+          // Создаем карту: ID -> Имя (для обновления имени, если ID совпадает)
+          const idToName = new Map()
+          
+          categories.forEach(c => {
+            if (c.name) {
+              nameToId.set(c.name.trim().toLowerCase(), c.id)
+              idToName.set(c.id, c.name.trim())
+            }
+          })
+
+          const newEntries = entries.map(entry => {
+            let changed = false
+            let newEntry = { ...entry }
+            
+            const entryName = (typeof entry.category === 'string' ? entry.category : '').trim().toLowerCase()
+            const entryId = entry.categoryId ? String(entry.categoryId) : null
+
+            // 1. Если есть ID и он есть в списке категорий -> Обновляем имя (на случай переименования)
+            if (entryId && idToName.has(entryId)) {
+              if (newEntry.category !== idToName.get(entryId)) {
+                newEntry.category = idToName.get(entryId)
+                changed = true
+              }
+            } 
+            // 2. Иначе, если ID нет или некорректный, ищем по имени
+            else {
+               let targetId = null
+               
+               // Хелпер для нормализации (удаляет скобки, лишние пробелы)
+               const normalize = (s) => s.replace(/[\[\]\(\)\-_]/g, '').replace(/\s+/g, ' ').trim()
+               const normEntryName = normalize(entryName)
+
+               // 2a. Точное совпадение
+               if (entryName && nameToId.has(entryName)) {
+                 targetId = nameToId.get(entryName)
+               }
+               
+               // 2b. Поиск по нормализованному имени (игнорируя скобки)
+               // Пример: "Красота ответов" == "[Красота] ответов"
+               if (!targetId && entryName) {
+                  for (const [catName, catId] of nameToId.entries()) {
+                      if (normalize(catName) === normEntryName) {
+                          targetId = catId
+                          break
+                      }
+                  }
+               }
+
+               // 2c. Эвристика "Ends With" (Суффикс)
+               // Пример: "Задача [Работа]" -> "[Работа]"
+               if (!targetId && entryName) {
+                   for (const [catName, catId] of nameToId.entries()) {
+                       // Защита от коротких совпадений (мин 3 символа)
+                       if (catName.length >= 3 && entryName.endsWith(catName)) {
+                           targetId = catId
+                           break
+                       }
+                   }
+               }
+
+               // Применяем изменения, если нашли ID
+               if (targetId && String(newEntry.categoryId) !== String(targetId)) {
+                 newEntry.categoryId = targetId
+                 newEntry.category = idToName.get(targetId)
+                 changed = true
+               }
+            }
+
+            if (changed) {
+              updatedCount++
+              return { ...newEntry, updatedAt: new Date().toISOString() }
+            }
+            return entry
+          })
+
+          if (updatedCount > 0) {
+            useHistoryStore.getState().pushToUndo(entries, `Синхронизация ${updatedCount} записей`)
+            set({ entries: newEntries })
+            scheduleBackup()
+          }
+          
+          return updatedCount
         },
 
         /**
@@ -449,10 +598,57 @@ export const useEntriesStore = create<EntriesState>()(
             return false
           }
         },
+
+        /**
+         * Восстанавливает данные из облачного бэкапа
+         */
+        /**
+         * Восстанавливает данные из облачного бэкапа
+         */
+        restoreFromCloudBackup: async (backupData: BackupData) => {
+          try {
+             if (!backupData) return false
+
+             // Восстанавливаем записи
+             if (backupData.entries && Array.isArray(backupData.entries)) {
+               set({ entries: backupData.entries })
+             }
+
+             // Восстанавливаем настройки
+             const settingsStore = useSettingsStore.getState()
+
+             if (backupData.categories && Array.isArray(backupData.categories)) {
+               settingsStore.importCategories(backupData.categories)
+             }
+             
+             if (typeof backupData.dailyGoal === 'number') {
+                 settingsStore.updateSettings({ dailyGoal: backupData.dailyGoal })
+             }
+             
+             if (typeof backupData.dailyHours === 'number') {
+                 settingsStore.updateSettings({ dailyHours: backupData.dailyHours })
+             }
+
+             if (backupData.theme && ['light', 'dark', 'auto'].includes(backupData.theme)) {
+               settingsStore.setTheme(backupData.theme as 'light' | 'dark' | 'auto')
+             }
+             
+             // Сохраняем восстановленные данные как новый локальный бэкап
+             scheduleBackup()
+             
+             // Обновляем время синхронизации
+             useAuthStore.getState().setLastSyncTime(Date.now())
+             
+             return true
+          } catch (e) {
+             console.error('Restore from cloud failed', e)
+             return false
+          }
+        },
       }
     },
     {
-      name: 'time-tracker-entries', // Ключ в localStorage
+      name: 'entries-storage', // Изменено имя хранилища
       version: 1, // Версия для миграций данных
       // ✅ ОПТИМИЗАЦИЯ: Используем partialize для оптимизации размера данных
       // Сохраняем только entries, исключаем функции и временные данные
@@ -460,6 +656,11 @@ export const useEntriesStore = create<EntriesState>()(
     }
   )
 )
+
+// Helper to reset store
+export const resetEntriesStore = () => {
+  useEntriesStore.setState({ entries: [] })
+}
 
 // ===== Атомарные селекторы (рекомендуемое использование) =====
 export const useEntries = () => useEntriesStore(state => state.entries)
@@ -475,3 +676,6 @@ export const useBulkDeleteEntries = () => useEntriesStore(state => state.bulkDel
 export const useGetEntriesByIds = () => useEntriesStore(state => state.getEntriesByIds)
 export const useCreateManualBackup = () => useEntriesStore(state => state.createManualBackup)
 export const useRestoreFromBackup = () => useEntriesStore(state => state.restoreFromBackup)
+export const useUpdateEntryCategoryDetails = () => useEntriesStore(state => state.updateEntryCategoryDetails)
+export const useSyncCategories = () => useEntriesStore(state => state.syncCategories)
+export const useRestoreFromCloudBackup = () => useEntriesStore(state => state.restoreFromCloudBackup)

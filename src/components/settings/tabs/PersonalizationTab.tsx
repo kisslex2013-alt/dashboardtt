@@ -1,11 +1,11 @@
 /**
  * 🎨 PersonalizationTab Component
  *
- * Вкладка настроек персонализации (Фавикон + AI-уведомления).
+ * Вкладка настроек персонализации (Фавикон).
+ * AI-уведомления вынесены в отдельный таб AITab.
  */
 
 import { FaviconSection } from './personalization/FaviconSection'
-import { AISection } from './personalization/AISection'
 
 interface PersonalizationTabProps {
   // Favicon props
@@ -41,8 +41,7 @@ export function PersonalizationTab({
         animationSpeed={faviconSpeed}
         setAnimationSpeed={setFaviconSpeed}
       />
-
-      <AISection />
     </div>
   )
 }
+

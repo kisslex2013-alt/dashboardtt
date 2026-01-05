@@ -1,12 +1,14 @@
 import { useEffect, useState, useRef, useCallback, memo } from 'react'
 import { useRemoveNotification } from '../../store/useUIStore'
 import { useNotificationsSettings } from '../../store/useSettingsStore'
+import { useNotifications } from '../../hooks/useNotifications'
 import {
   NotificationVariant1,
   NotificationVariant2,
   NotificationVariant3,
   NotificationVariant4,
   NotificationVariant5,
+  NotificationVariant6,
 } from './NotificationVariants'
 
 /**
@@ -24,20 +26,25 @@ import {
  * @param {Object} notification - объект уведомления
  * @param {function} onClose - функция закрытия уведомления
  */
-export const Notification = memo(({ notification, onClose }) => {
+interface NotificationProps {
+  notification: any
+  onClose: () => void
+}
+
+export const Notification = memo<NotificationProps>(({ notification, onClose }) => {
   const [progress, setProgress] = useState(100)
   const [isPaused, setIsPaused] = useState(false) // Пауза при наведении
   const [isExiting, setIsExiting] = useState(false) // Анимация исчезновения
   // ✅ ОПТИМИЗАЦИЯ: Используем атомарный селектор для минимизации ре-рендеров
   const notificationSettings = useNotificationsSettings()
-  const intervalRef = useRef(null)
+  const intervalRef = useRef<any>(null)
 
   // ✨ КРИТИЧЕСКОЕ ИСПРАВЛЕНИЕ: Используем useRef для isPaused
   // Это позволяет проверять актуальное значение внутри интервала без пересоздания
   const isPausedRef = useRef(false)
 
-  // Получаем вариант уведомления из настроек (по умолчанию вариант 1)
-  const variant = notificationSettings?.variant || 1
+  // Получаем вариант уведомления из настроек (по умолчанию вариант 6 - Neon Glow)
+  const variant = notificationSettings?.variant || 6
 
   // ✨ УЛУЧШЕНИЕ: Обработчик закрытия с анимацией (используем useCallback)
   const handleClose = useCallback(() => {
@@ -94,7 +101,7 @@ export const Notification = memo(({ notification, onClose }) => {
     }
   }, [notification.duration, isExiting, handleClose]) // БЕЗ isPaused!
 
-  // Выбираем компонент варианта
+  // Выбираем компонент варианта (6 вариантов: 1-5 стандартные + 6 Neon Glow)
   const VariantComponent =
     {
       1: NotificationVariant1,
@@ -102,7 +109,8 @@ export const Notification = memo(({ notification, onClose }) => {
       3: NotificationVariant3,
       4: NotificationVariant4,
       5: NotificationVariant5,
-    }[variant] || NotificationVariant1
+      6: NotificationVariant6, // Neon Glow
+    }[variant] || NotificationVariant1 as any
 
   return (
     <div className={isExiting ? 'animate-fade-out' : ''}>
@@ -128,7 +136,7 @@ export const Notification = memo(({ notification, onClose }) => {
  * Используйте NotificationContainer.tsx вместо этого компонента
  */
 export function NotificationContainer() {
-  const notifications = useNotifications()
+  const { notifications } = useNotifications()
   const removeNotification = useRemoveNotification()
 
   return (

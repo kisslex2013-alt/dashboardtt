@@ -14,7 +14,12 @@ import { TrendingUp, TrendingDown, Minus } from '../../utils/icons'
  * @param {number} current - Текущее значение
  * @param {number} previous - Предыдущее значение для сравнения
  */
-export const ComparisonStat = memo(({ current, previous }) => {
+interface ComparisonStatProps {
+  current: number
+  previous?: number | null
+}
+
+export const ComparisonStat = memo<ComparisonStatProps>(({ current, previous }) => {
   if (previous === null || previous === undefined) return null
 
   const diff = current - previous

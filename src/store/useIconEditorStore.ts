@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { persist, PersistOptions } from 'zustand/middleware'
 import { getDefaultIconSettings } from '../constants/defaultIconSettings'
 import { logger } from '../utils/logger'
 
@@ -28,10 +28,37 @@ import { logger } from '../utils/logger'
  * из constants/defaultIconSettings.js
  */
 
+/** Словарь замен (componentId -> value) */
+type ReplacementMap = Record<string, string>
+
+/** Интерфейс состояния IconEditor store */
+interface IconEditorState {
+  // State
+  isEditMode: boolean
+  iconReplacements: ReplacementMap
+  buttonColorReplacements: ReplacementMap
+
+  // Actions
+  toggleEditMode: () => void
+  setEditMode: (enabled: boolean) => void
+  replaceIcon: (componentId: string, iconName: string) => void
+  removeReplacement: (componentId: string) => void
+  resetAllReplacements: () => void
+  getIconReplacement: (componentId: string) => string | null
+  replaceButtonColor: (componentId: string, color: string) => void
+  removeColorReplacement: (componentId: string) => void
+  getButtonColor: (componentId: string) => string | null
+  saveAsDefaults: () => boolean
+}
+
+/** Тип для persisted state */
+type PersistedIconEditorState = Pick<IconEditorState, 'iconReplacements' | 'buttonColorReplacements'>
+
 // Получаем дефолтные настройки для инициализации
 const defaultSettings = getDefaultIconSettings()
 
-export const useIconEditorStore = create(
+export const useIconEditorStore = create<IconEditorState>()(
+
   persist(
     (set, get) => ({
       // Режим редактирования иконок (только в dev режиме)
@@ -53,7 +80,7 @@ export const useIconEditorStore = create(
        */
       toggleEditMode: () => {
         // Только в dev режиме
-        if (import.meta.env.DEV) {
+        if ((import.meta as { env?: { DEV?: boolean } }).env?.DEV) {
           set(state => ({
             isEditMode: !state.isEditMode,
           }))
@@ -67,7 +94,7 @@ export const useIconEditorStore = create(
        * но сами замены иконок и цветов применяются и в production (из localStorage)
        */
       setEditMode: enabled => {
-        if (import.meta.env.DEV) {
+        if ((import.meta as { env?: { DEV?: boolean } }).env?.DEV) {
           set({ isEditMode: enabled })
         }
       },
@@ -194,7 +221,7 @@ export const useIconEditorStore = create(
           const { iconReplacements, buttonColorReplacements } = get()
 
           // Обновляем дефолтные значения в коде (только в dev режиме)
-          if (import.meta.env.DEV) {
+          if ((import.meta as { env?: { DEV?: boolean } }).env?.DEV) {
             fetch('/api/update-icon-defaults', {
               method: 'POST',
               headers: {
@@ -236,10 +263,11 @@ export const useIconEditorStore = create(
       // В production всегда используем дефолтные значения из файла (игнорируя localStorage)
       // В dev режиме: если localStorage пустой или отсутствует - используем дефолтные значения из файла
       merge: (persistedState, currentState) => {
+        const persisted = persistedState as PersistedIconEditorState | undefined
         const defaults = getDefaultIconSettings()
 
         // В production всегда используем дефолтные значения из файла
-        if (!import.meta.env.DEV) {
+        if (typeof import.meta !== 'undefined' && !(import.meta as { env?: { DEV?: boolean } }).env?.DEV) {
           logger.log(
             '[useIconEditorStore] Production режим: используются дефолтные значения из файла'
           )
@@ -272,7 +300,7 @@ export const useIconEditorStore = create(
 
         // В dev режиме: если localStorage пустой или отсутствует - используем дефолтные значения из файла
         // Это важно для режима инкогнито, где localStorage пустой
-        if (!persistedState) {
+        if (!persisted) {
           logger.log(
             '[useIconEditorStore] Dev режим: localStorage пустой, используются дефолтные значения из файла'
           )
@@ -285,10 +313,10 @@ export const useIconEditorStore = create(
 
         // Проверяем, есть ли данные в localStorage
         const hasIconReplacements =
-          persistedState.iconReplacements && Object.keys(persistedState.iconReplacements).length > 0
+          persisted.iconReplacements && Object.keys(persisted.iconReplacements).length > 0
         const hasColorReplacements =
-          persistedState.buttonColorReplacements &&
-          Object.keys(persistedState.buttonColorReplacements).length > 0
+          persisted.buttonColorReplacements &&
+          Object.keys(persisted.buttonColorReplacements).length > 0
 
         // Если данных нет или они пустые, используем дефолтные значения из файла
         if (!hasIconReplacements && !hasColorReplacements) {
@@ -310,11 +338,11 @@ export const useIconEditorStore = create(
           ...currentState,
           iconReplacements: {
             ...defaults.iconReplacements,
-            ...(persistedState.iconReplacements || {}),
+            ...(persisted.iconReplacements || {}),
           },
           buttonColorReplacements: {
             ...defaults.buttonColorReplacements,
-            ...(persistedState.buttonColorReplacements || {}),
+            ...(persisted.buttonColorReplacements || {}),
           },
         }
       },

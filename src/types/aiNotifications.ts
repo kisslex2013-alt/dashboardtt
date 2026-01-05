@@ -27,6 +27,7 @@ export type NotificationType =
   | 'achievement'          // 🏆 Достижение (цель достигнута, рекорд побит)
   | 'weekly-insight'       // 💡 Еженедельный инсайт
   | 'anomaly'              // 🔍 Аномалия в данных
+  | 'month-summary'        // 📅 Итоги месяца (для последних дней)
 
 /**
  * Быстрое действие в dropdown уведомлений

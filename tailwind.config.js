@@ -4,6 +4,9 @@ export default {
   darkMode: 'class',
   theme: {
     extend: {
+      screens: {
+        'xs': '375px',
+      },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
       },
@@ -102,6 +105,7 @@ export default {
         'pulse-success': 'pulseSuccess 400ms var(--ease-standard)',
         'pulse-glow': 'pulseGlow 2s infinite var(--ease-standard)',
         shimmer: 'shimmer 2s infinite',
+        'pulse-subtle': 'pulseSubtle 1.5s infinite ease-in-out',
         // Micro-animations с bounce/spring эффектами
         'bounce-in': 'bounceIn var(--duration-normal) var(--ease-spring)',
         'bounce-in-fast': 'bounceIn var(--duration-fast) var(--ease-spring)',
@@ -162,6 +166,10 @@ export default {
           '0%': { transform: 'translateX(-100%)' },
           '100%': { transform: 'translateX(100%)' },
         },
+        pulseSubtle: {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0.7' },
+        },
         // Устаревшие (для обратной совместимости)
         slideIn: {
           '0%': { transform: 'translateX(100%)', opacity: '0' },
@@ -210,6 +218,7 @@ export default {
     },
   },
   plugins: [
+    require("tailwindcss-animate"),
     // ✅ A11Y: Плагин для accessibility классов
     function ({ addUtilities }) {
       addUtilities({

@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { generateUUID } from '../utils/uuid'
-import type { SettingsState, Category, WorkScheduleStats, ExportReminderSettings } from '../types'
+import type { SettingsState, Category, WorkScheduleStats, ExportReminderSettings, UserProfile } from '../types'
 
 /**
  * 🎓 ПОЯСНЕНИЕ ДЛЯ НАЧИНАЮЩИХ:
@@ -53,6 +53,11 @@ export const useSettingsStore = create<SettingsState>()(
   persist(
     (set, get) => ({
       // Тема приложения
+      userProfile: {
+        name: 'User',
+        email: 'user@example.com',
+        avatar: null
+      },
       theme: 'dark', // По умолчанию темная тема
       colorScheme: 'default', // 'default' | 'claymorphism' | 'soft-pop' | 'neon-dark' | 'pastel-light' | 'corporate' | 'high-contrast' | 'auto' - цветовая схема оформления
       animations: true,
@@ -90,7 +95,7 @@ export const useSettingsStore = create<SettingsState>()(
         notificationInterval: 30, // минут между уведомлениями
         notificationSound: 'chime', // 'chime' | 'alert' | 'phone' | 'doorbell' | 'alarm' | 'notification' | 'bell' | 'beep' | 'ping' | 'gentle' | 'soft' | 'zen' | 'focus' | 'breeze' | 'crystal' | 'harmony' | 'whisper' | 'bloom'
         // Визуальный вариант уведомления
-        variant: 1, // 1-5 (по умолчанию 1 - Glass Effect)
+        variant: 6, // 1-6 (по умолчанию 6 - Neon Glow ✨)
         // Анимация фавикона
         faviconAnimationEnabled: true,
         faviconAnimationStyle: 'pulse', // 'pulse' | 'blink' | 'rotate' | 'wave' | 'gradient' | 'morph' | 'particles' | 'breathe'
@@ -244,9 +249,11 @@ export const useSettingsStore = create<SettingsState>()(
         rateDistribution: false, // Распределение ставок
         scatter: false, // Часы vs Доход
         hourAnalysis: false, // Анализ часов дня (объединенный: доход + ставка)
-        forecast: false, // Прогноз заработка
+        forecast: true, // Прогноз заработка
         calendar: false, // Календарь доходов
         categoryEfficiency: false, // Доходы по категориям
+        whatIf: true, // What-If Калькулятор (Predictive Analytics)
+        seasonality: true, // Сезонность доходов
       },
 
       // Режим отображения графиков
@@ -264,7 +271,9 @@ export const useSettingsStore = create<SettingsState>()(
 
       /**
        * Устанавливает тему приложения
-       * @param {string} theme - 'light', 'dark', 'auto'
+       * @export interface SettingsState {
+  userProfile: UserProfile
+  theme: 'light' | 'dark' | 'auto'
        */
       setTheme: theme => {
         set({ theme })
@@ -589,7 +598,7 @@ export const useSettingsStore = create<SettingsState>()(
             soundNotificationsEnabled: true,
             notificationInterval: 30,
             notificationSound: 'chime',
-            variant: 1, // Визуальный вариант уведомления: 1-5
+            variant: 6, // Визуальный вариант уведомления: 1-6 (Neon Glow по умолчанию)
             faviconAnimationEnabled: true,
             faviconAnimationStyle: 'pulse',
             faviconAnimationColor: '#3b82f6',
@@ -644,15 +653,15 @@ export const useSettingsStore = create<SettingsState>()(
             dynamics: true,
             trends: true,
             categoryDistribution: true,
-            timeDistribution: true,
+            weekdayAnalysis: true,
             rateDistribution: true,
-            weekday: true,
             scatter: true,
-            idealDay: true,
+            hourAnalysis: true,
             forecast: true,
             calendar: true,
             categoryEfficiency: true,
-            productivityHours: true,
+            whatIf: true,
+            seasonality: true,
           },
           chartDisplay: 'combined',
           combinedDynamicsType: 'area',
@@ -665,7 +674,7 @@ export const useSettingsStore = create<SettingsState>()(
     }),
     {
       name: 'time-tracker-settings',
-      version: 2, // ✅ Увеличили версию для миграции цветов
+      version: 6, // ✅ Увеличили версию для включения Neon Glow уведомлений
       // Миграция для существующих пользователей
       migrate: (persistedState, version) => {
         const newState = { ...persistedState }
@@ -728,6 +737,34 @@ export const useSettingsStore = create<SettingsState>()(
           console.log('🎨 Цвета категорий обновлены на семантические!')
         }
 
+        // Миграция v2 → v3: добавляем whatIf в chartVisibility
+        if (version < 3) {
+          if (newState.chartVisibility && typeof newState.chartVisibility.whatIf === 'undefined') {
+            newState.chartVisibility.whatIf = true
+          }
+        }
+
+        // Миграция v3 → v4: добавляем seasonality в chartVisibility
+        if (version < 4) {
+          if (newState.chartVisibility && typeof newState.chartVisibility.seasonality === 'undefined') {
+            newState.chartVisibility.seasonality = true
+          }
+        }
+
+        // Миграция v4 → v5: включаем forecast в chartVisibility для существующих пользователей
+        if (version < 5) {
+          if (newState.chartVisibility && newState.chartVisibility.forecast === false) {
+            newState.chartVisibility.forecast = true
+          }
+        }
+
+        // Миграция v5 → v6: включаем Neon Glow уведомления (вариант 6)
+        if (version < 6) {
+          if (newState.notifications) {
+            newState.notifications.variant = 6
+          }
+        }
+
         return newState
       },
     }
@@ -771,11 +808,15 @@ export const useUpdateCategory = () => useSettingsStore(state => state.updateCat
 export const useDeleteCategory = () => useSettingsStore(state => state.deleteCategory)
 export const useSetListView = () => useSettingsStore(state => state.setListView)
 export const useSetDefaultEntriesFilter = () => useSettingsStore(state => state.setDefaultEntriesFilter)
+export const useUserProfile = () => useSettingsStore(state => state.userProfile)
 export const useSetDefaultAnalyticsFilter = () => useSettingsStore(state => state.setDefaultAnalyticsFilter)
 export const useAddPaymentDate = () => useSettingsStore(state => state.addPaymentDate)
 export const useUpdatePaymentDate = () => useSettingsStore(state => state.updatePaymentDate)
 export const useDeletePaymentDate = () => useSettingsStore(state => state.deletePaymentDate)
+
+
 export const useReorderPaymentDates = () => useSettingsStore(state => state.reorderPaymentDates)
 export const useUpdateCategoryColors = () => useSettingsStore(state => state.updateCategoryColors)
 export const useDefaultCategory = () => useSettingsStore(state => state.defaultCategory)
 export const useSetDefaultCategory = () => useSettingsStore(state => state.setDefaultCategory)
+export const useWorkScheduleStats = () => useSettingsStore(state => state.getWorkScheduleStats())

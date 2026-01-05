@@ -1,4 +1,4 @@
-import React, { memo, Children, isValidElement, cloneElement } from 'react'
+import React, { memo, Children, isValidElement, cloneElement, ReactNode, ComponentType } from 'react'
 import { AnimatedText } from '../ui/AnimatedText'
 import { AnimatedHighlight } from '../ui/AnimatedHighlight'
 import { AnimatedCascadeDrop } from '../ui/AnimatedCascadeDrop'
@@ -29,7 +29,20 @@ import { AnimatedDate } from '../ui/AnimatedDate'
  * @param {number} animationDelay - Задержка анимации в секундах
  * @param {boolean} shouldAnimate - Запускать ли анимацию
  */
-export const InsightCard = memo(
+interface InsightCardProps {
+  title: string
+  description: string | ReactNode
+  icon?: ComponentType<any>
+  gradient?: string
+  borderColor?: string
+  iconColor?: string
+  glowClass?: string
+  highlightColorClass?: string
+  animationDelay?: number
+  shouldAnimate?: boolean
+}
+
+export const InsightCard = memo<InsightCardProps>(
   ({
     title,
     description,
@@ -43,14 +56,14 @@ export const InsightCard = memo(
     shouldAnimate = true,
   }) => {
     // Функция для выделения цифр и важных значений в тексте с анимацией
-    const highlightNumbers = (text, shouldAnimateProp = true, delay = 0) => {
+    const highlightNumbers = (text: string, shouldAnimateProp = true, delay = 0) => {
       // Разбиваем текст на части, выделяя цифры, проценты, валюту, время и дни недели
       // Важно: сохраняем пробелы вокруг времени, чтобы не потерять их
       const parts = text.split(
         /(\d+[\s,.]?\d*\s*₽|\d+[\s,.]?\d*\s*%|\d+[\s,.]?\d*\s*ч|\d{1,2}:\d{2}|\b[А-Яа-я]{2}\b)/g
       )
 
-      const result = []
+      const result: ReactNode[] = []
       parts.forEach((part, index) => {
         // Пропускаем пустые части
         if (!part) return
@@ -94,7 +107,7 @@ export const InsightCard = memo(
     }
 
     // Функция для рекурсивной обработки JSX элементов с анимацией
-    const processJSXElement = (element, shouldAnimateProp = true, delay = 0, index = 0) => {
+    const processJSXElement = (element: any, shouldAnimateProp = true, delay = 0, index = 0): ReactNode => {
       // Если это не React элемент, обрабатываем как примитив
       if (!isValidElement(element)) {
         // Если это строка, обрабатываем как текст
@@ -114,7 +127,7 @@ export const InsightCard = memo(
 
       // Если это React элемент, рекурсивно обрабатываем его children
       const elementType = element.type
-      const elementProps = element.props || {}
+      const elementProps: any = element.props || {}
       const { children, className, ...restProps } = elementProps
 
       // Если это Fragment, обрабатываем только children
@@ -129,7 +142,7 @@ export const InsightCard = memo(
       // Если это <span> с выделенным классом, заменяем на AnimatedHighlight или AnimatedMatrixText
       if (elementType === 'span' && className && className.includes('font-bold')) {
         // Рекурсивно извлекаем текст из children (может быть строка, массив, или React элемент)
-        const extractText = child => {
+        const extractText = (child: any): string => {
           if (typeof child === 'string') return child
           if (typeof child === 'number') return String(child)
           if (Array.isArray(child)) return child.map(extractText).join('')

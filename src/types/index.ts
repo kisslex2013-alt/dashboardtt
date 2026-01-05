@@ -23,6 +23,7 @@ export interface TimeEntry {
   description?: string
   createdAt?: string // ISO string
   updatedAt?: string // ISO string
+  isManual?: boolean // Создана вручную пользователем (true) или таймером (false)
 }
 
 /**
@@ -340,6 +341,9 @@ export interface EntriesState {
   createManualBackup: () => Promise<BackupResult>
   clearBackupTimer: () => void
   restoreFromBackup: (timestamp: number) => Promise<boolean>
+  restoreFromCloudBackup: (backupData: any) => Promise<boolean>
+  updateEntryCategoryDetails: (categoryId: string, newName: string, oldName?: string) => void
+  syncCategories: (categories: Category[]) => number
 }
 
 /**
@@ -487,7 +491,7 @@ export interface PaymentDate {
   day: number
   monthOffset: number
   customDate: string
-  period: { start: number; end: number }
+  period: { start: number; end: number; periodMonth?: number }
   color: string
   order: number
   enabled: boolean
@@ -547,6 +551,8 @@ export interface ChartVisibility {
   forecast: boolean
   calendar: boolean
   categoryEfficiency: boolean
+  whatIf: boolean
+  seasonality: boolean
 }
 
 /**
@@ -572,11 +578,12 @@ export interface WorkScheduleStats {
  * Состояние SettingsStore
  */
 export interface SettingsState {
+  userProfile: UserProfile
   theme: 'light' | 'dark' | 'auto'
   colorScheme: 'default' | 'claymorphism' | 'soft-pop' | 'neon-dark' | 'pastel-light' | 'corporate' | 'high-contrast' | 'auto'
   animations: boolean
   themeTransitionType: 'circle' | 'fade' | 'wipe' | 'blur' | 'rotate'
-  listView: 'list' | 'grid' | 'timeline'
+  listView: 'list' | 'grid' | 'timeline' | 'calendar'
   defaultEntriesFilter: string
   defaultAnalyticsFilter: string
   defaultChartVisibility: ChartVisibility | null
@@ -599,13 +606,15 @@ export interface SettingsState {
   chartDisplay: 'separate' | 'combined'
   combinedDynamicsType: 'bar' | 'line' | 'area'
   combinedRateType: 'bar' | 'line' | 'area'
+  defaultCategory: string
+  setDefaultCategory: (categoryIdOrName: string) => void
   advanced: AdvancedSettings
   setTheme: (theme: 'light' | 'dark' | 'auto') => void
   setColorScheme: (colorScheme: string) => void
   applyColorScheme: (colorScheme: string) => void
   setThemeTransitionType: (type: 'circle' | 'fade' | 'wipe' | 'blur' | 'rotate') => void
   toggleAnimations: () => void
-  setListView: (view: 'list' | 'grid' | 'timeline') => void
+  setListView: (view: 'list' | 'grid' | 'timeline' | 'calendar') => void
   setDefaultEntriesFilter: (filter: string) => void
   setDefaultAnalyticsFilter: (filter: string) => void
   updateChartVisibility: (visibility: Partial<ChartVisibility>) => void
@@ -641,7 +650,19 @@ export interface HistoryState {
   clearHistory: () => void
 }
 
+// ===== User Types =====
+
+/**
+ * Профиль пользователя
+ */
+export interface UserProfile {
+  name: string
+  email: string
+  avatar: string | null
+}
+
 // ===== Component Props Types =====
+
 
 /**
  * Пропсы для Button компонента
@@ -677,6 +698,7 @@ export interface BaseModalProps {
   className?: string
   footer?: React.ReactNode
   nested?: boolean // Для вложенных модальных окон - увеличивает z-index
+  hideFooterDivider?: boolean // Скрыть разделитель футера
 }
 
 /**
@@ -705,7 +727,7 @@ export interface MonthPickerProps {
   value: string | null
   onChange: (value: string) => void
   onClose?: () => void
-  inputRef?: React.RefObject<HTMLInputElement>
+  inputRef?: React.RefObject<HTMLElement>
 }
 
 /**
@@ -716,7 +738,7 @@ export interface CustomDatePickerProps {
   onChange: (value: string) => void
   onClose?: () => void
   placeholder?: string
-  inputRef?: React.RefObject<HTMLInputElement>
+  inputRef?: React.RefObject<HTMLInputElement | null>
 }
 
 /**
@@ -741,6 +763,7 @@ export interface CategorySelectProps {
   value: string
   onChange: (value: string) => void
   options: Array<{
+    id?: string
     name: string
     icon?: string
     color?: string

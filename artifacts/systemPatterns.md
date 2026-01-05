@@ -1,23 +1,25 @@
-# System Patterns
+# Системные паттерны (System Patterns)
 
-## Architecture
-- **Framework**: React 18+ (Functional Components, Hooks).
-- **Build Tool**: Vite (Fast HMR, optimized building).
-- **Language**: TypeScript (Strict typing preferred).
-- **State Management**: React Context + Providers (migrating to consolidated providers).
+## Архитектура
+- **Фреймворк**: React 18+ (Functional Components, Hooks).
+- **Сборщик**: Vite (быстрый HMR, оптимизированная сборка).
+- **Язык**: TypeScript (предпочтительна строгая типизация).
+- **Управление состоянием**: Zustand (заменил React Context для глобального состояния).
 
-## Core Patterns
-- **Component Composition**: Use of `children` prop and specialized containers (e.g., `ChartContainer`).
-- **Custom Hooks**: Encapsulation of logic (e.g., `useAnimation`, `useModal`).
-- **Barrel Files**: `index.ts` exports for clean path imports (e.g., `import { Button } from '@/ui'`).
-- **Lazy Loading**: `React.lazy` and `Suspense` for route-based and heavy component splitting.
+## Основные паттерны
+- **Component Composition**: Использование `children` prop и специализированных контейнеров (например, `ChartContainer`).
+- **Custom Hooks**: Инкапсуляция логики (например, `useAnimation`, `useModal`, `useAINotificationMonitor`).
+- **Barrel Files**: `index.ts` экспорты для чистых импортов (например, `import { Button } from '@/ui'`).
+- **Lazy Loading**: `React.lazy` и `Suspense` для route-based и тяжёлых компонентов.
+- **Web Workers**: Тяжёлые вычисления (AI-анализ) выполняются в фоновом потоке.
 
-## Styling
-- **CSS Strategy**: Vanilla CSS with CSS Variables (Tokens).
-- **Animation**: CSS Transitions + Framer Motion (for complex gestures).
-- **Responsive**: Mobile-first media queries defined in global tokens.
+## Стилизация
+- **CSS Стратегия**: Vanilla CSS с CSS Variables (Design Tokens).
+- **Анимации**: CSS Transitions + Framer Motion (для сложных жестов).
+- **Адаптивность**: Mobile-first media queries, определённые в глобальных tokens.
 
-## Code Standards
-- **Naming**: PascalCase for components, camelCase for functions/vars.
-- **File Structure**: Feature-based co-location where possible, or generic `ui/` folder for atoms.
-- **Error Handling**: Error Boundaries for UI crash prevention.
+## Стандарты кода
+- **Нейминг**: PascalCase для компонентов, camelCase для функций/переменных.
+- **Структура файлов**: Feature-based co-location где возможно, или generic `ui/` для атомов.
+- **Обработка ошибок**: Error Boundaries для предотвращения краха UI.
+- **Документация**: JSDoc/TSDoc для всех экспортируемых функций.

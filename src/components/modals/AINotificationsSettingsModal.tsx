@@ -9,13 +9,16 @@
  * 5. Режим тестирования (быстрые тесты, расширенный, массовый)
  */
 
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { BaseModal } from '../ui/BaseModal'
 import { Toggle } from '../ui/Toggle'
-import { Settings, Zap, Bell, Volume2, Moon, TestTube, Trash2 } from '../../utils/icons'
+import { Settings, Zap, Bell, Volume2, Moon, TestTube, Trash2, RefreshCw } from '../../utils/icons'
 import { useAINotificationsStore } from '../../store/useAINotificationsStore'
 import { AINotificationService } from '../../services/aiNotificationService'
 import { BrowserPushService } from '../../services/browserPushService'
+import { useAINotificationMonitor } from '../../hooks/useAINotificationMonitor'
+import { formatDistanceToNow } from 'date-fns'
+import { ru } from 'date-fns/locale'
 import type { NotificationType, NotificationPriority } from '../../types/aiNotifications'
 
 interface AINotificationsSettingsModalProps {
@@ -41,6 +44,7 @@ export function AINotificationsSettingsModal({
     addNotification,
     clearTestNotifications,
     updateTestStats,
+    lastAnalyzed,
   } = store
 
   // Локальное состояние для расширенного режима тестирования
@@ -49,6 +53,18 @@ export function AINotificationsSettingsModal({
   const [advancedTestPush, setAdvancedTestPush] = useState(false)
   const [advancedTestToast, setAdvancedTestToast] = useState(true)
   const [advancedTestSound, setAdvancedTestSound] = useState(false)
+
+  // Хук для ручного запуска анализа
+  const { triggerAnalysis } = useAINotificationMonitor()
+  const [isAnalyzing, setIsAnalyzing] = useState(false)
+
+  // Обработчик кнопки "Анализировать сейчас"
+  const handleAnalyzeNow = useCallback(() => {
+    setIsAnalyzing(true)
+    triggerAnalysis()
+    // Сбрасываем индикатор через 3 секунды
+    setTimeout(() => setIsAnalyzing(false), 3000)
+  }, [triggerAnalysis])
 
   // Статус разрешений Browser Push
   const [pushPermission, setPushPermission] = useState<NotificationPermission>(
@@ -93,9 +109,9 @@ export function AINotificationsSettingsModal({
     const notification = AINotificationService.generateAdvancedTest({
       type: advancedTestType,
       priority: advancedTestPriority,
-      showBrowserNotification: advancedTestPush,
-      showToast: advancedTestToast,
-      playSound: advancedTestSound,
+      withBrowserPush: advancedTestPush,
+      withToast: advancedTestToast,
+      withSound: advancedTestSound,
     })
     addNotification(notification)
     updateTestStats()
@@ -211,6 +227,36 @@ export function AINotificationsSettingsModal({
                 Максимум
               </button>
             </div>
+            
+            {/* Индикатор последнего анализа и кнопка "Анализировать сейчас" */}
+            {enabled && (
+              <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">
+                <div className="flex items-center justify-between">
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    {lastAnalyzed ? (
+                      <>Последний анализ: <span className="font-medium text-gray-700 dark:text-gray-300">{formatDistanceToNow(new Date(lastAnalyzed), { addSuffix: true, locale: ru })}</span></>
+                    ) : (
+                      <>Анализ ещё не выполнялся</>
+                    )}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={handleAnalyzeNow}
+                    disabled={isAnalyzing}
+                    className={`
+                      flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all
+                      ${isAnalyzing 
+                        ? 'bg-blue-100 dark:bg-blue-900/50 text-blue-400 cursor-not-allowed' 
+                        : 'bg-blue-500 hover:bg-blue-600 text-white shadow-sm hover:shadow-md'
+                      }
+                    `}
+                  >
+                    <RefreshCw className={`w-3.5 h-3.5 ${isAnalyzing ? 'animate-spin' : ''}`} />
+                    {isAnalyzing ? 'Анализ...' : 'Анализировать'}
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </section>
 

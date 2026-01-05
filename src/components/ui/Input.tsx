@@ -13,8 +13,15 @@ import PropTypes from 'prop-types'
  * @param {string} placeholder - текст-подсказка
  * @param {React.Component} icon - иконка для поля
  */
-export const Input = React.forwardRef(
-  ({ label, type = 'text', value, onChange, error, required, placeholder, icon: Icon }, ref) => {
+interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
+  label?: string
+  error?: string
+  icon?: React.ElementType
+  onChange: (value: string) => void
+}
+
+export const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  ({ label, type = 'text', value, onChange, error, required, placeholder, icon: Icon, className = '' }, ref) => {
     const inputRef = useRef(null)
 
     // ИСПРАВЛЕНО: Поддержка внешнего ref
@@ -79,6 +86,7 @@ export const Input = React.forwardRef(
             placeholder-gray-500 dark:placeholder-gray-400
             text-gray-900 dark:text-gray-100
             ${type === 'time' ? '[&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-inner-spin-button]:hidden [&::-webkit-outer-spin-button]:hidden [&::-webkit-datetime-edit-ampm-field]:hidden' : ''}
+            ${className}
           `}
             style={
               type === 'time'

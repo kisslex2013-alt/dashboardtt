@@ -1,42 +1,55 @@
 import { memo, useMemo, useCallback, useState, useEffect } from 'react'
-import {
-  ChevronDown,
-  Clock,
-  AlertTriangle,
-  DollarSign,
-  CheckCircle2,
-  XCircle,
-  AlertCircle,
-} from '../../../utils/icons'
+import { ChevronDown, CheckCircle2, AlertCircle, XCircle } from '../../../utils/icons'
 import { useCategories, useDailyGoal } from '../../../store/useSettingsStore'
 import { getDayMetrics } from '../../../utils/dayMetrics'
-import { getIcon } from '../../../utils/iconHelper'
 import { formatHoursToTime } from '../../../utils/formatting'
 import { useColumnResize } from '../../../hooks/useColumnResize'
+import { useIsMobile } from '../../../hooks/useIsMobile'
+import { calculateBreak } from '../../../utils/timeUtils'
 import { GridColumnDivider, TableColumnDivider, ResizeModeIndicator } from '../../ui/ColumnResizers'
+import { CategoryBadge, DayStatusBadge, DayMetricsBar, ProgressBar } from '../../ui'
+import { EntryRow, parseDuration, formatTimeRange } from '../EntryRow'
+import { TimeEntry } from '../../../types'
 
 /**
  * 📋 ОПТИМИЗИРОВАННЫЙ Вид списком с точным визуалом фото 1
  */
 
 // ОПТИМИЗАЦИЯ: Мемоизированный компонент дня
-const DayAccordion = memo(
+interface DayAccordionProps {
+  date: string
+  dateEntries: TimeEntry[]
+  metrics: any
+  dailyGoal: number
+  isMobile: boolean
+  onEdit: (entry: TimeEntry) => void
+  selectionMode: boolean
+  selectedEntries: Set<string>
+  onToggleSelection: (entryId: string) => void
+  /** Первый (самый новый) день — будет открыт по умолчанию */
+  isFirstDay: boolean
+  // Пропсы для изменения ширины столбцов
+  resizeMode: boolean
+  gridWidths: any
+  tableWidths: any
+  dragging: any
+  onDragStart: any
+  onDrag: any
+  onDragEnd: any
+}
+
+const DayAccordion = memo<DayAccordionProps>(
   ({
     date,
     dateEntries,
     metrics,
     dailyGoal,
-    categories,
-    getCategory,
-    getCategoryName,
-    getProgressBarColor,
-    getStatusTextColor,
-    getStatusIcon,
-    calculateBreak,
+    isMobile,
     onEdit,
     selectionMode,
     selectedEntries,
     onToggleSelection,
+    isFirstDay,
     // Пропсы для изменения ширины столбцов
     resizeMode,
     gridWidths,
@@ -72,6 +85,12 @@ const DayAccordion = memo(
       })
     }, [dateEntries])
 
+    const [isOpen, setIsOpen] = useState(isFirstDay)
+
+    const handleToggle = useCallback((e: React.SyntheticEvent<HTMLDetailsElement>) => {
+      setIsOpen(e.currentTarget.open)
+    }, [])
+
     return (
       <details
         className="glass-effect entry-card rounded-lg overflow-hidden snap-start mb-2"
@@ -79,111 +98,105 @@ const DayAccordion = memo(
           contain: 'layout style paint',
           contentVisibility: 'auto',
         }}
+        open={isOpen}
+        onToggle={handleToggle}
       >
-        <summary className="relative overflow-hidden list-none">
-          {/* Фоновый прогресс-бар */}
-          <div
-            className={`absolute inset-0 opacity-10 ${getProgressBarColor(metrics.status)}`}
-            style={{ width: `${Math.min(progressPercent, 100)}%` }}
-          />
+        <summary className="relative overflow-hidden list-none cursor-pointer group">
+          {/* Фоновый прогресс-бар - видимость 30% */}
+          <div className="absolute inset-0 opacity-30 pointer-events-none">
+            <ProgressBar
+              percent={progressPercent}
+              status={metrics.status?.status}
+              showLabel={false}
+              className="h-full rounded-none"
+            />
+          </div>
 
           {/* Содержимое summary */}
           <div
             className="relative px-3 py-2 grid grid-cols-[1fr_minmax(0,1fr)_minmax(100px,min-content)] md:grid-cols-[1fr_minmax(280px,1fr)_minmax(120px,min-content)] items-center hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors"
             style={{ columnGap: '8px' }}
           >
-            {/* Левая часть: Дата и проценты - проценты максимально вправо к дате */}
+            {/* Левая часть: Дата */}
             <div className="flex items-center gap-2 min-w-0 overflow-hidden">
-              <ChevronDown className="w-4 h-4 text-gray-500 dark:text-gray-400 transition-transform duration-200 details-chevron flex-shrink-0" />
-              <span
-                className="font-semibold text-gray-800 dark:text-white whitespace-nowrap truncate"
-                title={formattedDate}
-              >
-                {formattedDate}
-              </span>
-              {/* Проценты - максимально вправо к дате */}
-              <div
-                className="flex items-center gap-1.5 justify-center relative flex-shrink-0 ml-auto"
-                style={{ marginLeft: `${gridWidths?.percentMargin || 8}px` }}
-              >
-                {metrics.status && metrics.status.status && (
-                  <>
-                    {getStatusIcon(metrics.status)}
-                    <span
-                      className={`text-xs font-medium whitespace-nowrap ${getStatusTextColor(metrics.status)}`}
-                    >
-                      {progressPercent}%
-                    </span>
-                  </>
-                )}
-                {/* Разделитель столбцов (только в режиме изменения) */}
-                {resizeMode && (
-                  <GridColumnDivider
-                    column="percentMargin"
-                    onDragStart={onDragStart}
-                    isDragging={dragging?.mode === 'grid' && dragging?.column === 'percentMargin'}
-                    position="right"
-                  />
+              <ChevronDown className="w-4 h-4 text-gray-500 dark:text-gray-400 transition-transform duration-200 details-chevron flex-shrink-0 group-open:rotate-180" />
+              <div className="flex flex-col min-w-0">
+                <span
+                  className="font-semibold text-gray-800 dark:text-white whitespace-nowrap truncate text-sm"
+                  title={formattedDate}
+                >
+                  {day} {month} <span className="text-gray-400 font-normal">{weekday}</span>
+                </span>
+                {/* Мобильные метрики */}
+                {isMobile && (
+                  <div className="flex items-center gap-1.5 text-[10px] text-gray-500 mt-0.5">
+                    <span>{formatHoursToTime(metrics.totalHours)}</span>
+                    <span>•</span>
+                    <span>{metrics.totalEarned}₽</span>
+                  </div>
                 )}
               </div>
             </div>
 
-            {/* Центр: Компактные инсайты - четко между процентами и часами */}
-            <div
-              className="hidden md:flex items-center gap-1.5 text-xs justify-center relative"
-              style={{
-                minWidth: '280px',
-                marginLeft: `${gridWidths?.columnGap || 16}px`,
-                marginRight: `${gridWidths?.columnGap || 16}px`,
-              }}
-            >
-              <span
-                title="Общее время работы"
-                className="flex items-center gap-1 px-2 py-1 rounded-md bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700"
+            {/* Центр: Компактные инсайты (Desktop) */}
+            {!isMobile && (
+              <div
+                className="hidden md:flex items-center justify-center relative"
+                style={{
+                  minWidth: '280px',
+                  marginLeft: `${gridWidths?.columnGap || 16}px`,
+                  marginRight: `${gridWidths?.columnGap || 16}px`,
+                }}
               >
-                <Clock className="w-3 h-3 flex-shrink-0" />
-                <span className="font-medium">{formatHoursToTime(metrics.totalHours)}</span>
-              </span>
-              <span
-                title="Всего перерывов"
-                className="flex items-center gap-1 px-2 py-1 rounded-md bg-orange-50 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 border border-orange-200 dark:border-orange-700"
-              >
-                <AlertTriangle className="w-3 h-3 flex-shrink-0" />
-                <span className="font-medium">{metrics.totalBreaks || '0:00'}</span>
-              </span>
-              <span
-                title="Ср. ставка"
-                className="flex items-center gap-1 px-2 py-1 rounded-md bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-700"
-              >
-                <DollarSign className="w-3 h-3 flex-shrink-0" />
-                <span className="font-medium">{metrics.averageRate || 0}₽</span>
-              </span>
-              {/* Разделитель столбцов (только в режиме изменения) */}
-              {resizeMode && (
-                <GridColumnDivider
-                  column="insightsMargin"
-                  onDragStart={onDragStart}
-                  isDragging={dragging?.mode === 'grid' && dragging?.column === 'insightsMargin'}
-                  position="right"
-                />
-              )}
-            </div>
+                <div className="flex gap-2">
+                  <DayMetricsBar
+                    totalHours={metrics.totalHours}
+                    totalBreaks={metrics.totalBreaks}
+                    averageRate={metrics.averageRate || 0}
+                    compact
+                  />
+                </div>
+                
+                {/* Разделитель столбцов */}
+                {resizeMode && (
+                  <GridColumnDivider
+                    column="insightsMargin"
+                    onDragStart={onDragStart}
+                    isDragging={dragging?.mode === 'grid' && dragging?.column === 'insightsMargin'}
+                    position="right"
+                  />
+                )}
+              </div>
+            )}
 
-            {/* Правая часть: Итого - часы слева от дохода, выровнены по вертикали */}
+            {/* Правая часть: Статус и Прогресс */}
             <div
-              className="flex items-center gap-2 relative min-w-0 flex-shrink-0"
-              style={{ marginLeft: `${gridWidths?.columnGap || 16}px` }}
+              className="flex items-center justify-end gap-2 relative min-w-0 flex-shrink-0"
+              style={{ marginLeft: !isMobile ? `${gridWidths?.columnGap || 16}px` : 0 }}
             >
-              <span className="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap flex-shrink-0">
-                {metrics.totalHours.toFixed(2)}ч
-              </span>
-              <span
-                className={`text-lg font-bold whitespace-nowrap flex-shrink-0 ml-auto ${getStatusTextColor(metrics.status)}`}
-              >
-                {metrics.totalEarned}₽
-              </span>
-              {/* Разделитель столбцов (только в режиме изменения) */}
-              {resizeMode && (
+              {!isMobile && (
+                <span className="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap flex-shrink-0">
+                  {metrics.totalHours.toFixed(2)}ч
+                </span>
+              )}
+              
+              <div className="flex items-center gap-2">
+                 {!isMobile && (
+                   <span className="text-sm font-bold text-gray-800 dark:text-white whitespace-nowrap">
+                     {metrics.totalEarned}₽
+                   </span>
+                 )}
+                 
+                 <DayStatusBadge
+                   status={metrics.status?.status}
+                   size="sm"
+                   showLabel={false}
+                   showIcon={true}
+                 />
+              </div>
+
+              {/* Разделитель столбцов */}
+              {!isMobile && resizeMode && (
                 <GridColumnDivider
                   column="totalMargin"
                   onDragStart={onDragStart}
@@ -197,250 +210,178 @@ const DayAccordion = memo(
 
         {/* Содержимое аккордеона */}
         <div className="border-t border-gray-200 dark:border-gray-700 overflow-x-auto">
-          <table className="w-full text-sm min-w-full" style={{ tableLayout: 'auto' }}>
-            {/* ✅ colgroup для управления шириной столбцов */}
-            <colgroup>
+          {isMobile ? (
+            <div className="p-2 space-y-2">
+              {sortedEntries.map(entry => {
+                 let nextEntryByTime: TimeEntry | null = null
+                 if (entry.end) {
+                   const currentIndex = sortedEntriesForBreaks.findIndex(e => e.id === entry.id)
+                   if (currentIndex >= 0 && currentIndex < sortedEntriesForBreaks.length - 1) {
+                     nextEntryByTime = sortedEntriesForBreaks[currentIndex + 1]
+                     if (nextEntryByTime?.start && nextEntryByTime.start <= entry.end) {
+                       nextEntryByTime = null
+                     }
+                   }
+                 }
+                 const breakTime = calculateBreak(entry.end, nextEntryByTime?.start)
+
+                 return (
+                   <EntryRow
+                     key={entry.id}
+                     entry={entry}
+                     breakTime={breakTime}
+                     variant="compact"
+                     onEdit={onEdit}
+                   />
+                 )
+              })}
+            </div>
+          ) : (
+            <table className="w-full text-sm min-w-full" style={{ tableLayout: 'auto' }}>
+              {/* ✅ colgroup для управления шириной столбцов */}
+              <colgroup>
+                {selectionMode && (
+                  <col style={{ width: `${tableWidths?.checkbox || 40}px`, minWidth: '40px' }} />
+                )}
+                <col style={{ width: `${tableWidths?.time || 150}px`, minWidth: '120px' }} />
+                <col style={{ width: `${tableWidths?.category || 200}px`, minWidth: '100px' }} />
+                <col style={{ width: `${tableWidths?.hours || 80}px`, minWidth: '60px' }} />
+                <col style={{ width: `${tableWidths?.income || 100}px`, minWidth: '70px' }} />
+              </colgroup>
+  
               {selectionMode && (
-                <col style={{ width: `${tableWidths?.checkbox || 40}px`, minWidth: '40px' }} />
+                <thead>
+                  <tr>
+                    <th className="px-3 py-1.5 text-left text-xs font-medium text-gray-500 dark:text-gray-400 relative">
+                      {/* Разделитель столбцов (только в режиме изменения) */}
+                      {resizeMode && (
+                        <TableColumnDivider
+                          column="checkbox"
+                          onDragStart={onDragStart}
+                          isDragging={dragging?.mode === 'table' && dragging?.column === 'checkbox'}
+                          position="right"
+                        />
+                      )}
+                    </th>
+                    {/* Остальные заголовки скрыты, так как они дублируются логически, или можно оставить пустыми если дизайн требует */}
+                    <th colSpan={4} />
+                  </tr>
+                </thead>
               )}
-              <col style={{ width: `${tableWidths?.time || 150}px`, minWidth: '120px' }} />
-              <col style={{ width: `${tableWidths?.category || 200}px`, minWidth: '100px' }} />
-              <col style={{ width: `${tableWidths?.hours || 80}px`, minWidth: '60px' }} />
-              <col style={{ width: `${tableWidths?.income || 100}px`, minWidth: '70px' }} />
-            </colgroup>
-
-            {selectionMode && (
-              <thead>
-                <tr>
-                  <th className="px-3 py-1.5 text-left text-xs font-medium text-gray-500 dark:text-gray-400 relative">
-                    {/* Разделитель столбцов (только в режиме изменения) */}
-                    {resizeMode && (
-                      <TableColumnDivider
-                        column="checkbox"
-                        onDragStart={onDragStart}
-                        isDragging={dragging?.mode === 'table' && dragging?.column === 'checkbox'}
-                        position="right"
-                      />
-                    )}
-                  </th>
-                  <th className="px-3 py-1.5 text-left text-xs font-medium text-gray-500 dark:text-gray-400 relative">
-                    Время
-                    {/* Разделитель столбцов (только в режиме изменения) */}
-                    {resizeMode && (
-                      <TableColumnDivider
-                        column="time"
-                        onDragStart={onDragStart}
-                        isDragging={dragging?.mode === 'table' && dragging?.column === 'time'}
-                        position="right"
-                      />
-                    )}
-                  </th>
-                  <th className="px-3 py-1.5 text-left text-xs font-medium text-gray-500 dark:text-gray-400 relative">
-                    Категория
-                    {/* Разделитель столбцов (только в режиме изменения) */}
-                    {resizeMode && (
-                      <TableColumnDivider
-                        column="category"
-                        onDragStart={onDragStart}
-                        isDragging={dragging?.mode === 'table' && dragging?.column === 'category'}
-                        position="right"
-                      />
-                    )}
-                  </th>
-                  <th className="px-3 py-1.5 text-right text-xs font-medium text-gray-500 dark:text-gray-400 relative">
-                    Часы
-                    {/* Разделитель столбцов (только в режиме изменения) */}
-                    {resizeMode && (
-                      <TableColumnDivider
-                        column="hours"
-                        onDragStart={onDragStart}
-                        isDragging={dragging?.mode === 'table' && dragging?.column === 'hours'}
-                        position="right"
-                      />
-                    )}
-                  </th>
-                  <th className="px-3 py-1.5 text-right text-xs font-medium text-gray-500 dark:text-gray-400 relative">
-                    Доход
-                    {/* Разделитель столбцов (только в режиме изменения) */}
-                    {resizeMode && (
-                      <TableColumnDivider
-                        column="income"
-                        onDragStart={onDragStart}
-                        isDragging={dragging?.mode === 'table' && dragging?.column === 'income'}
-                        position="right"
-                      />
-                    )}
-                  </th>
-                </tr>
-              </thead>
-            )}
-            <tbody>
-              {sortedEntries.map((entry, entryIdx) => {
-                const duration = entry.duration
-                  ? parseFloat(entry.duration).toFixed(2)
-                  : (() => {
-                      if (entry.start && entry.end) {
-                        const [startH, startM] = entry.start.split(':').map(Number)
-                        const [endH, endM] = entry.end.split(':').map(Number)
-                        const minutes = endH * 60 + endM - (startH * 60 + startM)
-                        return (minutes / 60).toFixed(2)
+  
+              <tbody>
+                {sortedEntries.map((entry, entryIdx) => {
+                  const duration = parseDuration(entry)
+                  const earned = Math.round(parseFloat(String(entry.earned)) || 0)
+                  const timeRange = formatTimeRange(entry)
+                  const categoryValue = entry.category || entry.categoryId
+  
+                  const isSelected = selectedEntries.has(String(entry.id))
+  
+                  let nextEntryByTime: TimeEntry | null = null
+                  if (entry.end) {
+                    const currentIndex = sortedEntriesForBreaks.findIndex(e => e.id === entry.id)
+                    if (currentIndex >= 0 && currentIndex < sortedEntriesForBreaks.length - 1) {
+                      nextEntryByTime = sortedEntriesForBreaks[currentIndex + 1]
+                      if (nextEntryByTime?.start && nextEntryByTime.start <= entry.end) {
+                        nextEntryByTime = null
                       }
-                      return '0.00'
-                    })()
-
-                const earned = Math.round(parseFloat(entry.earned) || 0)
-                const timeRange = entry.start
-                  ? entry.end
-                    ? `${entry.start}—${entry.end}`
-                    : `${entry.start} (в процессе)`
-                  : ''
-
-                // Получаем категорию для иконки и цвета
-                const categoryValue = entry.category || entry.categoryId
-                const category = getCategory(categoryValue)
-                const CategoryIcon = category && category.icon ? getIcon(category.icon) : null
-                const categoryColor = category && category.color ? category.color : '#6B7280'
-                const categoryName = getCategoryName(categoryValue)
-
-                // ИСПРАВЛЕНО: Правильный расчет перерыва
-                // Ищем следующую запись по времени начала (ближайшую после окончания текущей)
-                let nextEntryByTime = null
-                if (entry.end) {
-                  // Используем отсортированный список от старых к новым для правильного поиска
-                  const currentIndex = sortedEntriesForBreaks.findIndex(e => e.id === entry.id)
-                  if (currentIndex >= 0 && currentIndex < sortedEntriesForBreaks.length - 1) {
-                    // Берем следующую запись в отсортированном списке
-                    nextEntryByTime = sortedEntriesForBreaks[currentIndex + 1]
-                    // Проверяем, что следующая запись действительно начинается после окончания текущей
-                    if (nextEntryByTime.start && nextEntryByTime.start <= entry.end) {
-                      nextEntryByTime = null
                     }
                   }
-                }
-                const breakTime = calculateBreak(entry.end, nextEntryByTime?.start)
-
-                return (
-                  <tr
-                    key={entry.id}
-                    className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all duration-300 border-b border-gray-100 dark:border-gray-700 last:border-b-0 group"
-                    style={{
-                      transform: 'translateY(0) translateZ(0)',
-                      willChange: 'transform',
-                    }}
-                    onMouseEnter={e => {
-                      e.currentTarget.style.transform = 'translateY(-3px) translateZ(0)'
-                      e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)'
-                    }}
-                    onMouseLeave={e => {
-                      e.currentTarget.style.transform = 'translateY(0) translateZ(0)'
-                      e.currentTarget.style.boxShadow = 'none'
-                    }}
-                    onDoubleClick={() => onEdit && onEdit(entry)}
-                    title="Двойной клик для редактирования"
-                  >
-                    {/* Чекбокс для выбора (если включен режим выбора) */}
-                    {selectionMode && (
-                      <td
-                        className="px-3 py-1.5 align-middle"
-                        style={{ verticalAlign: 'middle', width: '40px' }}
-                      >
-                        <input
-                          type="checkbox"
-                          checked={selectedEntries.has(entry.id)}
-                          onChange={() => onToggleSelection && onToggleSelection(entry.id)}
-                          onClick={e => e.stopPropagation()}
-                          className="w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500"
-                        />
-                      </td>
-                    )}
-
-                    {/* Время БЕЗ иконки часов */}
-                    <td
-                      className="px-3 py-1.5 align-middle font-mono text-xs text-gray-600 dark:text-gray-400"
-                      style={{ verticalAlign: 'middle' }}
+                  const breakTime = calculateBreak(entry.end, nextEntryByTime?.start)
+  
+                  return (
+                    <tr
+                      key={entry.id}
+                      className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all duration-300 border-b border-gray-100 dark:border-gray-700 last:border-b-0 group"
+                      onDoubleClick={() => onEdit && onEdit(entry)}
+                      title="Двойной клик для редактирования"
                     >
-                      <div className="flex items-center gap-1.5 flex-wrap">
-                        <span>{timeRange}</span>
-                        {breakTime && (
-                          <span className="text-xs px-1.5 py-0.5 rounded bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-400 font-medium">
-                            {breakTime}
-                          </span>
-                        )}
-                      </div>
-                      {/* Разделитель столбцов (только в режиме изменения, только в первой строке) */}
-                      {resizeMode && entryIdx === 0 && (
-                        <TableColumnDivider
-                          column="time"
-                          onDragStart={onDragStart}
-                          isDragging={dragging?.mode === 'table' && dragging?.column === 'time'}
-                          position="right"
-                        />
+                      {/* Чекбокс для выбора */}
+                      {selectionMode && (
+                        <td className="px-3 py-1.5 align-middle" style={{ width: '40px' }}>
+                          <input
+                            type="checkbox"
+                            checked={isSelected}
+                            onChange={() => onToggleSelection?.(String(entry.id))}
+                            onClick={e => e.stopPropagation()}
+                            className="w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500"
+                          />
+                          {resizeMode && entryIdx === 0 && (
+                            <TableColumnDivider
+                              column="checkbox"
+                              onDragStart={onDragStart}
+                              isDragging={dragging?.mode === 'table' && dragging?.column === 'checkbox'}
+                              position="right"
+                            />
+                          )}
+                        </td>
                       )}
-                    </td>
-
-                    {/* Категория с иконкой */}
-                    <td
-                      className="px-3 py-1.5 align-middle relative"
-                      style={{ verticalAlign: 'middle' }}
-                    >
-                      <div className="flex items-center gap-1 text-xs">
-                        {CategoryIcon && (
-                          <CategoryIcon
-                            className="w-3 h-3 flex-shrink-0"
-                            style={{ color: categoryColor }}
+  
+                      {/* Время БЕЗ иконки часов */}
+                      <td className="px-3 py-1.5 align-middle font-mono text-xs text-gray-600 dark:text-gray-400 relative">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span>{timeRange}</span>
+                          {breakTime && (
+                            <span className="text-xs px-1.5 py-0.5 rounded bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-400 font-medium">
+                              {breakTime}
+                            </span>
+                          )}
+                        </div>
+                        {resizeMode && entryIdx === 0 && (
+                          <TableColumnDivider
+                            column="time"
+                            onDragStart={onDragStart}
+                            isDragging={dragging?.mode === 'table' && dragging?.column === 'time'}
+                            position="right"
                           />
                         )}
-                        <span className="text-gray-700 dark:text-gray-300">{categoryName}</span>
-                      </div>
-                      {/* Разделитель столбцов (только в режиме изменения, только в первой строке) */}
-                      {resizeMode && entryIdx === 0 && (
-                        <TableColumnDivider
-                          column="category"
-                          onDragStart={onDragStart}
-                          isDragging={dragging?.mode === 'table' && dragging?.column === 'category'}
-                          position="right"
-                        />
-                      )}
-                    </td>
-
-                    {/* Часы (длительность) */}
-                    <td
-                      className="px-3 py-1.5 align-middle text-right text-xs text-gray-500 dark:text-gray-400 relative whitespace-nowrap"
-                      style={{ verticalAlign: 'middle' }}
-                    >
-                      {duration}ч
-                      {/* Разделитель столбцов (только в режиме изменения, только в первой строке) */}
-                      {resizeMode && entryIdx === 0 && (
-                        <TableColumnDivider
-                          column="hours"
-                          onDragStart={onDragStart}
-                          isDragging={dragging?.mode === 'table' && dragging?.column === 'hours'}
-                          position="right"
-                        />
-                      )}
-                    </td>
-
-                    {/* Доход */}
-                    <td
-                      className="px-3 py-1.5 align-middle text-right font-semibold text-gray-800 dark:text-gray-200 relative whitespace-nowrap"
-                      style={{ verticalAlign: 'middle' }}
-                    >
-                      {earned}₽
-                      {/* Разделитель столбцов (только в режиме изменения, только в первой строке) */}
-                      {resizeMode && entryIdx === 0 && (
-                        <TableColumnDivider
-                          column="income"
-                          onDragStart={onDragStart}
-                          isDragging={dragging?.mode === 'table' && dragging?.column === 'income'}
-                          position="right"
-                        />
-                      )}
-                    </td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
+                      </td>
+  
+                      {/* Категория */}
+                      <td className="px-3 py-1.5 align-middle relative">
+                        <CategoryBadge categoryId={categoryValue} size="sm" />
+                        {resizeMode && entryIdx === 0 && (
+                           <TableColumnDivider
+                             column="category"
+                             onDragStart={onDragStart}
+                             isDragging={dragging?.mode === 'table' && dragging?.column === 'category'}
+                             position="right"
+                           />
+                         )}
+                      </td>
+  
+                      {/* Часы (длительность) */}
+                      <td className="px-3 py-1.5 align-middle text-right text-xs text-gray-500 dark:text-gray-400 relative whitespace-nowrap">
+                        {duration}ч
+                        {resizeMode && entryIdx === 0 && (
+                          <TableColumnDivider
+                            column="hours"
+                            onDragStart={onDragStart}
+                            isDragging={dragging?.mode === 'table' && dragging?.column === 'hours'}
+                            position="right"
+                          />
+                        )}
+                      </td>
+  
+                      {/* Доход */}
+                      <td className="px-3 py-1.5 align-middle text-right font-semibold text-gray-800 dark:text-gray-200 relative whitespace-nowrap">
+                        {earned}₽
+                        {resizeMode && entryIdx === 0 && (
+                          <TableColumnDivider
+                            column="income"
+                            onDragStart={onDragStart}
+                            isDragging={dragging?.mode === 'table' && dragging?.column === 'income'}
+                            position="right"
+                          />
+                        )}
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          )}
         </div>
       </details>
     )
@@ -460,16 +401,26 @@ const DayAccordion = memo(
   }
 )
 
+
+interface ListViewProps {
+  entries: TimeEntry[]
+  onEdit: (entry: TimeEntry) => void
+  selectionMode: boolean
+  selectedEntries: Set<string>
+  onToggleSelection: (entryId: string) => void
+}
+
 export function ListView({
   entries,
   onEdit,
   selectionMode = false,
   selectedEntries = new Set(),
   onToggleSelection,
-}) {
+}: ListViewProps) {
   // ✅ ОПТИМИЗАЦИЯ: Используем атомарные селекторы для минимизации ре-рендеров
   const categories = useCategories()
   const dailyGoal = useDailyGoal()
+  const isMobile = useIsMobile()
 
   // ✅ Хук для изменения размеров столбцов
   const {
@@ -525,7 +476,7 @@ export function ListView({
 
   // ОПТИМИЗАЦИЯ: Мемоизация сортировки дат
   const sortedDates = useMemo(() => {
-    return Object.keys(groupedEntries).sort((a, b) => new Date(b) - new Date(a))
+    return Object.keys(groupedEntries).sort((a, b) => new Date(b).getTime() - new Date(a).getTime())
   }, [groupedEntries])
 
   // ОПТИМИЗАЦИЯ: Ограничиваем отображаемые даты
@@ -619,35 +570,7 @@ export function ListView({
     }
   }, [])
 
-  const calculateBreak = useCallback((entryEnd, nextEntryStart) => {
-    if (!entryEnd || !nextEntryStart) return null
 
-    const [endH, endM] = entryEnd.split(':').map(Number)
-    const [startH, startM] = nextEntryStart.split(':').map(Number)
-
-    const endMinutes = endH * 60 + endM
-    const startMinutes = startH * 60 + startM
-
-    // ИСПРАВЛЕНО: Правильный расчет перерыва для записей в один день
-    // Если следующая запись начинается раньше, чем заканчивается текущая,
-    // это означает, что записи перекрываются или неправильно отсортированы
-    const breakMinutes = startMinutes - endMinutes
-
-    // Если перерыв отрицательный, значит записи перекрываются или неправильный порядок
-    // В этом случае не показываем перерыв
-    if (breakMinutes < 0) {
-      return null
-    }
-
-    const hours = Math.floor(breakMinutes / 60)
-    const minutes = breakMinutes % 60
-
-    // ИСПРАВЛЕНО: Показываем все перерывы, даже маленькие (убрал фильтр 30 минут)
-    // Перерыв 0:00 не показываем
-    if (hours === 0 && minutes === 0) return null
-
-    return `${hours}:${minutes.toString().padStart(2, '0')}`
-  }, [])
 
   // ОПТИМИЗАЦИЯ: Кнопка "Показать еще" с плавной загрузкой
   const handleLoadMore = useCallback(() => {
@@ -668,24 +591,19 @@ export function ListView({
         onSaveAsDefaults={saveAsDefaults}
       />
 
-      {visibleDates.map(date => (
+      {visibleDates.map((date, index) => (
         <DayAccordion
           key={date}
           date={date}
           dateEntries={groupedEntries[date]}
           metrics={dayMetrics[date]}
           dailyGoal={dailyGoal}
-          categories={categories}
-          getCategory={getCategory}
-          getCategoryName={getCategoryName}
-          getProgressBarColor={getProgressBarColor}
-          getStatusTextColor={getStatusTextColor}
-          getStatusIcon={getStatusIcon}
-          calculateBreak={calculateBreak}
+          isMobile={isMobile}
           onEdit={onEdit}
           selectionMode={selectionMode}
           selectedEntries={selectedEntries}
           onToggleSelection={onToggleSelection}
+          isFirstDay={index === 0}
           resizeMode={resizeMode}
           gridWidths={gridWidths}
           tableWidths={tableWidths}

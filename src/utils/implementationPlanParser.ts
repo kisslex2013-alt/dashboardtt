@@ -298,8 +298,13 @@ export function parseImplementationPlan(planContent: string): ImplementationPlan
       continue
     }
 
-    if (line.startsWith('- ') && currentTask.description && currentTask.description.length < 200) {
-      currentTask.description += ` ${  line.substring(2).trim()}`
+    if (line.startsWith('- ') && currentTask) {
+      const text = line.substring(2).trim()
+      if (currentTask.description) {
+        currentTask.description += `; ${text}`
+      } else {
+        currentTask.description = text
+      }
     }
   }
 

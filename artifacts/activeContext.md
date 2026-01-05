@@ -1,27 +1,33 @@
-# Active Context
+# Активный Контекст
 
-## Current Focus
-Auditing and enhancing project rules based on community resources (Habr article, awesome-antigravity, workspace-template).
+## Текущий фокус
+Улучшение UI/UX настроек и исправление отображения периодов в календаре.
 
-## Recent Achievements
-- Refactored Chart Components (`DynamicsChart`, `TrendsChart`) to use `ChartContainer`.
-- Resolved type errors in `EmptyState.tsx`.
-- Adjusted barrel exports for `utils` and `ui`.
-- Fixed provider issues and explored Gemini integration.
-- **[2025-12-28]** Added Memory Bank structure and rules.
-- **[2025-12-28]** Added Context7, Analysis Phase, Debug Flow, Fail Gracefully, Stateless Tools rules.
-- **[2025-12-28]** Completed full rules audit — no conflicts found.
-- **[2025-12-28]** Added Auto-Documentation rules (CHANGELOG, Conventional Commits, ADR).
+## Последние достижения
+- **Текущий фокус:** Улучшение UI/UX настроек и видимости предиктивной аналитики.
 
-## Active Tasks
-- [x] Create Memory Bank files (`projectBrief`, `productContext`, `systemPatterns`, `techContext`).
-- [x] Review and integrate with `task.md`.
-- [x] Officialized Memory Bank rules in `.antigravity/rules.md`.
-- [x] Added Context7, Analysis Phase, Debug Flow rules.
-- [x] Added Fail Gracefully, Stateless Tools rules.
-- [x] Completed full rules audit.
-- [ ] Continue with "General `useModal` refactoring" (pushed from previous session).
+  **Недавние достижения (Дек 2025):**
+  - Реализованы **Сохраняемые настройки для Предиктивной Аналитики** (миграция v4).
+  - Добавлены "Что если", "Прогноз" и "Сезонность" в главное **Меню видимости графиков**.
+  - **Тепловая карта сезонности** теперь имеет собственный независимый переключатель видимости.
+  - Исправлено отображение периодов календаря (`isInPeriod()` теперь возвращает объект `payment` с цветом).
+  - Улучшен UI модального окна настроек: уведомления ИИ перенесены на отдельную вкладку, удалены аккордеоны из `SettingsCard`, индикаторы ВКЛ/ВЫКЛ добавлены для вкладок Персонализации и ИИ, вкладка "Финансы" переименована в "Платежи", добавлена кнопка "Анализировать" для ручного запуска анализа ИИ.
+  - Реализована архитектура Web Worker для ИИ анализа.
 
-## Next Steps
-- Implement generic `useModal` hook.
-- Implement "Design Tokens" centralization.
+## Активные задачи
+  **Текущие задачи:**
+  - [x] Web Worker для ИИ анализа
+  - [x] Улучшения UI модального окна настроек
+  - [x] Кнопка "Анализировать"
+  - [x] Исправления периодов календаря
+  - [x] Настройки предиктивной аналитики и миграция
+  - [ ] Проверить отображение периодов в браузере
+  - [ ] Реализовать универсальный хук `useModal<T>()`
+  - [ ] Включить `noImplicitAny: true` и типизировать файлы
+
+## Следующие шаги
+  **Дальнейшие действия:**
+  - Проверить отображение периодов в браузере.
+  - Рефакторинг `AnalyticsSection.tsx` для устранения постоянных ошибок линтера.
+  - Реализовать универсальный хук `useModal<T>()`.
+  - Включить `noImplicitAny: true` и типизировать файлы.

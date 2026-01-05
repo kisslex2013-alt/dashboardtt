@@ -1,4 +1,4 @@
-import { Calendar, Search, Clock, FilterX } from '../../utils/icons'
+import { Calendar, Search, Clock, FilterX, Info } from '../../utils/icons'
 import { useState, useMemo, useCallback, useEffect } from 'react'
 import {
   useEntries,
@@ -8,12 +8,13 @@ import {
   useGetEntriesByIds,
 } from '../../store/useEntriesStore'
 import { useTimer } from '../../hooks/useTimer'
-import { useShowSuccess, useShowError, useOpenModal } from '../../store/useUIStore'
+import { useShowSuccess, useShowError, useOpenModal, useUIStore } from '../../store/useUIStore'
 import {
   useListView,
   useSetListView,
   useDefaultEntriesFilter,
   useSetDefaultEntriesFilter,
+  useSettingsStore,
 } from '../../store/useSettingsStore'
 import { useConfirmModal } from '../../hooks/useConfirmModal'
 import { useCategory } from '../../hooks/useCategory'
@@ -74,14 +75,20 @@ export function EntriesList({
   const timer = useTimer()
   const { confirmConfig, openConfirm } = useConfirmModal()
   const openModal = useOpenModal()
-  const [searchQuery, setSearchQuery] = useState('')
+  
+  // --- RESTORED FILTER LOGIC ---
+  const { filters, updateFilters } = useUIStore()
+  const searchQuery = filters.searchQuery || ''
+  const dateFilter = filters.activeFilter || 'Месяц'
+  const customDateRange = filters.customDateRange || { start: '', end: '' }
 
-  // Состояние для массовых операций
-  const [selectionMode, setSelectionMode] = useState(false)
-  const [selectedEntries, setSelectedEntries] = useState(new Set())
-  const [showBulkCategoryModal, setShowBulkCategoryModal] = useState(false)
+  const setSearchQuery = (q) => updateFilters({ searchQuery: q })
+  const setDateFilter = (f) => updateFilters({ activeFilter: f })
+  const setCustomDateRange = (r) => updateFilters({ customDateRange: r })
 
-  // ✅ ОПТИМИЗАЦИЯ: Мемоизированные константы (не меняются между рендерами)
+  const { getCategoryNameById } = useCategory({ defaultName: 'Без категории' })
+  const getCategoryName = useCallback(id => getCategoryNameById(id, 'Без категории'), [getCategoryNameById])
+
   const filterTextMapping = useMemo(
     () => ({
       today: 'Сегодня',
@@ -113,34 +120,6 @@ export function EntriesList({
     []
   )
 
-  // Используем сохраненный фильтр по умолчанию для блока "Записи времени"
-  const [dateFilter, setDateFilter] = useState(() => {
-    const mapping = {
-      today: 'Сегодня',
-      halfMonth1: '1/2 месяца',
-      halfMonth2: '2/2 месяца',
-      month: 'Месяц',
-      year: 'Год',
-      all: 'Все записи',
-      custom: 'Выбор даты',
-    }
-    return mapping[defaultEntriesFilter] || 'Месяц'
-  })
-  const [customDateRange, setCustomDateRange] = useState({ start: '', end: '' })
-  // Удалены локальные состояния для модальных окон - теперь используем глобальный store
-
-  // ✅ ОПТИМИЗАЦИЯ: Используем централизованный хук для работы с категориями
-  const { getCategoryNameById } = useCategory({ defaultName: 'Без категории' })
-
-  // Обертка для совместимости с существующим кодом
-  const getCategoryName = useCallback(
-    categoryId => {
-      return getCategoryNameById(categoryId, 'Без категории')
-    },
-    [getCategoryNameById]
-  )
-
-  // ✅ ОПТИМИЗАЦИЯ: Мемоизированная функция фильтрации по дате
   const filterByDate = useCallback(
     entry => {
       const entryDate = new Date(entry.date)
@@ -173,8 +152,6 @@ export function EntriesList({
           return entryDate.getFullYear() === currentYear
 
         case 'Выбор даты': {
-          // Если не выбраны обе даты - не показываем записи (возвращаем false)
-          // Это предотвращает загрузку всех записей при выборе фильтра
           if (!customDateRange.start || !customDateRange.end) return false
           const startDate = new Date(customDateRange.start)
           const endDate = new Date(customDateRange.end)
@@ -190,92 +167,85 @@ export function EntriesList({
     [dateFilter, customDateRange]
   )
 
-  // ✅ ОПТИМИЗАЦИЯ: Мемоизированный список отфильтрованных записей
   const filteredEntries = useMemo(() => {
     return entries.filter(entry => {
-      // Получаем название категории (поддержка как category, так и categoryId)
       const categoryName = getCategoryName(entry.category || entry.categoryId)
-
-      // Фильтр по поиску
       const matchesSearch =
         !searchQuery ||
         entry.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         categoryName.toLowerCase().includes(searchQuery.toLowerCase())
-
-      // Фильтр по дате
       const matchesDate = filterByDate(entry)
-
       return matchesSearch && matchesDate
     })
   }, [entries, searchQuery, filterByDate, getCategoryName])
+  // --- END RESTORED LOGIC ---
+
+  // Состояние для массовых операций
+  const [selectionMode, setSelectionMode] = useState(false)
+  
+  const [showBulkCategoryModal, setShowBulkCategoryModal] = useState(false)
+  const selectedEntries = useUIStore(state => state.selectedEntries)
+  const { toggleEntrySelection, selectAllEntries: selectAllInStore, clearSelection: clearSelectionInStore } = useUIStore()
+
+  // Мемоизируем Set для передачи в дочерние компоненты (совместимость)
+  const selectedEntriesSet = useMemo(() => new Set(selectedEntries), [selectedEntries])
 
   // ✅ ОПТИМИЗАЦИЯ: Мемоизированные функции для массовых операций
   const toggleSelection = useCallback(entryId => {
-    setSelectedEntries(prev => {
-      const newSet = new Set(prev)
-      if (newSet.has(entryId)) {
-        newSet.delete(entryId)
-      } else {
-        newSet.add(entryId)
-      }
-      return newSet
-    })
-  }, [])
+    toggleEntrySelection(String(entryId))
+  }, [toggleEntrySelection])
 
   const selectAllEntries = useCallback(() => {
-    const allEntryIds = filteredEntries.map(entry => entry.id)
-    setSelectedEntries(new Set(allEntryIds))
-  }, [filteredEntries])
+    const allEntryIds = filteredEntries.map(entry => String(entry.id))
+    selectAllInStore(allEntryIds)
+  }, [filteredEntries, selectAllInStore])
 
   const clearSelection = useCallback(() => {
-    setSelectedEntries(new Set())
+    clearSelectionInStore()
     setSelectionMode(false)
-  }, [])
+  }, [clearSelectionInStore])
 
   const handleBulkCategory = useCallback(() => {
-    if (selectedEntries.size > 0) {
+    if (selectedEntries.length > 0) {
       setShowBulkCategoryModal(true)
     }
-  }, [selectedEntries.size])
+  }, [selectedEntries.length])
 
   const handleBulkCategoryConfirm = useCallback(
     categoryId => {
-      const selectedIds = Array.from(selectedEntries)
-      bulkUpdateCategory(selectedIds, categoryId)
-      showSuccess(`Категория изменена для ${selectedIds.length} записей`)
+      bulkUpdateCategory(selectedEntries, categoryId)
+      showSuccess(`Категория изменена для ${selectedEntries.length} записей`)
       clearSelection()
     },
     [selectedEntries, bulkUpdateCategory, showSuccess, clearSelection]
   )
 
   const handleBulkExport = useCallback(async () => {
-    const selectedIds = Array.from(selectedEntries)
-    const selectedEntriesData = getEntriesByIds(selectedIds)
+    const selectedEntriesData = getEntriesByIds(selectedEntries)
 
     try {
       await exportToJSON(selectedEntriesData, categories, useSettingsStore.getState(), {
         filename: `selected_entries_${new Date().toISOString().split('T')[0]}.json`,
       })
-      showSuccess(`Экспортировано ${selectedIds.length} записей`)
+      showSuccess(`Экспортировано ${selectedEntries.length} записей`)
       clearSelection()
     } catch (error) {
       // ИСПРАВЛЕНО: Используем централизованную обработку ошибок
-      const errorMessage = handleError(error, {
+      const errorMessage = handleError(error as Error, {
         operation: 'Экспорт записей',
-        count: selectedIds.length,
+        count: selectedEntries.length,
       })
       showError(errorMessage)
     }
   }, [selectedEntries, getEntriesByIds, categories, showSuccess, showError, clearSelection])
 
   const handleBulkDelete = useCallback(() => {
-    const selectedIds = Array.from(selectedEntries)
     openConfirm({
       title: 'Удалить записи?',
-      message: `Удалить ${selectedIds.length} записей? Это действие нельзя отменить.`,
+      message: `Удалить ${selectedEntries.length} записей? Это действие нельзя отменить.`,
       onConfirm: () => {
-        bulkDeleteEntries(selectedIds)
-        showSuccess(`Удалено ${selectedIds.length} записей`)
+        bulkDeleteEntries(selectedEntries)
+        showSuccess(`Удалено ${selectedEntries.length} записей`)
         clearSelection()
       },
       confirmText: 'Удалить',
@@ -313,18 +283,18 @@ export function EntriesList({
           <BulkCategoryModal
             isOpen={showBulkCategoryModal}
             onClose={() => setShowBulkCategoryModal(false)}
-            selectedCount={selectedEntries.size}
+            selectedCount={selectedEntries.length}
             onConfirm={handleBulkCategoryConfirm}
           />
         )}
       </Suspense>
 
       {/* Панель массовых действий */}
-      {selectionMode && selectedEntries.size > 0 && (
+      {selectionMode && selectedEntries.length > 0 && (
         <BulkActionsPanel
-          selectedCount={selectedEntries.size}
+          selectedCount={selectedEntries.length}
           onSelectAll={selectAllEntries}
-          onDeselectAll={() => setSelectedEntries(new Set())}
+          onDeselectAll={() => clearSelectionInStore()}
           onBulkCategory={handleBulkCategory}
           onBulkExport={handleBulkExport}
           onBulkDelete={handleBulkDelete}
@@ -375,7 +345,7 @@ export function EntriesList({
                 entries={filteredEntries}
                 onEdit={onEditEntry}
                 selectionMode={selectionMode}
-                selectedEntries={selectedEntries}
+                selectedEntries={selectedEntriesSet}
                 onToggleSelection={toggleSelection}
               />
             )}
@@ -385,7 +355,7 @@ export function EntriesList({
                 entries={filteredEntries}
                 onEdit={onEditEntry}
                 selectionMode={selectionMode}
-                selectedEntries={selectedEntries}
+                selectedEntries={selectedEntriesSet}
                 onToggleSelection={toggleSelection}
               />
             )}
@@ -395,7 +365,7 @@ export function EntriesList({
                 entries={filteredEntries}
                 onEdit={onEditEntry}
                 selectionMode={selectionMode}
-                selectedEntries={selectedEntries}
+                selectedEntries={selectedEntriesSet}
                 onToggleSelection={toggleSelection}
               />
             )}
@@ -403,7 +373,7 @@ export function EntriesList({
         )}
 
         {/* Календарь рендерится отдельно, вне условия filteredEntries */}
-        {listView === 'calendar' && (
+        {listView === 'calendar' && entries.length > 0 && (
           <div className="animate-fade-in">
             <EntriesCalendarView
               entries={entries}
@@ -416,9 +386,12 @@ export function EntriesList({
 
         {/* Информационное сообщение для больших списков */}
         {filteredEntries.length > 100 && (
-          <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-            <p className="text-sm text-blue-800 dark:text-blue-300">
-              💡 Показано {filteredEntries.length} записей. Для лучшей производительности
+          <div className="mt-4 p-4 rounded-xl border border-blue-200/50 dark:border-blue-800/50 bg-blue-50/50 dark:bg-blue-900/10 backdrop-blur-sm flex items-start gap-3 transition-all hover:bg-blue-50 dark:hover:bg-blue-900/20">
+            <div className="shrink-0 mt-0.5">
+              <Info className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+            </div>
+            <p className="text-sm text-blue-800 dark:text-blue-200 leading-relaxed">
+              Показано <span className="font-semibold">{filteredEntries.length}</span> записей. Для лучшей производительности
               используйте фильтры для уменьшения количества записей.
             </p>
           </div>

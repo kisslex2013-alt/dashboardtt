@@ -1,81 +1,77 @@
+"use client";
+
+import React, { ComponentPropsWithoutRef, useMemo } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+
 /**
- * 🎭 Stagger Animation Components
+ * 🎭 StaggeredList (AnimatedList)
  *
- * Компоненты для анимации списков с последовательным появлением элементов.
- * Best practice: элементы появляются один за другим с небольшой задержкой.
- */
-
-import { Children, cloneElement, isValidElement, ReactNode } from 'react'
-
-interface StaggeredListProps {
-  /** Дочерние элементы списка */
-  children: ReactNode
-  /** Задержка между элементами в мс */
-  staggerDelay?: number
-  /** Начальная задержка в мс */
-  initialDelay?: number
-  /** Длительность анимации в мс */
-  duration?: number
-  /** Дополнительные классы для контейнера */
-  className?: string
-}
-
-/**
- * StaggeredList — список с последовательным появлением элементов
+ * Компонент для анимации списков с последовательным появлением элементов.
+ * Использует Framer Motion для плавных spring-анимаций.
  *
  * @example
- * <StaggeredList staggerDelay={50}>
- *   <div>Item 1</div>
- *   <div>Item 2</div>
- *   <div>Item 3</div>
+ * <StaggeredList staggerDelay={100}>
+ *   {items.map((item) => <ItemCard key={item.id} {...item} />)}
  * </StaggeredList>
  */
-export function StaggeredList({
-  children,
-  staggerDelay = 50,
-  initialDelay = 0,
-  duration = 300,
-  className = '',
-}: StaggeredListProps) {
-  const childArray = Children.toArray(children)
-
-  return (
-    <div className={className}>
-      {childArray.map((child, index) => {
-        if (!isValidElement(child)) return child
-
-        const delay = initialDelay + index * staggerDelay
-        const childProps = child.props as { style?: React.CSSProperties }
-
-        return cloneElement(child as React.ReactElement<{ style?: React.CSSProperties }>, {
-          style: {
-            ...childProps.style,
-            animation: `fadeIn ${duration}ms ease-out ${delay}ms both`,
-            opacity: 0,
-          },
-          key: child.key ?? index,
-        })
-      })}
-    </div>
-  )
+export interface StaggeredListProps extends ComponentPropsWithoutRef<"ul"> {
+  /** Элементы списка */
+  children: React.ReactNode;
+  /** Задержка между появлением элементов в мс (default: 50) */
+  staggerDelay?: number;
+  /** Начальная задержка перед первым элементом в мс (default: 0) */
+  initialDelay?: number;
+  /** Длительность анимации в мс (устаревший, используется spring) */
+  duration?: number;
 }
 
-interface StaggeredItemProps {
-  /** Дочерний элемент */
-  children: ReactNode
-  /** Индекс элемента для расчета задержки */
-  index: number
-  /** Задержка между элементами в мс */
-  staggerDelay?: number
-  /** Начальная задержка в мс */
-  initialDelay?: number
-  /** Дополнительные классы */
-  className?: string
+export function StaggeredList({
+  children,
+  className,
+  staggerDelay = 50,
+  initialDelay = 0,
+  ...props
+}: StaggeredListProps) {
+  const childrenArray = React.Children.toArray(children);
+
+  return (
+    <ul className={className} {...props}>
+      <AnimatePresence mode="popLayout">
+        {childrenArray.map((child, index) => (
+          <StaggeredItem
+            key={(child as React.ReactElement)?.key ?? index}
+            index={index}
+            staggerDelay={staggerDelay}
+            initialDelay={initialDelay}
+          >
+            {child}
+          </StaggeredItem>
+        ))}
+      </AnimatePresence>
+    </ul>
+  );
 }
 
 /**
- * StaggeredItem — отдельный элемент с анимацией появления
- * Используется для ручного контроля над анимацией
+ * Алиас для обратной совместимости
+ */
+export const AnimatedList = StaggeredList;
+
+// ============================================
+// StaggeredItem
+// ============================================
+
+interface StaggeredItemProps {
+  children: React.ReactNode;
+  index: number;
+  staggerDelay?: number;
+  initialDelay?: number;
+  className?: string;
+}
+
+/**
+ * StaggeredItem — отдельный элемент с анимацией появления.
+ * Можно использовать самостоятельно для ручного контроля.
  *
  * @example
  * {items.map((item, index) => (
@@ -89,24 +85,46 @@ export function StaggeredItem({
   index,
   staggerDelay = 50,
   initialDelay = 0,
-  className = '',
+  className = "",
 }: StaggeredItemProps) {
-  const delay = initialDelay + index * staggerDelay
+  const animationVariants = useMemo(
+    () => ({
+      initial: { opacity: 0, y: 20, scale: 0.95 },
+      animate: { opacity: 1, y: 0, scale: 1 },
+      exit: { opacity: 0, y: -20, scale: 0.95 },
+    }),
+    []
+  );
+
+  const delay = (initialDelay + index * staggerDelay) / 1000;
 
   return (
-    <div
-      className={`staggered-fade-in ${className}`}
-      style={{
-        animationDelay: `${delay}ms`,
+    <motion.li
+      variants={animationVariants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      transition={{
+        type: "spring",
+        stiffness: 300,
+        damping: 24,
+        delay,
       }}
+      layout
+      className={`relative list-none ${className}`}
     >
       {children}
-    </div>
-  )
+    </motion.li>
+  );
 }
 
+// ============================================
+// useStaggerAnimation Hook
+// ============================================
+
 /**
- * useStaggerAnimation — хук для расчета стилей анимации
+ * useStaggerAnimation — хук для расчета стилей анимации (CSS fallback).
+ * Используется когда Framer Motion недоступен или для простых случаев.
  *
  * @example
  * const { getItemStyle } = useStaggerAnimation()
@@ -115,14 +133,20 @@ export function StaggeredItem({
  *   <div style={getItemStyle(index)}>{item.name}</div>
  * ))}
  */
-export function useStaggerAnimation(staggerDelay = 50, initialDelay = 0, duration = 300) {
-  const getItemStyle = (index: number) => ({
+export function useStaggerAnimation(
+  staggerDelay = 50,
+  initialDelay = 0,
+  duration = 300
+) {
+  const getItemStyle = (index: number): React.CSSProperties => ({
     animation: `fadeIn ${duration}ms ease-out both`,
     animationDelay: `${initialDelay + index * staggerDelay}ms`,
     opacity: 0,
-  })
+  });
 
-  const getItemClassName = () => 'staggered-fade-in'
+  const getItemClassName = () => "staggered-fade-in";
 
-  return { getItemStyle, getItemClassName }
+  return { getItemStyle, getItemClassName };
 }
+
+export default StaggeredList;

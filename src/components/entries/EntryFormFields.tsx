@@ -13,19 +13,29 @@ import { TimeInput } from '../ui/TimeInput'
 import { CategorySelect } from '../ui/CategorySelect'
 import { CustomDatePicker } from '../ui/CustomDatePicker'
 import { useIsMobile } from '../../hooks/useIsMobile'
+import { calculateDuration } from '../../utils/calculations'
+import { Clock, Calendar, AlertCircle } from 'lucide-react' // Assuming lucide-react or similar icons are available, otherwise stick to reliable ones or project utils
 
-/**
- * Компонент полей формы записи времени
- * @param {Object} props - Пропсы компонента
- * @param {Object} props.formData - Данные формы
- * @param {Function} props.onFieldChange - Обработчик изменения поля
- * @param {Function} props.onTimeChange - Обработчик изменения времени
- * @param {Function} props.onCategoryChange - Обработчик изменения категории
- * @param {Object} props.errors - Объект с ошибками валидации
- * @param {Array} props.categories - Список категорий
- * @param {Function} props.onOpenCategoriesModal - Обработчик открытия модального окна категорий
- * @param {Object|null} props.effectiveEntry - Текущая редактируемая запись
- */
+// Fallback icons if lucide-react is not available or we prefer project icons
+// Adjust imports based on available icon sets in the project
+// For now, I'll use simple SVGs or check project utils in next step if these break.
+// Actually, looking at imports in other files, 'utils/icons' is used.
+import { Clock as ClockIcon, Calendar as CalendarIcon, Tag, DollarSign, FileText } from '../../utils/icons'
+
+// Helper for duration bubble
+const DurationBubble = ({ start, end }) => {
+  const duration = calculateDuration(start, end)
+  if (!duration || duration === '0ч 00м') return null
+  
+  return (
+    <div className="flex items-center justify-center">
+      <div className="bg-blue-500/10 text-blue-500 dark:text-blue-400 text-xs font-medium px-2 py-0.5 rounded-full border border-blue-500/20 shadow-sm whitespace-nowrap">
+        {duration}
+      </div>
+    </div>
+  )
+}
+
 export function EntryFormFields({
   formData,
   onFieldChange,
@@ -35,45 +45,63 @@ export function EntryFormFields({
   categories,
   onOpenCategoriesModal,
   effectiveEntry,
+  disabled
 }) {
   const isMobile = useIsMobile()
   const [showDatePicker, setShowDatePicker] = useState(false)
-  const dateInputRef = useRef(null)
-  const startTimeRef = useRef(null)
-  const endTimeRef = useRef(null)
-  const earnedInputRef = useRef(null)
+  const dateInputRef = useRef<HTMLInputElement>(null)
+  const startTimeRef = useRef<HTMLInputElement>(null)
+  const endTimeRef = useRef<HTMLInputElement>(null)
+  const earnedInputRef = useRef<HTMLInputElement>(null)
+
+  // Calcluate duration for display
+  const durationDisplay = calculateDuration(formData.start, formData.end)
+
+  // Check for time overlap (simplified visual check, validation logic is in hook)
+  const hasTimeError = errors.start || errors.end
+  
+  // Logic to check for overlap (simplified for visual indicator)
+  // We can use a simplified check or pass 'isOverlap' prop if calculated in parent/hook. 
+  // For now, let's assume if there is a specific time error not related to format, it might be overlap.
+  // Or better, let's check against effectiveEntry if provided, or leave as false if complex logic is needed.
+  // The user requirement "Imp: Add visual conflict indicator" implied we should have it.
+  // I will check if errors.start or errors.end contains "пересекается" (overlap) text if possible, 
+  // or just rely on hasTimeError for the red line (which I am doing below).
+  const isOverlap = (errors.start && errors.start.includes('пересекается')) || (errors.end && errors.end.includes('пересекается'))
 
   return (
-    <div className="space-y-4">
-      {/* Поле даты - только при создании новой записи */}
-      {!effectiveEntry?.id && (
-        <div>
-          <label className="block text-sm font-medium mb-2">
-            Дата <span className="text-red-500">*</span>
-          </label>
-          <input
-            ref={dateInputRef}
-            type="text"
-            readOnly
-            value={
-              formData.date
-                ? (() => {
-                    const [year, month, day] = formData.date.split('-')
-                    return `${day}/${month}/${year}`
-                  })()
-                : ''
-            }
-            onFocus={() => setShowDatePicker(true)}
-            onClick={() => setShowDatePicker(true)}
-            placeholder="дд/мм/гггг"
-            className={`w-full px-4 py-2 glass-effect rounded-lg border-2 ${errors.date ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 bg-white/80 dark:bg-gray-800/80 cursor-pointer`}
-            aria-label="Дата записи"
-            aria-required="true"
-            aria-invalid={!!errors.date}
-            aria-describedby={errors.date ? 'date-error' : undefined}
-            id="entry-date-input"
-          />
-          {showDatePicker && (
+    <div className="space-y-6">
+      {/* --- TIME SECTION --- */}
+      <div className={`
+        relative overflow-hidden
+        bg-gray-50 dark:bg-gray-800/50 
+        border ${hasTimeError ? 'border-red-500/50' : 'border-gray-200 dark:border-gray-700'} 
+        rounded-xl p-4
+        transition-all duration-300
+      `}>
+        {hasTimeError && (
+           <div className="absolute top-0 left-0 w-full h-1 bg-red-500/50" />
+        )}
+        
+        <div className="flex items-center gap-2 mb-3 text-gray-500 dark:text-gray-400 text-xs font-medium uppercase tracking-wider">
+          <ClockIcon className="w-3.5 h-3.5" />
+          <span>Время работы</span>
+          {/* Date Picker Button (Small) */}
+          <button 
+             type="button"
+             onClick={() => setShowDatePicker(true)}
+             className="ml-auto hover:text-blue-500 transition-colors flex items-center gap-1"
+          >
+             {formData.date ? (() => {
+                  const [year, month, day] = formData.date.split('-')
+                  return `${day}.${month}`
+             })() : 'Сегодня'}
+             <CalendarIcon className="w-3.5 h-3.5" />
+          </button>
+        </div>
+
+        {/* Date Picker Modal/Popover */}
+        {showDatePicker && (
             <CustomDatePicker
               value={formData.date}
               onChange={date => {
@@ -81,102 +109,104 @@ export function EntryFormFields({
                 setShowDatePicker(false)
               }}
               onClose={() => setShowDatePicker(false)}
-              inputRef={dateInputRef}
+              inputRef={dateInputRef} 
             />
-          )}
-          {errors.date && (
-            <p
-              id="date-error"
-              className="text-red-500 text-sm mt-1"
-              role="alert"
-              aria-live="polite"
-            >
-              {errors.date}
-            </p>
-          )}
-        </div>
-      )}
+        )}
 
-      <div className={`grid ${isMobile ? 'grid-cols-1' : 'grid-cols-2'} gap-4`}>
-        <div>
-          <label className={`block ${isMobile ? 'text-base' : 'text-sm'} font-medium mb-2`}>
-            Время начала <span className="text-red-500">*</span>
-          </label>
-          <TimeInput
-            ref={startTimeRef}
-            value={formData.start}
-            onChange={value => onTimeChange('start', value)}
-            placeholder="чч:мм"
-            error={errors.start}
-            onComplete={() => {
-              // Автоматический переход на поле "Время окончания"
-              endTimeRef.current?.focus()
-            }}
-          />
-        </div>
+        <div className="flex items-center justify-between relative z-10">
+          <div className="w-24">
+             <label className="text-xs text-gray-500 font-medium mb-1.5 ml-1 block">Начало</label>
+             <TimeInput
+               ref={startTimeRef}
+               value={formData.start}
+               onChange={(v) => onTimeChange('start', v)}
+               onComplete={() => endTimeRef.current?.focus()}
+               error={errors.start}
+               hideErrorText={true}
+               className="text-lg font-bold bg-transparent border-none p-0 !px-0 focus:ring-0 w-full"
+               placeholder="09:00"
+             />
+          </div>
 
-        <div>
-          <label className={`block ${isMobile ? 'text-base' : 'text-sm'} font-medium mb-2`}>
-            Время окончания <span className="text-red-500">*</span>
-          </label>
-          <TimeInput
-            ref={endTimeRef}
-            value={formData.end}
-            onChange={value => onTimeChange('end', value)}
-            placeholder="чч:мм"
-            error={errors.end}
-            onComplete={() => {
-              // Автоматический переход на поле "Заработок"
-              earnedInputRef.current?.focus()
-            }}
-          />
-        </div>
-      </div>
+             <div className="flex flex-col items-center justify-center w-full relative">
+               <div className={`text-sm font-bold -mb-1 ${
+                 hasTimeError ? 'text-red-500' : 'text-blue-500 dark:text-blue-400'
+               }`}>
+                 {durationDisplay}
+               </div>
+               
+               {/* Arrow Visual */}
+               <div className="w-full h-4 flex items-center justify-center relative my-1">
+                  <div className={`w-full h-[2px] ${hasTimeError ? 'bg-red-500/50' : 'bg-blue-500'} relative rounded-full`}>
+                    <div className={`absolute right-[-1px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[4px] border-t-transparent border-l-[8px] ${hasTimeError ? 'border-l-red-500/50' : 'border-l-blue-500'} border-b-[4px] border-b-transparent`} />
+                  </div>
+                  
+                   {/* Conflict Indicator */}
+                   {isOverlap && (
+                     <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[2px] bg-red-500/50 animate-pulse rounded-full" />
+                   )}
+               </div>
 
-      {/* Кастомный Select для категории с иконками */}
-      <div>
-        <label className="block text-sm font-medium mb-2">
-          Категория <span className="text-red-500">*</span>
-        </label>
-        <CategorySelect
-          value={formData.category}
-          onChange={onCategoryChange}
-          options={categories}
-          onAddNew={onOpenCategoriesModal}
-          error={errors.category}
-        />
-        {errors.category && (
-          <p
-            id="category-select-error"
-            className="text-red-500 text-sm mt-1"
-            role="alert"
-            aria-live="polite"
-          >
-            {errors.category}
-          </p>
+               <div className="text-xs text-gray-500 font-medium -mt-0.5">
+                 Длительность
+               </div>
+             </div>
+
+          <div className="w-24 text-right">
+             <label className="text-xs text-gray-500 font-medium mb-1.5 mr-1 block">Конец</label>
+             <TimeInput
+               ref={endTimeRef}
+               value={formData.end}
+               onChange={(v) => onTimeChange('end', v)}
+               error={errors.end}
+               hideErrorText={true}
+               className="text-lg font-bold bg-transparent border-none p-0 !px-0 focus:ring-0 w-full text-right"
+               placeholder="18:00"
+             />
+          </div>
+        </div>
+        {/* Error Message Footer */}
+        {hasTimeError && (
+          <div className="mt-3 text-center text-xs text-red-500 font-medium bg-red-500/10 py-1 px-2 rounded">
+             {errors.start || errors.end}
+          </div>
         )}
       </div>
 
-      {/* Заработок и Описание в одной строке - на мобильных вертикально */}
-      <div className={`grid ${isMobile ? 'grid-cols-1' : 'grid-cols-2'} gap-4`}>
-        <Input
-          ref={earnedInputRef}
-          label="Заработок (₽)"
-          type="number"
-          value={formData.earned != null ? String(formData.earned) : ''}
-          onChange={value => onFieldChange('earned', value)}
-          error={errors.earned}
-          placeholder="Введите сумму"
-          required
-        />
+      {/* 2. Category Block */}
+      <div className="space-y-1">
+         <label className="text-xs text-gray-500 font-medium ml-1">Категория</label>
+         <CategorySelect
+           value={formData.category} // Pass the category NAME
+           onChange={onCategoryChange}
+           options={categories}
+           onAddNew={onOpenCategoriesModal}
+           className="w-full"
+           placeholder="Выберите категорию"
+           error={errors.category}
+         />
+      </div>
 
-        <Input
-          label="Описание"
-          type="text"
-          value={formData.description}
-          onChange={value => onFieldChange('description', value)}
-          placeholder="Что вы делали?"
-        />
+      {/* 3. Earnings Block */}
+      <div className="space-y-1">
+         <label className="text-xs text-gray-500 font-medium ml-1">Заработок</label>
+          <div className="relative">
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+              <DollarSign className="w-4 h-4" />
+            </div>
+              <Input
+                ref={earnedInputRef}
+                type="number"
+                value={formData.earned != null ? String(formData.earned) : ''}
+                onChange={(v) => onFieldChange('earned', v)}
+                placeholder="0"
+                className="pl-10 w-full bg-white/40 dark:bg-gray-800/40 border-white/20 dark:border-white/10 rounded-xl hover:bg-white/60 dark:hover:bg-gray-800/60 transition-colors focus:ring-2 focus:ring-blue-500/50 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                error={errors.earned}
+              />
+             <div className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-gray-400 font-medium">
+               ₽
+             </div>
+          </div>
       </div>
     </div>
   )

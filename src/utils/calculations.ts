@@ -12,7 +12,19 @@
 import { safeParseDate } from './dateHelpers'
 import { startOfDay, endOfDay } from 'date-fns'
 import { processArrayInChunks } from './yieldToMain'
-import type { TimeEntry } from '../types'
+import type {
+  TimeEntry,
+  PeriodStats,
+  CategoryGrouping,
+  CategoryData,
+  Efficiency,
+  Trend,
+  WeeklyProductivity,
+  OptimalTime,
+  TimeRecommendation,
+  EarningsForecast,
+  HourlyData
+} from '../types'
 
 /**
  * Рассчитывает длительность работы в часах
@@ -29,7 +41,7 @@ export function calculateDuration(startTime: string, endTime: string): string {
   const endTotalMinutes = endHours * 60 + endMinutes
 
   const durationMinutes = endTotalMinutes - startTotalMinutes
-  return (durationMinutes / 60).toFixed(2)
+  return `${(durationMinutes / 60).toFixed(2)} ч.`
 }
 
 /**
@@ -67,7 +79,11 @@ export function roundTime(minutes: number, roundTo: number = 15): number {
  * @returns {Object|Promise<Object>} объект со статистикой
  * ✅ PERFORMANCE: Для больших массивов (>1000) возвращает Promise
  */
-export function calculateStats(entries, startDate, endDate) {
+export function calculateStats(
+  entries: TimeEntry[],
+  startDate: Date,
+  endDate: Date
+): PeriodStats | Promise<PeriodStats> {
   // Нормализуем даты до начала/конца дня для корректного сравнения
   const start = startOfDay(startDate)
   const end = endOfDay(endDate)
@@ -88,10 +104,10 @@ export function calculateStats(entries, startDate, endDate) {
         },
         100 // chunk size
       )
-      const validFiltered = filtered.filter(Boolean) // Удаляем null значения
+      const validFiltered = filtered.filter((e): e is TimeEntry => !!e) // Удаляем null значения
 
-      const totalHours = validFiltered.reduce((sum, e) => sum + parseFloat(e.duration || 0), 0)
-      const totalEarned = validFiltered.reduce((sum, e) => sum + parseFloat(e.earned || 0), 0)
+      const totalHours = validFiltered.reduce((sum, e) => sum + parseFloat(String(e.duration || 0)), 0)
+      const totalEarned = validFiltered.reduce((sum, e) => sum + parseFloat(String(e.earned || 0)), 0)
       const averageRate = totalHours > 0 ? totalEarned / totalHours : 0
 
       return {
@@ -112,8 +128,8 @@ export function calculateStats(entries, startDate, endDate) {
     return normalizedEntryDate >= start && normalizedEntryDate <= end
   })
 
-  const totalHours = filtered.reduce((sum, e) => sum + parseFloat(e.duration || 0), 0)
-  const totalEarned = filtered.reduce((sum, e) => sum + parseFloat(e.earned || 0), 0)
+  const totalHours = filtered.reduce((sum, e) => sum + parseFloat(String(e.duration || 0)), 0)
+  const totalEarned = filtered.reduce((sum, e) => sum + parseFloat(String(e.earned || 0)), 0)
   const averageRate = totalHours > 0 ? totalEarned / totalHours : 0
 
   return {
@@ -130,25 +146,28 @@ export function calculateStats(entries, startDate, endDate) {
  * @returns {Object|Promise<Object>} объект с группировкой по категориям
  * ✅ PERFORMANCE: Для больших массивов (>1000) возвращает Promise
  */
-export function groupByCategory(entries) {
+export function groupByCategory(
+  entries: TimeEntry[]
+): CategoryGrouping | Promise<CategoryGrouping> {
   // ✅ PERFORMANCE: Для больших массивов (>1000) используем chunked processing
   if (entries.length > 1000) {
     return (async () => {
-      const result = {}
+      const result: CategoryGrouping = {}
       await processArrayInChunks(
         entries,
         entry => {
-          if (!result[entry.category]) {
-            result[entry.category] = {
+          const category = entry.category || 'Uncategorized'
+          if (!result[category]) {
+            result[category] = {
               hours: 0,
               earned: 0,
               count: 0,
-              averageRate: 0,
+              averageRate: "0",
             }
           }
-          result[entry.category].hours += parseFloat(entry.duration || 0)
-          result[entry.category].earned += parseFloat(entry.earned || 0)
-          result[entry.category].count += 1
+          result[category].hours += parseFloat(String(entry.duration || 0))
+          result[category].earned += parseFloat(String(entry.earned || 0))
+          result[category].count += 1
         },
         100 // chunk size
       )
@@ -167,23 +186,24 @@ export function groupByCategory(entries) {
   }
 
   // Синхронная версия для небольших массивов
-  return entries.reduce((acc, entry) => {
-    if (!acc[entry.category]) {
-      acc[entry.category] = {
+  return entries.reduce((acc: CategoryGrouping, entry) => {
+    const category = entry.category || 'Uncategorized'
+    if (!acc[category]) {
+      acc[category] = {
         hours: 0,
         earned: 0,
         count: 0,
-        averageRate: 0,
+        averageRate: "0",
       }
     }
-    acc[entry.category].hours += parseFloat(entry.duration || 0)
-    acc[entry.category].earned += parseFloat(entry.earned || 0)
-    acc[entry.category].count += 1
+    acc[category].hours += parseFloat(String(entry.duration || 0))
+    acc[category].earned += parseFloat(String(entry.earned || 0))
+    acc[category].count += 1
 
     // Рассчитываем среднюю ставку для категории
-    if (acc[entry.category].hours > 0) {
-      acc[entry.category].averageRate = (
-        acc[entry.category].earned / acc[entry.category].hours
+    if (acc[category].hours > 0) {
+      acc[category].averageRate = (
+        acc[category].earned / acc[category].hours
       ).toFixed(2)
     }
 
@@ -197,7 +217,7 @@ export function groupByCategory(entries) {
  * @param {number} planned - плановое значение
  * @returns {Object} объект с эффективностью и цветом индикации
  */
-export function calculateEfficiency(actual, planned) {
+export function calculateEfficiency(actual: number, planned: number): Efficiency {
   if (planned === 0) return { percentage: '0', color: 'gray', status: 'no-plan' }
 
   const percentage = (actual / planned) * 100
@@ -227,10 +247,10 @@ export function calculateEfficiency(actual, planned) {
  * @param {number} previous - предыдущее значение
  * @returns {Object} объект с трендом
  */
-export function calculateTrend(current, previous) {
+export function calculateTrend(current: number, previous: number): Trend {
   if (previous === 0) {
     return {
-      change: current,
+      change: current.toFixed(2),
       percentage: current > 0 ? '100' : '0',
       direction: current > 0 ? 'up' : 'down',
       color: current > 0 ? 'green' : 'red',
@@ -253,16 +273,16 @@ export function calculateTrend(current, previous) {
  * @param {Array} entries - массив записей времени
  * @returns {Object} объект с производительностью по дням
  */
-export function calculateWeeklyProductivity(entries) {
+export function calculateWeeklyProductivity(entries: TimeEntry[]): WeeklyProductivity {
   const daysOfWeek = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
-  const productivity = {}
+  const productivity: any = {}
 
   daysOfWeek.forEach(day => {
     productivity[day] = {
       totalHours: 0,
       totalEarned: 0,
       entriesCount: 0,
-      averageHours: 0,
+      averageHours: "0",
     }
   })
 
@@ -270,8 +290,8 @@ export function calculateWeeklyProductivity(entries) {
     const dayOfWeek = new Date(entry.date).getDay()
     const dayName = daysOfWeek[dayOfWeek]
 
-    productivity[dayName].totalHours += parseFloat(entry.duration || 0)
-    productivity[dayName].totalEarned += parseFloat(entry.earned || 0)
+    productivity[dayName].totalHours += parseFloat(String(entry.duration || 0))
+    productivity[dayName].totalEarned += parseFloat(String(entry.earned || 0))
     productivity[dayName].entriesCount += 1
   })
 
@@ -291,8 +311,8 @@ export function calculateWeeklyProductivity(entries) {
  * @param {Array} entries - массив записей времени
  * @returns {Object} рекомендации по оптимальному времени
  */
-export function calculateOptimalTime(entries) {
-  const hourlyData = {}
+export function calculateOptimalTime(entries: TimeEntry[]): OptimalTime {
+  const hourlyData: { [key: number]: HourlyData } = {}
 
   // Инициализируем часы дня
   for (let hour = 0; hour < 24; hour++) {
@@ -307,8 +327,8 @@ export function calculateOptimalTime(entries) {
   // Анализируем записи по часам начала работы
   entries.forEach(entry => {
     const startHour = parseInt(entry.start.split(':')[0])
-    hourlyData[startHour].totalHours += parseFloat(entry.duration || 0)
-    hourlyData[startHour].totalEarned += parseFloat(entry.earned || 0)
+    hourlyData[startHour].totalHours += parseFloat(String(entry.duration || 0))
+    hourlyData[startHour].totalEarned += parseFloat(String(entry.earned || 0))
     hourlyData[startHour].entriesCount += 1
   })
 
@@ -323,7 +343,7 @@ export function calculateOptimalTime(entries) {
   // Находим наиболее продуктивные часы
   const sortedHours = Object.entries(hourlyData)
     .filter(([_, data]) => data.entriesCount > 0)
-    .sort((a, b) => parseFloat(b[1].efficiency) - parseFloat(a[1].efficiency))
+    .sort((a, b) => parseFloat(b[1].efficiency) - parseFloat(a[1].efficiency)) as [string, HourlyData][]
 
   return {
     hourlyData,
@@ -340,8 +360,8 @@ export function calculateOptimalTime(entries) {
  * @param {Array} sortedHours - отсортированные часы по эффективности
  * @returns {Array} массив рекомендаций
  */
-function generateTimeRecommendations(sortedHours) {
-  const recommendations = []
+function generateTimeRecommendations(sortedHours: [string, HourlyData][]): TimeRecommendation[] {
+  const recommendations: TimeRecommendation[] = []
 
   if (sortedHours.length > 0) {
     const bestHour = parseInt(sortedHours[0][0])
@@ -376,7 +396,7 @@ function generateTimeRecommendations(sortedHours) {
  * @param {number} daysAhead - на сколько дней вперед прогнозировать
  * @returns {Object} прогноз заработка
  */
-export function calculateEarningsForecast(entries, daysAhead = 7) {
+export function calculateEarningsForecast(entries: TimeEntry[], daysAhead = 7): EarningsForecast {
   if (entries.length < 7) {
     return {
       forecast: 0,
@@ -386,13 +406,13 @@ export function calculateEarningsForecast(entries, daysAhead = 7) {
   }
 
   // Группируем записи по дням
-  const dailyEarnings = {}
+  const dailyEarnings: Record<string, number> = {}
   entries.forEach(entry => {
     const {date} = entry
     if (!dailyEarnings[date]) {
       dailyEarnings[date] = 0
     }
-    dailyEarnings[date] += parseFloat(entry.earned || 0)
+    dailyEarnings[date] += parseFloat(String(entry.earned || 0))
   })
 
   // Рассчитываем средний дневной заработок
@@ -433,12 +453,12 @@ export function calculateEarningsForecast(entries, daysAhead = 7) {
  * @returns {number} Количество рабочих дней
  */
 export function calculateWorkingDaysInMonth(
-  year,
-  month,
-  startDay = 1,
-  endDay = null,
-  settings = {}
-) {
+  year: number,
+  month: number,
+  startDay: number = 1,
+  endDay: number | null = null,
+  settings: any = {}
+): number {
   const daysInMonth = new Date(year, month + 1, 0).getDate()
   const actualEndDay = endDay || daysInMonth
   let workingDays = 0

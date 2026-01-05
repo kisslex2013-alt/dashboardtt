@@ -45,7 +45,10 @@ if (window.location.pathname.includes('/promo/')) {
   window.addEventListener(
     'error',
     event => {
-      console.error('Глобальная ошибка:', event.error)
+      // Игнорируем ошибки без деталей (часто бывают от расширений браузера)
+      if (!event.error && !event.message) return
+
+      console.error('Глобальная ошибка:', event.error || event.message || event)
       // Показываем ошибку в консоли для разработки
       if (import.meta.env.DEV) {
         const errorDiv = document.createElement('div')

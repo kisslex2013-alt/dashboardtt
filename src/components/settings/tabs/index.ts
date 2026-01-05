@@ -5,4 +5,5 @@ export * from './FinanceTab'
 export * from './BackupsTab'
 export * from './WorkScheduleTab'
 export * from './CategoriesTab'
-
+export * from './AITab'
+export * from './AccountTab'

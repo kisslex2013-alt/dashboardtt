@@ -44,6 +44,7 @@ export function BaseModal({
   disableContentScroll = false,
   fixedHeight = false,
   nested = false,
+  hideFooterDivider = false,
 }: BaseModalProps) {
   // Три состояния для контроля анимаций (Three-State Animation Control)
   const [shouldMount, setShouldMount] = useState(false)
@@ -54,8 +55,8 @@ export function BaseModal({
   const [isResizing, setIsResizing] = useState(false)
   const [dimensions, setDimensions] = useState({ width: 'auto', height: 'auto' })
 
-  const panelRef = useRef(null)
-  const overlayRef = useRef(null)
+  const panelRef = useRef<HTMLDivElement>(null)
+  const overlayRef = useRef<HTMLDivElement>(null)
   const resizeTimeoutRef = useRef<number | null>(null)
   const dimensionsRef = useRef({ width: 0, height: 0 })
   const isMobile = useIsMobile()
@@ -161,10 +162,13 @@ export function BaseModal({
             })
 
             // После завершения анимации возвращаем auto
-            resizeTimeoutRef.current = setTimeout(() => {
+            resizeTimeoutRef.current = window.setTimeout(() => {
               setDimensions({ width: 'auto', height: 'auto' })
               setIsResizing(false)
-              dimensionsRef.current = { width, height }
+              if(panelRef.current) {
+                const rect = panelRef.current.getBoundingClientRect()
+                dimensionsRef.current = { width: rect.width, height: rect.height }
+              }
             }, 300) // Длительность transition
           })
         }
@@ -344,6 +348,7 @@ export function BaseModal({
               ? 'width 300ms cubic-bezier(0.4, 0, 0.2, 1), height 300ms cubic-bezier(0.4, 0, 0.2, 1)'
               : undefined,
             willChange: isResizing ? 'width, height' : undefined,
+            animationFillMode: 'forwards' // Гарантируем, что состояние после анимации сохранится
           }}
           onClick={(e) => {
             // ✅ ИСПРАВЛЕНО: Не блокируем клики на интерактивных элементах
@@ -447,7 +452,7 @@ export function BaseModal({
           {/* Футер (опционально) */}
           {footer && (
             <div
-              className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 flex-shrink-0"
+              className={`mt-4 ${hideFooterDivider ? '' : 'pt-4 border-t border-gray-200 dark:border-gray-700'} flex-shrink-0`}
               onClick={(e) => e.stopPropagation()}
               onMouseDown={(e) => e.stopPropagation()}
             >

@@ -88,6 +88,17 @@ export interface ForecastData {
 }
 
 /**
+ * Данные итогов месяца (для последних дней)
+ */
+export interface MonthSummaryData {
+  currentEarned: number
+  goalAmount: number
+  percentComplete: number
+  daysRemaining: number
+  status: 'exceeded' | 'on-track' | 'behind' | 'failed'
+}
+
+/**
  * Парсит duration в минуты
  */
 const parseToMinutes = (duration: string | number): number => {
@@ -191,8 +202,13 @@ export const analyzeGoalProgress = (
   const daysPassed = differenceInDays(today, monthStart) + 1
   const daysRemaining = differenceInDays(monthEnd, today)
 
+  console.log('[analyzeGoalProgress] daysRemaining:', daysRemaining, 'monthlyGoal:', monthlyGoal)
+
   // Если осталось меньше 5 дней, не показываем уведомление
-  if (daysRemaining < 5) return null
+  if (daysRemaining < 5) {
+    console.log('[analyzeGoalProgress] SKIP: daysRemaining < 5')
+    return null
+  }
 
   // Фильтруем записи текущего месяца
   const monthEntries = entries.filter((entry) => {
@@ -200,7 +216,12 @@ export const analyzeGoalProgress = (
     return entryDate >= monthStart && entryDate <= today
   })
 
-  if (monthEntries.length === 0) return null
+  console.log('[analyzeGoalProgress] monthEntries:', monthEntries.length)
+
+  if (monthEntries.length === 0) {
+    console.log('[analyzeGoalProgress] SKIP: no entries this month')
+    return null
+  }
 
   // Вычисляем текущий заработок
   const currentEarned = monthEntries.reduce(
@@ -215,8 +236,11 @@ export const analyzeGoalProgress = (
   // Разрыв с целью
   const gap = monthlyGoal - forecast
 
+  console.log('[analyzeGoalProgress] currentEarned:', currentEarned, 'forecast:', forecast, 'goal:', monthlyGoal, 'ratio:', (forecast/monthlyGoal*100).toFixed(1) + '%')
+
   // Риск недостижения: прогноз <90% от цели
   if (forecast < monthlyGoal * 0.9) {
+    console.log('[analyzeGoalProgress] ✅ RISK: forecast < 90% of goal')
     const requiredDailyIncrease = Math.round(
       ((monthlyGoal - currentEarned) / daysRemaining - dailyAvg) * 100 / dailyAvg
     )
@@ -231,6 +255,7 @@ export const analyzeGoalProgress = (
     }
   }
 
+  console.log('[analyzeGoalProgress] NO RISK: forecast >= 90% of goal')
   return null
 }
 
@@ -258,7 +283,12 @@ export const generateMonthlyForecast = (
     return entryDate >= monthStart && entryDate <= today
   })
 
-  if (monthEntries.length === 0 || daysPassed < 10) return null
+  console.log('[generateMonthlyForecast] monthEntries:', monthEntries.length, 'daysPassed:', daysPassed)
+
+  if (monthEntries.length === 0 || daysPassed < 10) {
+    console.log('[generateMonthlyForecast] SKIP: entries=', monthEntries.length, 'daysPassed=', daysPassed)
+    return null
+  }
 
   const currentEarned = monthEntries.reduce(
     (sum, entry) => sum + parseToNumber(entry.earned),
@@ -268,8 +298,11 @@ export const generateMonthlyForecast = (
   const dailyAvg = currentEarned / daysPassed
   const forecast = Math.round(dailyAvg * daysInMonth)
 
+  console.log('[generateMonthlyForecast] forecast:', forecast, 'goal:', monthlyGoal, 'ratio:', (forecast/monthlyGoal*100).toFixed(1) + '%')
+
   // Показываем только если прогноз >110% от цели (позитивный инсайт)
   if (forecast > monthlyGoal * 1.1) {
+    console.log('[generateMonthlyForecast] ✅ OVERACHIEVEMENT: forecast > 110% of goal')
     return {
       forecast,
       goalAmount: monthlyGoal,
@@ -278,6 +311,7 @@ export const generateMonthlyForecast = (
     }
   }
 
+  console.log('[generateMonthlyForecast] NO OVERACHIEVEMENT: forecast <= 110% of goal')
   return null
 }
 
@@ -555,4 +589,76 @@ export const detectAchievements = (
   }
 
   return null
+}
+
+/**
+ * Генерирует итоги месяца (для последних 5 дней)
+ *
+ * Показывает статус выполнения цели в конце месяца
+ *
+ * @param entries - массив записей времени
+ * @param monthlyGoal - цель месяца в рублях
+ * @returns данные итогов или null
+ */
+export const analyzeMonthSummary = (
+  entries: TimeEntry[],
+  monthlyGoal: number
+): MonthSummaryData | null => {
+  const today = new Date()
+  const monthStart = startOfMonth(today)
+  const monthEnd = endOfMonth(today)
+
+  const daysRemaining = differenceInDays(monthEnd, today)
+
+  // Показываем только в последние 5 дней месяца
+  if (daysRemaining >= 5) {
+    console.log('[analyzeMonthSummary] SKIP: daysRemaining >= 5, still', daysRemaining, 'days left')
+    return null
+  }
+
+  // Фильтруем записи текущего месяца
+  const monthEntries = entries.filter((entry) => {
+    const entryDate = new Date(entry.date)
+    return entryDate >= monthStart && entryDate <= today
+  })
+
+  if (monthEntries.length === 0) {
+    console.log('[analyzeMonthSummary] SKIP: no entries this month')
+    return null
+  }
+
+  const currentEarned = monthEntries.reduce(
+    (sum, entry) => sum + parseToNumber(entry.earned),
+    0
+  )
+
+  const percentComplete = Math.round((currentEarned / monthlyGoal) * 100)
+
+  // Определяем статус
+  let status: 'exceeded' | 'on-track' | 'behind' | 'failed'
+  if (percentComplete >= 110) {
+    status = 'exceeded'
+  } else if (percentComplete >= 90) {
+    status = 'on-track'
+  } else if (percentComplete >= 70) {
+    status = 'behind'
+  } else {
+    status = 'failed'
+  }
+
+  console.log('[analyzeMonthSummary] ✅ Generated:', {
+    currentEarned: Math.round(currentEarned),
+    goalAmount: monthlyGoal,
+    percentComplete,
+    daysRemaining,
+    status
+  })
+
+  return {
+    currentEarned: Math.round(currentEarned),
+    goalAmount: monthlyGoal,
+    percentComplete,
+    daysRemaining,
+    status,
+  }
 }

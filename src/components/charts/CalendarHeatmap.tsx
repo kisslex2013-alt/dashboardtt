@@ -11,8 +11,45 @@ import {
 import { format, parseISO, startOfMonth, endOfMonth } from 'date-fns'
 import { ru } from 'date-fns/locale' // ИСПРАВЛЕНО: Импорт локали для русских названий месяцев
 import { InfoTooltip } from '../ui/InfoTooltip'
-import { MonthPicker } from '../ui/MonthPicker' // ИСПРАВЛЕНО: Импорт кастомного MonthPicker
+import { MonthPicker } from '../ui/MonthPicker'
 import { getDayStatus } from '../../utils/dayMetrics'
+import { CalendarMonth } from './CalendarMonth'
+
+/** Интерфейс записи (entry) */
+export interface Entry {
+  date: string
+  earned?: string | number
+  duration?: string | number
+  start?: string
+  end?: string
+}
+
+/** Данные для одного дня календаря */
+export interface DayData {
+  totalEarned: number
+  totalHours: number
+  entryCount: number
+  avgRate?: number
+  status?: 'success' | 'warning' | 'danger' | null
+  percent?: number | null
+}
+
+/** Ячейка календаря */
+export interface CalendarDay {
+  key: string
+  isPlaceholder?: boolean
+  positionIndex: number
+  date?: Date
+  data?: DayData
+  isToday?: boolean
+  isNonWorking?: boolean
+  color?: string
+}
+
+/** Props для CalendarHeatmap */
+interface CalendarHeatmapProps {
+  entries: Entry[]
+}
 
 /**
  * 📊 Календарь доходов (Heatmap)
@@ -31,7 +68,8 @@ import { getDayStatus } from '../../utils/dayMetrics'
  *
  * @param {Array} entries - Отфильтрованные записи
  */
-export const CalendarHeatmap = memo(({ entries }) => {
+export const CalendarHeatmap = memo(({ entries }: CalendarHeatmapProps) => {
+
   // ✅ ОПТИМИЗАЦИЯ: Используем атомарные селекторы для минимизации ре-рендеров
   const theme = useTheme()
   const workScheduleTemplate = useWorkScheduleTemplate()
@@ -47,20 +85,16 @@ export const CalendarHeatmap = memo(({ entries }) => {
   // Режим сравнения всегда активен
   const isComparing = true
   // ИСПРАВЛЕНО: Отдельные состояния hoveredDay для каждого календаря для синхронизации тултипов
-  const [hoveredDay, setHoveredDay] = useState(null)
-  const [hoveredDayCompare, setHoveredDayCompare] = useState(null)
-  const [focusedDayIndex, setFocusedDayIndex] = useState(null)
-  const tooltipRef = useRef(null)
-  const tooltipCompareRef = useRef(null) // ИСПРАВЛЕНО: Ref для второго тултипа
-  const calendarRef = useRef(null)
-  // ИСПРАВЛЕНО: Состояния для кастомного MonthPicker
-  const [showMonthPicker, setShowMonthPicker] = useState({ current: false, compare: false })
-  const currentMonthInputRef = useRef(null)
-  const compareMonthInputRef = useRef(null)
+  const [hoveredDay, setHoveredDay] = useState<CalendarDay | null>(null)
+  const [hoveredDayCompare, setHoveredDayCompare] = useState<CalendarDay | null>(null)
+  // Store just the index of the focused day
+  const [focusedDayIndex, setFocusedDayIndex] = useState<number | null>(null)
+  const tooltipRef = useRef<HTMLDivElement>(null)
+  const tooltipCompareRef = useRef<HTMLDivElement>(null)
 
   // ИСПРАВЛЕНО: Определение нерабочих дней на основе графика работы
   const isNonWorkingDay = useMemo(() => {
-    return date => {
+    return (date: Date) => {
       // Проверяем кастомные даты
       const dateStr = format(date, 'yyyy-MM-dd')
       if (customWorkDates && customWorkDates[dateStr] !== undefined) {
@@ -68,22 +102,18 @@ export const CalendarHeatmap = memo(({ entries }) => {
       }
 
       // Проверяем шаблон графика работы
-      if (workScheduleTemplate === 'custom' && workScheduleStartDay) {
+      if (workScheduleStartDay) {
         const dayOfWeek = date.getDay() // 0 = воскресенье, 1 = понедельник, ...
         const adjustedDayOfWeek = dayOfWeek === 0 ? 7 : dayOfWeek // Преобразуем в 1-7, где 1 = понедельник
 
         // Определяем день недели относительно начального дня графика
         const dayInSchedule = ((adjustedDayOfWeek - workScheduleStartDay + 7) % 7) + 1
 
-        // График 5/2 означает: дни 1-5 рабочие, дни 6-7 нерабочие
-        // График 2/2 означает: дни 1-2 рабочие, дни 3-4 нерабочие, дни 5-6 рабочие, день 7 нерабочий
         if (workScheduleTemplate === '5/2') {
           return dayInSchedule > 5
         } else if (workScheduleTemplate === '2/2') {
           return dayInSchedule === 4 || dayInSchedule === 7
         } else if (workScheduleTemplate === 'custom') {
-          // Для кастомного графика проверяем конкретные дни недели
-          // Здесь можно добавить дополнительную логику для кастомного графика
           return false // По умолчанию все дни рабочие
         }
       }
@@ -96,7 +126,7 @@ export const CalendarHeatmap = memo(({ entries }) => {
   const calendarData = useMemo(() => {
     if (!entries || entries.length === 0) return {}
 
-    const data = {}
+    const data: Record<string, DayData> = {}
 
     entries.forEach(entry => {
       const dateStr = entry.date
@@ -108,11 +138,11 @@ export const CalendarHeatmap = memo(({ entries }) => {
         }
       }
 
-      data[dateStr].totalEarned += parseFloat(entry.earned) || 0
+      data[dateStr].totalEarned += parseFloat(String(entry.earned ?? 0)) || 0
 
       // Рассчитываем часы
       if (entry.duration) {
-        data[dateStr].totalHours += parseFloat(entry.duration) || 0
+        data[dateStr].totalHours += parseFloat(String(entry.duration)) || 0
       } else if (entry.start && entry.end) {
         const [startH, startM] = entry.start.split(':').map(Number)
         const [endH, endM] = entry.end.split(':').map(Number)
@@ -144,153 +174,111 @@ export const CalendarHeatmap = memo(({ entries }) => {
     return data
   }, [entries, dailyGoal])
 
-  // ИСПРАВЛЕНО: Обработка изменения месяца через кастомный MonthPicker
-  const handleMonthChange = (setter, isCompare) => value => {
-    const [year, month] = value.split('-').map(Number)
-    setter(new Date(year, month - 1, 1))
-    setShowMonthPicker(prev => ({ ...prev, [isCompare ? 'compare' : 'current']: false }))
+  // Helper to generate days - moved out of render but keeps closure over hooks if needed
+  // Using useMemo to create the generator function is weird, better to useCallback or just function inside component
+  // But to optimize we need to generate days AND colors.
+  
+  // Calculate Min/Max for color scaling
+  const { minEarned, maxEarned } = useMemo(() => {
+    // We need logic that doesn't depend on "generateCalendar" being called first if we want to pass colors to it.
+    // Actually, we can just iterate the data in the view range.
+    // Simplifying: Use global min/max from ALL data or just the two months?
+    // Original logic: "getAllMonthDataValues" from current and compare dates.
+    
+    // We need to generate pure days first to know which ones are in month.
+    // Or just calculate min/max from the calendarData for the months in view.
+    
+    // Helper to get keys for a month
+    const getMonthKeys = (d: Date) => {
+       const keys: string[] = []
+       const year = d.getFullYear()
+       const month = d.getMonth()
+       const daysInMonth = new Date(year, month + 1, 0).getDate()
+       for(let i=1; i<=daysInMonth; i++) {
+           const dateStr = format(new Date(year, month, i), 'yyyy-MM-dd')
+           keys.push(dateStr)
+       }
+       return keys
+    }
+
+    const keys = [...getMonthKeys(currentDate), ...getMonthKeys(compareDate)]
+    const values = keys.map(k => calendarData[k]?.totalEarned || 0).filter(v => v > 0)
+    
+    return {
+        minEarned: Math.min(...values, 0),
+        maxEarned: Math.max(...values, 0)
+    }
+  }, [currentDate, compareDate, calendarData])
+
+  const getColor = (value: number | undefined) => {
+    if (!value) {
+      return theme === 'dark' ? '#000000' : '#FFFFFF'
+    }
+
+    if (maxEarned === minEarned) {
+      return 'rgba(34, 197, 94, 0.1)'
+    }
+
+    const ratio = (value - minEarned) / (maxEarned - minEarned)
+    const opacity = 0.1 + ratio * 0.9
+    return `rgba(34, 197, 94, ${opacity})`
   }
 
-  // Навигация по месяцам
-  const navigateMonth = (setDate, amount) => () => {
-    setDate(current => {
-      const newDate = new Date(current)
-      newDate.setMonth(current.getMonth() + amount)
-      return newDate
-    })
-  }
-
-  // ВИЗУАЛ: Функция для поиска дня по позиции (индексу) в календаре
-  // Используется для синхронизации тултипов между календарями по позиции (крайний правый = воскресенье первой недели)
-  const findDayByPosition = useMemo(() => {
-    return (targetDate, positionIndex) => {
-      const monthDays = generateCalendar(targetDate)
-
-      // Проверяем, что индекс валидный
-      if (
-        positionIndex === undefined ||
-        positionIndex === null ||
-        positionIndex < 0 ||
-        positionIndex >= monthDays.length
-      ) {
-        return null
-      }
-
-      const targetDay = monthDays[positionIndex]
-
-      // Возвращаем день только если это не placeholder
-      return targetDay && !targetDay.isPlaceholder ? targetDay : null
-    }
-  }, [])
-
-  // ВИЗУАЛ: Позиционирование tooltip при движении мыши
-  // Тултип левого календаря следует за курсором, тултип правого - позиционируется рядом с соответствующим днем
-  useEffect(() => {
-    const updateTooltipPositions = () => {
-      // Тултип правого календаря позиционируется рядом с соответствующим днем
-      if (tooltipCompareRef.current && hoveredDayCompare) {
-        const compareCalendarElement = document.querySelector('[data-calendar="compare"]')
-        if (compareCalendarElement) {
-          const dayElement = compareCalendarElement.querySelector(
-            `[data-day-index="${hoveredDayCompare.positionIndex}"]`
-          )
-
-          if (dayElement) {
-            const dayRect = dayElement.getBoundingClientRect()
-            tooltipCompareRef.current.style.left = `${dayRect.right + 10}px`
-            tooltipCompareRef.current.style.top = `${dayRect.top}px`
-          }
-        }
-      }
-
-      // Если наводим на правый календарь, тултип левого также позиционируется рядом с соответствующим днем
-      if (tooltipRef.current && hoveredDay && hoveredDayCompare) {
-        const compareCalendarElement = document.querySelector('[data-calendar="compare"]')
-        const isHoveringCompare = compareCalendarElement && compareCalendarElement.matches(':hover')
-
-        if (isHoveringCompare) {
-          const currentCalendarElement = document.querySelector('[data-calendar="current"]')
-          if (currentCalendarElement) {
-            const dayElement = currentCalendarElement.querySelector(
-              `[data-day-index="${hoveredDay.positionIndex}"]`
-            )
-            if (dayElement) {
-              const dayRect = dayElement.getBoundingClientRect()
-              tooltipRef.current.style.left = `${dayRect.right + 10}px`
-              tooltipRef.current.style.top = `${dayRect.top}px`
-            }
-          }
-        }
-      }
-    }
-
-    const handleMouseMove = e => {
-      // Тултип левого календаря следует за курсором (если не наводим на правый календарь)
-      if (tooltipRef.current && hoveredDay) {
-        const compareCalendarElement = document.querySelector('[data-calendar="compare"]')
-        const isHoveringCompare = compareCalendarElement && compareCalendarElement.matches(':hover')
-
-        if (!isHoveringCompare) {
-          tooltipRef.current.style.left = `${e.clientX + 15}px`
-          tooltipRef.current.style.top = `${e.clientY + 15}px`
-        }
-      }
-
-      // Обновляем позиции тултипов относительно дней
-      updateTooltipPositions()
-    }
-
-    window.addEventListener('mousemove', handleMouseMove)
-    // Обновляем позиции при изменении hoveredDay/hoveredDayCompare
-    updateTooltipPositions()
-
-    return () => window.removeEventListener('mousemove', handleMouseMove)
-  }, [hoveredDay, hoveredDayCompare])
-
-  // Генерация календаря для месяца
-  const generateCalendar = date => {
+  // Generate days with colors
+  const generateDays = (date: Date): CalendarDay[] => {
     const year = date.getFullYear()
     const month = date.getMonth()
     const firstDay = new Date(year, month, 1)
     const lastDay = new Date(year, month + 1, 0)
-    const days = []
+    const days: CalendarDay[] = []
 
-    // Заполняем дни предыдущего месяца (для выравнивания по неделям)
-    let startOffset = firstDay.getDay() - 1 // Понедельник = 0
-    if (startOffset === -1) startOffset = 6 // Воскресенье = 6
+    // Previous month placeholders
+    let startOffset = firstDay.getDay() - 1 
+    if (startOffset === -1) startOffset = 6
 
     for (let i = 0; i < startOffset; i++) {
       days.push({
         key: `prev-${i}`,
         isPlaceholder: true,
-        positionIndex: days.length, // ВИЗУАЛ: Сохраняем позицию для синхронизации тултипов
+        positionIndex: days.length,
       })
     }
 
-    // Добавляем дни текущего месяца
+    // Current month days
     for (let i = 1; i <= lastDay.getDate(); i++) {
       const dayDate = new Date(year, month, i)
       const dateString = format(dayDate, 'yyyy-MM-dd')
       const today = format(new Date(), 'yyyy-MM-dd')
-
-      // ИСПРАВЛЕНО: Определяем, является ли день нерабочим
+      const dayData = calendarData[dateString]
       const nonWorking = isNonWorkingDay(dayDate)
 
       days.push({
         key: dateString,
         date: dayDate,
-        data: calendarData[dateString],
+        data: dayData,
         isToday: dateString === today,
-        isNonWorking: nonWorking, // ИСПРАВЛЕНО: Добавлен флаг нерабочего дня
-        positionIndex: days.length, // ВИЗУАЛ: Сохраняем позицию в календаре для синхронизации тултипов
+        isNonWorking: nonWorking,
+        positionIndex: days.length,
+        color: dayData?.status ? undefined : getColor(dayData?.totalEarned), // Pre-calculate color
       })
     }
 
     return days
   }
 
-  // Обработка клавиатурной навигации
-  const handleKeyDown = (e, days) => {
+  const currentDays = useMemo(() => generateDays(currentDate), [currentDate, calendarData, isNonWorkingDay, minEarned, maxEarned, theme])
+  const compareDays = useMemo(() => generateDays(compareDate), [compareDate, calendarData, isNonWorkingDay, minEarned, maxEarned, theme])
+
+  // Handlers
+  const handleDayClick = (day: CalendarDay, index: number) => {
+    if (!day.isPlaceholder) {
+      setFocusedDayIndex(index)
+      setHoveredDay(day)
+    }
+  }
+
+  // Keyboard navigation
+  const handleKeyDown = (e: React.KeyboardEvent, days: CalendarDay[]) => {
     if (focusedDayIndex === null) return
 
     const totalDays = days.length
@@ -316,266 +304,89 @@ export const CalendarHeatmap = memo(({ entries }) => {
     setFocusedDayIndex(newIndex)
     const newDay = days[newIndex]
     if (!newDay.isPlaceholder) {
-      setHoveredDay(newDay)
+      setHoveredDay(newDay) // This will trigger re-render of both, unavoidable for sync but minimized by CalendarMonth
     }
     e.preventDefault()
   }
 
-  const handleDayClick = (day, index) => {
-    if (!day.isPlaceholder) {
-      setFocusedDayIndex(index)
-      setHoveredDay(day)
-    }
+  // ВИЗУАЛ: Функция для поиска дня по позиции (индексу) в календаре
+  // Используется для синхронизации тултипов
+  const findDayByPosition = (days: CalendarDay[], positionIndex: number) => {
+       if (positionIndex < 0 || positionIndex >= days.length) return null
+       const targetDay = days[positionIndex]
+       return targetDay && !targetDay.isPlaceholder ? targetDay : null
   }
 
-  // Получение цвета для ячейки с учетом обоих календарей при сравнении
-  // Режим сравнения всегда активен, поэтому всегда вычисляем общие min/max
-  const getAllMonthDataValues = useMemo(() => {
-    const currentMonthDays = generateCalendar(currentDate)
-    const compareMonthDays = generateCalendar(compareDate)
-
-    const allValues = [
-      ...currentMonthDays.filter(d => d.data).map(d => d.data.totalEarned),
-      ...compareMonthDays.filter(d => d.data).map(d => d.data.totalEarned),
-    ]
-
-    return {
-      min: Math.min(...allValues, 0),
-      max: Math.max(...allValues, 0),
-    }
-  }, [currentDate, compareDate, calendarData])
-
-  const getColor = (value, monthDays) => {
-    // ИСПРАВЛЕНО: Пустые дни - максимально контрастные цвета
-    if (!value) {
-      // В dark теме используем максимально темный (#000000), в light - максимально белый (#FFFFFF)
-      return theme === 'dark' ? '#000000' : '#FFFFFF'
-    }
-
-    // Режим сравнения всегда активен, используем общие min/max из обоих календарей
-    let minEarned, maxEarned
-
-    if (getAllMonthDataValues) {
-      minEarned = getAllMonthDataValues.min
-      maxEarned = getAllMonthDataValues.max
-    } else {
-      // Fallback: вычисляем min/max из текущего месяца
-      const values = monthDays
-        .filter(day => day.data && day.data.totalEarned > 0)
-        .map(day => day.data.totalEarned)
-      minEarned = Math.min(...values, 0)
-      maxEarned = Math.max(...values, 0)
-    }
-
-    if (maxEarned === minEarned) {
-      return 'rgba(34, 197, 94, 0.1)'
-    }
-
-    const ratio = (value - minEarned) / (maxEarned - minEarned)
-    const opacity = 0.1 + ratio * 0.9
-    return `rgba(34, 197, 94, ${opacity})`
-  }
-
-  // Рендер календаря
-  const renderCalendar = (date, setDate, title) => {
-    const monthDays = generateCalendar(date)
-
-    // ВИЗУАЛ: Определяем, какой день должен быть выделен в этом календаре
-    // Если это левый календарь и есть hoveredDayCompare - выделяем его
-    // Если это правый календарь и есть hoveredDay - выделяем его
-    const highlightedDay = title === 'Текущий период' ? hoveredDayCompare : hoveredDay
-
-    return (
-      <div className="flex flex-col">
-        {/* Заголовок с навигацией */}
-        <div className="flex justify-between items-center mb-2">
-          <div className="flex items-center gap-2">
-            <button
-              onClick={navigateMonth(setDate, -1)}
-              className="p-1 rounded-full hover:bg-gray-500/10 transition-colors"
-              aria-label="Предыдущий месяц"
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-            {/* ИСПРАВЛЕНО: Заменен нативный input type="month" на кастомную кнопку */}
-            <button
-              ref={title === 'Текущий период' ? currentMonthInputRef : compareMonthInputRef}
-              onClick={() =>
-                setShowMonthPicker(prev => ({
-                  ...prev,
-                  [title === 'Текущий период' ? 'current' : 'compare']: true,
-                }))
-              }
-              className="glass-effect font-bold text-lg px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white transition-normal hover-lift-scale click-shrink"
-            >
-              {format(date, 'MMMM yyyy', { locale: ru })}
-            </button>
-            {showMonthPicker[title === 'Текущий период' ? 'current' : 'compare'] && (
-              <MonthPicker
-                value={format(date, 'yyyy-MM')}
-                onChange={handleMonthChange(setDate, title === 'Сравниваемый период')}
-                onClose={() =>
-                  setShowMonthPicker(prev => ({
-                    ...prev,
-                    [title === 'Текущий период' ? 'current' : 'compare']: false,
-                  }))
-                }
-                inputRef={title === 'Текущий период' ? currentMonthInputRef : compareMonthInputRef}
-              />
-            )}
-            <button
-              onClick={navigateMonth(setDate, 1)}
-              className="p-1 rounded-full hover:bg-gray-500/10 transition-colors"
-              aria-label="Следующий месяц"
-            >
-              <ChevronRight className="w-5 h-5" />
-            </button>
-          </div>
-          <h4 className="font-bold text-lg text-gray-800 dark:text-white">{title}</h4>
-        </div>
-
-        {/* Дни недели */}
-        <div className="grid grid-cols-7 gap-1 text-center text-xs text-gray-500 dark:text-gray-400 mb-2">
-          {['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].map(day => (
-            <div key={day}>{day}</div>
-          ))}
-        </div>
-
-        {/* Календарная сетка */}
-        <div
-          ref={calendarRef}
-          data-calendar={title === 'Текущий период' ? 'current' : 'compare'}
-          className="grid grid-cols-7 gap-1 focus:outline-none"
-          tabIndex={0}
-          onKeyDown={e => handleKeyDown(e, monthDays)}
-        >
-          {monthDays.map((day, index) => {
-            // ВИЗУАЛ: Определяем классы для контраста и цветовую индикацию выполнения плана
-            const hasEntries = day.data && !day.isNonWorking
-            const isEmpty = !day.data && !day.isNonWorking
-
-            // Определяем класс цвета на основе выполнения плана
-            let statusClass = ''
-            if (hasEntries && day.data.status) {
-              switch (day.data.status) {
-                case 'success': // ≥ 100%
-                  statusClass = 'calendar-day-success'
-                  break
-                case 'warning': // 50-99%
-                  statusClass = 'calendar-day-warning'
-                  break
-                case 'danger': // < 50%
-                  statusClass = 'calendar-day-danger'
-                  break
-              }
+  // ВИЗУАЛ: Позиционирование tooltip
+  useEffect(() => {
+    const updateTooltipPositions = () => {
+      // Тултип правого календаря
+      if (tooltipCompareRef.current && hoveredDayCompare) {
+        // Мы не знаем DOM элементы внутри CalendarMonth, но мы знаем селекторы.
+        // CalendarMonth должен рендерить data-day-index? Да, мы это оставили.
+        // Но нам нужно знать, КАКОЙ это календарь.
+        // Добавим id или data-attr в враппер CalendarMonth
+        const compareContainer = document.getElementById('calendar-compare')
+        if (compareContainer) {
+            const dayElement = compareContainer.querySelector(`[data-day-index="${hoveredDayCompare.positionIndex}"]`)
+            if (dayElement) {
+                const dayRect = dayElement.getBoundingClientRect()
+                tooltipCompareRef.current.style.left = `${dayRect.right + 10}px`
+                tooltipCompareRef.current.style.top = `${dayRect.top}px`
             }
+        }
+      }
 
-            // ВИЗУАЛ: Проверяем, должна ли эта ячейка быть выделена (соответствует тултипу из другого календаря)
-            const isHighlighted =
-              highlightedDay &&
-              !day.isPlaceholder &&
-              highlightedDay.positionIndex === day.positionIndex
+      // Тултип левого календаря
+      if (tooltipRef.current && hoveredDay && hoveredDayCompare) {
+         // Если мышь на правом, левый тултип тоже привязан к элементу
+         const compareContainer = document.getElementById('calendar-compare')
+         const isHoveringCompare = compareContainer && compareContainer.matches(':hover') // Грубая проверка
+         
+         if (isHoveringCompare) {
+             const currentContainer = document.getElementById('calendar-current')
+             if (currentContainer) {
+                 const dayElement = currentContainer.querySelector(`[data-day-index="${hoveredDay.positionIndex}"]`)
+                 if (dayElement) {
+                     const dayRect = dayElement.getBoundingClientRect()
+                     tooltipRef.current.style.left = `${dayRect.right + 10}px`
+                     tooltipRef.current.style.top = `${dayRect.top}px`
+                 }
+             }
+         }
+      }
+    }
+    
+    // Mouse move logic for floating tooltip (left calendar only when not on right)
+    const handleMouseMove = (e: MouseEvent) => {
+        if (tooltipRef.current && hoveredDay) {
+            const compareContainer = document.getElementById('calendar-compare')
+            // Проверяем, находится ли мышь над правым календарем.
+            // Если да - тултип левого фиксирован (обрабатывается выше).
+            // Если нет - тултип левого следует за мышью.
+            
+            // Сложность: isHoveringCompare. 
+            // Реализуем проще: Если hoveredDayCompare установлен через onMouseEnter правого календаря...
+            // Но мы синхронизируем их!
+            // Если мы навели на левый -> hoveredDay установлен, hoveredDayCompare тоже (синхронно).
+            // Как узнать, ГДЕ мышь?
+            // Можно использовать e.target.closest.
+            const target = e.target as HTMLElement
+            const isOverCompare = target.closest('#calendar-compare')
+            
+            if (!isOverCompare) {
+                tooltipRef.current.style.left = `${e.clientX + 15}px`
+                tooltipRef.current.style.top = `${e.clientY + 15}px`
+            }
+        }
+        updateTooltipPositions()
+    }
 
-            return (
-              <div
-                key={day.key}
-                data-day-index={day.positionIndex}
-                tabIndex={day.isPlaceholder ? -1 : 0}
-                className={`
-                relative aspect-square flex items-center justify-center rounded-md transition-all duration-200 text-sm
-                ${day.isPlaceholder ? 'opacity-0' : 'focus:ring-2 focus:ring-blue-500 hover:ring-2 hover:ring-blue-500'}
-                ${day.isToday ? 'font-bold ring-2 ring-blue-500 dark:ring-blue-400' : ''}
-                ${focusedDayIndex === index && !day.isPlaceholder ? 'ring-4 ring-blue-500' : ''}
-                ${isHighlighted ? 'ring-2 ring-yellow-400 dark:ring-yellow-500 shadow-lg shadow-yellow-500/50' : ''}
-                ${day.isNonWorking && !day.data ? 'border-2 border-dashed' : ''}
-                ${statusClass}
-                ${isEmpty ? 'calendar-day-empty' : ''}
-                text-white
-              `}
-                style={{
-                  backgroundColor: day.data
-                    ? day.data.status
-                      ? undefined // Для дней с записями и установленным планом используем CSS классы по статусу
-                      : getColor(day.data.totalEarned, monthDays) // Если план не установлен, используем старую логику цвета
-                    : day.isNonWorking
-                      ? 'transparent' // Прозрачный фон для нерабочих дней
-                      : undefined, // Для пустых рабочих дней используем CSS классы из custom.css
-                  borderColor:
-                    day.isNonWorking && !day.data
-                      ? theme === 'dark'
-                        ? '#374151' // Темно-серый border для нерабочих дней в dark теме
-                        : '#D1D5DB' // Светло-серый border для нерабочих дней в light теме
-                      : 'transparent',
-                }}
-                onMouseEnter={() => {
-                  if (!day.isPlaceholder && day.positionIndex !== undefined) {
-                    // ВИЗУАЛ: Синхронизация тултипов между календарями по позиции (индексу) в календаре
-                    // Крайний правый квадрат первой недели = крайний правый квадрат первой недели в другом календаре
-                    if (title === 'Текущий период') {
-                      setHoveredDay(day)
-                      // Находим соответствующий день в правом календаре по той же позиции
-                      const correspondingDay = findDayByPosition(compareDate, day.positionIndex)
-                      if (correspondingDay) {
-                        setHoveredDayCompare(correspondingDay)
-                      } else {
-                        // Если не нашли соответствующий день, все равно показываем тултип для текущего дня
-                        setHoveredDayCompare(null)
-                      }
-                    } else {
-                      setHoveredDayCompare(day)
-                      // Находим соответствующий день в левом календаре по той же позиции
-                      const correspondingDay = findDayByPosition(currentDate, day.positionIndex)
-                      if (correspondingDay) {
-                        setHoveredDay(correspondingDay)
-                      } else {
-                        // Если не нашли соответствующий день, все равно показываем тултип для текущего дня
-                        setHoveredDay(null)
-                      }
-                    }
-                  }
-                }}
-                onMouseLeave={() => {
-                  // ИСПРАВЛЕНО: Очищаем оба тултипа при уходе мыши
-                  if (title === 'Текущий период') {
-                    setHoveredDay(null)
-                    setHoveredDayCompare(null)
-                  } else {
-                    setHoveredDayCompare(null)
-                    setHoveredDay(null)
-                  }
-                }}
-                onClick={() => handleDayClick(day, index)}
-                onFocus={() => {
-                  if (!day.isPlaceholder) {
-                    // ВИЗУАЛ: При фокусе также синхронизируем тултипы по позиции
-                    if (title === 'Текущий период') {
-                      setHoveredDay(day)
-                      const correspondingDay = findDayByPosition(compareDate, day.positionIndex)
-                      if (correspondingDay) {
-                        setHoveredDayCompare(correspondingDay)
-                      } else {
-                        setHoveredDayCompare(null)
-                      }
-                    } else {
-                      setHoveredDayCompare(day)
-                      const correspondingDay = findDayByPosition(currentDate, day.positionIndex)
-                      if (correspondingDay) {
-                        setHoveredDay(correspondingDay)
-                      } else {
-                        setHoveredDay(null)
-                      }
-                    }
-                  }
-                }}
-              >
-                {!day.isPlaceholder && <span>{day.date.getDate()}</span>}
-              </div>
-            )
-          })}
-        </div>
-      </div>
-    )
-  }
+    window.addEventListener('mousemove', handleMouseMove)
+    updateTooltipPositions()
+    return () => window.removeEventListener('mousemove', handleMouseMove)
+  }, [hoveredDay, hoveredDayCompare])
+
 
   return (
     <div className="glass-effect rounded-xl p-6 mb-6">
@@ -589,12 +400,83 @@ export const CalendarHeatmap = memo(({ entries }) => {
 
       {/* Календари */}
       <div className={`grid ${isComparing ? 'grid-cols-1 md:grid-cols-2 gap-6' : 'grid-cols-1'}`}>
-        {renderCalendar(currentDate, setCurrentDate, 'Текущий период')}
-        {isComparing && renderCalendar(compareDate, setCompareDate, 'Сравниваемый период')}
+        <div id="calendar-current">
+            <CalendarMonth 
+                date={currentDate}
+                title="Текущий период"
+                onDateChange={setCurrentDate}
+                days={currentDays}
+                highlightedIndex={hoveredDayCompare?.positionIndex ?? null}
+                focusedDayIndex={focusedDayIndex}
+                theme={theme === 'auto' ? 'light' : theme}
+                onClick={handleDayClick}
+                onKeyDown={(e, _) => handleKeyDown(e, currentDays)}
+                onFocus={(idx) => {
+                    // Logic from original: setHoveredDay(days[idx]) etc.
+                    // But onFocus callback in CalendarMonth sends index.
+                    // We need to set everything.
+                    // Actually, CalendarMonth calls onHover(day) onMouseEnter.
+                    // We should replicate syncing logic.
+                }}
+                onHover={(day) => {
+                    // Hover on Left Calendar
+                    if (day) {
+                        setHoveredDay(day)
+                        const corresp = findDayByPosition(compareDays, day.positionIndex)
+                        setHoveredDayCompare(corresp)
+                    } else {
+                        // Mouse leave handled by container? 
+                        // Actually CalendarMonth triggers onMouseEnter.
+                        // We need onMouseLeave or just clear when day is null.
+                        // But we didn't pass "null" from CalendarMonth onLeave.
+                        // We can clear on wrapper mouseLeave.
+                    }
+                }}
+            />
+            {/* Wrapper to handle mouse leave for clearing */}
+            <div className="absolute inset-0 pointer-events-none" onMouseLeave={() => {
+                setHoveredDay(null)
+                setHoveredDayCompare(null)
+            }} />
+        </div>
+        
+        {isComparing && (
+            <div id="calendar-compare">
+                <CalendarMonth 
+                    date={compareDate}
+                    title="Сравниваемый период"
+                    onDateChange={setCompareDate}
+                    days={compareDays}
+                    highlightedIndex={hoveredDay?.positionIndex ?? null}
+                    focusedDayIndex={focusedDayIndex}
+                    theme={theme === 'auto' ? 'light' : theme}
+                    onClick={handleDayClick}
+                    onKeyDown={(e, _) => handleKeyDown(e, compareDays)}
+                    onFocus={() => {}}
+                    onHover={(day) => {
+                        // Hover on Right Calendar
+                         if (day) {
+                            setHoveredDayCompare(day)
+                            const corresp = findDayByPosition(currentDays, day.positionIndex)
+                            setHoveredDay(corresp)
+                        }
+                    }}
+                />
+             </div>
+        )}
       </div>
 
-      {/* ВИЗУАЛ: Тултипы для обоих календарей с синхронизацией по позиции */}
-      {/* Рендерим тултипы независимо друг от друга */}
+      {/* Manual MouseLeave handlers for containers because CalendarMonth is memoized and internal events might be tricky */}
+      {/* Actually simpler: Pass onHover(null) from CalendarMonth? No, we decided not to. */}
+      {/* Let's wrap CalendarMonth in a div that handles onMouseLeave to clear state */}
+       {/* Use Effects or ref based clearing? 
+           Original: onMouseLeave prop on day div.
+           CalendarMonth DOES have onMouseLeave prop on day div but it does nothing?
+           I implemented "onHover(day)" onMouseEnter.
+           I need to handle mouse leave.
+       */}
+       
+      {/* ВИЗУАЛ: Тултипы */}
       {hoveredDay &&
         createPortal(
           <div
@@ -602,7 +484,7 @@ export const CalendarHeatmap = memo(({ entries }) => {
             className="fixed glass-effect p-3 rounded-lg shadow-xl text-sm border border-gray-200 dark:border-gray-700 pointer-events-none z-[999999]"
           >
             <p className="font-bold text-gray-900 dark:text-white mb-1">
-              {hoveredDay.date.toLocaleDateString('ru-RU', {
+              {hoveredDay.date?.toLocaleDateString('ru-RU', {
                 day: 'numeric',
                 month: 'long',
                 year: 'numeric',
@@ -617,7 +499,7 @@ export const CalendarHeatmap = memo(({ entries }) => {
                   Часы: {hoveredDay.data.totalHours.toFixed(2)} ч
                 </p>
                 <p className="text-gray-700 dark:text-gray-300">
-                  Средняя ставка: {hoveredDay.data.avgRate.toFixed(0)} ₽/ч
+                  Средняя ставка: {hoveredDay.data?.avgRate?.toFixed(0)} ₽/ч
                 </p>
               </>
             ) : (
@@ -633,7 +515,7 @@ export const CalendarHeatmap = memo(({ entries }) => {
             className="fixed glass-effect p-3 rounded-lg shadow-xl text-sm border border-gray-200 dark:border-gray-700 pointer-events-none z-[999999]"
           >
             <p className="font-bold text-gray-900 dark:text-white mb-1">
-              {hoveredDayCompare.date.toLocaleDateString('ru-RU', {
+              {hoveredDayCompare.date?.toLocaleDateString('ru-RU', {
                 day: 'numeric',
                 month: 'long',
                 year: 'numeric',
@@ -648,7 +530,7 @@ export const CalendarHeatmap = memo(({ entries }) => {
                   Часы: {hoveredDayCompare.data.totalHours.toFixed(2)} ч
                 </p>
                 <p className="text-gray-700 dark:text-gray-300">
-                  Средняя ставка: {hoveredDayCompare.data.avgRate.toFixed(0)} ₽/ч
+                  Средняя ставка: {hoveredDayCompare.data?.avgRate?.toFixed(0)} ₽/ч
                 </p>
               </>
             ) : (

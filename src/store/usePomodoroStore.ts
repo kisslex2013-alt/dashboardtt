@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { shallow } from 'zustand/shallow'
+import { useShallow } from 'zustand/react/shallow'
 
 /**
  * 🍅 Хранилище для управления Pomodoro таймером
@@ -25,7 +25,46 @@ import { shallow } from 'zustand/shallow'
  * - totalPomodoros: общее количество завершенных помодоро
  */
 
-export const usePomodoroStore = create(
+/** Режим Pomodoro таймера */
+type PomodoroMode = 'work' | 'shortBreak' | 'longBreak'
+
+/** Параметры для setDurations */
+interface DurationSettings {
+  work?: number
+  shortBreak?: number
+  longBreak?: number
+  pomodorosUntilLongBreak?: number
+}
+
+/** Интерфейс состояния Pomodoro store */
+interface PomodoroState {
+  // State
+  mode: PomodoroMode
+  timeLeft: number
+  isRunning: boolean
+  startTime: number | null
+  pomodorosCompleted: number
+  lastResetDate: string | null
+  totalPomodoros: number
+  workDuration: number
+  shortBreakDuration: number
+  longBreakDuration: number
+  pomodorosUntilLongBreak: number
+
+  // Actions
+  start: () => void
+  pause: () => void
+  resume: () => void
+  reset: () => void
+  nextMode: () => void
+  tick: () => void
+  getDurationForMode: (mode?: PomodoroMode | null) => number
+  setDurations: (settings: DurationSettings) => void
+  resetDailyStats: () => void
+}
+
+export const usePomodoroStore = create<PomodoroState>()(
+
   persist(
     (set, get) => ({
       // Текущий режим: 'work' | 'shortBreak' | 'longBreak'
@@ -113,7 +152,7 @@ export const usePomodoroStore = create(
        */
       nextMode: () => {
         const { mode, pomodorosCompleted, pomodorosUntilLongBreak } = get()
-        let nextMode = 'work'
+        let nextMode: PomodoroMode = 'work'
         let newPomodorosCompleted = pomodorosCompleted
 
         if (mode === 'work') {
@@ -250,14 +289,14 @@ export const usePomodoroPomodorosUntilLongBreak = () => usePomodoroStore(state =
 // Для обратной совместимости - deprecated, используй отдельные селекторы выше
 export const usePomodoroDurations = () =>
   usePomodoroStore(
-    state => ({
+    useShallow(state => ({
       work: state.workDuration,
       shortBreak: state.shortBreakDuration,
       longBreak: state.longBreakDuration,
       pomodorosUntilLongBreak: state.pomodorosUntilLongBreak,
-    }),
-    shallow
+    }))
   )
+
 
 // Actions
 export const usePomodoroStart = () => usePomodoroStore(state => state.start)

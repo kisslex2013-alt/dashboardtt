@@ -9,17 +9,9 @@
 
 import { Button } from '../ui/Button'
 import { useIsMobile } from '../../hooks/useIsMobile'
-import { Save } from '../../utils/icons'
+import { Save, Trash2 } from '../../utils/icons'
 
-/**
- * Компонент кнопок действий формы записи времени
- * @param {Object} props - Пропсы компонента
- * @param {Function} props.onSave - Обработчик сохранения
- * @param {Function} props.onClose - Обработчик закрытия
- * @param {Function} props.onDelete - Обработчик удаления
- * @param {Object|null} props.effectiveEntry - Текущая редактируемая запись (для показа кнопки удаления)
- */
-export function EntryFormActions({ onSave, onClose, onDelete, effectiveEntry }) {
+export function EntryFormActions({ onSave, onClose, onDelete, effectiveEntry, isSaving }) {
   const isMobile = useIsMobile()
 
   // ✅ ИСПРАВЛЕНО: Обработчики с проверкой на undefined и явной остановкой распространения событий
@@ -54,16 +46,16 @@ export function EntryFormActions({ onSave, onClose, onDelete, effectiveEntry }) 
   }
 
   return (
-    <div className={`flex ${isMobile ? 'flex-col-reverse gap-3' : 'justify-between gap-2'}`}>
+    <div className={`flex ${isMobile ? 'flex-col-reverse gap-3' : 'justify-between gap-2'} items-center`}>
       {effectiveEntry && effectiveEntry.id && (
         <Button
-          variant="danger"
+          variant="destructive"
           onClick={handleDelete}
-          iconId="edit-entry-delete"
-          className={isMobile ? 'w-full touch-manipulation' : ''}
-          style={isMobile ? { minHeight: '44px' } : {}}
+          className={isMobile ? 'w-full touch-manipulation' : 'w-10 h-10 !p-0 flex items-center justify-center rounded-lg'}
+          aria-label="Удалить запись"
+          disabled={isSaving}
         >
-          Удалить
+           {isMobile ? 'Удалить' : <Trash2 className="w-5 h-5" />}
         </Button>
       )}
       <div className={`flex gap-2 ${isMobile ? 'w-full' : 'ml-auto'}`}>
@@ -71,20 +63,21 @@ export function EntryFormActions({ onSave, onClose, onDelete, effectiveEntry }) 
           variant="secondary"
           onClick={handleClose}
           type="button"
-          iconId="edit-entry-cancel"
           className={isMobile ? 'flex-1 touch-manipulation' : ''}
           style={isMobile ? { minHeight: '44px' } : {}}
+          disabled={isSaving}
         >
           Отмена
         </Button>
         <Button
           onClick={handleSave}
           type="button"
-          icon={Save}
           className={isMobile ? 'flex-1 touch-manipulation' : ''}
           style={isMobile ? { minHeight: '44px' } : {}}
+          disabled={isSaving}
         >
-          Сохранить
+          <Save className="w-4 h-4 mr-2" />
+          {isSaving ? 'Сохр...' : 'Сохранить'}
         </Button>
       </div>
     </div>

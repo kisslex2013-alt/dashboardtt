@@ -260,3 +260,198 @@ export function calculateTodayAnomaly(entries: TimeEntry[]): TodayAnomaly | null
     total: todayTotal,
   }
 }
+
+interface BurnoutRisk {
+  level: 'low' | 'medium' | 'high'
+  score: number // 0-100
+  factors: {
+    overwork: boolean // Переработки
+    noDaysOff: boolean // Работа без выходных
+    longSessions: boolean // Длинные сессии без перерывов
+    nightWork: boolean // Работа в ночное время
+  }
+  factorDetails: {
+    overwork: string
+    noDaysOff: string
+    longSessions: string
+    nightWork: string
+  }
+  message: string
+}
+
+/**
+ * Рассчитывает риск выгорания
+ */
+export function calculateBurnoutRisk(entries: TimeEntry[], dailyHoursLimit: number = 8): BurnoutRisk {
+  const defaultDetails = {
+    overwork: 'Средняя нагрузка в норме',
+    noDaysOff: 'Регулярные выходные',
+    longSessions: 'Сессии оптимальной длины',
+    nightWork: 'Работа в дневное время',
+  }
+
+  if (!entries || entries.length < 5) {
+    return {
+      level: 'low',
+      score: 0,
+      factors: { overwork: false, noDaysOff: false, longSessions: false, nightWork: false },
+      factorDetails: defaultDetails,
+      message: 'Недостаточно данных для анализа',
+    }
+  }
+
+  const now = new Date()
+  const monthAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 30)
+
+  // Фильтруем записи за последние 30 дней
+  const recentEntries = entries.filter(entry => {
+    const d = new Date(entry.date)
+    return d >= monthAgo
+  })
+
+  if (recentEntries.length === 0) {
+    return {
+      level: 'low',
+      score: 0,
+      factors: { overwork: false, noDaysOff: false, longSessions: false, nightWork: false },
+      factorDetails: defaultDetails,
+      message: 'Нет записей за последние 30 дней',
+    }
+  }
+
+  let score = 0
+  const factors = {
+    overwork: false,
+    noDaysOff: false,
+    longSessions: false,
+    nightWork: false,
+  }
+  const factorDetails = { ...defaultDetails }
+
+  // 1. Анализ переработок (средние часы в рабочий день)
+  const dailyHours: Record<string, number> = {}
+  recentEntries.forEach(entry => {
+    if (!entry.start || !entry.end) return
+    const duration = parseFloat(calculateDuration(entry.start, entry.end))
+    if (!dailyHours[entry.date]) dailyHours[entry.date] = 0
+    dailyHours[entry.date] += duration
+  })
+
+  const workDays = Object.keys(dailyHours).length
+  const totalHours = Object.values(dailyHours).reduce((a, b) => a + b, 0)
+  const avgHours = workDays > 0 ? totalHours / workDays : 0
+
+  if (avgHours > dailyHoursLimit * 1.2) { // +20% к норме
+    score += 40
+    factors.overwork = true
+    factorDetails.overwork = `В среднем ${avgHours.toFixed(1)}ч/день (норма ${dailyHoursLimit}ч) за ${workDays} рабочих дней`
+  } else if (avgHours > dailyHoursLimit) {
+    score += 20
+    factorDetails.overwork = `В среднем ${avgHours.toFixed(1)}ч/день — близко к лимиту`
+  }
+
+  // 2. Анализ работы без выходных
+  const sortedDates = Object.keys(dailyHours).sort()
+  let maxConsecutiveDays = 0
+  let currentConsecutive = 0
+  let consecutiveStart = sortedDates[0]
+  let consecutiveEnd = sortedDates[0]
+  let maxStart = sortedDates[0]
+  let maxEnd = sortedDates[0]
+  
+  for (let i = 0; i < sortedDates.length; i++) {
+    if (i === 0) {
+      currentConsecutive = 1
+      consecutiveStart = sortedDates[i]
+      consecutiveEnd = sortedDates[i]
+      continue
+    }
+    const prev = new Date(sortedDates[i - 1])
+    const curr = new Date(sortedDates[i])
+    const diffTime = Math.abs(curr.getTime() - prev.getTime())
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+
+    if (diffDays === 1) {
+      currentConsecutive++
+      consecutiveEnd = sortedDates[i]
+    } else {
+      if (currentConsecutive > maxConsecutiveDays) {
+        maxConsecutiveDays = currentConsecutive
+        maxStart = consecutiveStart
+        maxEnd = consecutiveEnd
+      }
+      currentConsecutive = 1
+      consecutiveStart = sortedDates[i]
+      consecutiveEnd = sortedDates[i]
+    }
+  }
+  if (currentConsecutive > maxConsecutiveDays) {
+    maxConsecutiveDays = currentConsecutive
+    maxStart = consecutiveStart
+    maxEnd = consecutiveEnd
+  }
+
+  const formatShortDate = (dateStr: string) => {
+    const d = new Date(dateStr)
+    return `${d.getDate()}.${String(d.getMonth() + 1).padStart(2, '0')}`
+  }
+
+  if (maxConsecutiveDays >= 7) {
+    score += 30
+    factors.noDaysOff = true
+    factorDetails.noDaysOff = `${maxConsecutiveDays} рабочих дней подряд (${formatShortDate(maxStart)} – ${formatShortDate(maxEnd)})`
+  } else if (maxConsecutiveDays >= 5) {
+    score += 15
+    factorDetails.noDaysOff = `${maxConsecutiveDays} дней подряд — почти без отдыха`
+  }
+
+  // 3. Анализ длинных сессий (> 4 часов без перерыва)
+  let longSessionsCount = 0
+  let maxSessionDuration = 0
+  recentEntries.forEach(entry => {
+    if (!entry.start || !entry.end) return
+    const duration = parseFloat(calculateDuration(entry.start, entry.end))
+    if (duration > 4) {
+      longSessionsCount++
+      maxSessionDuration = Math.max(maxSessionDuration, duration)
+    }
+  })
+
+  const longSessionsPercent = recentEntries.length > 0 ? Math.round((longSessionsCount / recentEntries.length) * 100) : 0
+
+  if (longSessionsCount > recentEntries.length * 0.3) { // Более 30% сессий длинные
+    score += 20
+    factors.longSessions = true
+    factorDetails.longSessions = `${longSessionsCount} сессий >4ч (${longSessionsPercent}%), макс. ${maxSessionDuration.toFixed(1)}ч`
+  }
+
+  // 4. Ночная работа (23:00 - 06:00)
+  let nightWorkCount = 0
+  recentEntries.forEach(entry => {
+    if (!entry.start) return
+    const hour = parseInt(entry.start.split(':')[0], 10)
+    if (hour >= 23 || hour < 6) nightWorkCount++
+  })
+
+  const nightPercent = recentEntries.length > 0 ? Math.round((nightWorkCount / recentEntries.length) * 100) : 0
+
+  if (nightWorkCount > recentEntries.length * 0.1) { // Более 10% записей ночью
+    score += 10
+    factors.nightWork = true
+    factorDetails.nightWork = `${nightWorkCount} сессий ночью (${nightPercent}% от всех)`
+  }
+
+  // Определяем уровень и сообщение
+  let level: 'low' | 'medium' | 'high' = 'low'
+  let message = 'Вы работаете в комфортном ритме'
+
+  if (score >= 70) {
+    level = 'high'
+    message = 'Высокий риск выгорания! Срочно нужен отдых'
+  } else if (score >= 40) {
+    level = 'medium'
+    message = 'Замечены признаки переутомления'
+  }
+
+  return { level, score, factors, factorDetails, message }
+}

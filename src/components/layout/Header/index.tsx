@@ -10,6 +10,8 @@ import { ColorSchemeSelector } from './components/ColorSchemeSelector'
 import { QuickStartPanel } from './components/QuickStartPanel'
 import { ComparisonControls } from './components/ComparisonControls'
 import { AINotificationsButton } from './components/AINotificationsButton'
+import { AuthSyncStatus } from '../../auth/AuthSyncStatus'
+import { APP_VERSION_FULL } from '../../../config/appVersion'
 
 /**
  * Шапка приложения с переключателем темы и быстрыми действиями
@@ -56,7 +58,7 @@ export function Header({
 
   return (
     <>
-      <header className="glass-effect rounded-xl p-4 sm:p-6 mb-0 relative z-10" role="banner">
+      <header className="glass-effect rounded-xl p-4 sm:p-6 mb-0 relative z-50" role="banner">
         {/* Верхняя строка с названием и кнопками */}
         <div className="flex items-center justify-between mb-4 sm:mb-6">
           <div className="flex items-center gap-2 sm:gap-4 flex-1 min-w-0">
@@ -84,8 +86,8 @@ export function Header({
                   }}
                   className="glass-button p-1.5 sm:p-2 rounded-lg transition-normal hover-lift-scale click-shrink touch-manipulation"
                   style={{
-                    minWidth: isMobile ? '36px' : 'auto',
-                    minHeight: isMobile ? '36px' : 'auto',
+                    minWidth: isMobile ? '44px' : 'auto',
+                    minHeight: isMobile ? '44px' : 'auto',
                   }}
                   title="Открыть промо-страницу"
                   aria-label="Открыть промо-страницу"
@@ -95,9 +97,14 @@ export function Header({
                 </button>
               </div>
               {!isMobile && (
-                <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 transition-all duration-300 hover:text-gray-700 dark:hover:text-gray-300">
-                  Умный учет рабочего времени
-                </p>
+                <div className="flex items-center gap-2">
+                  <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 transition-all duration-300 hover:text-gray-700 dark:hover:text-gray-300">
+                    Умный учет рабочего времени
+                  </p>
+                  <div className="inline-flex items-center px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-[10px] sm:text-xs font-medium">
+                    {APP_VERSION_FULL}
+                  </div>
+                </div>
               )}
             </div>
           </div>
@@ -128,6 +135,9 @@ export function Header({
 
                 {/* Quick Start - быстрый запуск таймера */}
                 <QuickStartPanel />
+
+                {/* Cloud Sync Status moved to left */}
+                {/* <AuthSyncStatus /> removed */}
 
                 {/* AI-уведомления */}
                 <AINotificationsButton />
@@ -172,6 +182,9 @@ export function Header({
                 >
                   <Info className="w-5 h-5" />
                 </button>
+
+                {/* Cloud Sync Status (Far Right) */}
+                <AuthSyncStatus />
               </>
             )}
           </div>

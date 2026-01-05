@@ -136,18 +136,20 @@ export function IconButton({ iconId, defaultIcon: DefaultIcon, children = null, 
     return buttonColorReplacements[iconId] || null
   }, [iconId, buttonColorReplacements])
 
-  // Логируем для отладки
+  // Логирование отключено для уменьшения шума
+  /*
   if (iconId && iconReplacement) {
     logger.log('[IconButton] Получена замена иконки для', iconId, ':', iconReplacement)
   }
   if (iconId && buttonColorReplacement) {
     logger.log('[IconButton] Получен цвет для', iconId, ':', buttonColorReplacement)
   }
+  */
 
   // Определяем какую иконку использовать: замену или оригинал
   const DisplayIcon = useMemo(() => {
     if (iconId && iconReplacement) {
-      logger.log('[IconButton] Применение замены иконки:', iconId, '->', iconReplacement)
+      // logger.log('[IconButton] Применение замены иконки:', iconId, '->', iconReplacement)
       const ReplacementIconComponent = getIcon(iconReplacement)
       if (ReplacementIconComponent) {
         return ReplacementIconComponent
@@ -234,10 +236,10 @@ export function IconButton({ iconId, defaultIcon: DefaultIcon, children = null, 
   // Формируем финальный className
   const finalClassName = useMemo(() => {
     const result = `${cleanedClassName} ${colorClassName}`.trim()
-    logger.log('[IconButton] Финальный className для', iconId, ':', result)
-    logger.log('[IconButton] cleanedClassName:', cleanedClassName)
-    logger.log('[IconButton] colorClassName:', colorClassName)
-    logger.log('[IconButton] buttonStyle:', buttonStyle)
+    // logger.log('[IconButton] Финальный className для', iconId, ':', result)
+    // logger.log('[IconButton] cleanedClassName:', cleanedClassName)
+    // logger.log('[IconButton] colorClassName:', colorClassName)
+    // logger.log('[IconButton] buttonStyle:', buttonStyle)
     return result
   }, [cleanedClassName, colorClassName, iconId, buttonStyle])
 

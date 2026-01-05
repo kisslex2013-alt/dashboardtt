@@ -34,7 +34,11 @@ import {
   useDefaultCategory,
   useSetDefaultCategory,
 } from '../../store/useSettingsStore'
-import { useEntries } from '../../store/useEntriesStore'
+import {
+  useEntries,
+  useSyncCategories,
+  useUpdateEntryCategoryDetails,
+} from '../../store/useEntriesStore'
 import { Button } from '../ui/Button'
 import { BaseModal } from '../ui/BaseModal'
 import { AnimatedModalContent } from '../ui/AnimatedModalContent'
@@ -42,6 +46,8 @@ import { ConfirmModal } from './ConfirmModal'
 import { useConfirmModal } from '../../hooks/useConfirmModal'
 import { getIcon } from '../../utils/iconHelper'
 import { IconSelect } from '../ui/IconSelect'
+
+// Force HMR update
 
 /**
  * 🎨 Модальное окно управления категориями (Табличное представление)
@@ -63,6 +69,14 @@ export function CategoriesModal({ isOpen, onClose, autoOpenAddForm = false, onCa
   const { confirmConfig, openConfirm } = useConfirmModal()
   const defaultCategory = useDefaultCategory()
   const setDefaultCategory = useSetDefaultCategory()
+  const syncCategories = useSyncCategories()
+  const [syncStatus, setSyncStatus] = useState<{ count: number; show: boolean } | null>(null)
+
+  const handleSyncData = () => {
+    const count = syncCategories(categories)
+    setSyncStatus({ count, show: true })
+    setTimeout(() => setSyncStatus(null), 3000)
+  }
 
   // Форма добавления категории
   const [isAdding, setIsAdding] = useState(autoOpenAddForm)
@@ -284,6 +298,8 @@ export function CategoriesModal({ isOpen, onClose, autoOpenAddForm = false, onCa
     setError('')
   }
 
+  const updateEntryCategoryDetails = useUpdateEntryCategoryDetails()
+
   // Обработчик сохранения изменений
   const handleSaveEdit = () => {
     if (!formData.name.trim()) {
@@ -291,12 +307,20 @@ export function CategoriesModal({ isOpen, onClose, autoOpenAddForm = false, onCa
       return
     }
 
-    // Обновляем категорию
+    const newName = formData.name.trim()
+    const oldCategory = categories.find(c => c.id === editingId)
+    const oldName = oldCategory ? oldCategory.name : undefined
+
+    // Обновляем категорию в настройках
     updateCategory(editingId, {
-      name: formData.name.trim(),
+      name: newName,
       color: formData.color,
       icon: formData.icon,
     })
+
+    // ✅ СИНХРОНИЗАЦИЯ: Обновляем записи с этой категорией
+    // Это важно, так как записи хранят денормализованное имя
+    updateEntryCategoryDetails(editingId, newName, oldName)
 
     // Очищаем форму
     setFormData({ name: '', color: '#3B82F6', icon: 'Folder' })
@@ -606,12 +630,29 @@ export function CategoriesModal({ isOpen, onClose, autoOpenAddForm = false, onCa
             </table>
           </div>
 
-          {/* Подсказка */}
-          <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-            <p className="text-xs text-blue-800 dark:text-blue-300">
-              💡 <strong>Подсказка:</strong> Категории используются для группировки записей времени.
-              Нельзя удалить категорию, которая используется в записях.
-            </p>
+          {/* Подсказка и Синхронизация */}
+          <div className="mt-4 flex flex-col sm:flex-row gap-3 items-center justify-between">
+            <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800 flex-1">
+              <p className="text-xs text-blue-800 dark:text-blue-300">
+                💡 <strong>Подсказка:</strong> Если данные на графиках не совпадают, используйте синхронизацию.
+              </p>
+            </div>
+            
+            <div className="flex items-center gap-2">
+                {syncStatus && syncStatus.show && (
+                    <span className="text-xs text-green-600 dark:text-green-400 font-medium animate-fade-in">
+                        Обновлено: {syncStatus.count}
+                    </span>
+                 )}
+                <button
+                onClick={handleSyncData}
+                className="flex items-center gap-2 px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-xs font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                title="Синхронизировать записи с текущими категориями"
+                >
+                <Database className="w-3.5 h-3.5 text-blue-500" />
+                Синхронизировать
+                </button>
+            </div>
           </div>
         </div>
       </AnimatedModalContent>

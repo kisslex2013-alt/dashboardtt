@@ -38,16 +38,6 @@ export function WorkScheduleTab({
 }: WorkScheduleTabProps) {
   return (
     <div className="space-y-6">
-      {/* Заголовок */}
-      <div className="mb-6">
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
-          <Clock className="w-6 h-6 text-blue-500" />
-          Рабочий график
-        </h2>
-        <p className="text-sm text-gray-600 dark:text-gray-400">
-          Выберите оптимальный режим работы и настройте финансовые цели
-        </p>
-      </div>
 
       {/* Сетка 3x2: 5 шаблонов + Настройки */}
       <div>

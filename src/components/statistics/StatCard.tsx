@@ -28,7 +28,27 @@ import { ComparisonStat } from './ComparisonStat'
  * @param {string} periodFilter - Текущий фильтр периода (не используется, но передается)
  * @param {boolean} immediate - Флаг для немедленного обновления без анимации
  */
-export const StatCard = memo(
+interface StatCardProps {
+  title: string
+  value?: string
+  numericValue?: number
+  suffix?: string
+  decimals?: number
+  icon?: React.ComponentType<any>
+  gradient?: string
+  accentClass: string
+  glowClass?: string
+  titleColorClass?: string
+  iconOpacity?: string
+  comparison?: {
+    current: number
+    previous?: number | null
+  }
+  periodFilter?: string
+  immediate?: boolean
+}
+
+export const StatCard = memo<StatCardProps>(
   ({
     title,
     value,
@@ -166,7 +186,7 @@ export const StatCard = memo(
           </p>
           {numericValue !== undefined ? (
             <AnimatedCounter
-              value={finalNumericValue}
+              value={finalNumericValue ?? 0}
               suffix={finalSuffix}
               decimals={finalDecimals}
               className="text-2xl font-bold text-gray-900 dark:text-white leading-tight"

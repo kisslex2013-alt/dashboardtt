@@ -1,8 +1,10 @@
 import { useState, useEffect, useLayoutEffect, useRef, useCallback } from 'react'
 import { createPortal } from 'react-dom'
-import { Palette, Settings as SettingsIcon, Play, Bell, Timer, Trash2, BotMessageSquare, CalendarDays, Clock, Plus, HardDrive, Folder, Archive, Upload, Edit2, Star, CreditCard } from '../../utils/icons'
+import { AnimatePresence } from 'framer-motion'
+import { Palette, Settings as SettingsIcon, Play, Bell, Timer, Trash2, BotMessageSquare, CalendarDays, Clock, Plus, HardDrive, Folder, Archive, Upload, Edit2, Star, CreditCard, User } from '../../utils/icons'
 import { BaseModal } from '../ui/BaseModal'
-import { AnimatedModalContent } from '../ui/AnimatedModalContent'
+import { SettingsNavItem } from './settings/SettingsNavItem'
+import { NestedModal } from './about/NestedModal'
 import {
   useNotificationsSettings,
   useUpdateSettings,
@@ -16,13 +18,7 @@ import {
   useWorkScheduleTemplate,
   useDailyGoal,
   useWorkScheduleStartDay,
-  useCustomWorkDates,
-  useCategories,
-  useAddCategory,
-  useUpdateCategory,
-  useDeleteCategory,
-  useDefaultCategory,
-  useSetDefaultCategory
+  useCustomWorkDates
 } from '../../store/useSettingsStore'
 import { useSoundManager } from '../../hooks/useSound'
 import { useNotifications } from '../../hooks/useNotifications'
@@ -30,10 +26,8 @@ import { useShowSuccess } from '../../store/useUIStore'
 import { Notification } from '../ui/Notification'
 import { useIsMobile } from '../../hooks/useIsMobile'
 import { Toggle } from '../ui/Toggle'
-import { useAINotificationsStore } from '../../store/useAINotificationsStore'
-import { AINotificationService } from '../../services/aiNotificationService'
-import { BrowserPushService } from '../../services/browserPushService'
 import type { NotificationType, NotificationPriority } from '../../types/aiNotifications'
+import { PaymentDate, Category, WorkScheduleTemplate } from '../../types'
 import { PaymentCalendar } from './PaymentDatesSettingsModal/PaymentCalendar'
 import { PaymentDateItem } from './PaymentDatesSettingsModal/PaymentDateItem'
 import { usePaymentCalendar } from './PaymentDatesSettingsModal/hooks/usePaymentCalendar'
@@ -48,20 +42,26 @@ import { useScheduleTemplates } from './work-schedule/useScheduleTemplates'
 import { getIconColorClasses, getEfficiencyColor } from './work-schedule/scheduleUtils'
 
 import { useEntries } from '../../store/useEntriesStore'
-import { useConfirmModal } from '../../hooks/useConfirmModal'
-import { ConfirmModal } from './ConfirmModal'
 import { handleError } from '../../utils/errorHandler'
 import { logger } from '../../utils/logger'
 import { Button } from '../ui/Button'
 import { IconSelect } from '../ui/IconSelect'
 import { getIcon } from '../../utils/iconHelper'
-import { NotificationsTab, ProductivityTab, PersonalizationTab, FinanceTab, BackupsTab, WorkScheduleTab, CategoriesTab } from '../settings/tabs'
+import { useAINotificationsStore } from '../../store/useAINotificationsStore'
+import { APP_VERSION_FULL } from '../../config/appVersion'
+import { NotificationsTab, ProductivityTab, PersonalizationTab, FinanceTab, BackupsTab, WorkScheduleTab, CategoriesTab, AITab, AccountTab } from '../settings/tabs'
 
 /**
  * Компонент карточки предпросмотра анимации фавикона
  */
 
-export function SoundNotificationsSettingsModal({ isOpen, onClose, initialTab = null }) {
+interface SoundNotificationsSettingsModalProps {
+  isOpen: boolean
+  onClose: () => void
+  initialTab?: string | null
+}
+
+export function SoundNotificationsSettingsModal({ isOpen, onClose, initialTab = null }: SoundNotificationsSettingsModalProps) {
   // ✅ ОПТИМИЗАЦИЯ: Используем атомарные селекторы для минимизации ре-рендеров
   const notifications = useNotificationsSettings()
   const dailyHours = useDailyHours()
@@ -71,6 +71,7 @@ export function SoundNotificationsSettingsModal({ isOpen, onClose, initialTab = 
   const showSuccess = useShowSuccess()
   const { showWarning, showError } = useNotifications()
   const isMobile = useIsMobile()
+  const aiEnabled = useAINotificationsStore((state) => state.enabled)
 
   // Инициализация состояния с использованием текущих настроек
   const getInitialState = () => ({
@@ -148,18 +149,19 @@ export function SoundNotificationsSettingsModal({ isOpen, onClose, initialTab = 
   const [pomodoroShowNotifications, setPomodoroShowNotifications] = useState(
     () => getInitialState().pomodoroShowNotifications
   )
-  const [customIntervalMinutes, setCustomIntervalMinutes] = useState(null)
+  const [customIntervalMinutes, setCustomIntervalMinutes] = useState<number | null>(null)
 
   // Состояние для активного таба (вариант 4: вертикальные табы)
-  const [activeTab, setActiveTab] = useState(initialTab || 'notifications')
+  // null = показываем приветственный экран
+  const [activeTab, setActiveTab] = useState<string | null>(initialTab || null)
 
   // Обновление активного таба при открытии модального окна или изменении initialTab
   useEffect(() => {
     if (isOpen && initialTab) {
       setActiveTab(initialTab)
     } else if (isOpen && !initialTab) {
-      // Если модальное окно открывается без указания таба, используем дефолтный
-      setActiveTab('notifications')
+      // Если модальное окно открывается без указания таба, показываем приветствие
+      setActiveTab(null)
     }
   }, [isOpen, initialTab])
 
@@ -169,8 +171,8 @@ export function SoundNotificationsSettingsModal({ isOpen, onClose, initialTab = 
   const updatePaymentDate = useUpdatePaymentDate()
   const deletePaymentDate = useDeletePaymentDate()
   const reorderPaymentDates = useReorderPaymentDates()
-  const [paymentDates, setPaymentDates] = useState([])
-  const [editingId, setEditingId] = useState(null)
+  const [paymentDates, setPaymentDates] = useState<PaymentDate[]>([])
+  const [editingId, setEditingId] = useState<string | null>(null)
   const [draggedId, setDraggedId] = useState(null)
   const now = new Date()
   const calendar = usePaymentCalendar(now.getFullYear(), now.getMonth())
@@ -191,24 +193,7 @@ export function SoundNotificationsSettingsModal({ isOpen, onClose, initialTab = 
   const selectedSchedule = scheduleTemplates.find(t => t.id === selectedTemplate) || scheduleTemplates[0]
   const monthlyPlan = dailyPlan * selectedSchedule.monthlyDays
 
-  // Состояние для раздела Категории
-  const categories = useCategories()
-  const addCategory = useAddCategory()
-  const updateCategory = useUpdateCategory()
-  const deleteCategory = useDeleteCategory()
-  const entries = useEntries()
-  const defaultCategory = useDefaultCategory()
-  const setDefaultCategory = useSetDefaultCategory()
-  const categoryDeleteConfirm = useConfirmModal()
-  const [isAddingCategory, setIsAddingCategory] = useState(false)
-  const [editingCategoryId, setEditingCategoryId] = useState(null)
-  const [categoryFormData, setCategoryFormData] = useState({
-    name: '',
-    color: '#3B82F6',
-    icon: 'Folder',
-  })
-  const [categoryError, setCategoryError] = useState('')
-  const categoryNameInputRef = useRef(null)
+  // Состояние для раздела Категории перенесено в CategoriesTab
 
 
 
@@ -392,15 +377,15 @@ export function SoundNotificationsSettingsModal({ isOpen, onClose, initialTab = 
   }, [])
 
   const handleUpdatePeriodBoth = useCallback(
-    (id, start, end, periodMonth) => {
+    (id: string, start: number, end: number, periodMonth?: number) => {
       setPaymentDates(prev =>
         prev.map(p => {
           if (p.id === id) {
             return {
               ...p,
               period: {
-                start: parseInt(start) || 0,
-                end: parseInt(end) || 0,
+                start: start || 0,
+                end: end || 0,
                 periodMonth: periodMonth !== undefined ? periodMonth : p.period?.periodMonth,
               },
             }
@@ -413,8 +398,9 @@ export function SoundNotificationsSettingsModal({ isOpen, onClose, initialTab = 
   )
 
   const handleUpdatePaymentDay = useCallback(
-    (id, day, month) => {
-      const monthStr = (month + 1).toString().padStart(2, '0')
+    (id: string, day: number, month?: number) => {
+      const targetMonth = month !== undefined ? month : calendar.currentMonth
+      const monthStr = (targetMonth + 1).toString().padStart(2, '0')
       const dayStr = day.toString().padStart(2, '0')
       handleUpdateField(id, 'customDate', `${dayStr}.${monthStr}`)
       handleUpdateField(id, 'day', day)
@@ -439,8 +425,8 @@ export function SoundNotificationsSettingsModal({ isOpen, onClose, initialTab = 
   }, [calendar.currentMonth])
 
   const isPaymentDay = useCallback(
-    day => {
-      return paymentDates.find(payment => {
+    (day: number) => {
+      return !!paymentDates.find(payment => {
         if (payment.customDate) {
           const [d, m] = payment.customDate.split('.')
           const paymentMonth = parseInt(m) - 1
@@ -457,14 +443,14 @@ export function SoundNotificationsSettingsModal({ isOpen, onClose, initialTab = 
   )
 
   const isInPeriod = useCallback(
-    day => {
+    (day: number) => {
       return paymentDates.find(payment => {
         const periodMonth = getPeriodMonth(payment)
         if (periodMonth !== calendar.currentMonth) {
           return false
         }
         return day >= payment.period.start && day <= payment.period.end
-      })
+      }) || null
     },
     [paymentDates, calendar.currentMonth]
   )
@@ -649,100 +635,7 @@ export function SoundNotificationsSettingsModal({ isOpen, onClose, initialTab = 
 
 
   // Обработчики для категорий
-  const getCategoryUsageCount = category => {
-    const count = entries.filter(entry => {
-      if (!entry.category || entry.category === undefined || entry.category === null) {
-        return category.id === 'remix' || category.name === 'remix'
-      }
-      if (typeof entry.category === 'string') {
-        return entry.category === category.id || entry.category === category.name || entry.category.toLowerCase() === category.name.toLowerCase()
-      }
-      return entry.category === category.id || entry.category === category.name
-    }).length
-    return count
-  }
 
-  const handleAddCategory = () => {
-    if (!categoryFormData.name.trim()) {
-      setCategoryError('Введите название категории')
-      return
-    }
-
-    const exists = categories.some(c => c.name.toLowerCase() === categoryFormData.name.trim().toLowerCase())
-    if (exists) {
-      setCategoryError('Категория с таким названием уже существует')
-      return
-    }
-
-    addCategory({
-      name: categoryFormData.name.trim(),
-      color: categoryFormData.color,
-      icon: categoryFormData.icon,
-    })
-
-    setCategoryFormData({ name: '', color: '#3B82F6', icon: 'Folder' })
-    setCategoryError('')
-    setIsAddingCategory(false)
-  }
-
-  const handleCancelAddCategory = () => {
-    setCategoryFormData({ name: '', color: '#3B82F6', icon: 'Folder' })
-    setCategoryError('')
-    setIsAddingCategory(false)
-  }
-
-  const handleEditCategory = category => {
-    setEditingCategoryId(category.id)
-    setCategoryFormData({
-      name: category.name,
-      color: category.color,
-      icon: category.icon || 'Folder',
-    })
-    setCategoryError('')
-  }
-
-  const handleSaveCategory = () => {
-    if (!categoryFormData.name.trim()) {
-      setCategoryError('Введите название категории')
-      return
-    }
-
-    updateCategory(editingCategoryId, {
-      name: categoryFormData.name.trim(),
-      color: categoryFormData.color,
-      icon: categoryFormData.icon,
-    })
-
-    setCategoryFormData({ name: '', color: '#3B82F6', icon: 'Folder' })
-    setEditingCategoryId(null)
-    setCategoryError('')
-  }
-
-  const handleCancelEditCategory = () => {
-    setCategoryFormData({ name: '', color: '#3B82F6', icon: 'Folder' })
-    setEditingCategoryId(null)
-    setCategoryError('')
-  }
-
-  const handleDeleteCategory = categoryId => {
-    categoryDeleteConfirm.openConfirm({
-      title: 'Удалить категорию?',
-      message: 'Вы уверены, что хотите удалить эту категорию?\n\nВнимание: все записи с этой категорией останутся, но категория будет удалена из списка.',
-      onConfirm: () => deleteCategory(categoryId),
-      confirmText: 'Удалить',
-      cancelText: 'Отмена',
-    })
-  }
-
-  // Используем useLayoutEffect для синхронного фокуса на поле ввода категории
-  useLayoutEffect(() => {
-    if (isOpen && activeTab === 'categories' && isAddingCategory && categoryNameInputRef.current) {
-      // Используем requestAnimationFrame для гарантированного фокуса после рендера
-      requestAnimationFrame(() => {
-        categoryNameInputRef.current?.focus()
-      })
-    }
-  }, [isOpen, activeTab, isAddingCategory])
 
   const selectionState = {
     selectingMode: selection.selectingMode,
@@ -758,8 +651,8 @@ export function SoundNotificationsSettingsModal({ isOpen, onClose, initialTab = 
   }
 
   // Состояние для тестового уведомления (чтобы показать его поверх модального окна)
-  const [testNotification, setTestNotification] = useState(null)
-  const testNotificationTimeoutRef = useRef(null)
+  const [testNotification, setTestNotification] = useState<any>(null)
+  const testNotificationTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   // Тест напоминания о перерыве
   const handleTestBreakReminder = () => {
@@ -851,656 +744,434 @@ export function SoundNotificationsSettingsModal({ isOpen, onClose, initialTab = 
 
 
 
+  // Данные для карточек настроек
+  const gridCards = [
+    {
+      id: 'ai',
+      icon: BotMessageSquare,
+      title: 'AI Ассистент',
+      subtitle: 'Умные функции',
+      stats: 'Анализ, Советы',
+      accentClass: 'fuchsia-500', 
+    },
+    {
+      id: 'account',
+      icon: User,
+      title: 'Аккаунт',
+      subtitle: 'Профиль и план',
+      stats: 'Free/Pro',
+      accentClass: 'slate-500', 
+    },
+    {
+      id: 'workSchedule',
+      icon: CalendarDays,
+      title: 'График работы',
+      subtitle: 'Дни и часы',
+      stats: 'План, Цели',
+      accentClass: 'blue-500', 
+    },
+    {
+      id: 'backups',
+      icon: HardDrive,
+      title: 'Данные',
+      subtitle: 'Бэкап и сброс',
+      stats: 'Безопасность',
+      accentClass: 'cyan-500',
+    },
+    {
+      id: 'categories',
+      icon: Folder,
+      title: 'Категории',
+      subtitle: 'Теги и цвета',
+      stats: 'Управление',
+      accentClass: 'indigo-500', 
+    },
+    {
+      id: 'personalization',
+      icon: Palette,
+      title: 'Персонализация',
+      subtitle: 'Тема и иконки',
+      stats: 'Визуал',
+      accentClass: 'violet-500', 
+    },
+    {
+      id: 'productivity', // Было pomodoro, в табах productivity
+      icon: Timer,
+      title: 'Продуктивность',
+      subtitle: 'Помодоро и перерывы',
+      stats: 'Таймер, Отдых',
+      accentClass: 'rose-500', 
+    },
+    {
+      id: 'notifications',
+      icon: Bell,
+      title: 'Уведомления',
+      subtitle: 'Звуки и алерты',
+      stats: 'Звук, Интервалы',
+      accentClass: 'amber-500', 
+    },
+    {
+      id: 'finance', // Было payments, в табах finance
+      icon: CreditCard,
+      title: 'Финансы',
+      subtitle: 'Даты выплат',
+      stats: 'Зарплата',
+      accentClass: 'emerald-500', 
+    },
+  ]
+
+  // Сбрасываем выбранную секцию при закрытии
+  useEffect(() => {
+    if (!isOpen) { 
+      // При открытии initialTab обрабатывается в другом эффекте
+    }
+  }, [isOpen])
+
+  // Текущая активная карточка
+  const activeCard = gridCards.find(c => c.id === activeTab)
+
   return (
     <>
-      {/* Тестовое уведомление через портал поверх модального окна */}
-      {testNotification &&
-        createPortal(
-          <div className="fixed top-4 right-4 z-[99999999] pointer-events-auto">
-            <Notification
+      <BaseModal
+        isOpen={isOpen}
+        onClose={onClose}
+        title="Настройки"
+        subtitle="Управление приложением"
+        size="large"
+        className={`transition-all duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] md:!max-w-6xl md:!w-[95vw] md:!h-[90vh]`}
+        closeOnOverlayClick={false}
+        disableContentScroll={true}
+        footer={null}
+      >
+        <div className="flex flex-col md:flex-row h-full overflow-hidden">
+          {/* Левая колонка (Меню) */}
+          <div className={`
+            flex flex-col h-full overflow-y-auto custom-scrollbar transition-all duration-300 overflow-x-hidden
+            md:w-[25%] md:border-r md:border-gray-100 dark:md:border-gray-800 md:pr-4
+          `}>
+            {/* Навигация */}
+            <div className="flex flex-col gap-1 mb-6 p-1">
+              {gridCards.map(card => (
+                <SettingsNavItem
+                  key={card.id}
+                  icon={card.icon}
+                  title={card.title}
+                  accentClass={card.accentClass}
+                  onClick={() => setActiveTab(card.id)}
+                  isActive={activeTab === card.id}
+                />
+              ))}
+            </div>
+            
+            {/* Дополнительная инфо или кнопки внизу сайдбара */}
+            <div className="mt-auto hidden md:block opacity-60 hover:opacity-100 transition-opacity">
+               <p className="text-xs text-center text-gray-400">
+                  {APP_VERSION_FULL}
+               </p>
+            </div>
+          </div>
+
+          {/* Правая колонка (Контент) */}
+          <div className="hidden md:block md:w-[75%] h-full pl-6 overflow-hidden relative">
+            <AnimatePresence mode="wait">
+              {activeTab === null ? (
+                /* Приветственный экран */
+                <div className="h-full flex flex-col items-center justify-center text-center px-8">
+                  {/* Анимированная иконка */}
+                  <div className="relative mb-6">
+                    <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 dark:from-blue-500/10 dark:to-purple-500/10 flex items-center justify-center animate-pulse">
+                      <SettingsIcon className="w-12 h-12 text-blue-500 dark:text-blue-400" />
+                    </div>
+                    {/* Декоративные элементы */}
+                    <div className="absolute -top-2 -right-2 w-4 h-4 rounded-full bg-green-400 animate-bounce" style={{ animationDelay: '0.2s' }} />
+                    <div className="absolute -bottom-1 -left-1 w-3 h-3 rounded-full bg-purple-400 animate-bounce" style={{ animationDelay: '0.4s' }} />
+                  </div>
+                  
+                  {/* Заголовок */}
+                  <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-3">
+                    Добро пожаловать в настройки
+                  </h2>
+                  
+                  {/* Описание */}
+                  <p className="text-gray-500 dark:text-gray-400 mb-6 max-w-md">
+                    Выберите раздел слева, чтобы настроить приложение под свои задачи и предпочтения
+                  </p>
+                  
+                  {/* Декоративные элементы или пустой блок если нужно */}
+                </div>
+              ) : (
+              <NestedModal
+                key={activeTab}
+                isOpen={true}
+                onClose={() => {}}
+                title={activeCard?.title || 'Настройки'}
+                icon={activeCard?.icon || SettingsIcon}
+                embedded={true}
+              >
+                <div className="pb-20">
+                   {activeTab === 'notifications' && (
+                      <NotificationsTab
+                        soundNotificationsEnabled={soundNotificationsEnabled}
+                        setSoundNotificationsEnabled={setSoundNotificationsEnabled}
+                        notificationSound={notificationSound}
+                        setNotificationSound={(val) => setNotificationSound(val as any)}
+                        notificationInterval={notificationInterval}
+                        setNotificationInterval={setNotificationInterval}
+                        customIntervalMinutes={customIntervalMinutes}
+                        setCustomIntervalMinutes={setCustomIntervalMinutes}
+                        breakRemindersEnabled={breakRemindersEnabled}
+                        setBreakRemindersEnabled={setBreakRemindersEnabled}
+                        breakReminderInterval={breakReminderInterval}
+                        setBreakReminderInterval={setBreakReminderInterval}
+                        overtimeAlertsEnabled={overtimeAlertsEnabled}
+                        setOvertimeAlertsEnabled={setOvertimeAlertsEnabled}
+                        overtimeWarningThreshold={overtimeWarningThreshold}
+                        setOvertimeWarningThreshold={setOvertimeWarningThreshold}
+                        overtimeCriticalThreshold={overtimeCriticalThreshold}
+                        setOvertimeCriticalThreshold={setOvertimeCriticalThreshold}
+                        overtimeSoundEnabled={overtimeSoundAlert}
+                        setOvertimeSoundEnabled={setOvertimeSoundAlert}
+                        dailyHours={dailyHours || 8}
+                        onTestSound={handleTestSound}
+                        onTestBreakReminder={handleTestBreakReminder}
+                        onTestOvertimeAlert={handleTestOvertimeAlert}
+                      />
+                    )}
+                    {activeTab === 'productivity' && (
+                      <ProductivityTab
+                        pomodoroEnabled={pomodoroEnabled}
+                        setPomodoroEnabled={setPomodoroEnabled}
+                        pomodoroAutoStartBreaks={pomodoroAutoStartBreaks}
+                        setPomodoroAutoStartBreaks={setPomodoroAutoStartBreaks}
+                        pomodoroAutoStartWork={pomodoroAutoStartWork}
+                        setPomodoroAutoStartWork={setPomodoroAutoStartWork}
+                        pomodoroSoundOnComplete={pomodoroSoundOnComplete}
+                        setPomodoroSoundOnComplete={setPomodoroSoundOnComplete}
+                        pomodoroShowNotifications={pomodoroShowNotifications}
+                        setPomodoroShowNotifications={setPomodoroShowNotifications}
+                        onTestPomodoroNotification={handleTestPomodoroNotification}
+                      />
+                    )}
+                    {activeTab === 'personalization' && (
+                      <PersonalizationTab
+                        faviconEnabled={faviconAnimationEnabled}
+                        setFaviconEnabled={setFaviconAnimationEnabled}
+                        faviconStyle={faviconAnimationStyle}
+                        setFaviconStyle={(val) => setFaviconAnimationStyle(val as any)}
+                        faviconColor={faviconAnimationColor}
+                        setFaviconColor={setFaviconAnimationColor}
+                        faviconSpeed={faviconAnimationSpeed}
+                        setFaviconSpeed={(val) => setFaviconAnimationSpeed(val as any)}
+                      />
+                    )}
+                     {activeTab === 'finance' && (
+                      <FinanceTab
+                        paymentDates={paymentDates}
+                        calendar={calendar}
+                        isPaymentDay={isPaymentDay}
+                        isInPeriod={isInPeriod}
+                        selectionState={selectionState}
+                        handleDayClick={handleDayClick}
+                        selection={selection}
+                        editingId={editingId}
+                        handleStartEdit={handleStartEdit}
+                        handleUpdateField={handleUpdateField}
+                        handleUpdatePeriodBoth={handleUpdatePeriodBoth}
+                        handleSaveEdit={handleSaveEdit}
+                        handleDeletePayment={handleDelete}
+                        handleCancelEdit={handleCancelEdit}
+                        handleToggleRepeat={handleToggleRepeat}
+                        handleUpdatePaymentDay={handleUpdatePaymentDay}
+                        draggedId={draggedId}
+                        handleDragStart={handleDragStart}
+                        handleDragEnd={handleDragEnd}
+                        handleDragOver={handleDragOver}
+                        handleDragEnter={handleDragEnter}
+                        handleDrop={handleDrop}
+                        handleAddPayment={handleAddPayment}
+                      />
+                    )}
+                    {activeTab === 'backups' && (
+                      <BackupsTab />
+                    )}
+                     {activeTab === 'workSchedule' && (
+                      <WorkScheduleTab
+                        scheduleTemplates={scheduleTemplates}
+                        selectedTemplate={selectedTemplate}
+                        onSelectTemplate={handleTemplateSelect}
+                        onCustomDayToggle={handleCustomDayToggle}
+                        selectedSchedule={selectedSchedule}
+                        dailyPlan={dailyPlan}
+                        monthlyPlan={monthlyPlan}
+                        weekStart={weekStart}
+                        onDailyPlanChange={setDailyPlan}
+                        onWeekStartChange={setWeekStart}
+                        animateStats={animateStats}
+                      />
+                    )}
+                    {activeTab === 'categories' && (
+                      <CategoriesTab />
+                    )}
+                    {activeTab === 'ai' && (
+                      <AITab />
+                    )}
+                    {activeTab === 'account' && (
+                      <AccountTab />
+                    )}
+                </div>
+              </NestedModal>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* Мобильная версия NestedModal (Overlay) */}
+          <AnimatePresence>
+            {isOpen && activeTab && (
+               <div className="md:hidden">
+                 <NestedModal
+                    isOpen={true}
+                    onClose={() => {
+                        // На мобильном: закрываем модалку настроек полностью или делаем "Назад"?
+                        // В AboutModal мы делали setActiveSection(null).
+                        // Но здесь activeTab всегда установлен.
+                        // Если мы хотим "свернуть", то нужно состояние "мобильное меню активно".
+                        // Пока просто закроем всё модальное окно, как и было.
+                        onClose()
+                    }}
+                    title={activeCard?.title || ''}
+                    icon={activeCard?.icon || SettingsIcon}
+                    embedded={false}
+                  >
+                    <div className="pb-20">
+                       {activeTab === 'notifications' && (
+                      <NotificationsTab
+                        soundNotificationsEnabled={soundNotificationsEnabled}
+                        setSoundNotificationsEnabled={setSoundNotificationsEnabled}
+                        notificationSound={notificationSound}
+                        setNotificationSound={(val) => setNotificationSound(val as any)}
+                        notificationInterval={notificationInterval}
+                        setNotificationInterval={setNotificationInterval}
+                        customIntervalMinutes={customIntervalMinutes}
+                        setCustomIntervalMinutes={setCustomIntervalMinutes}
+                        breakRemindersEnabled={breakRemindersEnabled}
+                        setBreakRemindersEnabled={setBreakRemindersEnabled}
+                        breakReminderInterval={breakReminderInterval}
+                        setBreakReminderInterval={setBreakReminderInterval}
+                        overtimeAlertsEnabled={overtimeAlertsEnabled}
+                        setOvertimeAlertsEnabled={setOvertimeAlertsEnabled}
+                        overtimeWarningThreshold={overtimeWarningThreshold}
+                        setOvertimeWarningThreshold={setOvertimeWarningThreshold}
+                        overtimeCriticalThreshold={overtimeCriticalThreshold}
+                        setOvertimeCriticalThreshold={setOvertimeCriticalThreshold}
+                        overtimeSoundEnabled={overtimeSoundAlert}
+                        setOvertimeSoundEnabled={setOvertimeSoundAlert}
+                        dailyHours={dailyHours || 8}
+                        onTestSound={handleTestSound}
+                        onTestBreakReminder={handleTestBreakReminder}
+                        onTestOvertimeAlert={handleTestOvertimeAlert}
+                      />
+                    )}
+                    {activeTab === 'productivity' && (
+                      <ProductivityTab
+                        pomodoroEnabled={pomodoroEnabled}
+                        setPomodoroEnabled={setPomodoroEnabled}
+                        pomodoroAutoStartBreaks={pomodoroAutoStartBreaks}
+                        setPomodoroAutoStartBreaks={setPomodoroAutoStartBreaks}
+                        pomodoroAutoStartWork={pomodoroAutoStartWork}
+                        setPomodoroAutoStartWork={setPomodoroAutoStartWork}
+                        pomodoroSoundOnComplete={pomodoroSoundOnComplete}
+                        setPomodoroSoundOnComplete={setPomodoroSoundOnComplete}
+                        pomodoroShowNotifications={pomodoroShowNotifications}
+                        setPomodoroShowNotifications={setPomodoroShowNotifications}
+                        onTestPomodoroNotification={handleTestPomodoroNotification}
+                      />
+                    )}
+                    {activeTab === 'personalization' && (
+                      <PersonalizationTab
+                        faviconEnabled={faviconAnimationEnabled}
+                        setFaviconEnabled={setFaviconAnimationEnabled}
+                        faviconStyle={faviconAnimationStyle}
+                        setFaviconStyle={(val) => setFaviconAnimationStyle(val as any)}
+                        faviconColor={faviconAnimationColor}
+                        setFaviconColor={setFaviconAnimationColor}
+                        faviconSpeed={faviconAnimationSpeed}
+                        setFaviconSpeed={(val) => setFaviconAnimationSpeed(val as any)}
+                      />
+                    )}
+                     {activeTab === 'finance' && (
+                      <FinanceTab
+                        paymentDates={paymentDates}
+                        calendar={calendar}
+                        isPaymentDay={isPaymentDay}
+                        isInPeriod={isInPeriod}
+                        selectionState={selectionState}
+                        handleDayClick={handleDayClick}
+                        selection={selection}
+                        editingId={editingId}
+                        handleStartEdit={handleStartEdit}
+                        handleUpdateField={handleUpdateField}
+                        handleUpdatePeriodBoth={handleUpdatePeriodBoth}
+                        handleSaveEdit={handleSaveEdit}
+                        handleDeletePayment={handleDelete}
+                        handleCancelEdit={handleCancelEdit}
+                        handleToggleRepeat={handleToggleRepeat}
+                        handleUpdatePaymentDay={handleUpdatePaymentDay}
+                        draggedId={draggedId}
+                        handleDragStart={handleDragStart}
+                        handleDragEnd={handleDragEnd}
+                        handleDragOver={handleDragOver}
+                        handleDragEnter={handleDragEnter}
+                        handleDrop={handleDrop}
+                        handleAddPayment={handleAddPayment}
+                      />
+                    )}
+                    {activeTab === 'backups' && (
+                      <BackupsTab />
+                    )}
+                     {activeTab === 'workSchedule' && (
+                      <WorkScheduleTab
+                        scheduleTemplates={scheduleTemplates}
+                        selectedTemplate={selectedTemplate}
+                        onSelectTemplate={handleTemplateSelect}
+                        onCustomDayToggle={handleCustomDayToggle}
+                        selectedSchedule={selectedSchedule}
+                        dailyPlan={dailyPlan}
+                        monthlyPlan={monthlyPlan}
+                        weekStart={weekStart}
+                        onDailyPlanChange={setDailyPlan}
+                        onWeekStartChange={setWeekStart}
+                        animateStats={animateStats}
+                      />
+                    )}
+                    {activeTab === 'categories' && (
+                      <CategoriesTab />
+                    )}
+                    {activeTab === 'ai' && (
+                      <AITab />
+                    )}
+                    {activeTab === 'account' && (
+                      <AccountTab />
+                    )}
+                    </div>
+                  </NestedModal>
+               </div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Портал для уведомлений */}
+        {testNotification && createPortal(
+          <div className="fixed bottom-4 right-4 z-[999999] pointer-events-auto">
+             <Notification
               notification={testNotification}
               onClose={() => setTestNotification(null)}
             />
           </div>,
           document.body
         )}
+  
 
-      <BaseModal
-      isOpen={isOpen}
-      onClose={onClose}
-      title="Настройки"
-      titleIcon={SettingsIcon}
-      size="full"
-      closeOnOverlayClick={false}
-      fixedHeight={true}
-      nested={true}
-      footer={
-        <div className="flex gap-3">
-          <button
-            onClick={onClose}
-            className="flex-1 px-4 py-2 border border-gray-700 rounded-lg text-gray-300 hover:bg-gray-800 transition-colors font-semibold"
-          >
-            Отмена
-          </button>
-          <button
-            onClick={handleSave}
-            className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-semibold transition-colors"
-          >
-            Сохранить
-          </button>
-        </div>
-      }
-      className="flex flex-col max-w-7xl"
-    >
-      {/* Split View: Sidebar + Content */}
-      <div className={`flex flex-1 min-h-0 gap-0 -mx-6 ${isMobile ? 'flex-col' : ''}`}>
-        {/* Боковая навигация */}
-        {!isMobile && (
-        <div className="w-72 bg-gray-100/50 dark:bg-gray-800/50 border-r border-gray-200 dark:border-gray-700 pt-6 px-4 pb-4 sticky top-0 self-start">
-          <div className="space-y-2">
-            <button
-              onClick={() => setActiveTab('notifications')}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
-                activeTab === 'notifications'
-                  ? 'bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/30'
-                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-200/50 dark:hover:bg-gray-700/50 border border-transparent'
-              }`}
-            >
-              <Bell className="w-5 h-5 flex-shrink-0" />
-              <span className="font-medium text-sm">Уведомления</span>
-              <span className={`ml-auto px-2 py-0.5 rounded-md text-xs font-semibold ${
-                soundNotificationsEnabled || breakRemindersEnabled || overtimeAlertsEnabled
-                  ? 'bg-green-500/20 text-green-600 dark:text-green-400'
-                  : 'bg-gray-500/20 text-gray-600 dark:text-gray-400'
-              }`}>
-                {soundNotificationsEnabled || breakRemindersEnabled || overtimeAlertsEnabled ? 'ВКЛ' : 'ВЫКЛ'}
-              </span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab('productivity')}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
-                activeTab === 'productivity'
-                  ? 'bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/30'
-                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-200/50 dark:hover:bg-gray-700/50 border border-transparent'
-              }`}
-            >
-              <Timer className="w-5 h-5 flex-shrink-0" />
-              <span className="font-medium text-sm">Продуктивность</span>
-              <span className={`ml-auto px-2 py-0.5 rounded-md text-xs font-semibold ${
-                pomodoroEnabled
-                  ? 'bg-green-500/20 text-green-600 dark:text-green-400'
-                  : 'bg-gray-500/20 text-gray-600 dark:text-gray-400'
-              }`}>
-                {pomodoroEnabled ? 'ВКЛ' : 'ВЫКЛ'}
-              </span>
-            </button>
-
-                        <button
-              onClick={() => setActiveTab('personalization')}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
-                activeTab === 'personalization'
-                  ? 'bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/30'
-                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-200/50 dark:hover:bg-gray-700/50 border border-transparent'
-              }`}
-            >
-              <Palette className="w-5 h-5 flex-shrink-0" />
-              <span className="font-medium text-sm">Персонализация</span>
-            </button>
-
-
-
-                        <button
-              onClick={() => setActiveTab('finance')}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
-                activeTab === 'finance'
-                  ? 'bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/30'
-                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-200/50 dark:hover:bg-gray-700/50 border border-transparent'
-              }`}
-            >
-              <CreditCard className="w-5 h-5 flex-shrink-0" />
-              <span className="font-medium text-sm">Финансы</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab('workSchedule')}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
-                activeTab === 'workSchedule'
-                  ? 'bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/30'
-                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-200/50 dark:hover:bg-gray-700/50 border border-transparent'
-              }`}
-            >
-              <Clock className="w-5 h-5 flex-shrink-0" />
-              <span className="font-medium text-sm">Рабочий график</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab('categories')}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
-                activeTab === 'categories'
-                  ? 'bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/30'
-                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-200/50 dark:hover:bg-gray-700/50 border border-transparent'
-              }`}
-            >
-              <Folder className="w-5 h-5 flex-shrink-0" />
-              <span className="font-medium text-sm">Категории</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab('backups')}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
-                activeTab === 'backups'
-                  ? 'bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/30'
-                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-200/50 dark:hover:bg-gray-700/50 border border-transparent'
-              }`}
-            >
-              <HardDrive className="w-5 h-5 flex-shrink-0" />
-              <span className="font-medium text-sm">Бэкапы</span>
-            </button>
-
-
-          </div>
-        </div>
-        )}
-
-        {/* Мобильная навигация */}
-        {isMobile && (
-          <div className="bg-gray-100/50 dark:bg-gray-800/50 border-b border-gray-200 dark:border-gray-700 pt-6 px-3 pb-3">
-            <div className="flex gap-2 overflow-x-auto">
-              <button
-                onClick={() => setActiveTab('notifications')}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg whitespace-nowrap transition-all ${
-                  activeTab === 'notifications'
-                    ? 'bg-blue-500 text-white'
-                    : 'text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-700'
-                }`}
-              >
-                <Bell className="w-4 h-4" />
-                <span className="text-sm font-medium">Уведомления</span>
-              </button>
-                          <button
-              onClick={() => setActiveTab('productivity')}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
-                activeTab === 'productivity'
-                  ? 'bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/30'
-                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-200/50 dark:hover:bg-gray-700/50 border border-transparent'
-              }`}
-            >
-              <Timer className="w-5 h-5 flex-shrink-0" />
-              <span className="font-medium text-sm">Продуктивность</span>
-              <span className={`ml-auto px-2 py-0.5 rounded-md text-xs font-semibold ${
-                pomodoroEnabled
-                  ? 'bg-green-500/20 text-green-600 dark:text-green-400'
-                  : 'bg-gray-500/20 text-gray-600 dark:text-gray-400'
-              }`}>
-                {pomodoroEnabled ? 'ВКЛ' : 'ВЫКЛ'}
-              </span>
-            </button>
-                          <button
-              onClick={() => setActiveTab('personalization')}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
-                activeTab === 'personalization'
-                  ? 'bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/30'
-                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-200/50 dark:hover:bg-gray-700/50 border border-transparent'
-              }`}
-            >
-              <Palette className="w-5 h-5 flex-shrink-0" />
-              <span className="font-medium text-sm">Персонализация</span>
-            </button>
-
-                          <button
-              onClick={() => setActiveTab('finance')}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
-                activeTab === 'finance'
-                  ? 'bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/30'
-                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-200/50 dark:hover:bg-gray-700/50 border border-transparent'
-              }`}
-            >
-              <CreditCard className="w-5 h-5 flex-shrink-0" />
-              <span className="font-medium text-sm">Финансы</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab('workSchedule')}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
-                activeTab === 'workSchedule'
-                  ? 'bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/30'
-                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-200/50 dark:hover:bg-gray-700/50 border border-transparent'
-              }`}
-            >
-              <Clock className="w-5 h-5 flex-shrink-0" />
-              <span className="font-medium text-sm">Рабочий график</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab('categories')}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
-                activeTab === 'categories'
-                  ? 'bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/30'
-                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-200/50 dark:hover:bg-gray-700/50 border border-transparent'
-              }`}
-            >
-              <Folder className="w-5 h-5 flex-shrink-0" />
-              <span className="font-medium text-sm">Категории</span>
-            </button>
-
-              <button
-                onClick={() => setActiveTab('backups')}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg whitespace-nowrap transition-all ${
-                  activeTab === 'backups'
-                    ? 'bg-blue-500 text-white'
-                    : 'text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-700'
-                }`}
-              >
-                <HardDrive className="w-4 h-4" />
-                <span className="text-sm font-medium">Бэкапы</span>
-              </button>
-
-            </div>
-          </div>
-        )}
-
-        {/* Основной контент */}
-        <div className="flex-1 min-h-0 p-6 overflow-y-auto custom-scrollbar">
-          <AnimatedModalContent contentKey={`${activeTab}-${isOpen}`}>
-            {/* Таб: Уведомления */}
-            {activeTab === 'notifications' && (
-              <NotificationsTab
-                soundNotificationsEnabled={soundNotificationsEnabled}
-                setSoundNotificationsEnabled={setSoundNotificationsEnabled}
-                notificationSound={notificationSound}
-                setNotificationSound={(val) => setNotificationSound(val as any)}
-                notificationInterval={notificationInterval}
-                setNotificationInterval={setNotificationInterval}
-                customIntervalMinutes={customIntervalMinutes}
-                setCustomIntervalMinutes={setCustomIntervalMinutes}
-                breakRemindersEnabled={breakRemindersEnabled}
-                setBreakRemindersEnabled={setBreakRemindersEnabled}
-                breakReminderInterval={breakReminderInterval}
-                setBreakReminderInterval={setBreakReminderInterval}
-                overtimeAlertsEnabled={overtimeAlertsEnabled}
-                setOvertimeAlertsEnabled={setOvertimeAlertsEnabled}
-                overtimeWarningThreshold={overtimeWarningThreshold}
-                setOvertimeWarningThreshold={setOvertimeWarningThreshold}
-                overtimeCriticalThreshold={overtimeCriticalThreshold}
-                setOvertimeCriticalThreshold={setOvertimeCriticalThreshold}
-                overtimeSoundEnabled={overtimeSoundAlert}
-                setOvertimeSoundEnabled={setOvertimeSoundAlert}
-                dailyHours={dailyHours || 8}
-                onTestSound={handleTestSound}
-                onTestBreakReminder={handleTestBreakReminder}
-                onTestOvertimeAlert={handleTestOvertimeAlert}
-              />
-            )}
-
-                      {activeTab === 'productivity' && (
-              <ProductivityTab
-                pomodoroEnabled={pomodoroEnabled}
-                setPomodoroEnabled={setPomodoroEnabled}
-                pomodoroAutoStartBreaks={pomodoroAutoStartBreaks}
-                setPomodoroAutoStartBreaks={setPomodoroAutoStartBreaks}
-                pomodoroAutoStartWork={pomodoroAutoStartWork}
-                setPomodoroAutoStartWork={setPomodoroAutoStartWork}
-                pomodoroSoundOnComplete={pomodoroSoundOnComplete}
-                setPomodoroSoundOnComplete={setPomodoroSoundOnComplete}
-                pomodoroShowNotifications={pomodoroShowNotifications}
-                setPomodoroShowNotifications={setPomodoroShowNotifications}
-                onTestPomodoroNotification={handleTestPomodoroNotification}
-              />
-            )}
-
-            {activeTab === 'personalization' && (
-              <PersonalizationTab
-                faviconEnabled={faviconAnimationEnabled}
-                setFaviconEnabled={setFaviconAnimationEnabled}
-                faviconStyle={faviconAnimationStyle}
-                setFaviconStyle={setFaviconAnimationStyle}
-                faviconColor={faviconAnimationColor}
-                setFaviconColor={setFaviconAnimationColor}
-                faviconSpeed={faviconAnimationSpeed}
-                setFaviconSpeed={setFaviconAnimationSpeed}
-              />
-            )}
-
-            {activeTab === 'finance' && (
-              <FinanceTab
-                // Payments
-                paymentDates={paymentDates}
-                calendar={calendar}
-                isPaymentDay={isPaymentDay}
-                isInPeriod={isInPeriod}
-                selectionState={selectionState}
-                handleDayClick={handleDayClick}
-                selection={selection}
-                editingId={editingId}
-                handleStartEdit={handleStartEdit}
-                handleUpdateField={handleUpdateField}
-                handleUpdatePeriodBoth={handleUpdatePeriodBoth}
-                handleSaveEdit={handleSaveEdit}
-                handleDeletePayment={handleDelete}
-                handleCancelEdit={handleCancelEdit}
-                handleToggleRepeat={handleToggleRepeat}
-                handleUpdatePaymentDay={handleUpdatePaymentDay}
-                draggedId={draggedId}
-                handleDragStart={handleDragStart}
-                handleDragEnd={handleDragEnd}
-                handleDragOver={handleDragOver}
-                handleDragEnter={handleDragEnter}
-                handleDrop={handleDrop}
-                handleAddPayment={handleAddPayment}
-
-                // Categories
-                categories={categories}
-                entries={entries}
-                isAddingCategory={isAddingCategory}
-                setIsAddingCategory={setIsAddingCategory}
-                editingCategoryId={editingCategoryId}
-                categoryFormData={categoryFormData}
-                setCategoryFormData={setCategoryFormData}
-                categoryError={categoryError}
-                handleAddCategory={handleAddCategory}
-                handleCancelAddCategory={handleCancelAddCategory}
-                handleEditCategory={handleEditCategory}
-                handleSaveCategory={handleSaveCategory}
-                handleCancelEditCategory={handleCancelEditCategory}
-                handleDeleteCategory={handleDeleteCategory}
-                defaultCategory={defaultCategory}
-                setDefaultCategory={setDefaultCategory}
-                categoryNameInputRef={categoryNameInputRef}
-              />
-            )}
-
-          {/* Таб: Рабочий график */}
-          {activeTab === 'workSchedule' && (
-            <WorkScheduleTab
-              scheduleTemplates={scheduleTemplates}
-              selectedTemplate={selectedTemplate}
-              onSelectTemplate={handleTemplateSelect}
-              onCustomDayToggle={handleCustomDayToggle}
-              selectedSchedule={selectedSchedule}
-              dailyPlan={dailyPlan}
-              monthlyPlan={monthlyPlan}
-              weekStart={weekStart}
-              onDailyPlanChange={setDailyPlan}
-              onWeekStartChange={setWeekStart}
-              animateStats={animateStats}
-            />
-          )}
-
-          {/* Таб: Бэкапы */}
-          {activeTab === 'backups' && (
-            <BackupsTab />
-          )}
-
-          {/* Таб: Категории */}
-          {activeTab === 'categories' && (
-            <div key="categories-tab" className="space-y-4">
-              <div className="mb-6">
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Категории работ</h2>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Управление категориями для учета времени</p>
-              </div>
-
-              {!isAddingCategory && !editingCategoryId && (
-                <div className="mb-3">
-                  <button
-                    onClick={() => setIsAddingCategory(true)}
-                    className="w-full bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-normal hover-lift-scale click-shrink font-medium text-sm flex items-center justify-center gap-2"
-                  >
-                    <Plus className="w-4 h-4" />
-                    Добавить категорию
-                  </button>
-                </div>
-              )}
-
-              {(isAddingCategory || editingCategoryId) && (
-                <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3 mb-3">
-                  <h3 className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                    {editingCategoryId ? 'Редактировать категорию' : 'Добавить новую категорию'}
-                  </h3>
-                  <div className="space-y-2">
-                    <div className="flex flex-wrap items-end gap-2">
-                      <div className="flex-1 min-w-[150px]">
-                        <label className="block text-xs text-gray-600 dark:text-gray-400 mb-0.5">
-                          Название
-                        </label>
-                        <input
-                          ref={categoryNameInputRef}
-                          type="text"
-                          placeholder="Разработка"
-                          value={categoryFormData.name}
-                          onChange={e => setCategoryFormData({ ...categoryFormData, name: e.target.value })}
-                          className="w-full px-2 py-1.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-200 dark:focus:ring-blue-800 outline-none"
-                          onKeyDown={e => {
-                            if (e.key === 'Enter') {
-                              editingCategoryId ? handleSaveCategory() : handleAddCategory()
-                            }
-                          }}
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-xs text-gray-600 dark:text-gray-400 mb-0.5">
-                          Цвет
-                        </label>
-                        <div className="flex gap-0.5">
-                          <input
-                            type="color"
-                            value={categoryFormData.color}
-                            onChange={e => setCategoryFormData({ ...categoryFormData, color: e.target.value })}
-                            className="w-8 h-7 rounded border border-gray-300 dark:border-gray-600"
-                          />
-                          <input
-                            type="text"
-                            value={categoryFormData.color}
-                            onChange={e => setCategoryFormData({ ...categoryFormData, color: e.target.value })}
-                            className="w-20 px-1.5 py-1.5 text-xs rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-200 dark:focus:ring-blue-800 outline-none font-mono uppercase"
-                            maxLength={7}
-                          />
-                        </div>
-                      </div>
-
-                      <div>
-                        <label className="block text-xs text-gray-600 dark:text-gray-400 mb-0.5">
-                          Иконка
-                        </label>
-                        <IconSelect
-                          value={categoryFormData.icon}
-                          onChange={icon => setCategoryFormData({ ...categoryFormData, icon })}
-                          color={categoryFormData.color}
-                        />
-                      </div>
-
-                      <div className="flex items-center gap-1.5">
-                        {editingCategoryId ? (
-                          <>
-                            <button
-                              onClick={handleSaveCategory}
-                              className="bg-blue-600 text-white px-2 py-1.5 rounded-lg hover:bg-blue-700 transition-normal hover-lift-scale click-shrink font-medium text-xs whitespace-nowrap"
-                            >
-                              Сохранить
-                            </button>
-                            <button
-                              onClick={handleCancelEditCategory}
-                              className="px-2 py-1.5 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-normal hover-lift-scale click-shrink font-medium text-xs whitespace-nowrap"
-                            >
-                              Отмена
-                            </button>
-                          </>
-                        ) : (
-                          <>
-                            <button
-                              onClick={handleAddCategory}
-                              disabled={!categoryFormData.name.trim()}
-                              className="bg-blue-500 text-white px-2 py-1.5 rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-normal hover-lift-scale click-shrink font-medium text-xs whitespace-nowrap"
-                            >
-                              Добавить
-                            </button>
-                            <button
-                              onClick={handleCancelAddCategory}
-                              className="px-2 py-1.5 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-normal hover-lift-scale click-shrink font-medium text-xs whitespace-nowrap"
-                            >
-                              Отмена
-                            </button>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  {categoryError && (
-                    <div className="mt-3 p-2 bg-red-100 dark:bg-red-900/30 border border-red-300 dark:border-red-700 rounded-lg text-sm text-red-700 dark:text-red-400">
-                      {categoryError}
-                    </div>
-                  )}
-                </div>
-              )}
-
-              <div className="overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700">
-                <table className="w-full">
-                  <thead className="bg-gray-50 dark:bg-gray-800">
-                    <tr className="text-xs text-gray-600 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
-                      <th className="text-left py-2 px-3 font-semibold w-12 text-xs">Цвет</th>
-                      <th className="text-left py-2 px-3 font-semibold text-xs">Название</th>
-                      <th className="text-center py-2 px-3 font-semibold w-32 text-xs">Использовано</th>
-                      <th className="text-center py-2 px-3 font-semibold w-20 text-xs">По умолч.</th>
-                      <th className="text-center py-2 px-3 font-semibold w-28 text-xs">Действия</th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white dark:bg-gray-900">
-                    {categories.length === 0 ? (
-                      <tr>
-                        <td
-                          colSpan={5}
-                          className="text-center py-6 text-sm text-gray-500 dark:text-gray-400"
-                        >
-                          Нет категорий. Добавьте первую категорию.
-                        </td>
-                      </tr>
-                    ) : (
-                      categories.map((category, index) => {
-                        const usageCount = getCategoryUsageCount(category)
-                        const uniqueKey = category.id || `category-${index}`
-                        return (
-                          <tr
-                            key={uniqueKey}
-                            className={`${
-                              index < categories.length - 1
-                                ? 'border-b border-gray-100 dark:border-gray-800'
-                                : ''
-                            } hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors ${
-                              editingCategoryId === category.id ? 'bg-blue-50 dark:bg-blue-900/20' : ''
-                            }`}
-                          >
-                            <td className="py-2 px-3">
-                              {category.icon ? (
-                                (() => {
-                                  const CategoryIcon = getIcon(category.icon)
-                                  if (CategoryIcon) {
-                                    return (
-                                      <CategoryIcon
-                                        className="w-5 h-5"
-                                        style={{ color: category.color }}
-                                      />
-                                    )
-                                  }
-                                  return (
-                                    <div
-                                      className="w-5 h-5 rounded-full"
-                                      style={{ background: category.color }}
-                                    />
-                                  )
-                                })()
-                              ) : (
-                                <div
-                                  className="w-5 h-5 rounded-full"
-                                  style={{ background: category.color }}
-                                />
-                              )}
-                            </td>
-
-                            <td className="py-2 px-3">
-                              <span className="font-medium text-sm text-gray-800 dark:text-white">
-                                {category.name}
-                              </span>
-                            </td>
-
-                            <td className="py-2 px-3 text-center">
-                              <span className="text-xs text-gray-600 dark:text-gray-400">
-                                {usageCount}{' '}
-                                {usageCount === 1
-                                  ? 'раз'
-                                  : usageCount > 1 && usageCount < 5
-                                    ? 'раза'
-                                    : 'раз'}
-                              </span>
-                            </td>
-
-                            <td className="py-2 px-3 text-center">
-                              <button
-                                onClick={() => setDefaultCategory(category.id)}
-                                className={`p-1 rounded transition-colors hover-lift-scale click-shrink ${
-                                  defaultCategory === category.id || defaultCategory === category.name
-                                    ? 'text-yellow-500 dark:text-yellow-400'
-                                    : 'text-gray-300 dark:text-gray-600 hover:text-yellow-400 dark:hover:text-yellow-500'
-                                }`}
-                                title={
-                                  defaultCategory === category.id || defaultCategory === category.name
-                                    ? 'Категория по умолчанию'
-                                    : 'Сделать категорией по умолчанию'
-                                }
-                              >
-                                <Star
-                                  className="w-4 h-4"
-                                  fill={
-                                    defaultCategory === category.id || defaultCategory === category.name
-                                      ? 'currentColor'
-                                      : 'none'
-                                  }
-                                />
-                              </button>
-                            </td>
-
-                            <td className="py-2 px-3">
-                              <div className="flex items-center justify-center gap-1.5">
-                                <button
-                                  onClick={() => handleEditCategory(category)}
-                                  className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors p-1 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded hover-lift-scale click-shrink"
-                                  title="Редактировать"
-                                >
-                                  <Edit2 className="w-3.5 h-3.5" />
-                                </button>
-                                <button
-                                  onClick={() => handleDeleteCategory(category.id)}
-                                  className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors p-1 hover:bg-red-50 dark:hover:bg-red-900/30 rounded hover-lift-scale click-shrink"
-                                  title="Удалить"
-                                >
-                                  <Trash2 className="w-3.5 h-3.5" />
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
-                        )
-                      })
-                    )}
-                  </tbody>
-                </table>
-              </div>
-
-              <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                <p className="text-xs text-blue-800 dark:text-blue-300">
-                  💡 <strong>Подсказка:</strong> Категории используются для группировки записей времени.
-                </p>
-              </div>
-            </div>
-          )}
-      </AnimatedModalContent>
-        </div>
-      </div>
-
-      {/* Модальные окна подтверждения */}
-
-      <ConfirmModal {...categoryDeleteConfirm.confirmConfig} />
-    </BaseModal>
+      </BaseModal>
     </>
   )
 }

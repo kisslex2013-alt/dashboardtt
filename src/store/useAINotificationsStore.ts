@@ -47,6 +47,8 @@ interface AINotificationsState {
   dismissedRecommendations: string[]
   /** Последние даты показа для каждого типа (для контроля частоты) */
   lastShownDates: Record<string, string>
+  /** Время последнего полного анализа */
+  lastAnalyzed: string | null
 
   // ============ ТЕСТОВЫЙ РЕЖИМ ============
   /** Статистика тестовых уведомлений */
@@ -86,6 +88,8 @@ interface AINotificationsState {
   updateTestStats: () => void
   /** Отметить тип уведомления как показанный (для контроля частоты) */
   markAsShown: (type: string) => void
+  /** Установить время последнего анализа */
+  setLastAnalyzed: (date: string) => void
 
   /** Получить непрочитанные уведомления */
   getUnreadNotifications: () => AINotification[]
@@ -123,6 +127,7 @@ export const useAINotificationsStore = create<AINotificationsState>()(
       notifications: [],
       dismissedRecommendations: [],
       lastShownDates: {},
+      lastAnalyzed: null,
       testStats: {
         totalCreated: 0,
         currentCount: 0,
@@ -259,6 +264,9 @@ export const useAINotificationsStore = create<AINotificationsState>()(
           },
         })),
 
+      // Установить время последнего анализа
+      setLastAnalyzed: (date) => set({ lastAnalyzed: date }),
+
       // ============ ГЕТТЕРЫ ============
       getUnreadNotifications: () => {
         const state = get()
@@ -320,6 +328,7 @@ export const useAINotificationsStore = create<AINotificationsState>()(
         quietHours: state.quietHours,
         dismissedRecommendations: state.dismissedRecommendations,
         lastShownDates: state.lastShownDates,
+        lastAnalyzed: state.lastAnalyzed,
         testStats: state.testStats,
       }),
     }
@@ -331,6 +340,10 @@ export const useAINotificationsStore = create<AINotificationsState>()(
 /** Включены ли AI-уведомления */
 export const useAIEnabled = () =>
   useAINotificationsStore((state) => state.enabled)
+
+/** Время последнего анализа */
+export const useLastAnalyzed = () =>
+  useAINotificationsStore((state) => state.lastAnalyzed)
 
 /** Все уведомления */
 export const useNotifications = () =>

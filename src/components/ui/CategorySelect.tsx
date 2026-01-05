@@ -19,7 +19,8 @@ export function CategorySelect({
   onAddNew,
   placeholder = 'Выберите категорию',
   error,
-}: CategorySelectProps) {
+  className = '',
+}: CategorySelectProps & { className?: string }) {
   // ✅ ИСПРАВЛЕНО: Используем хуки для управления состоянием и анимациями
   const { isOpen, toggle, close } = useModal(false)
   const { shouldMount, isAnimating, isExiting } = useAnimationState({
@@ -37,7 +38,7 @@ export function CategorySelect({
   useEffect(() => {
     if (shouldMount && selectRef.current) {
       const updatePosition = () => {
-        const rect = selectRef.current.getBoundingClientRect()
+        const rect = selectRef.current!.getBoundingClientRect()
         const viewportHeight = window.innerHeight
         const viewportWidth = window.innerWidth
         const dropdownMaxHeight = 256 // max-h-64 = 256px
@@ -140,6 +141,7 @@ export function CategorySelect({
             bg-white/80 dark:bg-gray-800/80 appearance-none
             flex items-center justify-between
             transition-colors
+            ${className}
           `}
           aria-label="Выбрать категорию"
           aria-expanded={isOpen}

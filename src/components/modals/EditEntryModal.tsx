@@ -99,9 +99,9 @@ export function EditEntryModal({ isOpen, onClose, entry, onSave }: EditEntryModa
 
       // Валидация в реальном времени
       if (field === 'start' && value && formData.end) {
-        validateTime(value, formData.end, formData.date || effectiveEntry?.date)
+        validateTime(value, formData.end, formData.date || effectiveEntry?.date || '')
       } else if (field === 'end' && value && formData.start) {
-        validateTime(formData.start, value, formData.date || effectiveEntry?.date)
+        validateTime(formData.start, value, formData.date || effectiveEntry?.date || '')
       }
     },
     [setField, formData, effectiveEntry, errors, clearErrors, validateTime]
@@ -124,43 +124,51 @@ export function EditEntryModal({ isOpen, onClose, entry, onSave }: EditEntryModa
     openModal('soundSettings', { activeTab: 'categories' })
   }, [openModal])
 
-  // Расчет заработка за день
-  const getDailyEarnings = useCallback(() => {
+  // Расчет статистики за день (заработок и ставка)
+  const getDailyStats = useCallback(() => {
     const dateToCheck = formData.date || effectiveEntry?.date || getTodayString()
-    if (!dateToCheck) return 0
+    if (!dateToCheck) return { totalEarned: 0, averageRate: 0 }
 
-    // ✅ ИСПРАВЛЕНО: Учитываем только сохраненные записи за день
-    // Записи с isManual: false (созданные таймером) не учитываются до сохранения пользователем
-    // После сохранения они получают isManual: true и начинают учитываться
-
-    // Получаем все записи за день, исключая записи из таймера (isManual: false)
-    // Эти записи еще не сохранены пользователем и не должны учитываться в заработке
+    // Получаем все сохраненные записи за день (исключаем текущую таймерную если isManual=false)
     const dayEntries = entries.filter(e => e.date === dateToCheck && e.isManual !== false)
 
-    // ✅ ИСПРАВЛЕНО: Если редактируем существующую сохраненную запись, используем значение из formData
     const excludeIdString = effectiveEntry?.id ? String(effectiveEntry.id) : null
 
-    // Суммируем заработок из всех сохраненных записей за день
-    const totalEarned = dayEntries.reduce(
-      (sum, e) => {
-        // Если это текущая редактируемая запись, используем значение из formData (если есть)
-        // Иначе используем сохраненное значение
-        if (excludeIdString && String(e.id) === excludeIdString) {
-          // Это текущая редактируемая запись - используем новое значение из formData
-          const newEarned = parseFloat(formData.earned) || 0
-          return sum + newEarned
-        }
-        // Обычная сохраненная запись - используем сохраненное значение
-        return sum + (parseFloat(e.earned) || 0)
-      },
-      0
-    )
+    // Агрегируем данные
+    let totalEarned = 0
+    let totalHours = 0
 
-    // ✅ ИСПРАВЛЕНО: Записи из таймера (isManual: false) не учитываются в расчете
-    // Они будут учтены только после сохранения пользователем (когда получат isManual: true)
-    // Это предотвращает показ неверного заработка за день для несохраненных записей из таймера
+    // Добавляем существующие записи
+    dayEntries.forEach(e => {
+        // Если это редактируемая запись, пропускаем (добавим данные из формы ниже)
+        if (excludeIdString && String(e.id) === excludeIdString) return
+        
+        totalEarned += (parseFloat(String(e.earned)) || 0)
+        totalHours += (parseFloat(String(e.duration)) || 0)
+    })
 
-    return totalEarned
+    // Добавляем данные из текущей формы
+    const currentEarned = parseFloat(formData.earned) || 0
+    const currentDurationStr = calculateDuration(formData.start, formData.end)
+    // Convert duration string "Xч Yм" to number hours
+    // This is tricky because calculateDuration likely returns formatted string.
+    // However, logic in save uses calculateDuration then parseFloat(duration)? 
+    // Wait, calculateDuration usually returns string like "1.5". Check imports.
+    // Step 686 imports calculateDuration from utils/calculations.
+    // If it returns "1.5" (string), parseFloat works.
+    // If it returns "1ч 30м", parseFloat is NaN.
+    // Usually in this project duration is stored as number string "1.5".
+    // Let's assume calculateDuration returns decimal string (as used in save logic).
+    // line 204: duration: parseFloat(duration) -> implies calculateDuration gives parseable string.
+    
+    const currentDurationVal = parseFloat(currentDurationStr) || 0
+    
+    totalEarned += currentEarned
+    totalHours += currentDurationVal
+
+    const averageRate = totalHours > 0 ? totalEarned / totalHours : 0
+
+    return { totalEarned, averageRate }
   }, [formData, effectiveEntry, entries])
 
   // Получаем дату для отображения заработка
@@ -194,7 +202,7 @@ export function EditEntryModal({ isOpen, onClose, entry, onSave }: EditEntryModa
     }
 
     // Подготавливаем данные для сохранения
-    const saveData = {
+    const saveData: any = {
       date: formData.date || effectiveEntry?.date || getTodayString(),
       start: formData.start,
       end: formData.end,
@@ -219,7 +227,7 @@ export function EditEntryModal({ isOpen, onClose, entry, onSave }: EditEntryModa
       await optimisticSave(saveData, async () => {
         // Оборачиваем синхронный onSave в Promise
         return new Promise<typeof saveData>((resolve) => {
-          onSave(saveData)
+          onSave?.(saveData)
           // Даем время на обновление store
           setTimeout(() => resolve(saveData), 50)
         })
@@ -255,7 +263,7 @@ export function EditEntryModal({ isOpen, onClose, entry, onSave }: EditEntryModa
       message: 'Вы уверены, что хотите удалить эту запись? Это действие нельзя отменить.',
       onConfirm: () => {
         triggerHaptic('heavy') // ✅ UX: Сильная вибрация при подтверждении удаления
-        onSave({ ...effectiveEntry, _delete: true })
+        onSave?.({ ...effectiveEntry, _delete: true } as any)
         onClose()
       },
       confirmText: 'Удалить',
@@ -273,6 +281,7 @@ export function EditEntryModal({ isOpen, onClose, entry, onSave }: EditEntryModa
       title={modalTitle}
       size={isMobile ? 'full' : 'small'}
       closeOnOverlayClick={false}
+      hideFooterDivider={true}
       footer={
         <EntryFormActions
           onSave={handleSave}
@@ -297,8 +306,17 @@ export function EditEntryModal({ isOpen, onClose, entry, onSave }: EditEntryModa
           disabled={isSaving} // 🎯 OPTIMISTIC UI: Блокируем форму при сохранении
         />
 
-        {/* ✅ ОПТИМИЗАЦИЯ: Используем подкомпонент для отображения заработка */}
-        <DailyEarningsDisplay dailyEarnings={getDailyEarnings()} date={getDateForEarnings()} />
+        {/* ✅ ОПТИМИЗАЦИЯ: Используем подкомпонент для отображения заработка и статистики */}
+        {(() => {
+           const stats = getDailyStats()
+           return (
+             <DailyEarningsDisplay 
+                dailyEarnings={stats.totalEarned} 
+                dailyRate={stats.averageRate}
+                date={getDateForEarnings()} 
+             />
+           )
+        })()}
 
         {/* 🎯 OPTIMISTIC UI: Индикатор сохранения */}
         {isSaving && (

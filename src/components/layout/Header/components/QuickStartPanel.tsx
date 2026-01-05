@@ -58,8 +58,8 @@ export function QuickStartPanel() {
               right: `${quickStart.dropdownPosition.right}px`,
             }}
           >
-            <div className="glass-effect rounded-xl p-2 shadow-2xl border border-gray-200 dark:border-gray-700 backdrop-blur-lg bg-white/95 dark:bg-gray-800/95">
-              <div className="flex flex-col gap-1 max-h-[400px] overflow-y-auto">
+            <div className="glass-effect rounded-xl p-2 shadow-2xl border border-gray-200 dark:border-gray-700">
+              <div className="flex flex-col gap-1 max-h-[400px] overflow-y-auto overflow-x-hidden custom-scrollbar">
                 {categories.map(category => {
                   const IconComponent = getIcon(category.icon)
                   return (
@@ -68,8 +68,8 @@ export function QuickStartPanel() {
                       onClick={() => handleQuickStart(category.name)}
                       disabled={isRunning}
                       className={`
-                        flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium
-                        transition-all duration-200 text-left
+                        flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium w-full
+                        transition-colors duration-200 text-left
                         bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600
                         text-gray-900 dark:text-white
                         ${

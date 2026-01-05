@@ -1,0 +1,79 @@
+# Antigravity Ignore File
+# Исключает папки и файлы из контекста AI-ассистента
+# Экономит токены, исключая нерелевантные данные
+
+# ===== Зависимости =====
+node_modules/
+.pnpm/
+
+# ===== Сборка и билды =====
+dist/
+build/
+.next/
+out/
+.vite/
+
+# ===== Кэши =====
+.cache/
+.parcel-cache/
+.turbo/
+coverage/
+
+# ===== Логи =====
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ===== Переменные окружения =====
+.env
+.env.*
+!.env.example
+
+# ===== IDE и редакторы =====
+.idea/
+.vscode/settings.json
+*.swp
+*.swo
+
+# ===== Тестовые данные и моки =====
+__mocks__/
+__tests__/fixtures/
+*.snap
+
+# ===== Большие медиа-файлы =====
+*.mp4
+*.webm
+*.mp3
+*.wav
+*.ogg
+*.pdf
+*.zip
+*.tar.gz
+
+# ===== Публичные ассеты (картинки) =====
+public/assets/
+public/images/
+src/assets/images/
+
+# ===== Документация (не нужна для кода) =====
+docs/researches/
+*.pdf
+
+# ===== Lock-файлы (огромные) =====
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# ===== Миграции и бэкапы =====
+migrations/
+backups/
+*.backup
+*.bak
+
+# ===== Генерируемые файлы =====
+*.map
+*.d.ts.map
+sw.js
+workbox-*.js

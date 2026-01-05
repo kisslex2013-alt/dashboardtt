@@ -2,11 +2,14 @@ import { useMemo, useDeferredValue } from 'react'
 import { Clock, DollarSign, TrendingUp, Calendar, Moon } from '../../utils/icons'
 import { useEntries } from '../../store/useEntriesStore'
 import { useIsMobile } from '../../hooks/useIsMobile'
-import { calculateDuration } from '../../utils/calculations'
-import { timeToMinutes } from '../../utils/dateHelpers'
 import { useWorkerCalculation } from '../../hooks/useWorkerCalculation'
 import { SkeletonGrid } from '../ui/SkeletonCard'
 import { StatCard } from './StatCard'
+import {
+  getFilteredEntries as getFilteredEntriesUtil,
+  calculateDetailedStats as calculateDetailedStatsUtil,
+  DashboardStats,
+} from '../../utils/statisticsCalculations'
 
 /**
  * 📊 Расширенная панель статистики с 6 карточками показателей
@@ -26,194 +29,41 @@ import { StatCard } from './StatCard'
  * @param {string} customDateFrom - начальная дата для кастомного периода
  * @param {string} customDateTo - конечная дата для кастомного периода
  */
+import { TimeEntry } from '../../types'
+
+interface StatisticsDashboardProps {
+  compareMode?: boolean
+  periodFilter?: string
+  customDateFrom?: string | null
+  customDateTo?: string | null
+}
+
+// DashboardStats imported from utils/statisticsCalculations
+
 export function StatisticsDashboard({
   compareMode = false,
   periodFilter = 'month',
   customDateFrom = null,
   customDateTo = null,
-}) {
+}: StatisticsDashboardProps) {
   // ✅ ОПТИМИЗАЦИЯ: Используем атомарный селектор для минимизации ре-рендеров
   const entries = useEntries()
   const isMobile = useIsMobile()
 
   /**
    * Фильтрует записи по заданному периоду
+   * Использует оптимизированную функцию из утилит
    */
-  const getFilteredEntries = (filter, dateFrom, dateTo) => {
-    const now = new Date()
-
-    return entries.filter(entry => {
-      const entryDate = new Date(entry.date)
-
-      switch (filter) {
-        case 'today': {
-          return entryDate.toDateString() === now.toDateString()
-        }
-
-        case 'week': {
-          const startOfWeek = new Date(now)
-          startOfWeek.setDate(now.getDate() - now.getDay() + 1) // Понедельник
-          startOfWeek.setHours(0, 0, 0, 0)
-          const endOfWeek = new Date(startOfWeek)
-          endOfWeek.setDate(startOfWeek.getDate() + 6)
-          endOfWeek.setHours(23, 59, 59, 999)
-          return entryDate >= startOfWeek && entryDate <= endOfWeek
-        }
-
-        case 'month': {
-          return (
-            entryDate.getFullYear() === now.getFullYear() && entryDate.getMonth() === now.getMonth()
-          )
-        }
-
-        case 'year': {
-          return entryDate.getFullYear() === now.getFullYear()
-        }
-
-        case 'custom': {
-          if (!dateFrom || !dateTo) return true
-          const from = new Date(dateFrom)
-          from.setHours(0, 0, 0, 0)
-          const to = new Date(dateTo)
-          to.setHours(23, 59, 59, 999)
-          return entryDate >= from && entryDate <= to
-        }
-
-        default:
-          return true
-      }
-    })
+  const getFilteredEntries = (filter: string, dateFrom: string | null, dateTo: string | null) => {
+    return getFilteredEntriesUtil(entries, filter, dateFrom, dateTo)
   }
 
   /**
    * Рассчитывает детальную статистику для массива записей
+   * Использует оптимизированную функцию из утилит
    */
-  const calculateDetailedStats = (data, filter) => {
-    if (data.length === 0) {
-      return {
-        totalHours: 0,
-        totalEarned: 0,
-        avgRate: 0,
-        daysWorked: 0,
-        totalBreaks: 0,
-        daysOff: 0,
-      }
-    }
-
-    // Общие часы и заработок
-    const totalHours = data.reduce((sum, e) => {
-      if (!e.start || !e.end) return sum
-      return sum + parseFloat(calculateDuration(e.start, e.end))
-    }, 0)
-
-    const totalEarned = data.reduce((sum, e) => sum + (parseFloat(e.earned) || 0), 0)
-
-    // Расчет перерывов между сессиями
-    const breaksByDay = data.reduce((acc, entry) => {
-      if (!acc[entry.date]) {
-        acc[entry.date] = []
-      }
-      acc[entry.date].push(entry)
-      return acc
-    }, {})
-
-    let totalBreakMinutes = 0
-    Object.values(breaksByDay).forEach(dayEntries => {
-      const sorted = [...dayEntries].sort((a, b) => a.start.localeCompare(b.start))
-      for (let i = 1; i < sorted.length; i++) {
-        const prevEnd = timeToMinutes(sorted[i - 1].end)
-        const currentStart = timeToMinutes(sorted[i].start)
-        const breakMinutes = (currentStart + 24 * 60 - prevEnd) % (24 * 60)
-        if (breakMinutes > 0 && breakMinutes < 12 * 60) {
-          // Игнорируем перерывы > 12 часов
-          totalBreakMinutes += breakMinutes
-        }
-      }
-    })
-
-    // Вычисляем рабочие дни (уникальные даты с записями)
-    const workedDays = new Set(data.map(e => e.date))
-    const daysWorked = workedDays.size
-
-    // Вычисляем выходные дни (дни БЕЗ записей в периоде)
-    let daysOff = 0
-    const now = new Date()
-
-    if (filter === 'today') {
-      daysOff = data.length === 0 ? 1 : 0
-    } else if (filter === 'week') {
-      // Текущая неделя (понедельник-воскресенье)
-      const startOfWeek = new Date(now)
-      startOfWeek.setDate(now.getDate() - now.getDay() + 1)
-      for (let i = 0; i < 7; i++) {
-        const date = new Date(startOfWeek)
-        date.setDate(startOfWeek.getDate() + i)
-        const dateStr = date.toISOString().split('T')[0]
-        if (!workedDays.has(dateStr)) {
-          daysOff++
-        }
-      }
-    } else if (filter === 'month') {
-      // Текущий месяц
-      const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate()
-      for (let i = 1; i <= daysInMonth; i++) {
-        const date = new Date(now.getFullYear(), now.getMonth(), i)
-        const dateStr = date.toISOString().split('T')[0]
-        if (!workedDays.has(dateStr)) {
-          daysOff++
-        }
-      }
-    } else if (filter === 'year') {
-      // Текущий год
-      const startOfYear = new Date(now.getFullYear(), 0, 1)
-      const endOfYear = new Date(now.getFullYear(), 11, 31)
-      const daysInYear = Math.ceil((endOfYear - startOfYear) / (1000 * 60 * 60 * 24)) + 1
-      for (let i = 0; i < daysInYear; i++) {
-        const date = new Date(startOfYear)
-        date.setDate(startOfYear.getDate() + i)
-        const dateStr = date.toISOString().split('T')[0]
-        if (!workedDays.has(dateStr)) {
-          daysOff++
-        }
-      }
-    } else if (filter === 'custom' && customDateFrom && customDateTo) {
-      // Кастомный период
-      const from = new Date(customDateFrom)
-      const to = new Date(customDateTo)
-      const daysInRange = Math.ceil((to - from) / (1000 * 60 * 60 * 24)) + 1
-      for (let i = 0; i < daysInRange; i++) {
-        const date = new Date(from)
-        date.setDate(from.getDate() + i)
-        const dateStr = date.toISOString().split('T')[0]
-        if (!workedDays.has(dateStr)) {
-          daysOff++
-        }
-      }
-    } else {
-      // Все время
-      if (data.length > 0) {
-        const firstDate = new Date(Math.min(...data.map(e => new Date(e.date))))
-        const today = new Date()
-        const daysInRange = Math.ceil((today - firstDate) / (1000 * 60 * 60 * 24)) + 1
-        for (let i = 0; i < daysInRange; i++) {
-          const date = new Date(firstDate)
-          date.setDate(firstDate.getDate() + i)
-          const dateStr = date.toISOString().split('T')[0]
-          if (!workedDays.has(dateStr) && date <= today) {
-            daysOff++
-          }
-        }
-      }
-    }
-
-    return {
-      totalHours,
-      totalEarned,
-      avgRate: totalHours > 0 ? totalEarned / totalHours : 0,
-      daysWorked,
-      totalBreaks: totalBreakMinutes / 60,
-      daysOff,
-    }
+  const calculateDetailedStats = (data: TimeEntry[], filter: string): DashboardStats => {
+    return calculateDetailedStatsUtil(data, filter)
   }
 
   // Получаем статистику для текущего периода (мемоизировано для оптимизации)
@@ -228,7 +78,7 @@ export function StatisticsDashboard({
   const { result: workerStats, isLoading: workerLoading } = useWorkerCalculation(
     shouldUseWorker ? filtered : [],
     'statistics',
-    periodFilter
+    periodFilter as any as any
   )
 
   // ✅ УПРОЩЕННАЯ ВЕРСИЯ: Без useTransition - убрана логика переходов, вызывавшая мерцание
@@ -236,7 +86,7 @@ export function StatisticsDashboard({
   const currentStats = useMemo(() => {
     if (shouldUseWorker) {
       return (
-        workerStats || {
+        (workerStats as DashboardStats) || {
           totalHours: 0,
           totalEarned: 0,
           avgRate: 0,
@@ -309,7 +159,7 @@ export function StatisticsDashboard({
       <div className="mb-6">
         <SkeletonGrid
           count={6}
-          variant="statistic"
+          variant="stat"
           columns={3}
           className="grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6"
         />
@@ -321,7 +171,7 @@ export function StatisticsDashboard({
   if (isMobile) {
     return (
       <div className="mb-6 px-4 sm:px-6">
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           {/* Карточка 1: Затрачено */}
           <StatCard
             title="Затрачено"
@@ -336,7 +186,7 @@ export function StatisticsDashboard({
             comparison={
               compareMode
                 ? { current: statsForDisplay.totalHours, previous: previousStats?.totalHours }
-                : null
+                : undefined
             }
             periodFilter={periodFilter}
           />
@@ -355,7 +205,7 @@ export function StatisticsDashboard({
             comparison={
               compareMode
                 ? { current: statsForDisplay.totalBreaks, previous: previousStats?.totalBreaks }
-                : null
+                : undefined
             }
             periodFilter={periodFilter}
           />
@@ -375,7 +225,7 @@ export function StatisticsDashboard({
             comparison={
               compareMode
                 ? { current: statsForDisplay.totalEarned, previous: previousStats?.totalEarned }
-                : null
+                : undefined
             }
             periodFilter={periodFilter}
           />
@@ -395,7 +245,7 @@ export function StatisticsDashboard({
             comparison={
               compareMode
                 ? { current: statsForDisplay.avgRate, previous: previousStats?.avgRate }
-                : null
+                : undefined
             }
             periodFilter={periodFilter}
           />
@@ -414,7 +264,7 @@ export function StatisticsDashboard({
             comparison={
               compareMode
                 ? { current: statsForDisplay.daysWorked, previous: previousStats?.daysWorked }
-                : null
+                : undefined
             }
             periodFilter={periodFilter}
           />
@@ -433,7 +283,7 @@ export function StatisticsDashboard({
             comparison={
               compareMode
                 ? { current: statsForDisplay.daysOff || 0, previous: previousStats?.daysOff || 0 }
-                : null
+                : undefined
             }
             periodFilter={periodFilter}
           />
@@ -459,7 +309,7 @@ export function StatisticsDashboard({
         comparison={
           compareMode
             ? { current: statsForDisplay.totalHours, previous: previousStats?.totalHours }
-            : null
+            : undefined
         }
         periodFilter={periodFilter}
       />
@@ -478,7 +328,7 @@ export function StatisticsDashboard({
         comparison={
           compareMode
             ? { current: statsForDisplay.totalBreaks, previous: previousStats?.totalBreaks }
-            : null
+            : undefined
         }
         periodFilter={periodFilter}
       />
@@ -498,7 +348,7 @@ export function StatisticsDashboard({
         comparison={
           compareMode
             ? { current: statsForDisplay.totalEarned, previous: previousStats?.totalEarned }
-            : null
+            : undefined
         }
         periodFilter={periodFilter}
       />
@@ -518,7 +368,7 @@ export function StatisticsDashboard({
         comparison={
           compareMode
             ? { current: statsForDisplay.avgRate, previous: previousStats?.avgRate }
-            : null
+            : undefined
         }
         periodFilter={periodFilter}
       />
@@ -537,7 +387,7 @@ export function StatisticsDashboard({
         comparison={
           compareMode
             ? { current: statsForDisplay.daysWorked, previous: previousStats?.daysWorked }
-            : null
+            : undefined
         }
         periodFilter={periodFilter}
       />
@@ -556,7 +406,7 @@ export function StatisticsDashboard({
         comparison={
           compareMode
             ? { current: statsForDisplay.daysOff || 0, previous: previousStats?.daysOff || 0 }
-            : null
+            : undefined
         }
         periodFilter={periodFilter}
       />

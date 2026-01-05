@@ -3,13 +3,13 @@
  *
  * Унифицированная карточка для секции настроек.
  * Features:
- * - Toggle в заголовке
- * - Collapse/expand анимация
+ * - Toggle в заголовке (вкл/выкл)
  * - Иконка и описание
+ * - Контент всегда виден (без аккордеона)
  */
 
-import { useState, ReactNode } from 'react'
-import { ChevronDown, LucideIcon } from 'lucide-react'
+import { ReactNode } from 'react'
+import { LucideIcon } from 'lucide-react'
 
 interface SettingsCardProps {
   /** Заголовок карточки */
@@ -28,7 +28,7 @@ interface SettingsCardProps {
   children: ReactNode
   /** Показывать контент только если enabled */
   collapseOnDisable?: boolean
-  /** Начальное состояние collapse */
+  /** @deprecated - не используется (контент всегда открыт) */
   defaultExpanded?: boolean
   /** Дополнительные классы */
   className?: string
@@ -43,28 +43,23 @@ export function SettingsCard({
   onToggle,
   children,
   collapseOnDisable = true,
-  defaultExpanded = true,
   className = '',
 }: SettingsCardProps) {
-  const [isExpanded, setIsExpanded] = useState(defaultExpanded)
-
-  const shouldShowContent = collapseOnDisable ? enabled && isExpanded : isExpanded
+  // Контент показывается если: нет collapseOnDisable ИЛИ enabled = true
+  const shouldShowContent = !collapseOnDisable || enabled
 
   return (
     <div
       className={`
         glass-effect rounded-xl border border-gray-200 dark:border-gray-700
-        overflow-hidden transition-all duration-300
+        overflow-hidden relative
         ${!enabled && collapseOnDisable ? 'opacity-75' : ''}
         ${className}
       `}
     >
       {/* Header */}
       <div className="flex items-center justify-between p-4 gap-4">
-        <div
-          className="flex items-center gap-3 flex-1 cursor-pointer"
-          onClick={() => setIsExpanded(!isExpanded)}
-        >
+        <div className="flex items-center gap-3 flex-1">
           {Icon && (
             <div className={`
               p-2 rounded-lg transition-colors
@@ -87,14 +82,6 @@ export function SettingsCard({
               </p>
             )}
           </div>
-
-          {/* Expand indicator */}
-          <ChevronDown
-            className={`
-              w-5 h-5 text-gray-400 transition-transform duration-200
-              ${isExpanded ? 'rotate-180' : ''}
-            `}
-          />
         </div>
 
         {/* Toggle */}
@@ -121,19 +108,14 @@ export function SettingsCard({
         )}
       </div>
 
-      {/* Content */}
-      <div
-        className={`
-          overflow-hidden transition-all duration-300 ease-in-out
-          ${shouldShowContent ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'}
-        `}
-      >
+      {/* Content - всегда видим, если enabled или collapseOnDisable = false */}
+      {shouldShowContent && (
         <div className="px-4 pb-4 pt-0 border-t border-gray-100 dark:border-gray-700/50">
           <div className="pt-4">
             {children}
           </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }

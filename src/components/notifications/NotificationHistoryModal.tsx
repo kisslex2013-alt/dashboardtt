@@ -117,8 +117,11 @@ export function NotificationHistoryModal({
       closeOnOverlayClick={false}
       titleIcon={History}
       size="full"
+      fixedHeight={true}
     >
-      <div className="space-y-4">
+      <div className="flex flex-col h-full">
+        {/* Фиксированный header */}
+        <div className="flex-shrink-0 space-y-4 pb-4">
         {/* Поиск */}
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -144,11 +147,11 @@ export function NotificationHistoryModal({
             <option value="all">Все типы</option>
             <option value="burnout-warning">🔥 Выгорание</option>
             <option value="goal-risk">⚠️ Риск цели</option>
-            <option value="monthly-forecast">📊 Прогноз</option>
+            <option value="monthly-forecast">📈 Прогноз</option>
             <option value="productivity-pattern">💡 Паттерн</option>
             <option value="inefficient-category">⏱️ Неэффективность</option>
             <option value="achievement">🏆 Достижение</option>
-            <option value="weekly-insight">💡 Инсайт</option>
+            <option value="weekly-insight">📊 Инсайт</option>
             <option value="anomaly">🔍 Аномалия</option>
           </select>
 
@@ -180,7 +183,7 @@ export function NotificationHistoryModal({
           </select>
 
           {/* Тестовые */}
-          <label className="flex items-center gap-2 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-sm">
+          <label className="flex items-center gap-2 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-sm cursor-pointer">
             <input
               type="checkbox"
               checked={showTestOnly}
@@ -198,36 +201,11 @@ export function NotificationHistoryModal({
           >
             <Filter className="w-4 h-4" />
           </button>
-
-          {/* Очистка тестовых */}
-          {testStats.currentCount > 0 && (
-            <button
-              onClick={handleClearTests}
-              className="ml-auto px-3 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm transition-colors flex items-center gap-2"
-            >
-              <Trash2 className="w-4 h-4" />
-              Очистить тестовые ({testStats.currentCount})
-            </button>
-          )}
+        </div>
         </div>
 
-        {/* Статистика */}
-        <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
-          <span>
-            Найдено: {filteredNotifications.length} из {allNotifications.length}
-          </span>
-          {testStats.totalCreated > 0 && (
-            <span className="text-purple-600 dark:text-purple-400">
-              Создано тестовых: {testStats.totalCreated}
-            </span>
-          )}
-        </div>
-
-        {/* Список уведомлений */}
-        <div
-          className="space-y-2 overflow-y-auto"
-          style={{ maxHeight: '60vh' }}
-        >
+        {/* Скроллящийся список уведомлений */}
+        <div className="flex-1 overflow-y-auto min-h-0 space-y-2 py-2">
           {filteredNotifications.length === 0 ? (
             <EmptyState
               title="Уведомлений не найдено"
@@ -248,6 +226,19 @@ export function NotificationHistoryModal({
             ))
           )}
         </div>
+
+        {/* Фиксированная кнопка очистки тестовых внизу */}
+        {testStats.currentCount > 0 && (
+          <div className="flex-shrink-0 flex justify-end pt-3 border-t border-gray-200 dark:border-gray-700">
+            <button
+              onClick={handleClearTests}
+              className="px-3 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm transition-colors flex items-center gap-2"
+            >
+              <Trash2 className="w-4 h-4" />
+              Очистить тестовые ({testStats.currentCount})
+            </button>
+          </div>
+        )}
       </div>
     </BaseModal>
   )

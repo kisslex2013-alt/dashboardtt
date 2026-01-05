@@ -1,16 +1,22 @@
-# Project Brief
+# Краткое описание проекта (Project Brief)
 
-## Overview
-Antigravity Dashboardtt is a comprehensive dashboard application designed for tracking metrics, managing voting/effects, and visualizing analytics data. The project emphasizes a premium, dynamic user interface with high performance and offline capabilities.
+## Обзор
+**Time Tracker Dashboard** — комплексный дашборд для отслеживания рабочего времени, управления финансами фриланса и визуализации аналитики. Проект делает акцент на премиальном, динамичном интерфейсе с высокой производительностью и возможностями offline-работы.
 
-## Core Goals
-- **User Experience**: delivering a "wow" factor with smooth animations, dark mode, and responsive design.
-- **Performance**: ensuring 60fps animations and fast load times (lazy loading, code splitting).
-- **Stability**: eliminating UI freezes during rapid interactions (voting).
-- **Maintainability**: using strict TypeScript typing, clean component architecture, and consistent code patterns.
+## Основные цели
+- **Пользовательский опыт**: Создание "wow"-эффекта с помощью плавных анимаций, тёмной темы и адаптивного дизайна.
+- **Производительность**: Обеспечение 60fps анимаций и быстрой загрузки (lazy loading, code splitting, Web Workers).
+- **Стабильность**: Исключение зависаний UI при быстрых взаимодействиях.
+- **Поддерживаемость**: Строгая TypeScript типизация, чистая архитектура компонентов и последовательные паттерны кода.
 
-## Key Features
-- **Dashboard**: Real-time metrics and widget-based layout.
-- **Analytics**: Charts (Dynamics, Trends) for data visualization.
-- **Voting/Effects**: Interactive voting system with immediate visual feedback.
-- **Settings**: Customizable themes, user profile, and application preferences.
+## Ключевые возможности
+- **Dashboard**: Метрики в реальном времени и layout на основе виджетов.
+- **Записи времени**: CRUD-операции с категориями, ставками и заработком.
+- **Аналитика**: Графики (Dynamics, Trends, Heatmap) для визуализации данных.
+- **AI-уведомления**: Умные оповещения о рисках выгорания, достижении целей и аномалиях.
+- **Настройки**: Настраиваемые темы, профиль пользователя и предпочтения приложения.
+
+## Целевая аудитория
+- Фрилансеры и самозанятые
+- Удалённые работники, отслеживающие billable hours
+- Любой, кто хочет понять свою продуктивность

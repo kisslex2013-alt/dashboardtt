@@ -1,25 +1,30 @@
-# Tech Context
+# Технический контекст (Tech Context)
 
-## Frontend Stack
-- **Library**: React
-- **Language**: TypeScript
-- **Bundler**: Vite
-- **Routing**: React Router (presumed)
-- **Styling**: RAW CSS / CSS Modules
-- **Charts**: Recharts (or custom SVG implementations)
+## Frontend стек
+- **Библиотека**: React 18+
+- **Язык**: TypeScript
+- **Сборщик**: Vite 7+
+- **Роутинг**: React Router v6
+- **Стилизация**: Vanilla CSS с CSS Variables (без Tailwind)
+- **Графики**: Recharts
+- **Состояние**: Zustand (глобальное), React hooks (локальное)
 
-## Development Environment
-- **Node.js**: LTS version recommended.
-- **Package Manager**: npm / yarn / pnpm.
-- **Linting**: ESLint + Prettier.
+## Среда разработки
+- **Node.js**: LTS версия (рекомендуется 20+).
+- **Менеджер пакетов**: npm / yarn / pnpm.
+- **Линтинг**: ESLint + Prettier.
+- **Тестирование**: Vitest (unit), Playwright (e2e).
 
-## Key Dependencies
-- `react`, `react-dom`
-- `vite`
-- `@types/react`
-- `framer-motion` (if used for animations)
-- `recharts` (for analytics)
+## Ключевые зависимости
+- `react`, `react-dom` — UI фреймворк
+- `vite` — сборка и dev server
+- `zustand` — управление состоянием
+- `recharts` — графики и визуализации
+- `framer-motion` — анимации
+- `date-fns` — работа с датами
+- `vite-plugin-pwa` — Progressive Web App
 
-## Integration Points
-- **API**: REST/GraphQL (TBD, currently likely mocked or explicit backend).
-- **Auth**: Likely token-based (localStorage/Cookies).
+## Точки интеграции
+- **API**: Локальное хранилище (localStorage), планируется REST/GraphQL.
+- **PWA**: Service Worker для offline режима.
+- **Web Workers**: Фоновые вычисления (AI-анализ).

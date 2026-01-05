@@ -7,7 +7,6 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
   ResponsiveContainer,
   ReferenceLine,
 } from 'recharts'
@@ -287,122 +286,78 @@ export function WeekdayAnalysisChart({ entries: entriesProp }) {
         </div>
       </div>
 
-      <div className="flex gap-4">
-        {/* Легенда слева */}
-        <div className="flex-shrink-0">
-          <div className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">Легенда:</div>
-          <div className="space-y-1.5">
-            {(metricType === 'hours' || metricType === 'both') &&
-              categories.map(category => (
-                <div key={category.name} className="flex items-center gap-2 text-xs">
-                  <div className="w-3 h-3 rounded" style={{ backgroundColor: category.color }} />
-                  <span className="text-gray-600 dark:text-gray-400">{category.name}</span>
-                </div>
-              ))}
-            {(metricType === 'earned' || metricType === 'both') && (
-              <div className="flex items-center gap-2 text-xs">
-                <div className="w-3 h-3 rounded-full bg-blue-500" />
-                <span className="text-gray-600 dark:text-gray-400">Доход</span>
-              </div>
-            )}
-          </div>
+      {/* График на всю ширину — легенда в тултипе при наведении */}
+      <ResponsiveContainer width="100%" height={chartHeight}>
+        <ComposedChart data={chartData}>
+          <CartesianGrid
+            strokeDasharray="3 3"
+            stroke={theme === 'dark' ? '#374151' : '#E5E7EB'}
+          />
+          <XAxis dataKey="day" stroke="#6B7280" style={{ fontSize: '12px' }} />
+          <YAxis
+            yAxisId="left"
+            stroke="#6B7280"
+            style={{ fontSize: '12px' }}
+            label={{ value: 'Часы', angle: -90, position: 'insideLeft', fontSize: 12 }}
+          />
+          <YAxis
+            yAxisId="right"
+            orientation="right"
+            stroke="#3B82F6"
+            style={{ fontSize: '12px' }}
+            label={{ value: 'Доход (₽)', angle: 90, position: 'insideRight', fontSize: 12 }}
+          />
+          <Tooltip content={<CustomTooltip />} />
 
-          {/* Пунктирные линии справа от легенды */}
-          <div className="mt-4 space-y-2">
-            {metricType !== 'earned' && (
-              <div className="flex items-center gap-2 text-xs">
-                <div className="w-6 h-0.5 border-t-2 border-dashed border-yellow-500" />
-                <span className="text-yellow-600 dark:text-yellow-400">Среднее (часы)</span>
-              </div>
-            )}
-            {metricType !== 'hours' && (
-              <div className="flex items-center gap-2 text-xs">
-                <div className="w-6 h-0.5 border-t-2 border-dashed border-blue-500" />
-                <span className="text-blue-600 dark:text-blue-400">Среднее (доход)</span>
-              </div>
-            )}
-          </div>
-        </div>
+          {/* Reference lines */}
+          {metricType !== 'earned' && (
+            <ReferenceLine
+              yAxisId="left"
+              y={averageHours}
+              stroke="#F59E0B"
+              strokeDasharray="5 5"
+              label={{ value: 'Ср. часы', position: 'left', fontSize: 10, fill: '#F59E0B' }}
+            />
+          )}
+          {metricType !== 'hours' && (
+            <ReferenceLine
+              yAxisId="right"
+              y={averageEarned}
+              stroke="#3B82F6"
+              strokeDasharray="5 5"
+              label={{ value: 'Ср. доход', position: 'right', fontSize: 10, fill: '#3B82F6' }}
+            />
+          )}
 
-        {/* График */}
-        <div className="flex-1 min-w-0">
-          <ResponsiveContainer width="100%" height={chartHeight}>
-            <ComposedChart data={chartData}>
-              <CartesianGrid
-                strokeDasharray="3 3"
-                stroke={theme === 'dark' ? '#374151' : '#E5E7EB'}
-              />
-              <XAxis dataKey="day" stroke="#6B7280" style={{ fontSize: '12px' }} />
-              <YAxis
+          {/* Bars для каждой категории (часы) */}
+          {(metricType === 'hours' || metricType === 'both') &&
+            categories.map(category => (
+              <Bar
+                key={category.name}
                 yAxisId="left"
-                stroke="#6B7280"
-                style={{ fontSize: '12px' }}
-                label={{ value: 'Часы', angle: -90, position: 'insideLeft', fontSize: 12 }}
+                dataKey={`hours_${category.name}`}
+                stackId="hours"
+                fill={category.color}
+                name={category.name}
+                radius={[0, 0, 0, 0]}
               />
-              <YAxis
-                yAxisId="right"
-                orientation="right"
-                stroke="#3B82F6"
-                style={{ fontSize: '12px' }}
-                label={{ value: 'Доход (₽)', angle: 90, position: 'insideRight', fontSize: 12 }}
-              />
-              <Tooltip content={<CustomTooltip />} />
-              <Legend
-                verticalAlign="top"
-                wrapperStyle={{ fontSize: '12px', paddingBottom: '10px' }}
-                iconType="square"
-                content={() => null}
-              />
+            ))}
 
-              {/* Reference lines без подписей (подписи в легенде слева) */}
-              {metricType !== 'earned' && (
-                <ReferenceLine
-                  yAxisId="left"
-                  y={averageHours}
-                  stroke="#F59E0B"
-                  strokeDasharray="5 5"
-                />
-              )}
-              {metricType !== 'hours' && (
-                <ReferenceLine
-                  yAxisId="right"
-                  y={averageEarned}
-                  stroke="#3B82F6"
-                  strokeDasharray="5 5"
-                />
-              )}
-
-              {/* Bars для каждой категории (часы) - только если нужно показать часы */}
-              {(metricType === 'hours' || metricType === 'both') &&
-                categories.map(category => (
-                  <Bar
-                    key={category.name}
-                    yAxisId="left"
-                    dataKey={`hours_${category.name}`}
-                    stackId="hours"
-                    fill={category.color}
-                    name={category.name}
-                    radius={[0, 0, 0, 0]}
-                  />
-                ))}
-
-              {/* Line для дохода - только если нужно показать доход */}
-              {(metricType === 'earned' || metricType === 'both') && (
-                <Line
-                  yAxisId="right"
-                  type="monotone"
-                  dataKey="totalEarned"
-                  name="Доход"
-                  stroke="#3B82F6"
-                  strokeWidth={3}
-                  dot={{ fill: '#3B82F6', r: 4 }}
-                  activeDot={{ r: 6 }}
-                />
-              )}
-            </ComposedChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
+          {/* Line для дохода */}
+          {(metricType === 'earned' || metricType === 'both') && (
+            <Line
+              yAxisId="right"
+              type="monotone"
+              dataKey="totalEarned"
+              name="Доход"
+              stroke="#3B82F6"
+              strokeWidth={3}
+              dot={{ fill: '#3B82F6', r: 4 }}
+              activeDot={{ r: 6 }}
+            />
+          )}
+        </ComposedChart>
+      </ResponsiveContainer>
     </div>
   )
 }

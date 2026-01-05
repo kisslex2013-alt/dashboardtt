@@ -2,6 +2,16 @@ import React, { useState, useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useIsMobile } from '../../hooks/useIsMobile'
 
+interface TimeInputProps {
+  value?: string
+  onChange: (value: string) => void
+  placeholder?: string
+  className?: string
+  error?: string
+  onComplete?: () => void
+  hideErrorText?: boolean
+}
+
 /**
  * 🕐 Кастомный компонент ввода времени с 24-часовым форматом
  * - Поддержка 24-часового формата (00:00 - 23:59)
@@ -11,7 +21,7 @@ import { useIsMobile } from '../../hooks/useIsMobile'
  * АДАПТИВНОСТЬ: На мобильных устройствах использует type="time" для нативного выбора времени
  */
 // ИСПРАВЛЕНО: Добавлена поддержка forwardRef для доступа к input элементу
-export const TimeInput = React.forwardRef(
+export const TimeInput = React.forwardRef<HTMLInputElement, TimeInputProps>(
   (
     {
       value,
@@ -20,12 +30,13 @@ export const TimeInput = React.forwardRef(
       className = '',
       error,
       onComplete, // ИСПРАВЛЕНО: Добавлен callback для автофокуса
+      hideErrorText = false,
     },
     ref
   ) => {
     const isMobile = useIsMobile()
     const [displayValue, setDisplayValue] = useState(value || '')
-    const inputRef = useRef(null)
+    const inputRef = useRef<HTMLInputElement>(null)
 
     // ИСПРАВЛЕНО: Поддержка внешнего ref
     useEffect(() => {
@@ -43,16 +54,33 @@ export const TimeInput = React.forwardRef(
     }, [value])
 
     const formatTime = input => {
-      // Удаляем все не-цифры
+      // Если пользователь явно ввел двоеточие, уважаем его выбор
+      if (input.includes(':')) {
+        const parts = input.split(':')
+        let hours = parts[0].replace(/\D/g, '').slice(0, 2)
+        let minutes = parts[1] ? parts[1].replace(/\D/g, '').slice(0, 2) : ''
+
+        // Если часы пусты, но есть минуты, или введен разделитель - оставляем как есть
+        if (input.endsWith(':')) {
+           return `${hours}:`
+        }
+        
+        // Если есть минуты, возвращаем с разделителем
+        if (minutes) {
+           return `${hours}:${minutes}`
+        }
+        
+        // Если есть только часы
+        return `${hours}:${minutes}`
+      }
+
+      // Старая логика для ввода только цифр (fallback)
       const digits = input.replace(/\D/g, '')
 
       if (digits.length === 0) return ''
       if (digits.length <= 2) return digits
-      if (digits.length <= 4) {
-        // Форматируем как HH:MM
-        return `${digits.slice(0, 2)}:${digits.slice(2, 4)}`
-      }
-      // Ограничиваем 4 цифрами
+      
+      // Если больше 2 цифр, предполагаем HHMM
       return `${digits.slice(0, 2)}:${digits.slice(2, 4)}`
     }
 
@@ -62,7 +90,10 @@ export const TimeInput = React.forwardRef(
       const [hours, minutes] = timeString.split(':').map(Number)
 
       // Проверяем валидность
-      if (isNaN(hours) || isNaN(minutes)) return false
+      if (isNaN(hours)) return false
+      // Минуты могут быть пустыми при вводе
+      if (minutes === undefined || isNaN(minutes)) return false
+      
       if (hours < 0 || hours > 23) return false
       if (minutes < 0 || minutes > 59) return false
 
@@ -71,19 +102,29 @@ export const TimeInput = React.forwardRef(
 
     const handleChange = e => {
       const input = e.target.value
-      const formatted = formatTime(input)
+      // Используем умное форматирование
+      let formatted = formatTime(input)
 
+      // Фикс удаление двоеточия: если пользователь удаляет двоеточие, объединяем части
+      // (Это упрощенно, полное управление курсором требует больше логики)
+      
       setDisplayValue(formatted)
 
       // Если время валидно и полное (HH:MM), вызываем onChange
-      if (validateTime(formatted) && formatted.length === 5) {
-        onChange(formatted)
+      // Проверяем длину (формат H:MM, HH:MM, H:M и т.д.)
+      // Для строгости требуем 5 символов или валидные HH:MM
+      if (validateTime(formatted) && (formatted.length === 5 || (formatted.length === 4 && formatted.indexOf(':') === 1))) {
+        // Нормализуем HH:MM перед отправкой
+        const [h, m] = formatted.split(':')
+        const normalized = `${h.padStart(2, '0')}:${m.padStart(2, '0')}`
+        
+        onChange(normalized)
+        
         // ИСПРАВЛЕНО: Автоматический переход на следующее поле
-        if (onComplete) {
-          // Небольшая задержка для завершения форматирования
+        if (onComplete && normalized.length === 5) {
           setTimeout(() => {
             onComplete()
-          }, 50)
+          }, 200)
         }
       } else if (formatted.length === 0) {
         onChange('')
@@ -91,20 +132,18 @@ export const TimeInput = React.forwardRef(
     }
 
     const handleBlur = () => {
-      // При потере фокуса проверяем и корректируем значение
-      if (displayValue && displayValue.length === 5) {
-        const [hours, minutes] = displayValue.split(':').map(Number)
-
-        // Корректируем если нужно
-        let correctedHours = hours
-        let correctedMinutes = minutes
-
-        if (hours > 23) correctedHours = 23
-        if (minutes > 59) correctedMinutes = 59
-
-        const corrected = `${String(correctedHours).padStart(2, '0')}:${String(correctedMinutes).padStart(2, '0')}`
-        setDisplayValue(corrected)
-        onChange(corrected)
+      // При потере фокуса форматируем красиво
+      if (displayValue) {
+        const [h, m] = displayValue.split(':')
+        // Если есть хоть что-то
+        if (h !== undefined) {
+           const hours = Math.min(parseInt(h || '0', 10), 23)
+           const minutes = m ? Math.min(parseInt(m, 10), 59) : 0
+           
+           const corrected = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`
+           setDisplayValue(corrected)
+           onChange(corrected)
+        }
       }
     }
 
@@ -124,9 +163,10 @@ export const TimeInput = React.forwardRef(
               setDisplayValue(newValue)
               onChange(newValue)
               if (onComplete && newValue) {
+                // UX: Задержка 200ms, чтобы пользователь успел увидеть ввод перед сменой фокуса
                 setTimeout(() => {
                   onComplete()
-                }, 50)
+                }, 200)
               }
             }}
             onBlur={handleBlur}
@@ -150,7 +190,7 @@ export const TimeInput = React.forwardRef(
             id="time-input-mobile"
             aria-required="true"
           />
-          {error && (
+          {error && !hideErrorText && (
             <p
               id="time-input-error"
               className="text-red-500 text-sm mt-1"
@@ -194,7 +234,7 @@ export const TimeInput = React.forwardRef(
           id="time-input-desktop"
           aria-required="true"
         />
-        {error && (
+        {error && !hideErrorText && (
           <p
             id="time-input-error"
             className="text-red-500 text-sm mt-1"
@@ -213,7 +253,8 @@ TimeInput.propTypes = {
   value: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   placeholder: PropTypes.string,
-  className: PropTypes.string,
+      className: PropTypes.string,
   error: PropTypes.string,
   onComplete: PropTypes.func, // ИСПРАВЛЕНО: Добавлен prop для автофокуса
+  hideErrorText: PropTypes.bool,
 }

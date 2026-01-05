@@ -10,7 +10,7 @@ interface FinanceTabProps {
   paymentDates: any[]
   calendar: any
   isPaymentDay: (day: number) => boolean
-  isInPeriod: (day: number) => boolean
+  isInPeriod: (day: number) => any
   selectionState: any
   handleDayClick: (day: number) => void
   selection: any
@@ -25,7 +25,7 @@ interface FinanceTabProps {
   handleUpdatePaymentDay: (id: string, day: number) => void
   draggedId: string | null
   handleDragStart: (e: React.DragEvent, id: string) => void
-  handleDragEnd: () => void
+  handleDragEnd: (e: any) => void
   handleDragOver: (e: React.DragEvent, order: number) => void
   handleDragEnter: (e: React.DragEvent, order: number) => void
   handleDrop: (e: React.DragEvent, targetId: string) => void
@@ -59,14 +59,6 @@ export function FinanceTab({
 }: FinanceTabProps) {
   return (
     <div className="space-y-6">
-      <div className="mb-6">
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-          Выплаты
-        </h2>
-        <p className="text-sm text-gray-600 dark:text-gray-400">
-          Управление датами выплат и периодами работы
-        </p>
-      </div>
 
       <PaymentsSection
         paymentDates={paymentDates}

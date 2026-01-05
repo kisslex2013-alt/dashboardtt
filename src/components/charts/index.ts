@@ -1,6 +1,7 @@
 export * from './CalendarHeatmap'
 export * from './CategoryDistribution'
 export * from './CategoryEfficiencyChart'
+export * from './CombinedCategoryChart'
 export * from './ChartExportButton'
 export * from './ChartContainer' // New container
 export * from './CombinedChart'

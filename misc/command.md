@@ -1,6 +1,5 @@
----
 // ═══════════════════════════════════════════════════════════
-// AUTO-CLICKER FOR "Accept" BUTTON
+// AUTO-CLICKER FOR "Accept" BUTTON + CONFIRM DIALOGS
 // Searches inside iframes and auto-clicks
 // ═══════════════════════════════════════════════════════════
  
@@ -13,6 +12,7 @@
         ui: null,
         totalClicks: 0,
         totalScrolls: 0,
+        totalConfirms: 0,  // NEW: track confirm clicks
         targetScrollElement: null,
         targetIframe: null,
         isCollapsed: true
@@ -33,13 +33,12 @@
         const oldUI = document.getElementById('auto-clicker-indicator');
         if (oldUI) oldUI.remove();
  
-        // Clean up references
         window.autoClickerInterval = null;
         window.autoClickerUI = null;
  
         console.clear();
         console.log('═'.repeat(80));
-        console.log('🎯 AUTO-CLICKER FOR "Accept" BUTTON');
+        console.log('🎯 AUTO-CLICKER FOR "Accept" BUTTON + CONFIRM DIALOGS');
         console.log('═'.repeat(80));
     }
  
@@ -64,7 +63,7 @@
  
         const title = document.createElement('div');
         title.style.cssText = 'font-weight: bold; color: #4ec9b0; flex: 1;';
-        title.textContent = '🎯 Accept Auto-Clicker';
+        title.textContent = '🎯 Auto-Clicker';
  
         const collapseBtn = document.createElement('button');
         collapseBtn.id = 'collapse-btn';
@@ -89,6 +88,17 @@
         clickCount.textContent = '0';
         clickedDiv.appendChild(clickCount);
         clickedDiv.appendChild(document.createTextNode(' times'));
+ 
+        // NEW: Confirmed count
+        const confirmedDiv = document.createElement('div');
+        confirmedDiv.style.cssText = 'margin-bottom: 8px; color: #858585;';
+        confirmedDiv.textContent = 'Confirmed: ';
+        const confirmCount = document.createElement('span');
+        confirmCount.id = 'confirm-count';
+        confirmCount.style.cssText = 'color: #4ec9b0; font-weight: bold;';
+        confirmCount.textContent = '0';
+        confirmedDiv.appendChild(confirmCount);
+        confirmedDiv.appendChild(document.createTextNode(' times'));
  
         // Scroll into view checkbox
         const scrollLabel = document.createElement('label');
@@ -116,6 +126,19 @@
         clickLabel.appendChild(clickCheckbox);
         clickLabel.appendChild(clickText);
  
+        // NEW: Auto-confirm checkbox
+        const confirmLabel = document.createElement('label');
+        confirmLabel.style.cssText = 'display: flex; align-items: center; cursor: pointer; user-select: none; margin-bottom: 8px;';
+        const confirmCheckbox = document.createElement('input');
+        confirmCheckbox.type = 'checkbox';
+        confirmCheckbox.id = 'auto-confirm-checkbox';
+        confirmCheckbox.checked = true;
+        confirmCheckbox.style.cssText = 'margin-right: 8px; cursor: pointer; width: 16px; height: 16px;';
+        const confirmText = document.createElement('span');
+        confirmText.textContent = 'Auto-Confirm Dialogs';
+        confirmLabel.appendChild(confirmCheckbox);
+        confirmLabel.appendChild(confirmText);
+ 
         // Stop button
         const killBtn = document.createElement('button');
         killBtn.id = 'kill-btn';
@@ -129,8 +152,10 @@
  
         // Assemble content wrapper
         contentWrapper.appendChild(clickedDiv);
+        contentWrapper.appendChild(confirmedDiv);  // NEW
         contentWrapper.appendChild(scrollLabel);
         contentWrapper.appendChild(clickLabel);
+        contentWrapper.appendChild(confirmLabel);  // NEW
         contentWrapper.appendChild(killBtn);
         contentWrapper.appendChild(status);
  
@@ -372,13 +397,55 @@
         return false;
     }
  
+    // ==================== NEW: CONFIRM DIALOG FINDER ====================
+    function findAndClickConfirmButton() {
+        try {
+            const autoConfirmEnabled = document.getElementById('auto-confirm-checkbox')?.checked ?? true;
+            if (!autoConfirmEnabled) return;
+ 
+            // Search in main document
+            const confirmButtons = Array.from(document.querySelectorAll('button')).filter(button => {
+                const text = (button.textContent || '').trim();
+                return text === 'Confirm' && button.offsetWidth > 0 && button.offsetHeight > 0 && !button.disabled;
+            });
+ 
+            // Search in iframes
+            const iframes = document.querySelectorAll('iframe');
+            iframes.forEach(iframe => {
+                try {
+                    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                    const iframeButtons = Array.from(iframeDoc.querySelectorAll('button')).filter(button => {
+                        const text = (button.textContent || '').trim();
+                        return text === 'Confirm' && button.offsetWidth > 0 && button.offsetHeight > 0 && !button.disabled;
+                    });
+                    confirmButtons.push(...iframeButtons);
+                } catch (e) { /* Can't access iframe */ }
+            });
+ 
+            if (confirmButtons.length > 0) {
+                console.log(`✅ Found ${confirmButtons.length} Confirm button(s)`);
+                confirmButtons.forEach((button, index) => {
+                    console.log(`  🖱️  Clicking Confirm button ${index + 1}`);
+                    button.click();
+                    state.totalConfirms++;
+                    const confirmCountEl = document.getElementById('confirm-count');
+                    if (confirmCountEl) {
+                        confirmCountEl.textContent = state.totalConfirms;
+                    }
+                });
+            }
+        } catch (error) {
+            console.error('❗ Error in findAndClickConfirmButton:', error);
+        }
+    }
+ 
     // ==================== BUTTON FINDER ====================
     function findAndClickButton() {
         try {
             const foundButtons = [];
             const iframes = document.querySelectorAll('iframe');
-            const autoClickEnabled = document.getElementById('auto-click-checkbox').checked;
-            const scrollIntoViewEnabled = document.getElementById('scroll-into-view-checkbox').checked;
+            const autoClickEnabled = document.getElementById('auto-click-checkbox')?.checked ?? true;
+            const scrollIntoViewEnabled = document.getElementById('scroll-into-view-checkbox')?.checked ?? true;
  
             iframes.forEach((iframe) => {
                 try {
@@ -404,6 +471,9 @@
             if (autoClickEnabled && foundButtons.length > 0) {
                 clickButtons(foundButtons, scrollIntoViewEnabled);
             }
+ 
+            // NEW: Also check for Confirm buttons
+            findAndClickConfirmButton();
         } catch (error) {
             console.error('❗ Error:', error);
         }
@@ -437,7 +507,7 @@
  
     function logScanResults(iframeCount, buttonCount) {
         const timestamp = new Date().toLocaleTimeString();
-        console.log(`[${timestamp}] Scanned ${iframeCount} iframe(s) | Found ${buttonCount} button(s) | Total scrolls: ${state.totalScrolls}`);
+        console.log(`[${timestamp}] Scanned ${iframeCount} iframe(s) | Found ${buttonCount} button(s) | Confirms: ${state.totalConfirms} | Scrolls: ${state.totalScrolls}`);
     }
  
     // ==================== INITIALIZATION ====================
@@ -448,9 +518,9 @@
     window.autoClickerUI = ui;
  
     console.log('✅ AUTO-CLICKER ACTIVE');
-    console.log('🔍 Searching for "Accept" buttons in iframes');
+    console.log('🔍 Searching for "Accept" buttons and "Confirm" dialogs');
     console.log('📊 Scanning every 3 seconds');
-    console.log('☑️  Check the box to enable auto-clicking');
+    console.log('☑️  Check the boxes to enable features');
     console.log('═'.repeat(80));
  
     findAndClickButton();
@@ -458,4 +528,38 @@
     window.autoClickerInterval = state.interval;
  
 })();
----
+----
+Этот список — это, по сути, манифест "Lean Startup" на стероидах AI.
+
+Да, здесь определенно есть полезные мысли для вашего проекта (Dashboardtt / Тайм-трекер), но их нужно адаптировать. Ваш проект — это сложный веб-интерфейс (Dashboard, Settings, Finance), а не простая мобильная "игрушка" для TikTok, поэтому не все пункты применимы напрямую (например, виральность через короткие видео может быть не вашим основным каналом).
+
+Однако, методология разработки с AI здесь описана отлично.
+
+Вот что самое полезное и применимое к вашему проекту прямо сейчас:
+
+1. Фокус на "Core Interaction" (Пункт 3 и 5)
+"Design the core interaction so it fits inside a 10-second screen recording"
+
+Для вас: В тайм-трекере или финансовом дашборде есть 1-2 ключевых действия (например, "запустить таймер" или "увидеть сколько я заработал").
+Совет: Убедитесь, что эта функция работает идеально и выглядит "вкусно" (как мы делали с аватарами и анимациями). Если основное действие сложное или скучное — проект проиграет.
+2. AI как инструмент "шлифовки", а не просто кодинга (Пункт 2 и 13)
+"Use AI to tighten logic, handle edge cases... Ship the smallest change... re-record demo"
+
+Для вас: Мы с вами работаем именно так. Мы не пишем год "в стол". Мы берем кусок (например, модалку настроек), делаем её, видим баги/неудобства, и тут же правим.
+Совет: Продолжайте использовать меня (Antigravity) для быстрой итерации. "Сделай — покажи — исправь" — это ритм победителей.
+3. "Инвестиция" пользователя на старте (Пункт 17-19)
+"Add a one-question quiz... Use answers to personalize"
+
+Для вас: Это гениально для онбординга в Dashboard. Когда новый юзер заходит, не просто показывайте пустой экран.
+Идея: Спросите: "Какая у вас главная цель: учет денег или времени?". И сразу перестройте дашборд под этот ответ. Юзер почувствует: "О, это для меня".
+4. Мгновенная польза (Пункт 20-21)
+"Surface one clear insight right after first use... Save the first output"
+
+Для вас: После того как юзер ввел первые данные (или настроил аватар), дайте ему красивый график или отчет сразу же. Пусть он почувствует результат в первые 60 секунд.
+5. Демо как продукт (Пункт 6 и 15)
+Даже если вы не идете в TikTok, короткие видео (скринкасты) — лучший способ показать прогресс мне, себе или потенциальным пользователям/инвесторам. Если фичу нельзя "продать" за 15 секунд видео, возможно, она слишком сложная.
+Что фильтровать (менее применимо):
+Пункты 4, 9, 28-30 (TikTok-аналитика): Это специфично для B2C мобильных приложений, которые растут через хайп. Для серьезного инструмента (SaaS/Dashboard) важнее стабильность и удержание (retention), а не вирусность 3-секундного видео.
+Пункт 1 в части инструментов: Вместо "Claude Code" и "Rork" вы используете Antigravity и VS Code, что дает тот же (или лучший) контроль над кодом.
+Итог: Используйте этот список как напоминание "Не усложняй". Стройте вокруг главной фичи, полируйте её с AI до блеска и давайте пользователю результат мгновенно.
+----

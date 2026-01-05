@@ -2,26 +2,21 @@ import { BarChart3, LineChart, Layers } from '../../utils/icons'
 import type { ChartTypeSwitcherProps } from '../../types'
 
 /**
- * 📊 Переключатель типов графиков
+ * 📊 Переключатель типов графиков (только иконки с тултипами)
  *
- * 🎓 ПОЯСНЕНИЕ ДЛЯ НАЧИНАЮЩИХ:
- *
- * Этот компонент позволяет переключать тип отображения графика:
  * - Bar (столбчатый) - показывает данные в виде столбцов
  * - Line (линейный) - показывает данные в виде линии
  * - Area (областной) - показывает данные в виде залитой области
- *
- * Используется для разных графиков аналитики.
  */
 export function ChartTypeSwitcher({ currentType = 'line', onChange }: ChartTypeSwitcherProps) {
   const types = [
-    { value: 'bar', label: 'Столбцы', icon: BarChart3 },
-    { value: 'line', label: 'Линия', icon: LineChart },
-    { value: 'area', label: 'Область', icon: Layers },
+    { value: 'bar' as const, label: 'Столбцы', icon: BarChart3 },
+    { value: 'line' as const, label: 'Линия', icon: LineChart },
+    { value: 'area' as const, label: 'Область', icon: Layers },
   ]
 
   return (
-    <div className="flex items-center gap-0.5 bg-gray-100 dark:bg-gray-800 rounded-lg p-0.5">
+    <div className="flex bg-gray-100 dark:bg-gray-700/50 rounded-lg p-0.5">
       {types.map(type => {
         const Icon = type.icon
         const isActive = currentType === type.value
@@ -30,18 +25,14 @@ export function ChartTypeSwitcher({ currentType = 'line', onChange }: ChartTypeS
           <button
             key={type.value}
             onClick={() => onChange(type.value)}
-            className={`
-              flex items-center justify-center px-2 py-1 rounded-md text-xs font-medium transition-all
-              ${
-                isActive
-                  ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm'
-                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200'
-              }
-            `}
+            className={`p-1.5 rounded-md transition-all ${
+              isActive
+                ? 'bg-white dark:bg-gray-600 shadow-sm text-blue-500'
+                : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'
+            }`}
             title={type.label}
           >
-            <Icon className="w-3.5 h-3.5" />
-            <span className="hidden lg:inline ml-1">{type.label}</span>
+            <Icon className="w-4 h-4" />
           </button>
         )
       })}

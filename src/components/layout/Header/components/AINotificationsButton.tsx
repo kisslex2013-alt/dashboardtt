@@ -125,13 +125,28 @@ export function AINotificationsButton() {
     return 'bg-blue-500 dark:bg-blue-600'
   }
 
+  // Классы для подсветки кнопки
+  const getButtonGlow = () => {
+    if (unreadCount === 0) return ''
+    if (hasCritical) {
+      return 'ring-2 ring-red-500/50 shadow-[0_0_15px_rgba(239,68,68,0.3)]'
+    }
+    return 'ring-2 ring-blue-500/50 shadow-[0_0_15px_rgba(59,130,246,0.3)]'
+  }
+
   return (
     <div className="relative">
       {/* Кнопка */}
       <button
         ref={buttonRef}
         onClick={() => setIsOpen(!isOpen)}
-        className="glass-button p-2 rounded-lg transition-normal hover-lift-scale click-shrink relative"
+        className={`p-2 rounded-lg transition-all hover-lift-scale click-shrink relative ${
+          unreadCount > 0 
+            ? hasCritical 
+              ? 'bg-red-500/10 ring-2 ring-red-500 shadow-[0_0_20px_rgba(239,68,68,0.5)]' 
+              : 'bg-blue-500/10 ring-2 ring-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.5)]'
+            : 'glass-button'
+        }`}
         aria-label={`AI-уведомления${unreadCount > 0 ? ` (${unreadCount} новых)` : ''}`}
         title={`AI-уведомления${unreadCount > 0 ? ` (${unreadCount} новых)` : ''} (Alt+N)`}
         style={{

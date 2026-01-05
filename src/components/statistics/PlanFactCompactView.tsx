@@ -8,6 +8,7 @@ import {
   Zap,
   Flame,
   Sliders,
+  TrendingUp,
 } from '../../utils/icons'
 import { useEntries } from '../../store/useEntriesStore'
 import {
@@ -19,8 +20,16 @@ import {
 } from '../../store/useSettingsStore'
 import { useOpenModal } from '../../store/useUIStore'
 import { InfoTooltip } from '../ui/InfoTooltip'
+import { SimpleTooltip } from '../ui/SimpleTooltip'
 import { AnimatedCounter } from '../ui/AnimatedCounter'
 import { PlanFactIllustration, PaymentIllustration, TotalIllustration } from '../ui/illustrations'
+import { TopProjectsWidget } from './TopProjectsWidget'
+import {
+  calculateProductivityScore,
+  getScoreColor,
+  getFactorProgressColor,
+  getFactorTextColor,
+} from '../../utils/productivityScore'
 import { calculateWorkingDaysInMonth } from '../../utils/calculations'
 import { format } from 'date-fns'
 import {
@@ -89,13 +98,51 @@ export function PlanFactCompactView({ shouldAnimate = true, shouldShow = true })
   const handlePaymentsClick = () => {
     setPaymentsButtonHighlighted(false)
     localStorage.setItem('payments_button_highlight_shown', 'true')
-    openModal('soundSettings', { activeTab: 'payments' })
+    openModal('soundSettings', { activeTab: 'finance' })
   }
 
   const now = new Date()
   const currentYear = now.getFullYear()
   const currentMonth = now.getMonth()
   const currentDay = now.getDate()
+
+  // Данные для Productivity Score
+  const scoreData = useMemo(() => {
+    if (entries.length === 0) {
+      return {
+        score: 0,
+        factors: {
+          goalCompletion: { value: 0, max: 40, percentage: 0 },
+          consistency: { value: 0, max: 25, percentage: 0 },
+          focusTime: { value: 0, max: 20, percentage: 0 },
+          breakBalance: { value: 0, max: 15, percentage: 0 },
+        },
+      }
+    }
+    return calculateProductivityScore(entries, dailyGoal)
+  }, [entries, dailyGoal])
+
+  const { score, factors } = scoreData
+  const scoreColor = getScoreColor(score)
+
+  // Сокращенные названия факторов
+  const factorShortLabels = {
+    goalCompletion: 'Цели',
+    consistency: 'Регулярность',
+    focusTime: 'Фокус',
+    breakBalance: 'Перерывы',
+  }
+
+  const factorDescriptions = {
+    goalCompletion:
+      'Выполнение дневных целей по заработку. Оценивается средний процент выполнения цели за все дни с записями. Максимум 40 баллов.',
+    consistency:
+      'Регулярность работы. Оценивается процент дней с записями из возможных (за последние 30 дней). Максимум 25 баллов.',
+    focusTime:
+      'Время фокуса. Оценивается доля самой длинной непрерывной сессии от общего времени работы за день. Максимум 20 баллов.',
+    breakBalance:
+      'Баланс перерывов. Оценивается оптимальность перерывов между сессиями (5-30 минут - идеально). Максимум 15 баллов.',
+  }
 
   // Функция для получения названия и иконки текущего рабочего графика
   const getWorkScheduleInfo = () => {
@@ -159,7 +206,7 @@ export function PlanFactCompactView({ shouldAnimate = true, shouldShow = true })
 
         // Парсим дату - поддерживаем разные форматы (YYYY-MM-DD, ISO string, Date object)
         let entryDate
-        if (entry.date instanceof Date) {
+        if ((entry.date as any) instanceof Date) {
           entryDate = entry.date
         } else if (typeof entry.date === 'string') {
           // Если дата в формате YYYY-MM-DD, создаем Date объект
@@ -205,7 +252,7 @@ export function PlanFactCompactView({ shouldAnimate = true, shouldShow = true })
       const filtered = getFilteredEntries(filter)
       const sum = filtered.reduce((sum, e) => {
         // Проверяем разные варианты поля earned
-        const earned = e.earned || e.earnings || 0
+        const earned = e.earned || 0
         const numValue =
           typeof earned === 'string'
             ? parseFloat(earned.replace(/[^\d.,]/g, '').replace(',', '.')) || 0
@@ -228,6 +275,41 @@ export function PlanFactCompactView({ shouldAnimate = true, shouldShow = true })
 
     return result
   }, [entries, currentYear, currentMonth, currentDay])
+
+  // Рассчитываем общее количество часов и среднюю ставку
+  const totalHoursAndRate = useMemo(() => {
+    const totalHours = entries.reduce((sum, e) => {
+      let duration = parseFloat(String(e.duration)) || 0
+      if (duration === 0 && e.start && e.end) {
+        try {
+          const [startH, startM] = e.start.split(':').map(Number)
+          const [endH, endM] = e.end.split(':').map(Number)
+          const startMinutes = startH * 60 + startM
+          let endMinutes = endH * 60 + endM
+          if (endMinutes < startMinutes) endMinutes += 24 * 60
+          duration = (endMinutes - startMinutes) / 60
+        } catch {
+          duration = 0
+        }
+      }
+      return sum + duration
+    }, 0)
+
+    const totalEarned = entries.reduce((sum, e) => {
+      const earned = e.earned || 0
+      const numValue =
+        typeof earned === 'string'
+          ? parseFloat(earned.replace(/[^\d.,]/g, '').replace(',', '.')) || 0
+          : typeof earned === 'number'
+            ? earned
+            : 0
+      return sum + numValue
+    }, 0)
+
+    const averageRate = totalHours > 0 ? totalEarned / totalHours : 0
+
+    return { totalHours, averageRate }
+  }, [entries])
 
   // Рассчитываем планы на основе рабочих дней
   const settings = {
@@ -284,7 +366,7 @@ export function PlanFactCompactView({ shouldAnimate = true, shouldShow = true })
 
         // Рассчитываем фактический доход
         const earned = filteredEntries.reduce((sum, e) => {
-          const earned = e.earned || e.earnings || 0
+        const earned = e.earned || 0
           const numValue =
             typeof earned === 'string'
               ? parseFloat(earned.replace(/[^\d.,]/g, '').replace(',', '.')) || 0
@@ -310,7 +392,6 @@ export function PlanFactCompactView({ shouldAnimate = true, shouldShow = true })
           ...payment,
           earned,
           plan,
-          period,
         }
       })
   }, [
@@ -334,7 +415,7 @@ export function PlanFactCompactView({ shouldAnimate = true, shouldShow = true })
     const minSpeed = 0.7
     const maxSpeed = 2.5
     const totalBars = 2 + paymentData.length // День + Месяц + Выплаты
-    const speeds = []
+    const speeds: number[] = []
 
     // Генерируем уникальные скорости
     while (speeds.length < totalBars) {
@@ -361,18 +442,126 @@ export function PlanFactCompactView({ shouldAnimate = true, shouldShow = true })
   const nextMonthDate = new Date(currentYear, currentMonth + 1, 1)
   const nextMonthStr = String(nextMonthDate.getMonth() + 1).padStart(2, '0')
 
+  // Helpers for current date display
+  const today = new Date()
+  const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
+  const currentDayName = capitalize(today.toLocaleDateString('ru-RU', { weekday: 'long' }))
+  const currentMonthName = capitalize(new Date(currentYear, currentMonth).toLocaleDateString('ru-RU', { month: 'long' }))
+
   return (
-    <div className="glass-effect rounded-xl p-6 mb-6">
+    <div className="glass-effect rounded-xl p-4 mb-4">
       {/* Заголовок */}
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex justify-between items-center mb-4">
         <div className="flex items-center gap-2">
           <h3 className="text-xl font-bold text-gray-900 dark:text-white">План/факт заработка</h3>
           <InfoTooltip text="Отслеживайте выполнение плана за день и месяц, планируйте выплаты и анализируйте общий доход за год и всё время работы. Настройте рабочий график для точного расчёта целей." />
         </div>
+
+        {/* Productivity Score (Desktop) */}
+        <div className="hidden md:flex items-center gap-2 flex-1 justify-end ml-4 group">
+            <SimpleTooltip
+              text="Общая оценка продуктивности от 0 до 100. Рассчитывается на основе выполнения целей (40%), регулярности работы (25%), времени фокуса (20%) и баланса перерывов (15%)."
+              position="bottom"
+            >
+              {(() => {
+                const getScoreHoverBorder = () => {
+                  if (scoreColor.includes('green')) return 'hover:border-green-500 dark:hover:border-green-400'
+                  if (scoreColor.includes('blue')) return 'hover:border-blue-500 dark:hover:border-blue-400'
+                  if (scoreColor.includes('yellow')) return 'hover:border-yellow-500 dark:hover:border-yellow-400'
+                  if (scoreColor.includes('red')) return 'hover:border-red-500 dark:hover:border-red-400'
+                  return 'hover:border-gray-500 dark:hover:border-gray-400'
+                }
+                const getScoreHoverShadow = () => {
+                  if (scoreColor.includes('green')) return 'hover:shadow-lg hover:shadow-green-500/20'
+                  if (scoreColor.includes('blue')) return 'hover:shadow-lg hover:shadow-blue-500/20'
+                  if (scoreColor.includes('yellow')) return 'hover:shadow-lg hover:shadow-yellow-500/20'
+                  if (scoreColor.includes('red')) return 'hover:shadow-lg hover:shadow-red-500/20'
+                  return 'hover:shadow-lg hover:shadow-gray-500/20'
+                }
+                return (
+                  <div className={`flex items-center gap-1.5 cursor-help px-2 py-1 rounded-lg transition-all duration-300 hover:bg-white/10 dark:hover:bg-white/5 hover:scale-105 border border-transparent ${getScoreHoverBorder()} ${getScoreHoverShadow()}`}>
+                    <TrendingUp className="w-4 h-4 text-blue-500 dark:text-blue-400 flex-shrink-0 transition-transform duration-300 group-hover:scale-110" />
+                    <AnimatedCounter
+                      value={score}
+                      decimals={0}
+                      className={`text-lg font-bold ${scoreColor}`}
+                      resetAnimation={false}
+                    />
+                    <span className="text-xs text-gray-500 dark:text-gray-400">/100</span>
+                  </div>
+                )
+              })()}
+            </SimpleTooltip>
+
+            {/* Разделитель */}
+            <div className="w-px h-6 bg-gray-300 dark:bg-gray-600 flex-shrink-0 mx-2"></div>
+
+            {/* Факторы с названиями */}
+            <div className="flex items-center gap-2 flex-1 justify-end max-w-2xl">
+              {Object.keys(factors).map((factorKey) => {
+                // @ts-ignore
+                const factor = factors[factorKey]
+                // @ts-ignore
+                const shortLabel = factorShortLabels[factorKey]
+                const {percentage} = factor
+                const progressColor = getFactorProgressColor(percentage)
+                const textColor = getFactorTextColor(percentage)
+
+                const getFactorHoverBorder = () => {
+                  if (progressColor.includes('green')) return 'hover:border-green-500 dark:hover:border-green-400'
+                  if (progressColor.includes('yellow')) return 'hover:border-yellow-500 dark:hover:border-yellow-400'
+                  if (progressColor.includes('red')) return 'hover:border-red-500 dark:hover:border-red-400'
+                  return 'hover:border-gray-500 dark:hover:border-gray-400'
+                }
+                const getFactorHoverShadow = () => {
+                  if (progressColor.includes('green')) return 'hover:shadow-lg hover:shadow-green-500/20'
+                  if (progressColor.includes('yellow')) return 'hover:shadow-lg hover:shadow-yellow-500/20'
+                  if (progressColor.includes('red')) return 'hover:shadow-lg hover:shadow-red-500/20'
+                  return 'hover:shadow-lg hover:shadow-gray-500/20'
+                }
+                const getProgressBarShadow = () => {
+                  if (progressColor.includes('green')) return 'group-hover:shadow-lg group-hover:shadow-green-500/50'
+                  if (progressColor.includes('yellow')) return 'group-hover:shadow-lg group-hover:shadow-yellow-500/50'
+                  if (progressColor.includes('red')) return 'group-hover:shadow-lg group-hover:shadow-red-500/50'
+                  return 'group-hover:shadow-lg group-hover:shadow-gray-500/50'
+                }
+
+                return (
+                  <SimpleTooltip
+                    key={factorKey}
+                    // @ts-ignore
+                    text={factorDescriptions[factorKey]}
+                    position="bottom"
+                  >
+                    <div className={`flex items-center gap-1.5 cursor-help min-w-0 px-2 py-1 rounded-lg transition-all duration-300 hover:bg-white/10 dark:hover:bg-white/5 hover:scale-105 group border border-transparent ${getFactorHoverBorder()} ${getFactorHoverShadow()}`}>
+                      <span className="text-xs text-gray-500 dark:text-gray-300 whitespace-nowrap flex-shrink-0">
+                        {shortLabel}
+                      </span>
+                      <div className="w-12 h-1 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden flex-shrink-0">
+                        <div
+                          className={`h-full ${progressColor} rounded-full transition-all duration-300 ${getProgressBarShadow()}`}
+                          style={{
+                            width: `${percentage}%`,
+                          }}
+                        />
+                      </div>
+                      <AnimatedCounter
+                        value={factor.value}
+                        decimals={0}
+                        suffix={`/${factor.max}`}
+                        className={`text-xs font-bold ${textColor} whitespace-nowrap flex-shrink-0`}
+                        resetAnimation={false}
+                      />
+                    </div>
+                  </SimpleTooltip>
+                )
+              })}
+            </div>
+        </div>
       </div>
 
-      {/* Сетка из 3 карточек */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      {/* Сетка из 4 карточек */}
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 items-stretch">
         {/* Карточка 1: План/факт */}
         <div
           className="glass-card glow-blue relative bg-blue-200 dark:bg-blue-500/10 border border-transparent hover:border-opacity-100 hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-300 group rounded-2xl p-4 overflow-hidden"
@@ -410,22 +599,23 @@ export function PlanFactCompactView({ shouldAnimate = true, shouldShow = true })
             </div>
 
             {day === 0 && month === 0 ? (
-              <div className="flex flex-col items-center justify-center py-6">
-                <div className="w-24 h-24 mb-3 text-blue-400 dark:text-blue-500 flex items-center justify-center">
-                  <PlanFactIllustration className="w-full h-full" animated={shouldAnimate} />
+              <div className="flex flex-col items-center justify-center py-4">
+                <div className="w-16 h-16 mb-2 flex items-center justify-center">
+                  <Calendar className="w-12 h-12 text-blue-400 dark:text-blue-500 opacity-50" strokeWidth={1.5} />
                 </div>
                 <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
                   Начните работу, чтобы увидеть план/факт
                 </p>
               </div>
             ) : (
-              <div className="space-y-4">
+              <div className="flex flex-col gap-4">
                 {/* День */}
                 <div
                   className={shouldAnimate ? 'animate-slide-up' : ''}
                   style={shouldAnimate ? { animationDelay: '0.1s', animationFillMode: 'both' } : {}}
                 >
-                  <div className="flex justify-between items-baseline">
+                  <div className="flex justify-between items-end mb-1">
+                    <div className="flex flex-col">
                     <p
                       className={`text-gray-500 dark:text-gray-400 text-sm ${shouldAnimate ? 'opacity-0 animate-fade-in' : ''}`}
                       style={
@@ -436,6 +626,12 @@ export function PlanFactCompactView({ shouldAnimate = true, shouldShow = true })
                     >
                       День
                     </p>
+                    <p className={`text-[10px] uppercase tracking-wider text-blue-600/60 dark:text-blue-400/60 font-bold mt-0.5 ${shouldAnimate ? 'opacity-0 animate-fade-in' : ''}`}
+                       style={shouldAnimate ? { animationDelay: '0.2s', animationFillMode: 'forwards' } : {}}
+                    >
+                       {currentDayName}
+                    </p>
+                    </div>
                     <AnimatedCounter
                       value={day}
                       suffix=" ₽"
@@ -448,13 +644,15 @@ export function PlanFactCompactView({ shouldAnimate = true, shouldShow = true })
                       key={`day-${day}`}
                     />
                   </div>
-                  <div className="w-full bg-gray-300 dark:bg-gray-700/50 rounded-full h-1 mt-1 overflow-hidden">
+                  <div className="w-full bg-gray-300 dark:bg-gray-700/50 rounded-full h-1 mt-1 mb-1 overflow-hidden">
                     <div
                       key={`day-progress-${day}`}
                       className="bg-blue-500 h-1 rounded-full transition-all duration-500"
                       style={{
                         width: `${dailyPlanValue > 0 ? Math.min(100, (day / dailyPlanValue) * 100) : 0}%`,
+                        // @ts-ignore
                         '--progress-width': `${dailyPlanValue > 0 ? Math.min(100, (day / dailyPlanValue) * 100) : 0}%`,
+                        // @ts-ignore
                         animation: shouldAnimate
                           ? `slideInProgress ${progressBarSpeeds.day}s cubic-bezier(0.4, 0, 0.2, 1) 0.25s both`
                           : 'none',
@@ -472,19 +670,28 @@ export function PlanFactCompactView({ shouldAnimate = true, shouldShow = true })
                 </div>
 
                 {/* Месяц */}
+
+                {/* Месяц */}
                 <div
                   className={shouldAnimate ? 'animate-slide-up' : ''}
                   style={shouldAnimate ? { animationDelay: '0.15s', animationFillMode: 'both' } : {}}
                 >
-                  <div className="flex justify-between items-baseline">
+                  <div className="flex justify-between items-end mb-1">
+                    <div className="flex flex-col">
                     <p
-                      className={`text-gray-500 dark:text-gray-400 text-sm ${shouldAnimate ? 'opacity-0 animate-fade-in' : ''}`}
+                      className={`text-gray-500 dark:text-gray-400 text-sm font-medium ${shouldAnimate ? 'opacity-0 animate-fade-in' : ''}`}
                       style={
                         shouldAnimate ? { animationDelay: '0.2s', animationFillMode: 'forwards' } : {}
                       }
                     >
                       Месяц
                     </p>
+                    <p className={`text-[10px] uppercase tracking-wider text-purple-600/60 dark:text-purple-400/60 font-bold mt-0.5 ${shouldAnimate ? 'opacity-0 animate-fade-in' : ''}`}
+                       style={shouldAnimate ? { animationDelay: '0.25s', animationFillMode: 'forwards' } : {}}
+                    >
+                       {currentMonthName}
+                    </p>
+                    </div>
                     <AnimatedCounter
                       value={month}
                       suffix=" ₽"
@@ -499,13 +706,15 @@ export function PlanFactCompactView({ shouldAnimate = true, shouldShow = true })
                       key={`month-${month}`}
                     />
                   </div>
-                  <div className="w-full bg-gray-300 dark:bg-gray-700/50 rounded-full h-1 mt-1 overflow-hidden">
+                  <div className="w-full bg-gray-300 dark:bg-gray-700/50 rounded-full h-1 mt-1 mb-1 overflow-hidden">
                     <div
                       key={`month-progress-${month}`}
                       className="bg-purple-500 h-1 rounded-full transition-all duration-500"
                       style={{
                         width: `${monthlyPlan > 0 ? Math.min(100, (month / monthlyPlan) * 100) : 0}%`,
+                        // @ts-ignore
                         '--progress-width': `${monthlyPlan > 0 ? Math.min(100, (month / monthlyPlan) * 100) : 0}%`,
+                        // @ts-ignore
                         animation: shouldAnimate
                           ? `slideInProgress ${progressBarSpeeds.month}s cubic-bezier(0.4, 0, 0.2, 1) 0.3s both`
                           : 'none',
@@ -566,8 +775,8 @@ export function PlanFactCompactView({ shouldAnimate = true, shouldShow = true })
                 </button>
               </div>
             ) : paymentData.every(p => p.earned === 0) ? (
-              <div className="flex flex-col items-center justify-center py-6">
-                <div className="w-24 h-24 mb-3 text-green-400 dark:text-green-500 flex items-center justify-center">
+              <div className="flex flex-col items-center justify-center py-4">
+                <div className="w-16 h-16 mb-2 text-green-400 dark:text-green-500 flex items-center justify-center">
                   <PaymentIllustration className="w-full h-full" animated={shouldAnimate} />
                 </div>
                 <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
@@ -575,10 +784,10 @@ export function PlanFactCompactView({ shouldAnimate = true, shouldShow = true })
                 </p>
               </div>
             ) : (
-              <div className="space-y-4">
+              <div className="flex flex-col gap-4">
                 {paymentData.map((payment, index) => (
+                  <div key={payment.id}>
                   <div
-                    key={payment.id}
                     className={shouldAnimate ? 'animate-slide-up' : ''}
                     style={
                       shouldAnimate
@@ -589,24 +798,27 @@ export function PlanFactCompactView({ shouldAnimate = true, shouldShow = true })
                         : {}
                     }
                   >
-                    <div className="flex justify-between items-baseline">
-                      <p
-                        className={`text-gray-500 dark:text-gray-400 text-sm ${shouldAnimate ? 'opacity-0 animate-fade-in' : ''}`}
-                        style={
-                          shouldAnimate
-                            ? {
-                                animationDelay: `${0.25 + index * 0.05}s`,
-                                animationFillMode: 'forwards',
-                              }
-                            : {}
-                        }
-                      >
-                        {payment.name}{' '}
-                        {/* ✅ A11Y: Улучшаем контраст для темной темы */}
-                        <span className="text-xs text-gray-400 dark:text-gray-300">
-                          (выплата {formatPaymentDate(payment, currentYear, currentMonth)})
+                    <div className="flex justify-between items-end mb-1">
+                      <div className="flex flex-col">
+                        <p
+                          className={`text-gray-500 dark:text-gray-400 text-sm font-medium ${shouldAnimate ? 'opacity-0 animate-fade-in' : ''}`}
+                          style={
+                            shouldAnimate
+                              ? {
+                                  animationDelay: `${0.25 + index * 0.05}s`,
+                                  animationFillMode: 'forwards',
+                                }
+                              : {}
+                          }
+                        >
+                          {payment.name}
+                        </p>
+                        <span className={`text-[10px] uppercase tracking-wider text-green-600/60 dark:text-green-400/60 font-bold mt-0.5 ${shouldAnimate ? 'opacity-0 animate-fade-in' : ''}`}
+                            style={shouldAnimate ? { animationDelay: `${0.25 + index * 0.05}s`, animationFillMode: 'forwards' } : {}}
+                        >
+                          {formatPaymentDate(payment, currentYear, currentMonth)}
                         </span>
-                      </p>
+                      </div>
                       <AnimatedCounter
                         value={payment.earned}
                         suffix=" ₽"
@@ -629,7 +841,9 @@ export function PlanFactCompactView({ shouldAnimate = true, shouldShow = true })
                         style={{
                           backgroundColor: payment.color || '#10B981',
                           width: `${payment.plan > 0 ? Math.min(100, (payment.earned / payment.plan) * 100) : 0}%`,
+                          // @ts-ignore
                           '--progress-width': `${payment.plan > 0 ? Math.min(100, (payment.earned / payment.plan) * 100) : 0}%`,
+                          // @ts-ignore
                           animation: `slideInProgress ${progressBarSpeeds.payments[index] || '1.5'}s cubic-bezier(0.4, 0, 0.2, 1) ${0.35 + index * 0.05}s both`,
                         }}
                       />
@@ -647,6 +861,7 @@ export function PlanFactCompactView({ shouldAnimate = true, shouldShow = true })
                     >
                       План: {payment.plan.toLocaleString('ru-RU')} ₽
                     </p>
+                  </div>
                   </div>
                 ))}
               </div>
@@ -667,11 +882,33 @@ export function PlanFactCompactView({ shouldAnimate = true, shouldShow = true })
           style={{ borderColor: 'rgba(249, 115, 22, 0.4)' }}
         >
           <div className="relative z-10">
-            <h4 className="font-semibold text-orange-600 dark:text-orange-400 mb-4">Общие итоги</h4>
+            {/* Заголовок с бейджем средней ставки */}
+            <div className="flex items-center justify-between mb-4">
+              <h4 className="font-semibold text-orange-600 dark:text-orange-400">Общие итоги</h4>
+              {totalHoursAndRate.averageRate > 0 && (
+                <SimpleTooltip
+                  text="Средняя ставка за час = общий заработок ÷ общее количество часов за всё время"
+                  position="bottom"
+                >
+                  <div
+                    className={`flex items-center gap-1.5 px-2 py-1 bg-orange-500/10 dark:bg-orange-500/20 rounded-md border border-orange-500/20 cursor-help ${shouldAnimate ? 'animate-slide-up opacity-0 animate-fade-in' : ''}`}
+                    style={shouldAnimate ? { animationDelay: '0.3s', animationFillMode: 'both' } : {}}
+                  >
+                    <AnimatedCounter
+                      value={totalHoursAndRate.averageRate}
+                      suffix=" ₽/ч"
+                      decimals={0}
+                      className="text-xs font-bold text-orange-600 dark:text-orange-400"
+                      resetAnimation={shouldAnimate}
+                    />
+                  </div>
+                </SimpleTooltip>
+              )}
+            </div>
 
             {year === 0 && allTime === 0 ? (
-              <div className="flex flex-col items-center justify-center py-6">
-                <div className="w-24 h-24 mb-3 text-orange-400 dark:text-orange-500 flex items-center justify-center">
+              <div className="flex flex-col items-center justify-center py-4">
+                <div className="w-16 h-16 mb-2 text-orange-400 dark:text-orange-500 flex items-center justify-center">
                   <TotalIllustration className="w-full h-full" animated={shouldAnimate} />
                 </div>
                 <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
@@ -679,7 +916,7 @@ export function PlanFactCompactView({ shouldAnimate = true, shouldShow = true })
                 </p>
               </div>
             ) : (
-              <div className="space-y-6 flex flex-col justify-center h-full">
+              <div className="space-y-6">
                 {/* Год */}
                 <div
                   className={`border-l-4 border-orange-400 pl-4 ${shouldAnimate ? 'animate-slide-up opacity-0 animate-fade-in' : ''}`}
@@ -729,6 +966,8 @@ export function PlanFactCompactView({ shouldAnimate = true, shouldShow = true })
                     resetAnimation={shouldAnimate}
                   />
                 </div>
+
+
               </div>
             )}
           </div>
@@ -740,6 +979,9 @@ export function PlanFactCompactView({ shouldAnimate = true, shouldShow = true })
             fill="none"
           />
         </div>
+
+        {/* Карточка 4: Топ проекты (Новая) */}
+        <TopProjectsWidget shouldAnimate={shouldAnimate} />
       </div>
     </div>
   )

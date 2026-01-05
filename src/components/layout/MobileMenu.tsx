@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { X, Moon, Sun, Info, HelpCircle, GitCompare, Volume2, Database, Folder, Upload, Download } from '../../utils/icons'
+import { Cloud } from 'lucide-react'
+import { useUIStore } from '../../store/useUIStore'
 
 /**
  * Мобильное меню (hamburger menu) для Header
@@ -25,12 +27,12 @@ export function MobileMenu({
   onOpenBackups,
   onExport,
   onImport,
-}) {
+}: any) {
   // Три состояния для контроля анимаций (Three-State Animation Control)
   const [shouldMount, setShouldMount] = useState(false)
   const [isAnimating, setIsAnimating] = useState(false)
   const [isExiting, setIsExiting] = useState(false)
-  const menuRef = useRef(null)
+  const menuRef = useRef<HTMLDivElement>(null)
 
   // Логика открытия
   useEffect(() => {
@@ -156,6 +158,27 @@ export function MobileMenu({
 
           {/* Список действий */}
           <div className="space-y-2">
+            {/* Cloud Sync / Account */}
+            <button
+               onClick={() => {
+                 // Открываем модалку авторизации через глобальный стор
+                 // Так как здесь нет доступа к useUIStore напрямую (или есть через пропсы?),
+                 // Лучше использовать window.dispatchEvent или добавить onOpenAuth в пропсы.
+                 // Но у нас нет onOpenAuth в пропсах.
+                 // Давайте добавим его или используем событие.
+                 // В MobileMenu нет useUIStore. 
+                 // Используем глобальный стор
+                 const { openModal } = useUIStore.getState()
+                 openModal('auth')
+                 onClose()
+               }}
+               className="w-full glass-button px-4 py-3 rounded-lg flex items-center gap-3 text-left transition-normal hover-lift-scale click-shrink"
+               style={{ minHeight: '44px' }}
+            >
+               <Cloud className="w-5 h-5 flex-shrink-0 text-blue-500" />
+               <span className="text-sm font-medium">Облако / Аккаунт</span>
+            </button>
+
             {/* Тема */}
             <button
               onClick={() => {

@@ -27,22 +27,47 @@ export function calculatePaymentPeriod(
   currentYear: number,
   currentMonth: number
 ): PaymentPeriod {
-  const targetMonth = currentMonth + payment.monthOffset
-  const targetYear = currentYear + Math.floor(targetMonth / 12)
-  const adjustedMonth = ((targetMonth % 12) + 12) % 12
+  // Если periodMonth сохранён, используем его для периода
+  // Иначе вычисляем на основе monthOffset
+  let periodMonth: number
+  let periodYear: number
+  
+  if (payment.period?.periodMonth !== undefined) {
+    // Используем сохранённый месяц периода
+    periodMonth = payment.period.periodMonth
+    periodYear = currentYear
+    // Если сохранённый месяц больше текущего, то это период прошлого года
+    if (periodMonth > currentMonth) {
+      periodYear = currentYear - 1
+    }
+  } else {
+    // Fallback на старую логику с monthOffset
+    const targetMonth = currentMonth + payment.monthOffset
+    periodYear = currentYear + Math.floor(targetMonth / 12)
+    periodMonth = ((targetMonth % 12) + 12) % 12
+  }
 
-  const lastDayOfMonth = new Date(targetYear, adjustedMonth + 1, 0).getDate()
+  const lastDayOfMonth = new Date(periodYear, periodMonth + 1, 0).getDate()
 
   const paymentDay = Math.min(payment.day, lastDayOfMonth)
   const periodStart = Math.min(payment.period.start, lastDayOfMonth)
   const periodEnd = Math.min(payment.period.end, lastDayOfMonth)
 
+  // Дата выплаты - в текущем месяце или как указано в customDate
+  let paymentDate: Date
+  if (payment.customDate) {
+    const [day, month] = payment.customDate.split('.').map(Number)
+    paymentDate = new Date(currentYear, month - 1, day)
+  } else {
+    paymentDate = new Date(currentYear, currentMonth, paymentDay)
+  }
+
   return {
-    start: new Date(targetYear, adjustedMonth, periodStart),
-    end: new Date(targetYear, adjustedMonth, periodEnd),
-    paymentDate: new Date(targetYear, adjustedMonth, paymentDay),
-    year: targetYear,
-    month: adjustedMonth,
+    start: new Date(periodYear, periodMonth, periodStart),
+    end: new Date(periodYear, periodMonth, periodEnd),
+    paymentDate,
+    year: periodYear,
+    month: periodMonth,
   }
 }
 

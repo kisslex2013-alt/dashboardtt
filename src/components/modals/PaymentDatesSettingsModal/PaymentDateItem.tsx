@@ -89,6 +89,10 @@ export function PaymentDateItem({
           Дата выплаты: {payment.customDate || formatDate(payment.day, paymentMonth)}
         </p>
         <p className="text-xs text-gray-600 dark:text-gray-500 mb-1 flex items-center gap-1 drop-shadow-sm whitespace-nowrap">
+          <span 
+            className="w-2 h-2 rounded-full flex-shrink-0" 
+            style={{ backgroundColor: payment.color }}
+          />
           Период расчета: {`${formatDate(payment.period.start, periodMonth)}-${formatDate(payment.period.end, periodMonth)}`}
         </p>
         <div className="flex items-center gap-2">

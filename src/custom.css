@@ -623,9 +623,9 @@ details[open] > summary .chevron-icon {
 /* Новая раскладка таймлайна на CSS Grid: центр = колонка с точкой */
 .timeline-item {
   display: grid;
-  grid-template-columns: 1fr 40px 1fr; /* левая карточка | точка | правая карточка */
-  align-items: center; /* центрируем всю строку, чтобы инсайты были посередине относительно main */
-  gap: 1rem;
+  grid-template-columns: 1fr 60px 1fr; /* левая карточка | точка (шире) | правая карточка */
+  align-items: start; /* выравниваем по верху для предотвращения наложения */
+  gap: 0.5rem;
   position: relative;
 }
 
@@ -638,7 +638,8 @@ details[open] > summary .chevron-icon {
   grid-column: 2;
   grid-row: 1;
   justify-self: center;
-  align-self: center; /* точка всегда по центру строки */
+  align-self: flex-start; /* точка сверху */
+  margin-top: 1.5rem;
   z-index: 2; /* точка поверх вертикальной линии */
 }
 
@@ -647,24 +648,24 @@ details[open] > summary .chevron-icon {
 .timeline-item:nth-child(odd) .timeline-main {
   grid-column: 1;
   grid-row: 1;
-  align-self: center; /* основной блок по центру строки */
+  align-self: start;
 }
 .timeline-item:nth-child(odd) .timeline-side {
   grid-column: 3;
   grid-row: 1;
-  align-self: center; /* инсайты по центру строки */
+  align-self: start;
 }
 
 /* В четных строках: main справа (col 3), side слева (col 1) */
 .timeline-item:nth-child(even) .timeline-main {
   grid-column: 3;
   grid-row: 1;
-  align-self: center; /* основной блок по центру строки */
+  align-self: start;
 }
 .timeline-item:nth-child(even) .timeline-side {
   grid-column: 1;
   grid-row: 1;
-  align-self: center; /* инсайты по центру строки */
+  align-self: start;
 }
 
 /* Ширина карточек внутри колонок */
@@ -672,6 +673,7 @@ details[open] > summary .chevron-icon {
 .timeline-side {
   width: 100%;
   max-width: 100%;
+  overflow: hidden; /* не даём контенту выходить за колонку */
 }
 
 .timeline-main > .timeline-main-card,

@@ -1,16 +1,16 @@
 import { useState, useRef, useEffect, useMemo, useCallback, memo } from 'react'
 import { parseISO, startOfDay, format } from 'date-fns'
 import { ChevronDown as ChevronDownIcon, ChevronUp, BarChart3, Pin, Settings } from '../../utils/icons'
-import { CategoryDistribution } from '../charts/CategoryDistribution'
+import { InfoTooltip } from '../ui/InfoTooltip'
+import { ChartVisibilityDropdown } from '../ui/ChartVisibilityDropdown'
+import { CombinedCategoryChart } from '../charts/CombinedCategoryChart'
 import { WeekdayAnalysisChart } from '../charts/WeekdayAnalysisChart'
 import { TrendsChart } from '../charts/TrendsChart'
 import { DynamicsChart } from '../charts/DynamicsChart'
 import { RateDistributionChart } from '../charts/RateDistributionChart'
 import { HoursVsEarningsChart } from '../charts/ScatterChart'
 import { HourAnalysisChart } from '../charts/HourAnalysisChart'
-import { ForecastChart } from '../charts/ForecastChart'
 import { CalendarHeatmap } from '../charts/CalendarHeatmap'
-import { CategoryEfficiencyChart } from '../charts/CategoryEfficiencyChart'
 import { CombinedChart } from '../charts/CombinedChart'
 import { CustomDatePicker } from '../ui/CustomDatePicker'
 import {
@@ -133,13 +133,6 @@ const AnalyticsSectionComponent = memo(() => {
 
   const entries = useEntries()
   const showSuccess = useShowSuccess()
-  const [isVisibilityMenuOpen, setIsVisibilityMenuOpen] = useState(false)
-  // Три состояния для контроля анимаций (Three-State Animation Control)
-  const [shouldMountVisibilityMenu, setShouldMountVisibilityMenu] = useState(false)
-  const [isAnimatingVisibilityMenu, setIsAnimatingVisibilityMenu] = useState(false)
-  const [isExitingVisibilityMenu, setIsExitingVisibilityMenu] = useState(false)
-  const visibilityMenuRef = useRef(null)
-  const visibilityButtonRef = useRef(null)
 
   // ✅ ОПТИМИЗАЦИЯ: Мемоизация маппингов фильтров
   const filterTextMapping = useMemo(
@@ -187,85 +180,6 @@ const AnalyticsSectionComponent = memo(() => {
   const endDateInputRef = useRef<HTMLInputElement>(null)
   const [isStartDatePickerOpen, setIsStartDatePickerOpen] = useState(false)
   const [isEndDatePickerOpen, setIsEndDatePickerOpen] = useState(false)
-
-  // Логика открытия visibility menu
-  // ИСПРАВЛЕНО: упрощена логика - убрана необходимость вычисления позиции (absolute позиционирование)
-  useEffect(() => {
-    if (isVisibilityMenuOpen) {
-      setShouldMountVisibilityMenu(true)
-      setIsExitingVisibilityMenu(false)
-      // Для обычных dropdown используем один RAF
-      const rafId = requestAnimationFrame(() => {
-        setIsAnimatingVisibilityMenu(true)
-      })
-      return () => cancelAnimationFrame(rafId)
-    }
-  }, [isVisibilityMenuOpen])
-
-  // Логика закрытия visibility menu с guard для предотвращения двойного срабатывания
-  useEffect(() => {
-    if (
-      !isVisibilityMenuOpen &&
-      shouldMountVisibilityMenu &&
-      !isExitingVisibilityMenu &&
-      isAnimatingVisibilityMenu
-    ) {
-      setIsAnimatingVisibilityMenu(false)
-      // RAF для синхронизации перед началом exit анимации
-      const rafId = requestAnimationFrame(() => {
-        setIsExitingVisibilityMenu(true)
-      })
-      return () => cancelAnimationFrame(rafId)
-    }
-  }, [
-    isVisibilityMenuOpen,
-    shouldMountVisibilityMenu,
-    isExitingVisibilityMenu,
-    isAnimatingVisibilityMenu,
-  ])
-
-  // Слушатель окончания анимации исчезновения visibility menu
-  useEffect(() => {
-    if (isExitingVisibilityMenu && visibilityMenuRef.current) {
-      const element = visibilityMenuRef.current
-
-      const handleAnimationEnd = e => {
-        // Проверяем, что событие относится к нашему элементу и это exit анимация
-        // ИСПРАВЛЕНО: Добавлены дополнительные проверки для надежности
-        if (
-          e.target === element &&
-          (e.animationName === 'slideDownOut' ||
-            e.animationName === 'slideUpOut' ||
-            e.animationName === 'slideOut' ||
-            e.animationName === 'fadeOut' ||
-            e.animationName.includes('slideOut') ||
-            e.animationName.includes('slide-out') ||
-            e.animationName.includes('fadeOut'))
-        ) {
-          setIsExitingVisibilityMenu(false)
-          // Небольшая задержка перед размонтированием для гарантии завершения анимации
-          setTimeout(() => {
-            setShouldMountVisibilityMenu(false)
-          }, 50)
-        }
-      }
-
-      // Fallback на случай, если событие не сработает (200ms анимация + запас)
-      const fallbackTimer = setTimeout(() => {
-        if (isExitingVisibilityMenu) {
-          setIsExitingVisibilityMenu(false)
-          setShouldMountVisibilityMenu(false)
-        }
-      }, 300)
-
-      element.addEventListener('animationend', handleAnimationEnd)
-
-      return () => {
-        clearTimeout(fallbackTimer)
-        element.removeEventListener('animationend', handleAnimationEnd)
-      }
-    }
-  }, [isExitingVisibilityMenu])
 
   // Логика открытия filter dropdown
   // ИСПРАВЛЕНО: упрощена логика - убрана необходимость вычисления позиции (absolute позиционирование)
@@ -358,14 +272,6 @@ const AnalyticsSectionComponent = memo(() => {
       !buttonRef.current.contains(event.target)
     ) {
       setIsFilterDropdownOpen(false)
-    }
-    if (
-      visibilityMenuRef.current &&
-      !visibilityMenuRef.current.contains(event.target) &&
-      visibilityButtonRef.current &&
-      !visibilityButtonRef.current.contains(event.target)
-    ) {
-      setIsVisibilityMenuOpen(false)
     }
   }, [])
 
@@ -471,16 +377,25 @@ const AnalyticsSectionComponent = memo(() => {
       rateDistribution: 'Распределение ставок',
       scatter: 'Часы vs Доход',
       hourAnalysis: 'Анализ часов дня',
-      forecast: 'Прогноз заработка',
       calendar: 'Календарь доходов',
       categoryEfficiency: 'Доходы по категориям',
     }),
     []
   )
 
+  // Опции для ChartVisibilityDropdown
+  const visibilityOptions = useMemo(() => 
+    Object.entries(chartLabels).map(([key, label]) => ({
+      key,
+      label,
+      visible: chartVisibility[key] ?? false
+    })),
+    [chartLabels, chartVisibility]
+  )
+
   // ✅ ОПТИМИЗАЦИЯ: Мемоизация функции переключения видимости графика
   const toggleChartVisibility = useCallback(
-    chartKey => {
+    (chartKey: string) => {
       updateChartVisibility({
         [chartKey]: !chartVisibility[chartKey],
       })
@@ -491,7 +406,6 @@ const AnalyticsSectionComponent = memo(() => {
   // ✅ ОПТИМИЗАЦИЯ: Мемоизация обработчиков событий (вынесены на верхний уровень)
   const handleToggleExpanded = useCallback(() => setIsExpanded(prev => !prev), [])
   const handleToggleFilterDropdown = useCallback(() => setIsFilterDropdownOpen(prev => !prev), [])
-  const handleToggleVisibilityMenu = useCallback(() => setIsVisibilityMenuOpen(prev => !prev), [])
 
   return (
     // ИСПРАВЛЕНО: Убираем mb-6 когда контент закрыт или закрывается, чтобы не было пустого пространства
@@ -507,8 +421,9 @@ const AnalyticsSectionComponent = memo(() => {
           <div className="flex items-center gap-3">
             <BarChart3 className="w-6 h-6 text-blue-500" aria-hidden="true" />
             <h2 id="analytics-section-header" className="text-xl font-bold">
-              Графики
+              Описательная аналитика
             </h2>
+            <InfoTooltip text="Детальный анализ динамики, структуры доходов и распределения времени по часам." />
           </div>
 
           <div className={`flex items-center ${isMobile ? 'gap-2 flex-wrap' : 'gap-3'}`}>
@@ -649,130 +564,12 @@ const AnalyticsSectionComponent = memo(() => {
                   )}
                 </div>
 
-                {/* Кнопка управления видимостью графиков - унифицирована с другими dropdown */}
-                {/* ИСПРАВЛЕНО: Используем relative контейнер для absolute позиционирования */}
-                <div className="relative">
-                  <button
-                    ref={visibilityButtonRef}
-                    onClick={handleToggleVisibilityMenu}
-                    className={`glass-effect ${isMobile ? 'px-2 py-1 pr-6 text-xs min-w-[80px]' : 'px-4 py-2 pr-10 text-sm min-w-[180px]'} rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 font-medium text-left transition-normal hover-lift-scale click-shrink touch-manipulation`}
-                    style={isMobile ? { minHeight: '32px' } : {}}
-                    title="Управление видимостью графиков"
-                    aria-label="Управление видимостью графиков"
-                    aria-expanded={isVisibilityMenuOpen}
-                    aria-haspopup="true"
-                  >
-                    <span className="flex items-center gap-1.5">
-                      <Settings className={isMobile ? 'w-3.5 h-3.5' : 'w-4 h-4'} />
-                      {!isMobile && <span>Графики</span>}
-                    </span>
-                    <ChevronDownIcon
-                      className={`absolute ${isMobile ? 'right-1.5' : 'right-3'} top-1/2 -translate-y-1/2 ${isMobile ? 'w-3 h-3' : 'w-4 h-4'} text-gray-500 transition-transform duration-200 ${isVisibilityMenuOpen ? 'rotate-180' : ''}`}
-                    />
-                  </button>
-
-                  {/* Dropdown меню - absolute позиционирование относительно кнопки, открывается ВНИЗ */}
-                  {shouldMountVisibilityMenu && (
-                    <div
-                      ref={visibilityMenuRef}
-                      className={`absolute right-0 mt-2 w-64 glass-effect rounded-lg border border-gray-300 dark:border-gray-600 shadow-xl z-[9999] backdrop-blur-lg bg-white/95 dark:bg-gray-800/95 ${
-                        !isAnimatingVisibilityMenu && !isExitingVisibilityMenu
-                          ? 'opacity-0 -translate-y-4'
-                          : ''
-                      } ${isAnimatingVisibilityMenu ? 'animate-slide-down' : ''} ${
-                        isExitingVisibilityMenu ? 'animate-slide-up-out' : ''
-                      }`}
-                      style={{
-                        maxHeight: 'calc(100vh - 100px)',
-                        overflowY: 'auto',
-                        scrollBehavior: 'smooth',
-                      }}
-                    >
-                      {Object.entries(chartLabels).map(([key, label]) => {
-                        const isVisible = chartVisibility[key]
-
-                        // ИСПРАВЛЕНО: Проверяем, установлен ли этот конкретный график как видимый по умолчанию
-                        // Каждый график имеет свой собственный флаг в defaultChartVisibility
-                        const isDefaultForChart =
-                          defaultChartVisibility && defaultChartVisibility[key] === true
-
-                        return (
-                          <div
-                            key={key}
-                            className="flex items-center justify-between px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 border-b border-gray-200 dark:border-gray-700 last:border-b-0"
-                          >
-                            {/* Текст графика - кликабельный для переключения видимости */}
-                            <span
-                              onClick={() => toggleChartVisibility(key)}
-                              className="flex-1 text-sm text-gray-900 dark:text-white"
-                            >
-                              {label}
-                            </span>
-
-                            {/* ИСПРАВЛЕНО: Иконка Pin для индивидуального выбора графика */}
-                            {/* PIN синий только если этот конкретный график включен по умолчанию */}
-                            {/* При клике: переключаем видимость только этого графика по умолчанию */}
-                            <button
-                              onClick={e => {
-                                e.stopPropagation()
-                                e.preventDefault()
-
-                                // ИСПРАВЛЕНО: Переключаем видимость только этого конкретного графика по умолчанию
-                                const currentDefaults = defaultChartVisibility || {}
-                                const newDefaults = {
-                                  ...currentDefaults,
-                                  [key]: !isDefaultForChart, // Переключаем: если был включен - выключаем, иначе включаем
-                                }
-
-                                // Если все графики выключены по умолчанию - сбрасываем в null
-                                const hasAnyDefault = Object.values(newDefaults).some(
-                                  v => v === true
-                                )
-                                if (!hasAnyDefault) {
-                                  setDefaultChartVisibility(null)
-                                  // ИСПРАВЛЕНО: Скрываем все графики когда снимаем последний PIN
-                                  const allHidden = Object.keys(chartLabels).reduce((acc, key) => {
-                                    acc[key] = false
-                                    return acc
-                                  }, {})
-                                  updateChartVisibility(allHidden)
-                                  showSuccess(
-                                    `График "${label}" убран из умолчания. Все графики скрыты.`
-                                  )
-                                  logger.log(
-                                    '📌 Дефолтная конфигурация графиков сброшена (все выключены)'
-                                  )
-                                } else {
-                                  setDefaultChartVisibility(newDefaults)
-                                  // ИСПРАВЛЕНО: Применяем новую конфигурацию сразу
-                                  updateChartVisibility(newDefaults)
-                                  showSuccess(
-                                    isDefaultForChart
-                                      ? `График "${label}" убран из умолчания`
-                                      : `График "${label}" установлен как видимый по умолчанию`
-                                  )
-                                  logger.log('📌 Дефолтная конфигурация графиков:', newDefaults)
-                                }
-                              }}
-                              className={`p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors hover-lift-scale click-shrink ${
-                                isDefaultForChart ? 'text-blue-500' : 'text-gray-400'
-                              }`}
-                              title={
-                                isDefaultForChart
-                                  ? `График "${label}" включен по умолчанию (клик - выключить)`
-                                  : `График "${label}" выключен по умолчанию (клик - включить)`
-                              }
-                            >
-                              <Pin
-                                className={`w-4 h-4 ${isDefaultForChart ? 'fill-current' : ''}`}
-                              />
-                            </button>
-                          </div>
-                        )
-                      })}
-                    </div>
-                  )}
-                </div>
+                {/* Кнопка управления видимостью графиков - используем унифицированный компонент */}
+                <ChartVisibilityDropdown
+                  options={visibilityOptions}
+                  onToggle={toggleChartVisibility}
+                  buttonLabel="Графики"
+                />
               </div>
             )}
 
@@ -912,8 +709,8 @@ const AnalyticsSectionComponent = memo(() => {
 
           {/* Распределения - в сетке 2 колонки */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {chartVisibility.categoryDistribution && (
-              <CategoryDistribution entries={filteredEntries} />
+            {(chartVisibility.categoryDistribution || chartVisibility.categoryEfficiency) && (
+              <CombinedCategoryChart entries={filteredEntries} />
             )}
             {chartVisibility.weekdayAnalysis && <WeekdayAnalysisChart entries={filteredEntries} />}
           </div>
@@ -941,15 +738,9 @@ const AnalyticsSectionComponent = memo(() => {
               <HoursVsEarningsChart entries={filteredEntries} />
             )}
             {chartVisibility.hourAnalysis && <HourAnalysisChart entries={filteredEntries} />}
-            {chartVisibility.categoryEfficiency && (
-              <CategoryEfficiencyChart entries={filteredEntries} />
-            )}
           </div>
 
-          {/* Прогноз заработка - во всю ширину */}
-          {chartVisibility.forecast && (
-            <ForecastChart entries={filteredEntries} dateFilter={filterKey} />
-          )}
+
 
           {/* Календарь доходов - скрыт на мобильных (не зависит от общего фильтра, имеет свою навигацию) */}
           {!isMobile && chartVisibility.calendar && (

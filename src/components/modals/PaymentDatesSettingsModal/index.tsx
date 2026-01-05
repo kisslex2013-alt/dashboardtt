@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { BaseModal } from '../../ui/BaseModal'
 import {
   usePaymentDates,
@@ -10,6 +10,7 @@ import {
 import { useShowSuccess, useShowError } from '../../../store/useUIStore'
 import { generateUUID } from '../../../utils/uuid'
 import { Plus } from '../../../utils/icons'
+import { PaymentDate } from '../../../types'
 import { PaymentCalendar } from './PaymentCalendar'
 import { PaymentDateItem } from './PaymentDateItem'
 import { usePaymentCalendar } from './hooks/usePaymentCalendar'
@@ -27,7 +28,12 @@ import { defaultColors } from './utils/paymentFormatters'
  * - Настройка дат, периодов и цветов
  * - Календарный выбор дня выплаты и периода
  */
-export function PaymentDatesSettingsModal({ isOpen, onClose }) {
+interface PaymentDatesSettingsModalProps {
+  isOpen: boolean
+  onClose: () => void
+}
+
+export function PaymentDatesSettingsModal({ isOpen, onClose }: PaymentDatesSettingsModalProps) {
   const savedPaymentDates = usePaymentDates()
   const addPaymentDate = useAddPaymentDate()
   const updatePaymentDate = useUpdatePaymentDate()
@@ -36,9 +42,9 @@ export function PaymentDatesSettingsModal({ isOpen, onClose }) {
   const showSuccess = useShowSuccess()
   const showError = useShowError()
 
-  const [paymentDates, setPaymentDates] = useState([])
-  const [editingId, setEditingId] = useState(null)
-  const [draggedId, setDraggedId] = useState(null)
+  const [paymentDates, setPaymentDates] = useState<PaymentDate[]>([])
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [draggedId, setDraggedId] = useState<string | null>(null)
 
   // Инициализация календаря
   const now = new Date()
@@ -48,21 +54,21 @@ export function PaymentDatesSettingsModal({ isOpen, onClose }) {
   const { validatePayment, validateAll } = usePaymentValidation(paymentDates)
 
   // Обновление поля выплаты
-  const handleUpdateField = useCallback((id, field, value) => {
+  const handleUpdateField = useCallback((id: string, field: string, value: any) => {
     setPaymentDates(prev => prev.map(p => (p.id === id ? { ...p, [field]: value } : p)))
   }, [])
 
   // Обновление периода (оба поля одновременно)
   const handleUpdatePeriodBoth = useCallback(
-    (id, start, end, periodMonth) => {
+    (id: string, start: string | number, end: string | number, periodMonth?: number) => {
       setPaymentDates(prev =>
         prev.map(p => {
           if (p.id === id) {
             return {
               ...p,
               period: {
-                start: parseInt(start) || 0,
-                end: parseInt(end) || 0,
+                start: Number(start) || 0,
+                end: Number(end) || 0,
                 periodMonth: periodMonth !== undefined ? periodMonth : p.period?.periodMonth,
               },
             }
@@ -76,8 +82,8 @@ export function PaymentDatesSettingsModal({ isOpen, onClose }) {
 
   // Обновление дня выплаты
   const handleUpdatePaymentDay = useCallback(
-    (id, day, month) => {
-      const monthStr = (month + 1).toString().padStart(2, '0')
+    (id: string, day: number, month?: number) => {
+      const monthStr = (month !== undefined ? month + 1 : 1).toString().padStart(2, '0')
       const dayStr = day.toString().padStart(2, '0')
       handleUpdateField(id, 'customDate', `${dayStr}.${monthStr}`)
       handleUpdateField(id, 'day', day)
@@ -94,9 +100,13 @@ export function PaymentDatesSettingsModal({ isOpen, onClose }) {
     calendar.currentMonth
   )
 
-  // Загружаем сохраненные настройки при открытии
+  // Загружаем сохраненные настройки только при ОТКРЫТИИ модала (переход false → true)
+  // Используем ref для отслеживания предыдущего состояния
+  const wasOpenRef = useRef(false)
+  
   useEffect(() => {
-    if (isOpen) {
+    // Загружаем данные только когда модал открывается (переход false → true)
+    if (isOpen && !wasOpenRef.current) {
       setPaymentDates([...savedPaymentDates])
       setEditingId(null)
       selection.resetSelection()
@@ -104,13 +114,14 @@ export function PaymentDatesSettingsModal({ isOpen, onClose }) {
       calendar.setCurrentYear(now.getFullYear())
       calendar.setCurrentMonth(now.getMonth())
     }
+    wasOpenRef.current = isOpen
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen, savedPaymentDates])
+  }, [isOpen, savedPaymentDates]) // savedPaymentDates нужен для реактивности при первом рендере
 
   // Проверка, является ли день днем выплаты
   const isPaymentDay = useCallback(
-    day => {
-      return paymentDates.find(payment => {
+    (day: number) => {
+      return !!paymentDates.find(payment => {
         if (payment.customDate) {
           const [d, m] = payment.customDate.split('.')
           const paymentMonth = parseInt(m) - 1
@@ -126,23 +137,23 @@ export function PaymentDatesSettingsModal({ isOpen, onClose }) {
     [paymentDates, calendar.currentMonth]
   )
 
-  // Проверка, находится ли день в периоде
+  // Проверка, находится ли день в периоде (возвращает payment с цветом или null)
   const isInPeriod = useCallback(
-    day => {
+    (day: number) => {
       return paymentDates.find(payment => {
         const periodMonth = getPeriodMonth(payment)
         if (periodMonth !== calendar.currentMonth) {
           return false
         }
-        return day >= payment.period.start && day <= payment.period.end
-      })
+        return payment.period && day >= payment.period.start && day <= payment.period.end
+      }) || null
     },
     [paymentDates, calendar.currentMonth]
   )
 
   // Обработчик клика по дню календаря
   const handleDayClick = useCallback(
-    day => {
+    (day: number) => {
       if (selection.selectingMode === 'period') {
         return
       }
@@ -184,7 +195,7 @@ export function PaymentDatesSettingsModal({ isOpen, onClose }) {
 
   // Начало редактирования
   const handleStartEdit = useCallback(
-    id => {
+    (id: string) => {
       setEditingId(id)
       selection.resetSelection()
     },
@@ -193,7 +204,7 @@ export function PaymentDatesSettingsModal({ isOpen, onClose }) {
 
   // Сохранение изменений
   const handleSaveEdit = useCallback(
-    id => {
+    (id: string) => {
       const payment = paymentDates.find(p => p.id === id)
       if (!payment) return
 
@@ -225,7 +236,7 @@ export function PaymentDatesSettingsModal({ isOpen, onClose }) {
 
   // Удаление выплаты
   const handleDelete = useCallback(
-    id => {
+    (id: string) => {
       if (!confirm('Вы уверены, что хотите удалить эту выплату?')) return
 
       deletePaymentDate(id)
@@ -264,7 +275,7 @@ export function PaymentDatesSettingsModal({ isOpen, onClose }) {
 
   // Переключение repeat
   const handleToggleRepeat = useCallback(
-    id => {
+    (id: string) => {
       const payment = paymentDates.find(p => p.id === id)
       if (!payment) return
       handleUpdateField(id, 'enabled', !payment.enabled)
@@ -273,25 +284,25 @@ export function PaymentDatesSettingsModal({ isOpen, onClose }) {
   )
 
   // Обработчики drag and drop
-  const handleDragStart = useCallback((e, id) => {
+  const handleDragStart = useCallback((e: React.DragEvent, id: string) => {
     setDraggedId(id)
     e.dataTransfer.effectAllowed = 'move'
     e.dataTransfer.setData('text/plain', id)
-    const element = e.currentTarget
+    const element = e.currentTarget as HTMLElement
     if (element) {
       element.style.opacity = '0.5'
     }
   }, [])
 
-  const handleDragEnd = useCallback(e => {
-    const element = e.currentTarget
+  const handleDragEnd = useCallback((e: React.DragEvent) => {
+    const element = e.currentTarget as HTMLElement
     if (element) {
       element.style.opacity = '1'
     }
     setDraggedId(null)
   }, [])
 
-  const handleDragOver = useCallback(e => {
+  const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault()
     e.stopPropagation()
     if (e.dataTransfer) {
@@ -299,13 +310,13 @@ export function PaymentDatesSettingsModal({ isOpen, onClose }) {
     }
   }, [])
 
-  const handleDragEnter = useCallback(e => {
+  const handleDragEnter = useCallback((e: React.DragEvent) => {
     e.preventDefault()
     e.stopPropagation()
   }, [])
 
   const handleDrop = useCallback(
-    (e, targetId) => {
+    (e: React.DragEvent, targetId: string) => {
       e.preventDefault()
       e.stopPropagation()
 

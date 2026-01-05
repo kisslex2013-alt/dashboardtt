@@ -39,6 +39,26 @@ const NotificationsDisplayModal = lazy(() =>
     default: module.NotificationsDisplayModal,
   }))
 )
+const CommandPaletteModal = lazy(() =>
+  import('../components/modals/CommandPaletteModal').then(module => ({
+    default: module.CommandPaletteModal,
+  }))
+)
+const AuthModal = lazy(() =>
+  import('../components/auth/AuthModal').then(module => ({
+    default: module.default,
+  }))
+)
+const SyncConflictModal = lazy(() =>
+  import('../components/modals/SyncConflictModal').then(module => ({
+    default: module.SyncConflictModal,
+  }))
+)
+const TimeOverlapModal = lazy(() =>
+  import('../components/modals/TimeOverlapModal').then(module => ({
+    default: module.TimeOverlapModal,
+  }))
+)
 
 // Dev-only компонент
 const DevIconEditor = lazy(() =>
@@ -50,6 +70,7 @@ const DevIconEditor = lazy(() =>
 // ... imports (lazy definitions remain the same)
 import { useAppSelectors } from '../hooks/useAppSelectors'
 import { useAppHandlers } from '../hooks/useAppHandlers'
+import { useAuthStore } from '../store/useAuthStore'
 // TODO: Import specific handlers if needed, or get them from selectors if available
 // For now, assuming basic close handlers are sufficient or available in store
 // Update: Looks like close handles are generic in store, but specific actions like onImport need specific handlers.
@@ -61,7 +82,7 @@ import { useAppHandlers } from '../hooks/useAppHandlers'
  */
 export const AppModals: React.FC<{ modals: any }> = ({ modals }) => {
   const { closeModal } = useAppSelectors()
-  const { handleImport, handleClearDemoData } = useAppHandlers()
+  const { handleImport, handleClearDemoData, handleSaveEntry } = useAppHandlers()
 
   // Обработчики закрытия для каждой модалки
   const handleClose = (modalName: string) => () => closeModal(modalName)
@@ -73,6 +94,7 @@ export const AppModals: React.FC<{ modals: any }> = ({ modals }) => {
            isOpen={modals.editEntry.isOpen}
            onClose={handleClose('editEntry')}
            entry={modals.editEntry.entry}
+           onSave={handleSaveEntry}
         />
       )}
       {modals.import?.isOpen && (
@@ -111,6 +133,7 @@ export const AppModals: React.FC<{ modals: any }> = ({ modals }) => {
         <SoundNotificationsSettingsModal
           isOpen={modals.soundSettings.isOpen}
           onClose={handleClose('soundSettings')}
+          initialTab={modals.soundSettings.activeTab}
         />
       )}
       {modals.floatingPanelSettings?.isOpen && (
@@ -127,11 +150,68 @@ export const AppModals: React.FC<{ modals: any }> = ({ modals }) => {
           {null}
         </NotificationsDisplayModal>
       )}
+      {modals.commandPalette?.isOpen && (
+        <CommandPaletteModal
+          isOpen={modals.commandPalette.isOpen}
+          onClose={handleClose('commandPalette')}
+        />
+      )}
+      {modals.auth?.isOpen && (
+        <AuthModal />
+      )}
 
       {/* Dev Tools */}
       {import.meta.env.DEV && modals.categoryManager?.isOpen && ( // Example dev tool or check store better
          null // Placeholder if dev icon editor was mapped differently
       )}
+    </Suspense>
+  )
+}
+
+/**
+ * Модал, управляемый через useAuthStore (вне Suspense, т.к. связан с auth flow)
+ */
+export const SyncConflictModalContainer: React.FC = () => {
+  const pendingSyncData = useAuthStore(state => state.pendingSyncData)
+  const handleSyncDecision = useAuthStore(state => state.handleSyncDecision)
+  const closeSyncDialog = useAuthStore(state => state.closeSyncDialog)
+
+  if (!pendingSyncData.show || !pendingSyncData.data) return null
+
+  return (
+    <Suspense fallback={null}>
+      <SyncConflictModal
+        isOpen={pendingSyncData.show}
+        onClose={closeSyncDialog}
+        syncData={pendingSyncData.data}
+        onMerge={() => handleSyncDecision('merge')}
+        onKeepLocal={() => handleSyncDecision('keep-local')}
+        onUseCloud={() => handleSyncDecision('use-cloud')}
+      />
+    </Suspense>
+  )
+}
+
+/**
+ * Модал для пересечений времени
+ */
+export const TimeOverlapModalContainer: React.FC = () => {
+  const pendingOverlaps = useAuthStore(state => state.pendingOverlaps)
+  const handleFixOverlaps = useAuthStore(state => state.handleFixOverlaps)
+  const closeOverlapsDialog = useAuthStore(state => state.closeOverlapsDialog)
+
+  if (!pendingOverlaps.show) return null
+
+  return (
+    <Suspense fallback={null}>
+      <TimeOverlapModal
+        isOpen={pendingOverlaps.show}
+        onClose={closeOverlapsDialog}
+        overlaps={pendingOverlaps.overlaps}
+        onAutoFix={handleFixOverlaps}
+        onIgnore={closeOverlapsDialog}
+        resolution={pendingOverlaps.resolution ?? undefined}
+      />
     </Suspense>
   )
 }

@@ -1,26 +1,28 @@
-# Product Context
+# Контекст Продукта (Product Context)
 
-## Problem Statement
-Users need a centralized, performant, and visually engaging dashboard to track complex metrics and interact with voting mechanics without UI latency or poor UX.
+## Постановка проблемы
+Пользователям нужен централизованный, производительный и визуально привлекательный дашборд для отслеживания сложных метрик и взаимодействия с механикой голосования без задержек UI или плохого UX.
 
-## User Experience Goals
-- **"Wow" Effect**: High-end visuals, glassmorphism, fluid micro-animations.
-- **Responsiveness**: Seamless experience across Desktop, Tablet, and Mobile.
-- **Immediacy**: Instant feedback on actions (voting, navigation).
+## Цели пользовательского опыта (UX Goals)
+- **"Wow"-эффект**: Премиальная визуализация, глассморфизм (glassmorphism), плавные микро-анимации.
+- **Отзывчивость**: Бесшовный опыт на Desktop, Tablet и Mobile.
+- **Мгновенность**: Мгновенная обратная связь на действия (голосование, навигация).
 
-## Functional Requirements
-### Core
-- **Metrics Dashboard**: Display key performance indicators (KPIs) with widget support.
-- **Voting System**: "Effect" cards with rapid voting capabilities.
-- **Analytics**: Interactive charts (Recharts/Custom) for trend analysis.
+## Функциональные требования
 
-### Planned / In Progress
-- **Offline Mode**: Full functionality without internet connection (PWA/Service Worker).
-- **PDF Export**: Generate reports from current views.
-- **Keyboard Shortcuts**: Power-user navigation (Cmd+K, hotkeys).
-- **Widgets**: Drag-and-drop customization for the main dashboard.
+### Основные
+- **Метрики Dashboard**: Отображение ключевых показателей (KPI) с поддержкой виджетов.
+- **Анализ времени**: Записи времени с категориями, ставками и заработком.
+- **Аналитика**: Интерактивные графики (Recharts/Custom) для анализа трендов.
+- **AI-уведомления**: Умные уведомления о выгорании, рисках и достижениях.
 
-## Design System
-- **Theme**: Dark/Light mode support with CSS variables/tokens.
-- **Typography**: Modern sans-serif (Inter/Roboto).
-- **Components**: Atomic design with consolidated UI kit (Buttons, Inputs, Modals).
+### Планируемые / В разработке
+- **Offline режим**: Полная функциональность без интернета (PWA/Service Worker).
+- **PDF экспорт**: Генерация отчётов из текущих представлений.
+- **Keyboard Shortcuts**: Горячие клавиши для power-users (Cmd+K, hotkeys).
+- **Виджеты**: Drag-and-drop кастомизация главного дашборда.
+
+## Дизайн-система
+- **Тема**: Поддержка тёмной/светлой темы через CSS Variables/Tokens.
+- **Типографика**: Современный sans-serif (Inter/Roboto/Open Sans).
+- **Компоненты**: Atomic design с консолидированным UI kit (Buttons, Inputs, Modals).

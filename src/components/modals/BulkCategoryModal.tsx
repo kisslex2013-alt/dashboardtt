@@ -4,6 +4,7 @@ import { useCategories } from '../../store/useSettingsStore'
 import { Button } from '../ui/Button'
 import { BaseModal } from '../ui/BaseModal'
 import { getIcon } from '../../utils/iconHelper'
+import { StaggeredItem } from '../ui/StaggeredList'
 
 /**
  * Модальное окно для массового изменения категории записей
@@ -66,38 +67,35 @@ export function BulkCategoryModal({ isOpen, onClose, selectedCount, onConfirm })
             const uniqueKey = category.id || `category-${index}`
 
             return (
-              <button
-                key={uniqueKey}
-                onClick={() => setSelectedCategoryId(category.id)}
-                className={`
-                  w-full p-3 rounded-lg border transition-normal hover-lift-scale
-                  flex items-center gap-3 text-left
-                  ${
-                    selectedCategoryId === category.id
-                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                      : 'border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800'
-                  }
-                `}
-              >
-                <div
-                  className="w-4 h-4 rounded-full flex-shrink-0"
-                  style={{ backgroundColor: category.color }}
-                />
-                {CategoryIcon && (
-                  <CategoryIcon
-                    className="w-5 h-5 flex-shrink-0"
-                    style={{ color: category.color }}
-                  />
-                )}
-                <span className="flex-1 font-medium text-gray-900 dark:text-white">
-                  {category.name}
-                </span>
-                {selectedCategoryId === category.id && (
-                  <div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center">
-                    <span className="text-white text-xs">✓</span>
-                  </div>
-                )}
-              </button>
+              <StaggeredItem key={uniqueKey} index={index} staggerDelay={40}>
+                <button
+                  onClick={() => setSelectedCategoryId(category.id)}
+                  className={`
+                    w-full p-3 rounded-lg border transition-normal hover-lift-scale
+                    flex items-center gap-3 text-left
+                    ${
+                      selectedCategoryId === category.id
+                        ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                        : 'border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800'
+                    }
+                  `}
+                >
+                  {CategoryIcon && (
+                    <CategoryIcon
+                      className="w-5 h-5 flex-shrink-0"
+                      style={{ color: category.color }}
+                    />
+                  )}
+                  <span className="flex-1 font-medium text-gray-900 dark:text-white">
+                    {category.name}
+                  </span>
+                  {selectedCategoryId === category.id && (
+                    <div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center">
+                      <span className="text-white text-xs">✓</span>
+                    </div>
+                  )}
+                </button>
+              </StaggeredItem>
             )
           })}
         </div>

@@ -76,3 +76,16 @@ lpt7
 lpt8
 lpt9
 
+# Playwright/Testing
+playwright-report/
+test-results/
+
+# Logs
+logs/
+*.log
+
+# Artifacts logs (session-specific)
+artifacts/logs/
+
+# Wrangler (Cloudflare)
+.wrangler/

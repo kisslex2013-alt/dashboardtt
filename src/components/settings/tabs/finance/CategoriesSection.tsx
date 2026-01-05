@@ -6,6 +6,8 @@
 
 import { Plus, Trash2 } from 'lucide-react'
 import { getIcon } from '../../../../utils/iconHelper'
+import { IconSelect } from '../../../ui/IconSelect'
+import { ColorPicker } from '../../../ui/ColorPicker'
 
 interface CategoriesSectionProps {
   categories: any[]
@@ -61,12 +63,6 @@ export function CategoriesSection({
     return count
   }
 
-  // Дефолтные цвета для пикера
-  const colors = [
-    '#3B82F6', '#EF4444', '#10B981', '#F59E0B',
-    '#8B5CF6', '#EC4899', '#6366F1', '#14B8A6'
-  ]
-
   return (
     <div key="categories-tab" className="space-y-4">
       <div className="mb-6">
@@ -107,37 +103,27 @@ export function CategoriesSection({
                 />
               </div>
 
+              {/* Цвет */}
               <div>
                 <label className="block text-xs text-gray-600 dark:text-gray-400 mb-0.5">
                   Цвет
                 </label>
-                <div className="flex gap-1">
-                  {colors.map(color => (
-                    <button
-                      key={color}
-                      type="button"
-                      onClick={() => setCategoryFormData({ ...categoryFormData, color })}
-                      className={`w-6 h-6 rounded-full border-2 transition-transform hover:scale-110 ${
-                        categoryFormData.color === color
-                          ? 'border-gray-900 dark:border-white scale-110'
-                          : 'border-transparent'
-                      }`}
-                      style={{ backgroundColor: color }}
-                    />
-                  ))}
-                  <div className="relative w-6 h-6 rounded-full overflow-hidden border border-gray-300 dark:border-gray-600">
-                    <input
-                      type="color"
-                      value={categoryFormData.color}
-                      onChange={e => setCategoryFormData({ ...categoryFormData, color: e.target.value })}
-                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                    />
-                    <div
-                      className="w-full h-full"
-                      style={{ backgroundColor: categoryFormData.color }}
-                    />
-                  </div>
-                </div>
+                <ColorPicker
+                  value={categoryFormData.color}
+                  onChange={color => setCategoryFormData({ ...categoryFormData, color })}
+                />
+              </div>
+
+              {/* Иконка */}
+              <div>
+                <label className="block text-xs text-gray-600 dark:text-gray-400 mb-0.5">
+                  Иконка
+                </label>
+                <IconSelect
+                  value={categoryFormData.icon}
+                  onChange={icon => setCategoryFormData({ ...categoryFormData, icon })}
+                  color={categoryFormData.color}
+                />
               </div>
             </div>
 

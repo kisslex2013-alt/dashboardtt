@@ -9,7 +9,7 @@
  * - Поле поиска (минималистичное с анимацией)
  */
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   Undo,
   Redo,
@@ -28,6 +28,7 @@ import {
   X,
   Search,
   ChevronUp,
+  Database,
 } from '../../utils/icons'
 import { useIsMobile } from '../../hooks/useIsMobile'
 import { usePomodoroIsRunning } from '../../store/usePomodoroStore'
@@ -56,6 +57,25 @@ export function EntriesListHeader({
   const [isSearchExpanded, setIsSearchExpanded] = useState(false)
   const [isSearchFocused, setIsSearchFocused] = useState(false)
   const pomodoroIsRunning = usePomodoroIsRunning() // ✅ ИНТЕГРАЦИЯ: проверка Pomodoro
+  
+  // 🎹 Слушаем глобальный хоткей поиска (Ctrl+F)
+  useEffect(() => {
+    const handleGlobalSearch = () => {
+      setIsSearchExpanded(true)
+      setIsSearchFocused(true)
+      // Даем React время на рендер инпута, если он был скрыт
+      setTimeout(() => {
+        const input = document.querySelector('input[type="text"][placeholder*="Поиск"]') as HTMLInputElement
+        if (input) {
+          input.focus()
+          input.select()
+        }
+      }, 50)
+    }
+
+    window.addEventListener('global-search-focus', handleGlobalSearch)
+    return () => window.removeEventListener('global-search-focus', handleGlobalSearch)
+  }, [])
 
   return (
     <>
@@ -64,7 +84,10 @@ export function EntriesListHeader({
       >
         {/* Первая строка: Заголовок и переключатель видов */}
         <div className={`flex items-center ${isMobile ? 'justify-between' : 'gap-2'}`}>
-          <h2 className="text-xl font-bold">Записи времени</h2>
+          <h2 className="text-xl font-bold flex items-center gap-2">
+            <Database className="w-5 h-5 text-blue-500" />
+            База данных
+          </h2>
 
           {/* Undo/Redo рядом с заголовком - скрыты на мобильных */}
           {!isMobile && (
@@ -149,18 +172,22 @@ export function EntriesListHeader({
               <Clock className={isMobile ? 'w-5 h-5' : 'w-4 h-4'} />
             </button>
 
+            {/* Кнопка "Календарь" - неактивна на мобильных */}
             <button
-              onClick={() => setListView('calendar')}
-              className={`${isMobile ? 'p-2.5' : 'p-2'} rounded-lg transition-normal hover-lift-scale click-shrink touch-manipulation ${
-                listView === 'calendar'
-                  ? 'text-blue-500 bg-blue-500/10'
-                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-500/10'
+              onClick={() => !isMobile && setListView('calendar')}
+              disabled={isMobile}
+              className={`${isMobile ? 'p-2.5' : 'p-2'} rounded-lg transition-normal touch-manipulation ${
+                isMobile
+                  ? 'text-gray-400 dark:text-gray-600 cursor-not-allowed opacity-50'
+                  : listView === 'calendar'
+                    ? 'text-blue-500 bg-blue-500/10 hover-lift-scale click-shrink'
+                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-500/10 hover-lift-scale click-shrink'
               }`}
               style={{
                 minWidth: isMobile ? '44px' : 'auto',
                 minHeight: isMobile ? '44px' : 'auto',
               }}
-              title="Календарь"
+              title={isMobile ? 'Календарь доступен только на десктопе' : 'Календарь'}
               aria-label="Вид календарём"
               data-icon-id="view-calendar"
             >
@@ -236,23 +263,29 @@ export function EntriesListHeader({
               </span>
             </IconButton>
 
-            {/* Таймер - минималистичная с анимацией */}
+            {/* Таймер - минималистичная с анимацией и пульсацией при активности */}
             <div className="flex items-center gap-2">
-              <IconButton
-                onClick={onStartTimer}
-                className={`glass-button h-10 min-w-[2.5rem] px-2.5 ${
-                  timer.isRunning ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'
-                } text-white rounded-lg overflow-hidden group relative transition-normal hover-lift-scale click-shrink flex items-center justify-center`}
-                title="Таймер"
-                aria-label="Таймер"
-                style={{ width: 'auto' }}
-                iconId={timer.isRunning ? 'header-timer-stop' : 'header-timer-start'}
-                defaultIcon={timer.isRunning ? Square : Play}
-              >
-                <span className="ml-0 pr-0 opacity-0 max-w-0 group-hover:opacity-100 group-hover:max-w-xs group-hover:ml-2 group-hover:pr-4 transition-normal whitespace-nowrap overflow-hidden">
-                  Таймер
-                </span>
-              </IconButton>
+              <div className="relative">
+                {/* Пульсирующее кольцо при активном таймере */}
+                {timer.isRunning && (
+                  <div className="absolute -inset-1 rounded-lg bg-red-500/30 animate-ping" />
+                )}
+                <IconButton
+                  onClick={onStartTimer}
+                  className={`relative glass-button h-10 min-w-[2.5rem] px-2.5 ${
+                    timer.isRunning ? 'bg-red-500 hover:bg-red-600 shadow-lg shadow-red-500/30' : 'bg-green-500 hover:bg-green-600'
+                  } text-white rounded-lg overflow-hidden group transition-normal hover-lift-scale click-shrink flex items-center justify-center`}
+                  title="Таймер"
+                  aria-label="Таймер"
+                  style={{ width: 'auto' }}
+                  iconId={timer.isRunning ? 'header-timer-stop' : 'header-timer-start'}
+                  defaultIcon={timer.isRunning ? Square : Play}
+                >
+                  <span className="ml-0 pr-0 opacity-0 max-w-0 group-hover:opacity-100 group-hover:max-w-xs group-hover:ml-2 group-hover:pr-4 transition-normal whitespace-nowrap overflow-hidden">
+                    Таймер
+                  </span>
+                </IconButton>
+              </div>
 
               {/* ✅ ИНТЕГРАЦИЯ: Индикатор одновременной работы таймеров */}
               {timer.isRunning && pomodoroIsRunning && (
@@ -394,20 +427,26 @@ export function EntriesListHeader({
                 defaultIcon={Plus}
               ></IconButton>
 
-              {/* Таймер - минималистичная с анимацией */}
-              <IconButton
-                onClick={onStartTimer}
-                className={`glass-button h-11 min-w-[2.5rem] px-2.5 ${
-                  timer.isRunning
-                    ? 'bg-red-500 hover:bg-red-600'
-                    : 'bg-green-500 hover:bg-green-600'
-                } text-white rounded-lg overflow-hidden group relative transition-normal hover-lift-scale click-shrink flex items-center justify-center touch-manipulation`}
-                style={{ minWidth: '44px', minHeight: '44px' }}
-                title="Таймер"
-                aria-label="Таймер"
-                iconId={timer.isRunning ? 'header-timer-stop' : 'header-timer-start'}
-                defaultIcon={timer.isRunning ? Square : Play}
-              ></IconButton>
+              {/* Таймер - минималистичная с анимацией и пульсацией при активности */}
+              <div className="relative">
+                {/* Пульсирующее кольцо при активном таймере */}
+                {timer.isRunning && (
+                  <div className="absolute -inset-1 rounded-lg bg-red-500/30 animate-ping" />
+                )}
+                <IconButton
+                  onClick={onStartTimer}
+                  className={`relative glass-button h-11 min-w-[2.5rem] px-2.5 ${
+                    timer.isRunning
+                      ? 'bg-red-500 hover:bg-red-600 shadow-lg shadow-red-500/30'
+                      : 'bg-green-500 hover:bg-green-600'
+                  } text-white rounded-lg overflow-hidden group transition-normal hover-lift-scale click-shrink flex items-center justify-center touch-manipulation`}
+                  style={{ minWidth: '44px', minHeight: '44px' }}
+                  title="Таймер"
+                  aria-label="Таймер"
+                  iconId={timer.isRunning ? 'header-timer-stop' : 'header-timer-start'}
+                  defaultIcon={timer.isRunning ? Square : Play}
+                ></IconButton>
+              </div>
             </div>
           </div>
         ) : null}

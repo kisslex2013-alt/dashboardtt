@@ -181,10 +181,6 @@ export function BackupsTab() {
   return (
     <>
       <div className="space-y-4 animate-fade-in">
-        <div className="mb-6">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Управление резервными копиями</h2>
-          <p className="text-sm text-gray-600 dark:text-gray-400">Создавайте, восстанавливайте и управляйте резервными копиями данных</p>
-        </div>
 
         <div className="mb-4">
           <Button

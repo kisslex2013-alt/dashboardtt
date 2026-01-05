@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback, memo, useMemo } from 'react'
-import { ChevronDown, ChevronUp, TrendingUp } from '../../utils/icons'
+import { ChevronDown, ChevronUp, Activity } from '../../utils/icons'
+import { InfoTooltip } from '../ui/InfoTooltip'
 import { PlanFactCompactView } from './PlanFactCompactView'
 import { InsightsPanel } from './InsightsPanel'
 import { useEntries } from '../../store/useEntriesStore'
@@ -126,7 +127,7 @@ export const StatisticsOverview = memo(() => {
   }, [isExitingContent])
 
   return (
-    <div className="mb-6 relative z-10">
+    <div className={`relative z-10 ${isExpanded ? 'mb-6' : 'mb-4'}`}>
       {/* Заголовок секции с кнопкой сворачивания */}
       <div
         ref={headerRef}
@@ -135,116 +136,17 @@ export const StatisticsOverview = memo(() => {
         {/* Desktop: все в одну строку */}
         <div className="hidden md:flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <TrendingUp className="w-6 h-6 text-blue-500" aria-hidden="true" />
+            <Activity className="w-6 h-6 text-blue-500" aria-hidden="true" />
             <h2
               id="statistics-overview-header"
               className="text-xl font-bold text-gray-900 dark:text-white"
             >
-              Статистика и аналитика
+              Базовая аналитика
             </h2>
+            <InfoTooltip text="Основные метрики: всего заработано, часов и оценка продуктивности." />
           </div>
 
-          {/* Компактный Productivity Score - занимает все свободное пространство */}
-          <div className="flex items-center gap-2 flex-1 justify-between group">
-            <SimpleTooltip
-              text="Общая оценка продуктивности от 0 до 100. Рассчитывается на основе выполнения целей (40%), регулярности работы (25%), времени фокуса (20%) и баланса перерывов (15%)."
-              position="bottom"
-            >
-              {(() => {
-                // Определяем цвет hover эффектов на основе scoreColor
-                const getScoreHoverBorder = () => {
-                  if (scoreColor.includes('green')) return 'hover:border-green-500 dark:hover:border-green-400'
-                  if (scoreColor.includes('blue')) return 'hover:border-blue-500 dark:hover:border-blue-400'
-                  if (scoreColor.includes('yellow')) return 'hover:border-yellow-500 dark:hover:border-yellow-400'
-                  if (scoreColor.includes('red')) return 'hover:border-red-500 dark:hover:border-red-400'
-                  return 'hover:border-gray-500 dark:hover:border-gray-400'
-                }
-                const getScoreHoverShadow = () => {
-                  if (scoreColor.includes('green')) return 'hover:shadow-lg hover:shadow-green-500/20'
-                  if (scoreColor.includes('blue')) return 'hover:shadow-lg hover:shadow-blue-500/20'
-                  if (scoreColor.includes('yellow')) return 'hover:shadow-lg hover:shadow-yellow-500/20'
-                  if (scoreColor.includes('red')) return 'hover:shadow-lg hover:shadow-red-500/20'
-                  return 'hover:shadow-lg hover:shadow-gray-500/20'
-                }
-                return (
-                  <div className={`flex items-center gap-1.5 cursor-help px-2 py-1 rounded-lg transition-all duration-300 hover:bg-white/10 dark:hover:bg-white/5 hover:scale-105 border border-transparent ${getScoreHoverBorder()} ${getScoreHoverShadow()}`}>
-                    <TrendingUp className="w-4 h-4 text-blue-500 dark:text-blue-400 flex-shrink-0 transition-transform duration-300 group-hover:scale-110" />
-                    <AnimatedCounter
-                      value={score}
-                      decimals={0}
-                      className={`text-lg font-bold ${scoreColor}`}
-                      resetAnimation={false}
-                    />
-                    <span className="text-xs text-gray-500 dark:text-gray-400">/100</span>
-                  </div>
-                )
-              })()}
-            </SimpleTooltip>
 
-            {/* Разделитель */}
-            <div className="w-px h-6 bg-gray-300 dark:bg-gray-600 flex-shrink-0"></div>
-
-            {/* Факторы с названиями */}
-            <div className="flex items-center gap-2 flex-1 justify-around">
-              {Object.keys(factors).map((factorKey, index) => {
-                const factor = factors[factorKey]
-                const shortLabel = factorShortLabels[factorKey]
-                const {percentage} = factor
-                const progressColor = getFactorProgressColor(percentage)
-                const textColor = getFactorTextColor(percentage)
-
-                // Определяем цвет hover эффектов на основе progressColor
-                const getFactorHoverBorder = () => {
-                  if (progressColor.includes('green')) return 'hover:border-green-500 dark:hover:border-green-400'
-                  if (progressColor.includes('yellow')) return 'hover:border-yellow-500 dark:hover:border-yellow-400'
-                  if (progressColor.includes('red')) return 'hover:border-red-500 dark:hover:border-red-400'
-                  return 'hover:border-gray-500 dark:hover:border-gray-400'
-                }
-                const getFactorHoverShadow = () => {
-                  if (progressColor.includes('green')) return 'hover:shadow-lg hover:shadow-green-500/20'
-                  if (progressColor.includes('yellow')) return 'hover:shadow-lg hover:shadow-yellow-500/20'
-                  if (progressColor.includes('red')) return 'hover:shadow-lg hover:shadow-red-500/20'
-                  return 'hover:shadow-lg hover:shadow-gray-500/20'
-                }
-                const getProgressBarShadow = () => {
-                  if (progressColor.includes('green')) return 'group-hover:shadow-lg group-hover:shadow-green-500/50'
-                  if (progressColor.includes('yellow')) return 'group-hover:shadow-lg group-hover:shadow-yellow-500/50'
-                  if (progressColor.includes('red')) return 'group-hover:shadow-lg group-hover:shadow-red-500/50'
-                  return 'group-hover:shadow-lg group-hover:shadow-gray-500/50'
-                }
-
-                return (
-                  <SimpleTooltip
-                    key={factorKey}
-                    text={factorDescriptions[factorKey]}
-                    position="bottom"
-                  >
-                    <div className={`flex items-center gap-1.5 cursor-help min-w-0 px-2 py-1 rounded-lg transition-all duration-300 hover:bg-white/10 dark:hover:bg-white/5 hover:scale-105 group border border-transparent ${getFactorHoverBorder()} ${getFactorHoverShadow()}`}>
-                      {/* ✅ A11Y: Улучшаем контраст для темной темы */}
-                      <span className="text-xs text-gray-500 dark:text-gray-300 whitespace-nowrap flex-shrink-0">
-                        {shortLabel}
-                      </span>
-                      <div className="w-12 h-1 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden flex-shrink-0">
-                        <div
-                          className={`h-full ${progressColor} rounded-full transition-all duration-300 ${getProgressBarShadow()}`}
-                          style={{
-                            width: `${percentage}%`,
-                          }}
-                        />
-                      </div>
-                      <AnimatedCounter
-                        value={factor.value}
-                        decimals={0}
-                        suffix={`/${factor.max}`}
-                        className={`text-xs font-bold ${textColor} whitespace-nowrap flex-shrink-0`}
-                        resetAnimation={false}
-                      />
-                    </div>
-                  </SimpleTooltip>
-                )
-              })}
-            </div>
-          </div>
 
           <button
             onClick={handleToggleExpanded}
@@ -266,13 +168,14 @@ export const StatisticsOverview = memo(() => {
         <div className="md:hidden">
           <div className="flex items-center justify-between gap-3 mb-3">
             <div className="flex items-center gap-3">
-              <TrendingUp className="w-6 h-6 text-blue-500" aria-hidden="true" />
+              <Activity className="w-6 h-6 text-blue-500" aria-hidden="true" />
               <h2
                 id="statistics-overview-header"
                 className="text-xl font-bold text-gray-900 dark:text-white"
               >
-                Статистика и аналитика
+                Базовая аналитика
               </h2>
+              <InfoTooltip text="Основные метрики: всего заработано, часов и оценка продуктивности." />
             </div>
             <button
               onClick={handleToggleExpanded}
@@ -299,7 +202,7 @@ export const StatisticsOverview = memo(() => {
                 position="top"
               >
                 <div className="flex items-center gap-2 cursor-help">
-                  <TrendingUp className="w-4 h-4 text-blue-500 dark:text-blue-400 flex-shrink-0" />
+                  <Activity className="w-4 h-4 text-blue-500 dark:text-blue-400 flex-shrink-0" />
                   <span className="text-sm font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">
                     Продуктивность:
                   </span>
