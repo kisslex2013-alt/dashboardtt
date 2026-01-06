@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         * {
             margin: 0;
@@ -41,6 +42,7 @@
             overflow-x: hidden;
             margin: 0;
             padding: 0;
+            padding-top: 72px; /* Compensate for fixed header */
         }
         
         /* Scroll Snap Sections */
@@ -48,6 +50,19 @@
             scroll-snap-align: start;
             scroll-snap-stop: always;
             min-height: 100vh;
+            scroll-margin-top: 72px; /* Offset for fixed header when scrolling to section */
+        }
+        
+        /* Main content offset for fixed header */
+        main {
+            margin-top: 0; /* Hero handles its own padding */
+        }
+        
+        /* Non-hero sections need top padding to avoid header overlap */
+        .bento-section,
+        .features,
+        .cta {
+            padding-top: 80px;
         }
         
         /* Scroll Animation Base */
@@ -860,13 +875,93 @@
             .hero-cta { flex-direction: column; }
             .btn-primary, .btn-secondary { width: 100%; justify-content: center; }
         }
+
+        /* Lucide Icons */
+        .lucide {
+            width: 24px;
+            height: 24px;
+            stroke-width: 2;
+            vertical-align: middle;
+        }
+        
+        .logo-icon .lucide { width: 28px; height: 28px; }
+        .hero-badge .lucide { width: 16px; height: 16px; margin-right: 4px; }
+        .feature-icon .lucide { width: 32px; height: 32px; color: var(--accent-blue); }
+        .insight-icon .lucide { width: 24px; height: 24px; color: var(--text-secondary); }
+        .demo-title .lucide { width: 18px; height: 18px; margin-right: 8px; color: var(--accent-blue); }
+        
+        /* View Modes Fixed Height */
+        .view-modes-demo {
+            min-height: 280px;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .view-modes-demo .view-content {
+            min-height: 150px;
+        }
+        
+        /* Device Toggle */
+        .device-toggle {
+            display: flex;
+            gap: 4px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 4px;
+        }
+        .device-toggle-btn {
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-family: inherit;
+            font-size: 12px;
+        }
+        .device-toggle-btn:hover {
+            background: rgba(255,255,255,0.1);
+            color: var(--text-primary);
+        }
+        .device-toggle-btn.active {
+            background: var(--accent-blue);
+            color: white;
+        }
+        .device-toggle-btn .lucide { width: 14px; height: 14px; }
+        
+        /* Phone Mode Styles - same layout, just hide calendar tab with animation */
+        .view-modes-demo .view-tabs {
+            transition: all 0.3s ease;
+        }
+        .view-modes-demo .view-tab {
+            transition: all 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+        }
+        .view-modes-demo.phone-mode .view-tab[data-view="calendar"] {
+            opacity: 0;
+            transform: scale(0.8);
+            width: 0;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+        }
+        
+        /* Animation keyframes for mode switch */
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .view-modes-demo.phone-mode .view-tab:not([data-view="calendar"]) {
+            animation: fadeSlideIn 0.3s ease forwards;
+        }
     </style>
 </head>
 <body>
     <header>
         <div class="container header-inner">
             <div class="logo">
-                <span class="logo-icon">⏱️</span>
+                <span class="logo-icon"><i data-lucide="clock"></i></span>
                 <span>Time Tracker</span>
             </div>
             <a href="/" class="nav-btn">Открыть Dashboard</a>
@@ -879,11 +974,11 @@
             <div class="container">
                 <div class="hero-content animate-on-scroll">
                     <div class="hero-badge">
-                        <span>✨</span>
-                        <span>Бесплатно • Локально • Приватно</span>
+                        <i data-lucide="sparkles"></i>
+                        <span>AI-аналитика • Приватно • Локально</span>
                     </div>
-                    <h1>Аналитика рабочего времени <span>нового поколения</span></h1>
-                    <p class="hero-subtitle">Отслеживайте время, считайте заработок и получайте инсайты — всё в одном современном дашборде</p>
+                    <h1>Умный учёт времени с <span>AI-аналитикой</span></h1>
+                    <p class="hero-subtitle">Отслеживайте время, получайте прогнозы дохода и инсайты о продуктивности — все данные хранятся на вашем устройстве</p>
                     <div class="hero-cta">
                         <a href="/" class="btn-primary">
                             <span>Начать работу</span>
@@ -927,28 +1022,47 @@
                     <!-- Demo Preview -->
                     <div class="bento-card bento-lg demo-preview animate-on-scroll">
                         <div class="demo-header">
-                            <span class="demo-title">📊 Распределение по категориям</span>
-                            <span class="demo-badge">Live Demo</span>
+                            <span class="demo-title"><i data-lucide="bar-chart-2"></i> Распределение по категориям</span>
+                            <span class="demo-badge">Кликни на столбик!</span>
                         </div>
-                        <div class="demo-chart" id="demo-chart">
-                            <div class="chart-bar" style="height: 85%;"></div>
-                            <div class="chart-bar" style="height: 45%;"></div>
-                            <div class="chart-bar" style="height: 62%;"></div>
-                            <div class="chart-bar" style="height: 38%;"></div>
-                            <div class="chart-bar" style="height: 55%;"></div>
-                            <div class="chart-bar" style="height: 72%;"></div>
-                            <div class="chart-bar" style="height: 48%;"></div>
-                            <div class="chart-bar" style="height: 65%;"></div>
-                            <div class="chart-bar" style="height: 42%;"></div>
-                            <div class="chart-bar" style="height: 58%;"></div>
-                            <div class="chart-bar" style="height: 35%;"></div>
-                            <div class="chart-bar" style="height: 78%;"></div>
+                        <!-- Legend -->
+                        <div id="chart-legend" style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; font-size: 11px;">
+                            <span style="display: flex; align-items: center; gap: 4px;"><span style="width:10px;height:10px;background:var(--accent-blue);border-radius:2px;"></span>Разработка</span>
+                            <span style="display: flex; align-items: center; gap: 4px;"><span style="width:10px;height:10px;background:var(--accent-purple);border-radius:2px;"></span>Дизайн</span>
+                            <span style="display: flex; align-items: center; gap: 4px;"><span style="width:10px;height:10px;background:var(--accent-green);border-radius:2px;"></span>Митинги</span>
+                            <span style="display: flex; align-items: center; gap: 4px;"><span style="width:10px;height:10px;background:var(--accent-orange);border-radius:2px;"></span>Обучение</span>
+                        </div>
+                        <!-- Interactive Chart -->
+                        <div class="demo-chart" id="demo-chart" style="position: relative;">
+                            <div class="chart-bar interactive" data-category="Разработка" data-hours="8.5" data-earn="7310" style="height: 85%; background: linear-gradient(180deg, var(--accent-blue), rgba(59, 130, 246, 0.4));"></div>
+                            <div class="chart-bar interactive" data-category="Дизайн" data-hours="4.5" data-earn="3870" style="height: 45%; background: linear-gradient(180deg, var(--accent-purple), rgba(139, 92, 246, 0.4));"></div>
+                            <div class="chart-bar interactive" data-category="Митинги" data-hours="6.2" data-earn="5330" style="height: 62%; background: linear-gradient(180deg, var(--accent-green), rgba(16, 185, 129, 0.4));"></div>
+                            <div class="chart-bar interactive" data-category="Обучение" data-hours="3.8" data-earn="3270" style="height: 38%; background: linear-gradient(180deg, var(--accent-orange), rgba(245, 158, 11, 0.4));"></div>
+                            <div class="chart-bar interactive" data-category="Разработка" data-hours="5.5" data-earn="4730" style="height: 55%; background: linear-gradient(180deg, var(--accent-blue), rgba(59, 130, 246, 0.4));"></div>
+                            <div class="chart-bar interactive" data-category="Дизайн" data-hours="7.2" data-earn="6190" style="height: 72%; background: linear-gradient(180deg, var(--accent-purple), rgba(139, 92, 246, 0.4));"></div>
+                            <div class="chart-bar interactive" data-category="Митинги" data-hours="4.8" data-earn="4130" style="height: 48%; background: linear-gradient(180deg, var(--accent-green), rgba(16, 185, 129, 0.4));"></div>
+                            <div class="chart-bar interactive" data-category="Разработка" data-hours="6.5" data-earn="5590" style="height: 65%; background: linear-gradient(180deg, var(--accent-blue), rgba(59, 130, 246, 0.4));"></div>
+                            <div class="chart-bar interactive" data-category="Обучение" data-hours="4.2" data-earn="3610" style="height: 42%; background: linear-gradient(180deg, var(--accent-orange), rgba(245, 158, 11, 0.4));"></div>
+                            <div class="chart-bar interactive" data-category="Дизайн" data-hours="5.8" data-earn="4990" style="height: 58%; background: linear-gradient(180deg, var(--accent-purple), rgba(139, 92, 246, 0.4));"></div>
+                            <div class="chart-bar interactive" data-category="Митинги" data-hours="3.5" data-earn="3010" style="height: 35%; background: linear-gradient(180deg, var(--accent-green), rgba(16, 185, 129, 0.4));"></div>
+                            <div class="chart-bar interactive" data-category="Разработка" data-hours="7.8" data-earn="6710" style="height: 78%; background: linear-gradient(180deg, var(--accent-blue), rgba(59, 130, 246, 0.4));"></div>
+                        </div>
+                        <!-- Tooltip -->
+                        <div id="chart-tooltip" style="display: none; position: absolute; background: rgba(0,0,0,0.9); color: white; padding: 10px 14px; border-radius: 8px; font-size: 12px; pointer-events: none; z-index: 100; box-shadow: 0 4px 20px rgba(0,0,0,0.3); backdrop-filter: blur(10px);">
+                            <div id="tooltip-category" style="font-weight: 700; margin-bottom: 4px;"></div>
+                            <div id="tooltip-hours" style="color: var(--accent-blue);"></div>
+                            <div id="tooltip-earn" style="color: var(--accent-green);"></div>
+                        </div>
+                        <!-- Selected Info -->
+                        <div id="chart-selected" style="margin-top: 12px; padding: 10px; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 8px; display: none;">
+                            <div style="font-size: 12px; color: var(--text-secondary);">Выбрано:</div>
+                            <div id="selected-info" style="font-weight: 600; font-size: 14px;"></div>
                         </div>
                     </div>
                     
                     <div class="bento-card bento-md animate-on-scroll">
                         <div class="demo-header">
-                            <span class="demo-title">💡 Умные инсайты</span>
+                            <span class="demo-title"><i data-lucide="lightbulb"></i> Умные инсайты</span>
                         </div>
                         <div style="margin-top: 16px;">
                             <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border-subtle);">
@@ -973,27 +1087,36 @@
                     <!-- Interactive Timer Demo -->
                     <div class="bento-card bento-md timer-demo animate-on-scroll">
                         <div class="demo-header" style="width: 100%; margin-bottom: 16px;">
-                            <span class="demo-title">⏱️ Живой таймер</span>
+                            <span class="demo-title"><i data-lucide="timer"></i> Живой таймер</span>
                             <span class="demo-badge">Попробуй!</span>
                         </div>
                         <div class="timer-display" id="timer-display">00:00:00</div>
                         <div class="timer-controls">
-                            <button class="timer-btn timer-btn-start" id="timer-start">▶ Старт</button>
-                            <button class="timer-btn timer-btn-stop" id="timer-stop" style="display: none;">⏸ Стоп</button>
-                            <button class="timer-btn timer-btn-reset" id="timer-reset">↺ Сброс</button>
+                            <button class="timer-btn timer-btn-start" id="timer-start"><i data-lucide="play" style="width:14px;height:14px;margin-right:4px;"></i>Старт</button>
+                            <button class="timer-btn timer-btn-stop" id="timer-stop" style="display: none;"><i data-lucide="pause" style="width:14px;height:14px;margin-right:4px;"></i>Стоп</button>
+                            <button class="timer-btn timer-btn-reset" id="timer-reset"><i data-lucide="rotate-ccw" style="width:14px;height:14px;margin-right:4px;"></i>Сброс</button>
                         </div>
                         <div class="timer-earning">Заработано: <span id="timer-earned">0 ₽</span></div>
                     </div>
                     
                     <!-- View Modes Demo -->
-                    <div class="bento-card bento-lg view-modes-demo animate-on-scroll">
-                        <div class="demo-header">
-                            <span class="demo-title">👁️ Три режима отображения</span>
+                    <div class="bento-card bento-lg view-modes-demo animate-on-scroll" id="view-modes-card">
+                        <div class="demo-header" style="justify-content: space-between;">
+                            <span class="demo-title" id="view-modes-title"><i data-lucide="layout-dashboard"></i> <span id="view-modes-count">4</span> режима отображения</span>
+                            <div class="device-toggle">
+                                <button class="device-toggle-btn active" id="device-pc" title="Десктоп">
+                                    <i data-lucide="monitor"></i>
+                                </button>
+                                <button class="device-toggle-btn" id="device-phone" title="Телефон">
+                                    <i data-lucide="smartphone"></i>
+                                </button>
+                            </div>
                         </div>
-                        <div class="view-tabs">
-                            <button class="view-tab active" data-view="list">📋 Список</button>
-                            <button class="view-tab" data-view="grid">⊞ Сетка</button>
-                            <button class="view-tab" data-view="timeline">📅 Таймлайн</button>
+                        <div class="view-tabs" id="view-tabs-container">
+                            <button class="view-tab active" data-view="list"><i data-lucide="list" style="width:14px;height:14px;margin-right:4px;"></i>Список</button>
+                            <button class="view-tab" data-view="grid"><i data-lucide="grid-3x3" style="width:14px;height:14px;margin-right:4px;"></i>Сетка</button>
+                            <button class="view-tab" data-view="calendar" id="calendar-tab"><i data-lucide="calendar" style="width:14px;height:14px;margin-right:4px;"></i>Календарь</button>
+                            <button class="view-tab" data-view="timeline"><i data-lucide="git-branch" style="width:14px;height:14px;margin-right:4px;"></i>Таймлайн</button>
                         </div>
                         
                         <!-- List View -->
@@ -1036,6 +1159,19 @@
                             </div>
                         </div>
                         
+                        <!-- Calendar View -->
+                        <div class="view-content" id="view-calendar">
+                            <div class="grid-view" style="grid-template-columns: repeat(7, 1fr); gap: 4px;">
+                                <div class="grid-item" style="opacity: 0.5;"><div class="grid-item-day">26</div><div class="grid-item-amount" style="font-size:11px;color:var(--text-secondary);">—</div></div>
+                                <div class="grid-item" style="opacity: 0.5;"><div class="grid-item-day">27</div><div class="grid-item-amount" style="font-size:11px;color:var(--text-secondary);">—</div></div>
+                                <div class="grid-item" style="opacity: 0.5;"><div class="grid-item-day">28</div><div class="grid-item-amount" style="font-size:11px;color:var(--text-secondary);">—</div></div>
+                                <div class="grid-item" style="background: rgba(16, 185, 129, 0.2);"><div class="grid-item-day">1</div><div class="grid-item-amount" style="font-size:11px;color:var(--accent-green);">3.9к</div></div>
+                                <div class="grid-item" style="background: rgba(59, 130, 246, 0.2);"><div class="grid-item-day">2</div><div class="grid-item-amount" style="font-size:11px;color:var(--accent-blue);">2.1к</div></div>
+                                <div class="grid-item" style="background: rgba(139, 92, 246, 0.3);"><div class="grid-item-day">3</div><div class="grid-item-amount" style="font-size:11px;color:var(--accent-purple);">5.2к</div></div>
+                                <div class="grid-item"><div class="grid-item-day">4</div><div class="grid-item-amount" style="font-size:11px;color:var(--text-secondary);">—</div></div>
+                            </div>
+                        </div>
+                        
                         <!-- Timeline View -->
                         <div class="view-content" id="view-timeline">
                             <div class="timeline-view">
@@ -1058,7 +1194,7 @@
                     <!-- Plan/Fact Demo -->
                     <div class="bento-card bento-md plan-fact-demo animate-on-scroll">
                         <div class="demo-header">
-                            <span class="demo-title">📊 План / Факт</span>
+                            <span class="demo-title"><i data-lucide="target"></i> План / Факт</span>
                         </div>
                         <div class="plan-fact-header">
                             <div>
@@ -1091,9 +1227,9 @@
                     </div>
                     
                     <!-- Income Calculator Demo -->
-                    <div class="bento-card bento-md animate-on-scroll" style="min-height: 200px;">
+                    <div class="bento-card bento-md animate-on-scroll" id="calculator-card" style="min-height: 200px;">
                         <div class="demo-header">
-                            <span class="demo-title">🧮 Калькулятор дохода</span>
+                            <span class="demo-title"><i data-lucide="calculator"></i> Калькулятор дохода</span>
                         </div>
                         <div style="margin-top: 16px;">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
@@ -1120,7 +1256,7 @@
                     <!-- Activity History Demo -->
                     <div class="bento-card bento-md animate-on-scroll" style="min-height: 200px;">
                         <div class="demo-header">
-                            <span class="demo-title">📜 История активности</span>
+                            <span class="demo-title"><i data-lucide="history"></i> История активности</span>
                             <span class="demo-badge">Сегодня</span>
                         </div>
                         <div style="margin-top: 16px; display: flex; flex-direction: column; gap: 12px;">
@@ -1143,7 +1279,8 @@
                             </div>
                             
                             <div style="display: flex; align-items: center; gap: 16px; padding: 12px; background: rgba(139, 92, 246, 0.1); border-radius: 10px;">
-                                <div style="width: 40px; height: 40px; background: var(--accent-purple); border-radius: 10px; display: flex; align-items: center; justify-content: center;">🎯</div>
+                            <div style="display: flex; align-items: center; gap: 16px; padding: 12px; background: rgba(139, 92, 246, 0.1); border-radius: 10px;">
+                                <div style="width: 40px; height: 40px; background: var(--accent-purple); border-radius: 10px; display: flex; align-items: center; justify-content: center;"><i data-lucide="target" style="color: white"></i></div>
                                 <div style="flex: 1;">
                                     <div style="font-weight: 600; font-size: 14px;">Цель достигнута!</div>
                                     <div style="color: var(--text-secondary); font-size: 12px;">Дневной план +15%</div>
@@ -1168,39 +1305,39 @@
                     
                     <div class="features-grid">
                         <div class="feature-card animate-on-scroll stagger-1">
-                            <div class="feature-icon">⏱️</div>
-                            <h3 class="feature-title">Таймер</h3>
-                            <p class="feature-desc">Запускайте таймер одним кликом. Плавающая панель всегда под рукой.</p>
+                            <div class="feature-icon"><i data-lucide="zap"></i></div>
+                            <h3 class="feature-title">AI-Аналитика</h3>
+                            <p class="feature-desc">Умные прогнозы дохода, анализ продуктивных часов и предупреждение о выгорании.</p>
                         </div>
                         
                         <div class="feature-card animate-on-scroll stagger-2">
-                            <div class="feature-icon">📊</div>
-                            <h3 class="feature-title">11 графиков</h3>
-                            <p class="feature-desc">От простых диаграмм до прогнозов заработка и календаря доходов.</p>
+                            <div class="feature-icon"><i data-lucide="bar-chart-3"></i></div>
+                            <h3 class="feature-title">11 Видов графиков</h3>
+                            <p class="feature-desc">От простых диаграмм до сложных тепловых карт и календаря доходов.</p>
                         </div>
                         
                         <div class="feature-card animate-on-scroll stagger-3">
-                            <div class="feature-icon">💰</div>
-                            <h3 class="feature-title">Авто-расчёт</h3>
-                            <p class="feature-desc">Система сама посчитает заработок, ставки и выполнение плана.</p>
+                            <div class="feature-icon"><i data-lucide="coins"></i></div>
+                            <h3 class="feature-title">Финансовый учёт</h3>
+                            <p class="feature-desc">Автоматический расчёт заработка по разным ставкам. Учёт переработок и целей.</p>
                         </div>
                         
                         <div class="feature-card animate-on-scroll stagger-4">
-                            <div class="feature-icon">📅</div>
-                            <h3 class="feature-title">Графики работы</h3>
-                            <p class="feature-desc">Сменные 2/2, 3/3, стандартный 5/2 или свой кастомный вариант.</p>
+                            <div class="feature-icon"><i data-lucide="calendar-days"></i></div>
+                            <h3 class="feature-title">Гибкий график</h3>
+                            <p class="feature-desc">Поддержка смен 2/2, 3/3, 5/2 или полностью кастомных расписаний.</p>
                         </div>
                         
                         <div class="feature-card animate-on-scroll stagger-5">
-                            <div class="feature-icon">🔔</div>
-                            <h3 class="feature-title">Уведомления</h3>
-                            <p class="feature-desc">Звуковые напоминания и отслеживание периодов выплат.</p>
+                            <div class="feature-icon"><i data-lucide="bell"></i></div>
+                            <h3 class="feature-title">Умные уведомления</h3>
+                            <p class="feature-desc">Звуковые напоминания, трекинг периодов выплат и AI-советы.</p>
                         </div>
                         
                         <div class="feature-card animate-on-scroll">
-                            <div class="feature-icon">💾</div>
-                            <h3 class="feature-title">Экспорт/Импорт</h3>
-                            <p class="feature-desc">Бэкапы в JSON, автосохранение и полная история изменений.</p>
+                            <div class="feature-icon"><i data-lucide="shield-check"></i></div>
+                            <h3 class="feature-title">Приватность</h3>
+                            <p class="feature-desc">Все данные хранятся локально в браузере. Бэкапы в JSON. Работает без интернета.</p>
                         </div>
                     </div>
                 </div>
@@ -1424,16 +1561,84 @@
             pfObserver.observe(pfBar.parentElement);
         }
         
-        // ===== Chart Bar Hover Effects =====
-        document.querySelectorAll('.chart-bar').forEach(bar => {
+        // ===== Interactive Chart with Tooltips and Click Selection =====
+        const chartTooltip = document.getElementById('chart-tooltip');
+        const tooltipCategory = document.getElementById('tooltip-category');
+        const tooltipHours = document.getElementById('tooltip-hours');
+        const tooltipEarn = document.getElementById('tooltip-earn');
+        const chartSelected = document.getElementById('chart-selected');
+        const selectedInfo = document.getElementById('selected-info');
+        let selectedBar = null;
+        
+        document.querySelectorAll('.chart-bar.interactive').forEach(bar => {
             bar.style.cursor = 'pointer';
-            bar.addEventListener('mouseenter', () => {
-                bar.style.filter = 'brightness(1.2)';
-                bar.style.transform = 'scaleY(1.05)';
+            bar.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+            
+            // Hover - show tooltip
+            bar.addEventListener('mouseenter', (e) => {
+                bar.style.filter = 'brightness(1.3)';
+                bar.style.transform = 'scaleY(1.08) scaleX(1.1)';
+                bar.style.boxShadow = '0 0 20px rgba(59, 130, 246, 0.5)';
+                
+                // Show tooltip
+                if (chartTooltip && bar.dataset.category) {
+                    tooltipCategory.textContent = bar.dataset.category;
+                    tooltipHours.textContent = `⏱ ${bar.dataset.hours}ч`;
+                    tooltipEarn.textContent = `💰 ${parseInt(bar.dataset.earn).toLocaleString('ru-RU')} ₽`;
+                    chartTooltip.style.display = 'block';
+                    
+                    // Position tooltip
+                    const rect = bar.getBoundingClientRect();
+                    const chartRect = document.getElementById('demo-chart').getBoundingClientRect();
+                    chartTooltip.style.left = `${rect.left - chartRect.left + rect.width/2 - 50}px`;
+                    chartTooltip.style.bottom = `${chartRect.bottom - rect.top + 10}px`;
+                }
             });
+            
             bar.addEventListener('mouseleave', () => {
-                bar.style.filter = 'brightness(1)';
-                bar.style.transform = 'scaleY(1)';
+                if (bar !== selectedBar) {
+                    bar.style.filter = 'brightness(1)';
+                    bar.style.transform = 'scaleY(1) scaleX(1)';
+                    bar.style.boxShadow = 'none';
+                }
+                if (chartTooltip) {
+                    chartTooltip.style.display = 'none';
+                }
+            });
+            
+            // Click - select bar
+            bar.addEventListener('click', () => {
+                // Deselect previous
+                if (selectedBar) {
+                    selectedBar.style.filter = 'brightness(1)';
+                    selectedBar.style.transform = 'scaleY(1) scaleX(1)';
+                    selectedBar.style.boxShadow = 'none';
+                    selectedBar.classList.remove('selected');
+                }
+                
+                // Select new
+                selectedBar = bar;
+                bar.classList.add('selected');
+                bar.style.filter = 'brightness(1.4)';
+                bar.style.transform = 'scaleY(1.1) scaleX(1.15)';
+                bar.style.boxShadow = '0 0 30px rgba(59, 130, 246, 0.7)';
+                
+                // Animate pulse effect
+                bar.animate([
+                    { transform: 'scaleY(1.1) scaleX(1.15)' },
+                    { transform: 'scaleY(1.15) scaleX(1.2)' },
+                    { transform: 'scaleY(1.1) scaleX(1.15)' }
+                ], { duration: 300, easing: 'ease-out' });
+                
+                // Show selected info panel
+                if (chartSelected && selectedInfo) {
+                    chartSelected.style.display = 'block';
+                    selectedInfo.innerHTML = `<span style="color:var(--accent-blue)">${bar.dataset.category}</span> — ${bar.dataset.hours}ч = <span style="color:var(--accent-green)">${parseInt(bar.dataset.earn).toLocaleString('ru-RU')} ₽</span>`;
+                    chartSelected.animate([
+                        { opacity: 0, transform: 'translateY(10px)' },
+                        { opacity: 1, transform: 'translateY(0)' }
+                    ], { duration: 300, easing: 'ease-out' });
+                }
             });
         });
         
@@ -1460,8 +1665,66 @@
             rateSlider.style.background = `linear-gradient(90deg, var(--accent-purple) ${ratePercent}%, rgba(255,255,255,0.1) ${ratePercent}%)`;
         }
         
+        
         hoursSlider?.addEventListener('input', updateCalculator);
         rateSlider?.addEventListener('input', updateCalculator);
+
+        // ===== Device Toggle (PC / Phone) =====
+        const devicePC = document.getElementById('device-pc');
+        const devicePhone = document.getElementById('device-phone');
+        const viewModesCard = document.getElementById('view-modes-card');
+        const viewModesCount = document.getElementById('view-modes-count');
+        const calendarTab = document.getElementById('calendar-tab');
+        const bentoGrid = document.querySelector('.bento-grid');
+        const calculatorCard = document.getElementById('calculator-card');
+        
+        let isPhoneMode = false;
+        
+        function switchToPhoneMode() {
+            isPhoneMode = true;
+            devicePC.classList.remove('active');
+            devicePhone.classList.add('active');
+            viewModesCard.classList.add('phone-mode');
+            
+            // Скрыть Календарь (нет в мобильной версии)
+            if (calendarTab) {
+                calendarTab.style.display = 'none';
+            }
+            
+            // Изменить заголовок на "3 режима"
+            if (viewModesCount) {
+                viewModesCount.textContent = '3';
+            }
+            
+            // Reinitialize icons after DOM changes
+            lucide.createIcons();
+        }
+        
+        function switchToPCMode() {
+            isPhoneMode = false;
+            devicePhone.classList.remove('active');
+            devicePC.classList.add('active');
+            viewModesCard.classList.remove('phone-mode');
+            
+            // Показать Календарь
+            if (calendarTab) {
+                calendarTab.style.display = '';
+            }
+            
+            // Изменить заголовок на "4 режима"
+            if (viewModesCount) {
+                viewModesCount.textContent = '4';
+            }
+            
+            // Reinitialize icons
+            lucide.createIcons();
+        }
+        
+        devicePC?.addEventListener('click', switchToPCMode);
+        devicePhone?.addEventListener('click', switchToPhoneMode);
+
+        // Initialize Lucide icons
+        lucide.createIcons();
     </script>
 </body>
 </html>
