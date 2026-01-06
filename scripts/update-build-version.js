@@ -25,15 +25,17 @@ const year = String(now.getFullYear()).slice(-2)
 // Формат: build_hh.mm_dd.mm.yy
 const buildVersion = `build_${hours}.${minutes}_${day}.${month}.${year}`
 
-// Путь к App.tsx (или App.jsx для обратной совместимости)
+// Путь к appVersion.ts (централизованный файл версии)
+const appVersionPath = join(rootDir, 'src', 'config', 'appVersion.ts')
+
+// Для обратной совместимости - старые пути
 const appTsxPath = join(rootDir, 'src', 'App.tsx')
 const appJsxPath = join(rootDir, 'src', 'App.jsx')
-const appPath = existsSync(appTsxPath) ? appTsxPath : appJsxPath
 
 try {
   // Читаем версию из package.json
   const packageJsonPath = join(rootDir, 'package.json')
-  let appVersion = '1.3.0'
+  let appVersion = '1.4'
   if (existsSync(packageJsonPath)) {
     try {
       const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf8'))
@@ -41,30 +43,21 @@ try {
         appVersion = packageJson.version
       }
     } catch (e) {
-      console.warn('⚠️ Не удалось прочитать версию из package.json, используем 1.3.0')
+      console.warn('⚠️ Не удалось прочитать версию из package.json, используем 1.4')
     }
   }
 
-  // Читаем файл App.tsx или App.jsx
-  if (!existsSync(appPath)) {
-    console.warn(`⚠️ Файл ${appPath} не найден, пропускаем обновление версии в App файле`)
-  } else {
-    let content = readFileSync(appPath, 'utf8')
-
-    // Ищем и заменяем версию
-    // Ищем паттерн: Time Tracker Dashboard v1.2.0 или Time Tracker Dashboard v1.2.0 build ...
-    const versionPattern = /(Time Tracker Dashboard v\d+\.\d+\.\d+)(\s+build[\d:/\s_.]+)?/
-
-    if (versionPattern.test(content)) {
-      // Заменяем версию БЕЗ build версии (она теперь отображается отдельно в footer)
-      content = content.replace(versionPattern, `Time Tracker Dashboard v${appVersion}`)
-
-      // Записываем обратно
-      writeFileSync(appPath, content, 'utf8')
-      console.log(`✅ Версия в ${appPath} обновлена: v${appVersion}`)
-    } else {
-      console.warn(`⚠️ Паттерн версии не найден в ${appPath}`)
+  // Обновляем версию в appVersion.ts (если нужно)
+  if (existsSync(appVersionPath)) {
+    let content = readFileSync(appVersionPath, 'utf8')
+    
+    // Проверяем текущую версию
+    const versionMatch = content.match(/APP_VERSION\s*=\s*['"]([^'"]+)['"]/)
+    if (versionMatch) {
+      console.log(`✅ Версия в appVersion.ts: v${versionMatch[1]}`)
     }
+  } else {
+    console.warn(`⚠️ Файл ${appVersionPath} не найден`)
   }
 
   // Записываем версию в .env файл
