@@ -9,33 +9,49 @@ export function useWelcomeScreen() {
   const openModal = useUIStore(state => state.openModal)
 
   useEffect(() => {
-    // Проверяем, был ли уже показан Tutorial
-    const shouldShowWelcome = () => {
+    // Проверка редиректа на промо-страницу
+    const checkPromoRedirect = () => {
       try {
-        // Пытаемся получить флаг завершения Tutorial
-        const tutorialCompleted = localStorage.getItem('tutorial_completed')
+        // Проверяем флаги посещения в localStorage и sessionStorage
+        const promoVisitedLocal = localStorage.getItem('promo_visited')
+        const promoVisitedSession = sessionStorage.getItem('promo_visited')
         
-        // Если флаг есть, значит пользователь уже видел Tutorial
-        if (tutorialCompleted === 'true') {
+        if (promoVisitedLocal === 'true' || promoVisitedSession === 'true') {
           return false
         }
 
-        // Проверяем режим инкогнито: пытаемся записать тестовое значение
+        // Если не посещали - ставим флаг и редиректим
+        // Пробуем записать везде, где можем, чтобы избежать циклов
+        try { localStorage.setItem('promo_visited', 'true') } catch (e) {}
+        try { sessionStorage.setItem('promo_visited', 'true') } catch (e) {}
+
+        window.location.href = '/promo/index.html'
+        return true
+      } catch (error) {
+        console.warn('Storage check failed', error)
+        return false
+      }
+    }
+
+    // Если ушли на редирект - прерываем выполнение
+    if (checkPromoRedirect()) return
+
+    // Проверяем, был ли уже показан Tutorial (существующая логика)
+    const shouldShowWelcome = () => {
+      try {
+        const tutorialCompleted = localStorage.getItem('tutorial_completed')
+        if (tutorialCompleted === 'true') return false
+
         const testKey = '__storage_test__'
         localStorage.setItem(testKey, 'test')
         localStorage.removeItem(testKey)
         
-        // localStorage работает, и tutorial не был завершен - показываем
         return true
       } catch (error) {
-        // Ошибка означает режим инкогнито или блокировку localStorage
-        // В этом случае всегда показываем приветственное окно
-        console.log('Режим инкогнито или localStorage недоступен - показываем приветствие')
         return true
       }
     }
 
-    // Небольшая задержка для лучшего UX (чтобы приложение успело загрузиться)
     const timer = setTimeout(() => {
       if (shouldShowWelcome()) {
         openModal('tutorial')

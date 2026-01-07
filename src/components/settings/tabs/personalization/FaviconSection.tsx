@@ -6,7 +6,8 @@
 
 import { SettingsCard, SettingsRow } from '../../SettingsCard'
 import { Toggle } from '../../../ui/Toggle'
-import { Sparkles, Activity } from 'lucide-react'
+import { Sparkles, Activity, Check, ChevronDown } from 'lucide-react'
+import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react'
 import { FaviconPreviewCard } from './FaviconPreviewCard'
 import { animationStyles, animationSpeeds, presetColors } from './constants'
 
@@ -47,17 +48,54 @@ export function FaviconSection({
           <label className="text-xs font-semibold text-gray-900 dark:text-white whitespace-nowrap min-w-[60px]">
             Стиль
           </label>
-          <select
-            value={animationStyle}
-            onChange={(e) => setAnimationStyle(e.target.value)}
-            className="flex-1 px-3 py-2 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-white"
-          >
-            {animationStyles.map(style => (
-              <option key={style.value} value={style.value}>
-                {style.label} — {style.description}
-              </option>
-            ))}
-          </select>
+          <Listbox value={animationStyle} onChange={setAnimationStyle}>
+            <div className="relative flex-1">
+              <ListboxButton className="relative w-full cursor-default rounded-lg bg-gray-100 dark:bg-gray-800 py-2 pl-3 pr-10 text-left border border-gray-200 dark:border-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 hover:bg-gray-200/50 dark:hover:bg-gray-700/50 transition-colors">
+                <span className="block truncate text-gray-900 dark:text-white">
+                  {animationStyles.find(s => s.value === animationStyle)?.label}
+                </span>
+                <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                  <ChevronDown
+                    className="h-4 w-4 text-gray-500"
+                    aria-hidden="true"
+                  />
+                </span>
+              </ListboxButton>
+              <ListboxOptions 
+                className="absolute z-50 mt-1 min-w-full max-h-60 overflow-auto rounded-xl border border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800 p-1 shadow-lg ring-1 ring-black/5 focus:outline-none"
+              >
+                {animationStyles.map((style) => (
+                  <ListboxOption
+                    key={style.value}
+                    className={({ active }) =>
+                      `relative cursor-pointer select-none rounded-lg py-2 pl-10 pr-4 ${
+                        active ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-900 dark:text-blue-100' : 'text-gray-900 dark:text-gray-100'
+                      }`
+                    }
+                    value={style.value}
+                  >
+                    {({ selected }) => (
+                      <>
+                        <span
+                          className={`block ${
+                            selected ? 'font-medium' : 'font-normal'
+                          }`}
+                          title={`${style.label} — ${style.description}`}
+                        >
+                          {style.label} <span className="text-gray-400 dark:text-gray-500 text-xs ml-1">— {style.description}</span>
+                        </span>
+                        {selected ? (
+                          <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-blue-600 dark:text-blue-400">
+                            <Check className="h-4 w-4" aria-hidden="true" />
+                          </span>
+                        ) : null}
+                      </>
+                    )}
+                  </ListboxOption>
+                ))}
+              </ListboxOptions>
+            </div>
+          </Listbox>
         </div>
 
         {/* Цвет - compact picker */}
@@ -65,7 +103,7 @@ export function FaviconSection({
           <label className="text-xs font-semibold text-gray-900 dark:text-white whitespace-nowrap min-w-[60px]">
             Цвет
           </label>
-          <div className="flex items-center gap-1.5 flex-wrap">
+          <div className="flex items-center gap-1 flex-nowrap">
             {presetColors.map(color => (
               <button
                 key={color.value}

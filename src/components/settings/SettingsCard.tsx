@@ -52,7 +52,7 @@ export function SettingsCard({
     <div
       className={`
         glass-effect rounded-xl border border-gray-200 dark:border-gray-700
-        overflow-hidden relative
+        overflow-visible relative
         ${!enabled && collapseOnDisable ? 'opacity-75' : ''}
         ${className}
       `}

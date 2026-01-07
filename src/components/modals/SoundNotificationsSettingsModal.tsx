@@ -1,7 +1,7 @@
 import { useState, useEffect, useLayoutEffect, useRef, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import { AnimatePresence } from 'framer-motion'
-import { Palette, Settings as SettingsIcon, Play, Bell, Timer, Trash2, BotMessageSquare, CalendarDays, Clock, Plus, HardDrive, Folder, Archive, Upload, Edit2, Star, CreditCard, User } from '../../utils/icons'
+import { Palette, Settings as SettingsIcon, Play, Bell, Timer, Trash2, BotMessageSquare, CalendarDays, Clock, Plus, HardDrive, Folder, Archive, Upload, Edit2, Star, CreditCard, User, Keyboard } from '../../utils/icons'
 import { BaseModal } from '../ui/BaseModal'
 import { SettingsNavItem } from './settings/SettingsNavItem'
 import { NestedModal } from './about/NestedModal'
@@ -49,7 +49,7 @@ import { IconSelect } from '../ui/IconSelect'
 import { getIcon } from '../../utils/iconHelper'
 import { useAINotificationsStore } from '../../store/useAINotificationsStore'
 import { APP_VERSION_FULL } from '../../config/appVersion'
-import { NotificationsTab, ProductivityTab, PersonalizationTab, FinanceTab, BackupsTab, WorkScheduleTab, CategoriesTab, AITab, AccountTab } from '../settings/tabs'
+import { NotificationsTab, ProductivityTab, PersonalizationTab, FinanceTab, BackupsTab, WorkScheduleTab, CategoriesTab, AITab, AccountTab, KeyboardShortcutsTab } from '../settings/tabs'
 
 /**
  * Компонент карточки предпросмотра анимации фавикона
@@ -245,6 +245,21 @@ export function SoundNotificationsSettingsModal({ isOpen, onClose, initialTab = 
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, savedPaymentDates, savedCustomWorkDates, workScheduleTemplate, dailyGoal, workScheduleStartDay])
+
+  // ✅ Автосохранение настроек фавикона при изменении
+  useEffect(() => {
+    if (isOpen) {
+      updateSettings({
+        notifications: {
+          ...notifications,
+          faviconAnimationStyle,
+          faviconAnimationColor,
+          faviconAnimationSpeed,
+          faviconAnimationEnabled,
+        }
+      })
+    }
+  }, [faviconAnimationStyle, faviconAnimationColor, faviconAnimationSpeed, faviconAnimationEnabled])
 
   // Типы звуков (компактный список - только основные)
   const soundTypes = [
@@ -744,81 +759,116 @@ export function SoundNotificationsSettingsModal({ isOpen, onClose, initialTab = 
 
 
 
-  // Данные для карточек настроек
-  const gridCards = [
+  // Данные для карточек настроек с группировкой
+  const settingsGroups = [
     {
-      id: 'ai',
-      icon: BotMessageSquare,
-      title: 'AI Ассистент',
-      subtitle: 'Умные функции',
-      stats: 'Анализ, Советы',
-      accentClass: 'fuchsia-500', 
+      id: 'profile',
+      title: 'Профиль',
+      items: [
+        {
+          id: 'account',
+          icon: User,
+          title: 'Аккаунт',
+          subtitle: 'Профиль и план',
+
+          accentClass: 'slate-500', 
+        },
+      ]
     },
     {
-      id: 'account',
-      icon: User,
-      title: 'Аккаунт',
-      subtitle: 'Профиль и план',
-      stats: 'Free/Pro',
-      accentClass: 'slate-500', 
+      id: 'app',
+      title: 'Приложение',
+      items: [
+        {
+          id: 'personalization',
+          icon: Palette,
+          title: 'Персонализация',
+          subtitle: 'Тема и иконки',
+
+          accentClass: 'violet-500', 
+        },
+        {
+          id: 'shortcuts',
+          icon: Keyboard,
+          title: 'Горячие клавиши',
+          subtitle: 'Быстрый доступ',
+
+          accentClass: 'sky-500', 
+        },
+        {
+          id: 'backups',
+          icon: HardDrive,
+          title: 'Данные',
+          subtitle: 'Бэкап и сброс',
+
+          accentClass: 'cyan-500',
+        },
+      ]
     },
     {
-      id: 'workSchedule',
-      icon: CalendarDays,
-      title: 'График работы',
-      subtitle: 'Дни и часы',
-      stats: 'План, Цели',
-      accentClass: 'blue-500', 
+      id: 'work',
+      title: 'Работа',
+      items: [
+        {
+          id: 'workSchedule',
+          icon: CalendarDays,
+          title: 'График работы',
+          subtitle: 'Дни и часы',
+
+          accentClass: 'blue-500', 
+        },
+        {
+          id: 'categories',
+          icon: Folder,
+          title: 'Категории',
+          subtitle: 'Теги и цвета',
+
+          accentClass: 'indigo-500', 
+        },
+        {
+          id: 'finance',
+          icon: CreditCard,
+          title: 'Финансы',
+          subtitle: 'Даты выплат',
+
+          accentClass: 'emerald-500', 
+        },
+      ]
     },
     {
-      id: 'backups',
-      icon: HardDrive,
-      title: 'Данные',
-      subtitle: 'Бэкап и сброс',
-      stats: 'Безопасность',
-      accentClass: 'cyan-500',
-    },
-    {
-      id: 'categories',
-      icon: Folder,
-      title: 'Категории',
-      subtitle: 'Теги и цвета',
-      stats: 'Управление',
-      accentClass: 'indigo-500', 
-    },
-    {
-      id: 'personalization',
-      icon: Palette,
-      title: 'Персонализация',
-      subtitle: 'Тема и иконки',
-      stats: 'Визуал',
-      accentClass: 'violet-500', 
-    },
-    {
-      id: 'productivity', // Было pomodoro, в табах productivity
-      icon: Timer,
-      title: 'Продуктивность',
-      subtitle: 'Помодоро и перерывы',
-      stats: 'Таймер, Отдых',
-      accentClass: 'rose-500', 
-    },
-    {
-      id: 'notifications',
-      icon: Bell,
-      title: 'Уведомления',
-      subtitle: 'Звуки и алерты',
-      stats: 'Звук, Интервалы',
-      accentClass: 'amber-500', 
-    },
-    {
-      id: 'finance', // Было payments, в табах finance
-      icon: CreditCard,
-      title: 'Финансы',
-      subtitle: 'Даты выплат',
-      stats: 'Зарплата',
-      accentClass: 'emerald-500', 
+      id: 'alerts',
+      title: 'Оповещения',
+      items: [
+        {
+          id: 'notifications',
+          icon: Bell,
+          title: 'Уведомления',
+          subtitle: 'Звуки и алерты',
+
+          accentClass: 'amber-500', 
+        },
+        {
+          id: 'productivity',
+          icon: Timer,
+          title: 'Продуктивность',
+          subtitle: 'Помодоро и перерывы',
+
+          accentClass: 'rose-500', 
+        },
+        {
+          id: 'ai',
+          icon: BotMessageSquare,
+          title: 'AI Ассистент',
+          subtitle: 'Умные функции',
+
+          accentClass: 'fuchsia-500', 
+        },
+      ]
     },
   ]
+
+  // Плоский массив карточек для поиска активной
+  const gridCards = settingsGroups.flatMap(group => group.items)
 
   // Сбрасываем выбранную секцию при закрытии
   useEffect(() => {
@@ -836,7 +886,6 @@ export function SoundNotificationsSettingsModal({ isOpen, onClose, initialTab = 
         isOpen={isOpen}
         onClose={onClose}
         title="Настройки"
-        subtitle="Управление приложением"
         size="large"
         className={`transition-all duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] md:!max-w-6xl md:!w-[95vw] md:!h-[90vh]`}
         closeOnOverlayClick={false}
@@ -849,17 +898,34 @@ export function SoundNotificationsSettingsModal({ isOpen, onClose, initialTab = 
             flex flex-col h-full overflow-y-auto custom-scrollbar transition-all duration-300 overflow-x-hidden
             md:w-[25%] md:border-r md:border-gray-100 dark:md:border-gray-800 md:pr-4
           `}>
-            {/* Навигация */}
-            <div className="flex flex-col gap-1 mb-6 p-1">
-              {gridCards.map(card => (
-                <SettingsNavItem
-                  key={card.id}
-                  icon={card.icon}
-                  title={card.title}
-                  accentClass={card.accentClass}
-                  onClick={() => setActiveTab(card.id)}
-                  isActive={activeTab === card.id}
-                />
+            {/* Навигация с группировкой */}
+            <div className="flex flex-col gap-2 mb-6 px-1">
+              {settingsGroups.map((group, groupIndex) => (
+                <div key={group.id}>
+                  {/* Заголовок группы — стили как у subtitle */}
+                  <div className={`
+                    px-3 text-sm text-gray-500 dark:text-gray-400 font-medium
+                    pb-3
+                    ${groupIndex > 0 ? 'mt-4 pt-3 border-t border-gray-100 dark:border-gray-800' : ''}
+                  `}>
+                    {group.title}
+                  </div>
+                  {/* Элементы группы */}
+                  <div className="flex flex-col gap-2">
+                    {group.items.map(card => (
+                      <SettingsNavItem
+                        key={card.id}
+                        icon={card.icon}
+                        title={card.title}
+                        subtitle={card.subtitle}
+
+                        accentClass={card.accentClass}
+                        onClick={() => setActiveTab(card.id)}
+                        isActive={activeTab === card.id}
+                      />
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
             
@@ -1018,6 +1084,9 @@ export function SoundNotificationsSettingsModal({ isOpen, onClose, initialTab = 
                     {activeTab === 'account' && (
                       <AccountTab />
                     )}
+                    {activeTab === 'shortcuts' && (
+                      <KeyboardShortcutsTab />
+                    )}
                 </div>
               </NestedModal>
               )}
@@ -1151,6 +1220,9 @@ export function SoundNotificationsSettingsModal({ isOpen, onClose, initialTab = 
                     )}
                     {activeTab === 'account' && (
                       <AccountTab />
+                    )}
+                    {activeTab === 'shortcuts' && (
+                      <KeyboardShortcutsTab />
                     )}
                     </div>
                   </NestedModal>

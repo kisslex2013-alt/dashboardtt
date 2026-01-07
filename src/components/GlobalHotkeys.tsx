@@ -68,7 +68,7 @@ export function GlobalHotkeys({
     },
 
     // ❌ Close Modals: Escape
-    'Escape': (e) => {
+    'escape': (e) => {
       // closeAllModals handles logic to close active modals
       closeAllModals()
     }

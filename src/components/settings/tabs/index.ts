@@ -7,3 +7,5 @@ export * from './WorkScheduleTab'
 export * from './CategoriesTab'
 export * from './AITab'
 export * from './AccountTab'
+export * from './KeyboardShortcutsTab'
+
