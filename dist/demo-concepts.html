@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Banner Concepts</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    animation: {
+                        'move-stripes': 'move-stripes 2s linear infinite',
+                    },
+                    keyframes: {
+                        'move-stripes': {
+                            '0%': { backgroundPosition: '0 0' },
+                            '100%': { backgroundPosition: '50px 50px' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .bg-stripes-animated {
+            background-image: repeating-linear-gradient(
+                45deg,
+                rgba(245, 158, 11, 0.1),
+                rgba(245, 158, 11, 0.1) 10px,
+                rgba(245, 158, 11, 0.2) 10px,
+                rgba(245, 158, 11, 0.2) 20px
+            );
+            background-size: 200% 200%;
+        }
+        /* Sticky Ribbon Styles */
+        .ribbon-container {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 150px;
+            height: 150px;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .ribbon {
+            position: absolute;
+            top: 30px;
+            right: -35px;
+            transform: rotate(45deg);
+            background-color: #eab308; /* yellow-500 */
+            color: white;
+            text-align: center;
+            font-weight: bold;
+            padding: 5px 40px;
+            width: 200px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            pointer-events: auto;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .ribbon:hover {
+            background-color: #ca8a04; /* yellow-600 */
+            transform: rotate(45deg) scale(1.05);
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen flex flex-col items-center justify-center p-10 gap-20">
+
+    <!-- Concept 1: Construction Tape -->
+    <div class="relative w-full max-w-md p-8 border border-gray-700 rounded-2xl bg-gray-800">
+        <h2 class="text-2xl font-bold mb-4 text-gray-300">Вариант 1: Construction Tape 🚧</h2>
+        <p class="text-gray-400 mb-8">Заметный блок с анимированными полосами. Всегда виден, привлекает внимание к "тестовости" данных.</p>
+        
+        <!-- The Component -->
+        <div class="relative overflow-hidden rounded-xl shadow-2xl group border border-yellow-500/30">
+            <!-- Animated Background -->
+            <div class="absolute inset-0 bg-yellow-900/40 bg-stripes-animated animate-move-stripes"></div>
+            
+            <!-- Content -->
+            <div class="relative bg-gray-900/80 backdrop-blur-md p-4">
+                <div class="flex items-start gap-3">
+                    <div class="shrink-0 mt-0.5">
+                        <div class="w-8 h-8 rounded-full bg-yellow-900/50 flex items-center justify-center animate-pulse border border-yellow-500/30">
+                            <span class="text-lg">🚧</span>
+                        </div>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h4 class="font-bold text-sm mb-1 text-white flex items-center gap-2">
+                            Демо режим
+                            <span class="text-[10px] uppercase font-extrabold bg-yellow-500 text-black px-1.5 py-0.5 rounded tracking-wider">Demo</span>
+                        </h4>
+                        <p class="text-xs text-gray-300 mb-3 leading-relaxed">
+                            Это тестовые данные. <span class="text-yellow-400 font-medium">Рекомендуется очистить</span> перед началом.
+                        </p>
+                        <button class="w-full text-xs font-semibold bg-yellow-500 hover:bg-yellow-600 text-black shadow-lg shadow-yellow-500/20 py-2 rounded-md transition-all flex items-center justify-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1 1 2 2 2h10c1 0 2-1 2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                            Очистить данные
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Concept 2: Sticky Ribbon -->
+    <div class="relative w-full max-w-md p-8 border border-gray-700 rounded-2xl bg-gray-800 overflow-hidden">
+        <h2 class="text-2xl font-bold mb-4 text-gray-300">Вариант 2: Sticky Ribbon 🎗️</h2>
+        <p class="text-gray-400 mb-20">Минималистичная лента в углу. Раскрывается деталями при наведении или клике. Экономит место.</p>
+        
+        <!-- The Component Implementation (Simulated corner) -->
+        <div class="absolute top-0 right-0 w-full h-full pointer-events-none border-2 border-dashed border-gray-600/50 rounded-2xl">
+            <div class="ribbon-container">
+                <div class="ribbon text-xs tracking-wider shadow-lg">DEMO DATA</div>
+            </div>
+            
+            <!-- Hover Card (Simulated appearing) -->
+            <div class="absolute top-16 right-4 w-64 bg-gray-900 border border-yellow-500/30 rounded-lg shadow-2xl p-4 transform translate-x-2 opacity-1 transition-all pointer-events-auto">
+                <div class="flex justify-between items-start mb-2">
+                    <h4 class="text-sm font-bold text-yellow-400">Демо режим активен</h4>
+                    <button class="text-gray-500 hover:text-white">✕</button>
+                </div>
+                <p class="text-xs text-gray-400 mb-3">Данные сгенерированы автоматически.</p>
+                <button class="w-full py-1.5 bg-yellow-600/20 hover:bg-yellow-600/30 text-yellow-400 border border-yellow-600/50 rounded text-xs transition-colors">
+                    Удалить данные
+                </button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
