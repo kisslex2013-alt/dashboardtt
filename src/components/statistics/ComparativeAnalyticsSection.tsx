@@ -106,20 +106,19 @@ export function ComparativeAnalyticsSection() {
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-             {/* Unique Icon for Comparative Analytics */}
             <GitCompareArrows className={`w-6 h-6 ${iconColor}`} aria-hidden="true" />
               <div className="flex items-center gap-2">
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                <h2 className={`font-bold text-gray-900 dark:text-white ${isMobile ? 'text-base' : 'text-xl'}`}>
                   Сравнительная аналитика
                 </h2>
-                <InfoTooltip text="Тренды, сравнения периодов и анализ категорий" />
+                {!isMobile && <InfoTooltip text="Тренды, сравнения периодов и анализ категорий" />}
               </div>
             </div>
 
           
           <div className="flex items-center gap-2">
-             {/* Tab Switcher in Header (only visible when open) */}
-            {isExpanded && (
+             {/* Tab Switcher - только на десктопе */}
+            {isExpanded && !isMobile && (
                 <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1" onClick={(e) => e.stopPropagation()}>
                 <button
                     onClick={() => setActiveTab('income')}
@@ -144,8 +143,8 @@ export function ComparativeAnalyticsSection() {
                 </div>
             )}
 
-            {/* Dropdown для выбора видимых блоков */}
-            {isExpanded && (
+            {/* Dropdown - только на десктопе */}
+            {isExpanded && !isMobile && (
               <ChartVisibilityDropdown
                 options={visibilityOptions}
                 onToggle={handleToggleVisibility}
@@ -167,6 +166,39 @@ export function ComparativeAnalyticsSection() {
             </button>
           </div>
         </div>
+
+        {/* Кнопки управления на мобильных - отдельная строка */}
+        {isMobile && isExpanded && (
+          <div className="flex items-center justify-end gap-2 mt-3">
+            <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1" onClick={(e) => e.stopPropagation()}>
+              <button
+                onClick={() => setActiveTab('income')}
+                className={`px-2 py-1 text-xs font-medium rounded-md transition-all ${
+                  activeTab === 'income'
+                    ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
+                    : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
+                }`}
+              >
+                Доход
+              </button>
+              <button
+                onClick={() => setActiveTab('hours')}
+                className={`px-2 py-1 text-xs font-medium rounded-md transition-all ${
+                  activeTab === 'hours'
+                    ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
+                    : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
+                }`}
+              >
+                Часы
+              </button>
+            </div>
+            <ChartVisibilityDropdown
+              options={visibilityOptions}
+              onToggle={handleToggleVisibility}
+              buttonLabel=""
+            />
+          </div>
+        )}
       </div>
 
       {shouldMountContent && (

@@ -20,6 +20,7 @@ import { EmptyState } from '../ui/EmptyState'
 import { ChartIllustration } from '../ui/illustrations'
 import { ChartTypeSwitcher } from '../ui/ChartTypeSwitcher'
 import { useResponsiveChartHeight } from '../../hooks/useResponsiveChartHeight'
+import { useIsMobile } from '../../hooks/useIsMobile'
 
 type DataMode = 'hours' | 'income'
 type ChartType = 'bar' | 'line' | 'area'
@@ -41,6 +42,7 @@ export function CombinedCategoryChart({ entries: entriesProp }: CombinedCategory
   const entriesStore = useEntries()
   const categories = useCategories()
   const theme = useTheme()
+  const isMobile = useIsMobile()
   const chartHeight = useResponsiveChartHeight(300, 250)
   
   const [dataMode, setDataMode] = useState<DataMode>('income')
@@ -253,7 +255,15 @@ export function CombinedCategoryChart({ entries: entriesProp }: CombinedCategory
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke={theme === 'dark' ? '#374151' : '#E5E7EB'} />
-            <XAxis dataKey="name" stroke="#6B7280" style={{ fontSize: '11px' }} angle={-35} textAnchor="end" height={70} />
+            <XAxis 
+              dataKey="name" 
+              stroke="#6B7280" 
+              style={{ fontSize: isMobile ? '9px' : '11px' }} 
+              angle={isMobile ? -55 : -35} 
+              textAnchor="end" 
+              height={isMobile ? 90 : 70}
+              tickFormatter={(value) => isMobile && value.length > 8 ? value.slice(0, 8) + '…' : value}
+            />
             <YAxis stroke="#6B7280" style={{ fontSize: '12px' }} />
             <Tooltip content={<CustomTooltip />} />
             <Bar dataKey={dataKey} fill="url(#colorCombinedCategoryBar)" radius={[4, 4, 0, 0]} />
@@ -267,7 +277,15 @@ export function CombinedCategoryChart({ entries: entriesProp }: CombinedCategory
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke={theme === 'dark' ? '#374151' : '#E5E7EB'} />
-            <XAxis dataKey="name" stroke="#6B7280" style={{ fontSize: '11px' }} angle={-35} textAnchor="end" height={70} />
+            <XAxis 
+              dataKey="name" 
+              stroke="#6B7280" 
+              style={{ fontSize: isMobile ? '9px' : '11px' }} 
+              angle={isMobile ? -55 : -35} 
+              textAnchor="end" 
+              height={isMobile ? 90 : 70}
+              tickFormatter={(value) => isMobile && value.length > 8 ? value.slice(0, 8) + '…' : value}
+            />
             <YAxis stroke="#6B7280" style={{ fontSize: '12px' }} />
             <Tooltip content={<CustomTooltip />} />
             <Area type="monotone" dataKey={dataKey} stroke="#3B82F6" fillOpacity={1} fill="url(#colorCombinedCategoryArea)" />
@@ -275,7 +293,15 @@ export function CombinedCategoryChart({ entries: entriesProp }: CombinedCategory
         ) : (
           <LineChart data={chartDataWithPercentages}>
             <CartesianGrid strokeDasharray="3 3" stroke={theme === 'dark' ? '#374151' : '#E5E7EB'} />
-            <XAxis dataKey="name" stroke="#6B7280" style={{ fontSize: '11px' }} angle={-35} textAnchor="end" height={70} />
+            <XAxis 
+              dataKey="name" 
+              stroke="#6B7280" 
+              style={{ fontSize: isMobile ? '9px' : '11px' }} 
+              angle={isMobile ? -55 : -35} 
+              textAnchor="end" 
+              height={isMobile ? 90 : 70}
+              tickFormatter={(value) => isMobile && value.length > 8 ? value.slice(0, 8) + '…' : value}
+            />
             <YAxis stroke="#6B7280" style={{ fontSize: '12px' }} />
             <Tooltip content={<CustomTooltip />} />
             <Line type="monotone" dataKey={dataKey} stroke="#3B82F6" strokeWidth={3} dot={{ fill: '#3B82F6', r: 4 }} activeDot={{ r: 6 }} />

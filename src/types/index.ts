@@ -583,7 +583,7 @@ export interface SettingsState {
   colorScheme: 'default' | 'claymorphism' | 'soft-pop' | 'neon-dark' | 'pastel-light' | 'corporate' | 'high-contrast' | 'auto'
   animations: boolean
   themeTransitionType: 'circle' | 'fade' | 'wipe' | 'blur' | 'rotate'
-  listView: 'list' | 'grid' | 'timeline' | 'calendar'
+  listView: 'list' | 'grid' | 'timeline' | 'calendar' | 'agenda' | 'cards'
   defaultEntriesFilter: string
   defaultAnalyticsFilter: string
   defaultChartVisibility: ChartVisibility | null
@@ -614,7 +614,7 @@ export interface SettingsState {
   applyColorScheme: (colorScheme: string) => void
   setThemeTransitionType: (type: 'circle' | 'fade' | 'wipe' | 'blur' | 'rotate') => void
   toggleAnimations: () => void
-  setListView: (view: 'list' | 'grid' | 'timeline' | 'calendar') => void
+  setListView: (view: 'list' | 'grid' | 'timeline' | 'calendar' | 'agenda' | 'cards') => void
   setDefaultEntriesFilter: (filter: string) => void
   setDefaultAnalyticsFilter: (filter: string) => void
   updateChartVisibility: (visibility: Partial<ChartVisibility>) => void

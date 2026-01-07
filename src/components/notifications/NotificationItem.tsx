@@ -22,6 +22,7 @@ interface NotificationItemProps {
   onClick: () => void
   compact?: boolean
   index?: number // для stagger анимации
+  isActive?: boolean // для подсветки выбранного
 }
 
 /**
@@ -156,6 +157,7 @@ export function NotificationItem({
   onClick,
   compact = false,
   index = 0,
+  isActive = false,
 }: NotificationItemProps) {
   const { markAsRead, removeNotification, snoozeNotification } = useNotificationActions()
   const metrics = extractMetrics(notification)
@@ -199,16 +201,21 @@ export function NotificationItem({
       exit="exit"
       custom={index}
       whileHover={{ 
-        scale: 1.02,
+        scale: isActive ? 1 : 1.02,
         boxShadow: '0 10px 40px -10px rgba(0, 0, 0, 0.15)',
       }}
       whileTap={{ scale: 0.98 }}
       layout
       className={`
         relative overflow-hidden
-        ${notification.isRead ? 'bg-gray-50/95 dark:bg-gray-800/50' : 'bg-white/95 dark:bg-slate-900/95'}
-        ${neonStyles.border}
-        ${notification.isRead ? '' : neonStyles.glow}
+        ${isActive 
+          ? 'bg-blue-50/80 dark:bg-blue-900/20 border-blue-500/50 ring-1 ring-blue-500/30' 
+          : notification.isRead 
+            ? 'bg-gray-50/95 dark:bg-gray-800/50' 
+            : 'bg-white/95 dark:bg-slate-900/95'
+        }
+        ${!isActive && neonStyles.border}
+        ${!isActive && !notification.isRead ? neonStyles.glow : ''}
         border rounded-xl p-4
         backdrop-blur-sm
         cursor-pointer
@@ -217,8 +224,13 @@ export function NotificationItem({
         transition-all duration-300
       `}
     >
-      {/* Неоновая линия сверху */}
-      {!notification.isRead && (
+      {/* Активный маркер слева */}
+      {isActive && (
+        <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-500" />
+      )}
+
+      {/* Неоновая линия сверху (только если не активный и не прочитан) */}
+      {!isActive && !notification.isRead && (
         <div 
           className={`
             absolute top-0 left-0 right-0 h-[2px]
@@ -233,11 +245,11 @@ export function NotificationItem({
         </div>
       )}
       {/* Main content */}
-      <div className="flex items-start gap-3">
+      <div className="flex items-start gap-3 pl-1">
         {/* Icon with pulse animation for unread */}
         <motion.div 
           className={`flex-shrink-0 p-2.5 rounded-xl ${getIconBgColor(notification)}`}
-          animate={!notification.isRead ? { 
+          animate={!notification.isRead && !isActive ? { 
             scale: [1, 1.05, 1],
           } : {}}
           transition={{ 
@@ -332,7 +344,7 @@ export function NotificationItem({
                 Тест
               </span>
             )}
-            {!notification.isRead && (
+            {!notification.isRead && !isActive && (
               <motion.span 
                 className="w-2 h-2 bg-blue-500 rounded-full"
                 animate={{ scale: [1, 1.3, 1], opacity: [1, 0.7, 1] }}

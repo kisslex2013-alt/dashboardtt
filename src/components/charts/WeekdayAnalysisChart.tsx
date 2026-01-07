@@ -264,7 +264,7 @@ export function WeekdayAnalysisChart({ entries: entriesProp }) {
             {isDropdownOpen && (
               <div
                 ref={dropdownRef}
-                className="absolute right-0 mt-2 w-40 glass-effect rounded-lg border border-gray-300 dark:border-gray-600 shadow-xl z-[9999] backdrop-blur-lg bg-white/95 dark:bg-gray-800/95 animate-slide-down"
+                className={`absolute mt-2 w-40 glass-effect rounded-lg border border-gray-300 dark:border-gray-600 shadow-xl z-[9999] backdrop-blur-lg bg-white/95 dark:bg-gray-800/95 animate-slide-down ${isMobile ? 'left-0' : 'right-0'}`}
               >
                 {metricOptions.map(option => (
                   <div
@@ -297,15 +297,17 @@ export function WeekdayAnalysisChart({ entries: entriesProp }) {
           <YAxis
             yAxisId="left"
             stroke="#6B7280"
-            style={{ fontSize: '12px' }}
-            label={{ value: 'Часы', angle: -90, position: 'insideLeft', fontSize: 12 }}
+            style={{ fontSize: isMobile ? '10px' : '12px' }}
+            width={isMobile ? 35 : 60}
+            label={!isMobile ? { value: 'Часы', angle: -90, position: 'insideLeft', fontSize: 12 } : undefined}
           />
           <YAxis
             yAxisId="right"
             orientation="right"
             stroke="#3B82F6"
-            style={{ fontSize: '12px' }}
-            label={{ value: 'Доход (₽)', angle: 90, position: 'insideRight', fontSize: 12 }}
+            style={{ fontSize: isMobile ? '10px' : '12px' }}
+            width={isMobile ? 40 : 60}
+            label={!isMobile ? { value: 'Доход (₽)', angle: 90, position: 'insideRight', fontSize: 12 } : undefined}
           />
           <Tooltip content={<CustomTooltip />} />
 

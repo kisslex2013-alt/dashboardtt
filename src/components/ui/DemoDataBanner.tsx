@@ -57,9 +57,19 @@ export const DemoDataBanner = memo(({
 
   return (
     <>
-      <div className="fixed top-0 right-0 w-[150px] h-[150px] ribbon-container z-50">
+      {/* Desktop: правый верхний угол, Mobile: нижний левый угол */}
+      <div className="fixed 
+        bottom-0 left-0 sm:bottom-auto sm:left-auto sm:top-0 sm:right-0 
+        w-[150px] h-[150px] ribbon-container z-50 overflow-hidden
+      ">
         <div 
-          className="ribbon absolute top-[30px] right-[-35px] bg-yellow-500 hover:bg-yellow-600 dark:bg-yellow-600 dark:hover:bg-yellow-700 text-white text-center font-bold py-[5px] px-[40px] w-[200px] text-xs tracking-wider animate-ribbon-pulse"
+          className="ribbon absolute 
+            bg-yellow-500 hover:bg-yellow-600 dark:bg-yellow-600 dark:hover:bg-yellow-700 
+            text-white text-center font-bold py-[5px] px-[40px] w-[200px] text-xs tracking-wider animate-ribbon-pulse
+            cursor-pointer
+            bottom-[30px] left-[-35px] -rotate-45
+            sm:bottom-auto sm:left-auto sm:top-[30px] sm:right-[-35px] sm:rotate-45
+          "
           onClick={() => setIsOpen(!isOpen)}
           onMouseEnter={() => setIsOpen(true)}
         >

@@ -420,64 +420,55 @@ const AnalyticsSectionComponent = memo(() => {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <BarChart3 className="w-6 h-6 text-blue-500" aria-hidden="true" />
-            <h2 id="analytics-section-header" className="text-xl font-bold">
+            <h2 id="analytics-section-header" className={`font-bold ${isMobile ? 'text-base' : 'text-xl'}`}>
               Описательная аналитика
             </h2>
-            <InfoTooltip text="Детальный анализ динамики, структуры доходов и распределения времени по часам." />
+            {!isMobile && <InfoTooltip text="Детальный анализ динамики, структуры доходов и распределения времени по часам." />}
           </div>
 
-          <div className={`flex items-center ${isMobile ? 'gap-2 flex-wrap' : 'gap-3'}`}>
-            {/* Режим отображения графиков */}
-            {isExpanded && (
-              <div className={`flex items-center ${isMobile ? 'gap-1' : 'gap-2'}`}>
-                {!isMobile && (
-                  <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                    Режим:
-                  </span>
-                )}
+          <div className={`flex items-center ${isMobile ? 'gap-1' : 'gap-3'}`}>
+            {/* Режим отображения графиков - только на десктопе */}
+            {isExpanded && !isMobile && (
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  Режим:
+                </span>
                 <div className="flex items-center gap-1">
                   <button
                     onClick={() => updateSettings({ chartDisplay: 'separate' })}
-                    className={`${isMobile ? 'px-2 py-1 text-xs' : 'px-3 py-1 text-xs'} font-medium rounded-md transition-all touch-manipulation ${
+                    className={`px-3 py-1 text-xs font-medium rounded-md transition-all ${
                       chartDisplay === 'separate'
                         ? 'glass-button text-blue-600 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/20'
                         : 'text-gray-600 dark:text-gray-300 hover:bg-gray-300/50 dark:hover:bg-gray-700/50'
                     }`}
-                    style={isMobile ? { minHeight: '36px' } : {}}
                   >
-                    {isMobile ? 'Раздел' : 'Раздельно'}
+                    Раздельно
                   </button>
                   <button
                     onClick={() => updateSettings({ chartDisplay: 'combined' })}
-                    className={`${isMobile ? 'px-2 py-1 text-xs' : 'px-3 py-1 text-xs'} font-medium rounded-md transition-all touch-manipulation ${
+                    className={`px-3 py-1 text-xs font-medium rounded-md transition-all ${
                       chartDisplay === 'combined'
                         ? 'glass-button text-blue-600 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/20'
                         : 'text-gray-600 dark:text-gray-300 hover:bg-gray-300/50 dark:hover:bg-gray-700/50'
                     }`}
-                    style={isMobile ? { minHeight: '36px' } : {}}
                   >
-                    {isMobile ? 'Совмест' : 'Совместно'}
+                    Совместно
                   </button>
                 </div>
               </div>
             )}
 
-            {/* Фильтр периода - кастомный dropdown с Pin иконками */}
-            {isExpanded && (
-              <div className={`flex items-center ${isMobile ? 'gap-1' : 'gap-2'}`}>
-                {!isMobile && (
-                  <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                    Период:
-                  </span>
-                )}
-                {/* ИСПРАВЛЕНО: Используем relative контейнер для absolute позиционирования */}
+            {/* Фильтр периода - только на десктопе в header */}
+            {isExpanded && !isMobile && (
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  Период:
+                </span>
                 <div className="relative">
-                  {/* Кнопка dropdown */}
                   <button
                     ref={buttonRef}
                     onClick={handleToggleFilterDropdown}
-                    className={`glass-effect ${isMobile ? 'px-3 py-1.5 pr-8 text-xs min-w-[120px]' : 'px-4 py-2 pr-10 text-sm min-w-[180px]'} rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium text-left transition-normal hover-lift-scale click-shrink touch-manipulation`}
-                    style={isMobile ? { minHeight: '36px' } : {}}
+                    className="glass-effect px-4 py-2 pr-10 text-sm min-w-[180px] rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium text-left transition-normal hover-lift-scale click-shrink"
                   >
                     {dateFilter}
                     <ChevronDownIcon
@@ -485,7 +476,6 @@ const AnalyticsSectionComponent = memo(() => {
                     />
                   </button>
 
-                  {/* Dropdown меню - absolute позиционирование относительно кнопки, открывается ВНИЗ */}
                   {shouldMountFilterDropdown && (
                     <div
                       ref={dropdownRef}
@@ -504,7 +494,6 @@ const AnalyticsSectionComponent = memo(() => {
                     >
                       {filterOptions.map(option => {
                         const filterKey = filterValueMapping[option]
-                        // ИСПРАВЛЕНО: Проверка учитывает null (нет дефолтного фильтра)
                         const isDefault =
                           defaultAnalyticsFilter !== null && defaultAnalyticsFilter === filterKey
                         const isCurrent = dateFilter === option
@@ -516,7 +505,6 @@ const AnalyticsSectionComponent = memo(() => {
                               isCurrent ? 'bg-blue-50 dark:bg-blue-900/20' : ''
                             }`}
                           >
-                            {/* Текст периода - кликабельный для выбора */}
                             <span
                               onClick={() => {
                                 setDateFilter(option)
@@ -534,12 +522,10 @@ const AnalyticsSectionComponent = memo(() => {
                               {option}
                             </span>
 
-                            {/* ИСПРАВЛЕНО: Иконка Pin с логикой переключения */}
                             <button
                               onClick={e => {
                                 e.stopPropagation()
                                 e.preventDefault()
-                                // ИСПРАВЛЕНО: Если это уже дефолтный фильтр - сбрасываем его, иначе устанавливаем
                                 if (isDefault) {
                                   setDefaultAnalyticsFilter(null)
                                   showSuccess('Фильтр по умолчанию сброшен')
@@ -564,7 +550,6 @@ const AnalyticsSectionComponent = memo(() => {
                   )}
                 </div>
 
-                {/* Кнопка управления видимостью графиков - используем унифицированный компонент */}
                 <ChartVisibilityDropdown
                   options={visibilityOptions}
                   onToggle={toggleChartVisibility}
@@ -573,10 +558,10 @@ const AnalyticsSectionComponent = memo(() => {
               </div>
             )}
 
-            {/* Кнопка аккордеона - после кнопки управления видимостью, всегда видна */}
+          {/* Кнопка аккордеона - всегда видна, не сжимается */}
             <button
               onClick={handleToggleExpanded}
-              className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-normal hover-lift-scale click-shrink focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-normal hover-lift-scale click-shrink focus:outline-none focus:ring-2 focus:ring-blue-500 flex-shrink-0 ml-auto"
               aria-expanded={isExpanded}
               aria-label={isExpanded ? 'Свернуть секцию графиков' : 'Развернуть секцию графиков'}
               aria-controls="analytics-section-content"
@@ -589,6 +574,128 @@ const AnalyticsSectionComponent = memo(() => {
               )}
             </button>
           </div>
+
+          {/* Кнопки управления на мобильных - отдельная строка */}
+          {isMobile && isExpanded && (
+            <div className="flex items-center justify-end gap-2 mt-3 flex-wrap">
+              {/* Режим отображения */}
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => updateSettings({ chartDisplay: 'separate' })}
+                  className={`px-2 py-1 text-xs font-medium rounded-md transition-all touch-manipulation ${
+                    chartDisplay === 'separate'
+                      ? 'glass-button text-blue-600 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/20'
+                      : 'text-gray-600 dark:text-gray-300 hover:bg-gray-300/50 dark:hover:bg-gray-700/50'
+                  }`}
+                  style={{ minHeight: '32px' }}
+                >
+                  Раздел
+                </button>
+                <button
+                  onClick={() => updateSettings({ chartDisplay: 'combined' })}
+                  className={`px-2 py-1 text-xs font-medium rounded-md transition-all touch-manipulation ${
+                    chartDisplay === 'combined'
+                      ? 'glass-button text-blue-600 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/20'
+                      : 'text-gray-600 dark:text-gray-300 hover:bg-gray-300/50 dark:hover:bg-gray-700/50'
+                  }`}
+                  style={{ minHeight: '32px' }}
+                >
+                  Совмест
+                </button>
+              </div>
+
+              {/* Фильтр периода */}
+              <div className="relative">
+                <button
+                  ref={buttonRef}
+                  onClick={handleToggleFilterDropdown}
+                  className="glass-effect px-2 py-1 pr-6 text-xs rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium text-left transition-normal touch-manipulation"
+                  style={{ minHeight: '32px', minWidth: '90px' }}
+                >
+                  {dateFilter}
+                  <ChevronDownIcon
+                    className={`absolute right-2 top-1/2 -translate-y-1/2 w-3 h-3 text-gray-500 transition-transform duration-200 ${isFilterDropdownOpen ? 'rotate-180' : ''}`}
+                  />
+                </button>
+
+                {/* Dropdown меню */}
+                {shouldMountFilterDropdown && (
+                  <div
+                    ref={dropdownRef}
+                    className={`absolute right-0 mt-2 w-56 glass-effect rounded-lg border border-gray-300 dark:border-gray-600 shadow-xl z-[9999] backdrop-blur-lg bg-white/95 dark:bg-gray-800/95 ${
+                      !isAnimatingFilterDropdown && !isExitingFilterDropdown
+                        ? 'opacity-0 -translate-y-4'
+                        : ''
+                    } ${isAnimatingFilterDropdown ? 'animate-slide-down' : ''} ${
+                      isExitingFilterDropdown ? 'animate-slide-up-out' : ''
+                    }`}
+                    style={{
+                      maxHeight: 'calc(100vh - 100px)',
+                      overflowY: 'auto',
+                    }}
+                  >
+                    {filterOptions.map(option => {
+                      const filterKey = filterValueMapping[option]
+                      const isDefault =
+                        defaultAnalyticsFilter !== null && defaultAnalyticsFilter === filterKey
+                      const isCurrent = dateFilter === option
+
+                      return (
+                        <div
+                          key={option}
+                          className={`flex items-center justify-between px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 border-b border-gray-200 dark:border-gray-700 last:border-b-0 ${
+                            isCurrent ? 'bg-blue-50 dark:bg-blue-900/20' : ''
+                          }`}
+                        >
+                          <span
+                            onClick={() => {
+                              setDateFilter(option)
+                              setIsFilterDropdownOpen(false)
+                              if (option === 'Выбор даты') {
+                                setShowDatePicker(true)
+                              } else {
+                                setShowDatePicker(false)
+                                setCustomDateRange({ start: '', end: '' })
+                              }
+                            }}
+                            className="flex-1 text-sm"
+                          >
+                            {option}
+                          </span>
+                          <button
+                            onClick={e => {
+                              e.stopPropagation()
+                              e.preventDefault()
+                              if (isDefault) {
+                                setDefaultAnalyticsFilter(null)
+                                showSuccess('Фильтр по умолчанию сброшен')
+                              } else {
+                                setDefaultAnalyticsFilter(filterKey)
+                                showSuccess(`"${option}" установлен по умолчанию для Аналитики`)
+                              }
+                            }}
+                            className={`p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors ${
+                              isDefault ? 'text-blue-500' : 'text-gray-400'
+                            }`}
+                            title={isDefault ? 'Убрать из умолчания' : 'Установить по умолчанию'}
+                          >
+                            <Pin className={`w-4 h-4 ${isDefault ? 'fill-current' : ''}`} />
+                          </button>
+                        </div>
+                      )
+                    })}
+                  </div>
+                )}
+              </div>
+
+              {/* Кнопка видимости графиков */}
+              <ChartVisibilityDropdown
+                options={visibilityOptions}
+                onToggle={toggleChartVisibility}
+                buttonLabel=""
+              />
+            </div>
+          )}
         </div>
 
         {/* Выбор даты (если активен) */}

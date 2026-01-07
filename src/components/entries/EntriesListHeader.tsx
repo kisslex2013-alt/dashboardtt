@@ -118,24 +118,25 @@ export function EntriesListHeader({
 
           {/* Переключатель видов отображения */}
           <div className={`flex items-center gap-1 ${isMobile ? 'ml-0' : 'ml-2'}`}>
-            {/* Кнопка "Список" - неактивна на мобильных */}
-            <button
-              onClick={() => !isMobile && setListView('list')}
-              disabled={isMobile}
-              className={`${isMobile ? 'p-2.5' : 'p-2'} rounded-lg transition-normal touch-manipulation ${
-                isMobile
-                  ? 'text-gray-400 dark:text-gray-600 cursor-not-allowed opacity-50'
-                  : listView === 'list'
-                    ? 'text-blue-500 bg-blue-500/10 hover-lift-scale click-shrink'
-                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-500/10 hover-lift-scale click-shrink'
-              }`}
-              title={isMobile ? 'Вид списком доступен только на десктопе' : 'Список'}
-              aria-label="Вид списком"
-              data-icon-id="view-list"
-            >
-              <List className={isMobile ? 'w-5 h-5' : 'w-4 h-4'} />
-            </button>
+            {/* === ДЕСКТОПНЫЕ ВИДЫ === */}
+            {/* Кнопка "Список" - только десктоп */}
+            {!isMobile && (
+              <button
+                onClick={() => setListView('list')}
+                className={`p-2 rounded-lg transition-normal hover-lift-scale click-shrink ${
+                  listView === 'list'
+                    ? 'text-blue-500 bg-blue-500/10'
+                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-500/10'
+                }`}
+                title="Список"
+                aria-label="Вид списком"
+                data-icon-id="view-list"
+              >
+                <List className="w-4 h-4" />
+              </button>
+            )}
 
+            {/* Кнопка "Сетка" - доступна везде */}
             <button
               onClick={() => setListView('grid')}
               className={`${isMobile ? 'p-2.5' : 'p-2'} rounded-lg transition-normal hover-lift-scale click-shrink touch-manipulation ${
@@ -154,45 +155,76 @@ export function EntriesListHeader({
               <Grid className={isMobile ? 'w-5 h-5' : 'w-4 h-4'} />
             </button>
 
-            <button
-              onClick={() => setListView('timeline')}
-              className={`${isMobile ? 'p-2.5' : 'p-2'} rounded-lg transition-normal hover-lift-scale click-shrink touch-manipulation ${
-                listView === 'timeline'
-                  ? 'text-blue-500 bg-blue-500/10'
-                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-500/10'
-              }`}
-              style={{
-                minWidth: isMobile ? '44px' : 'auto',
-                minHeight: isMobile ? '44px' : 'auto',
-              }}
-              title="Таймлайн"
-              aria-label="Вид таймлайном"
-              data-icon-id="view-timeline"
-            >
-              <Clock className={isMobile ? 'w-5 h-5' : 'w-4 h-4'} />
-            </button>
+            {/* Кнопка "Таймлайн" - только десктоп */}
+            {!isMobile && (
+              <button
+                onClick={() => setListView('timeline')}
+                className={`p-2 rounded-lg transition-normal hover-lift-scale click-shrink ${
+                  listView === 'timeline'
+                    ? 'text-blue-500 bg-blue-500/10'
+                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-500/10'
+                }`}
+                title="Таймлайн"
+                aria-label="Вид таймлайном"
+                data-icon-id="view-timeline"
+              >
+                <Clock className="w-4 h-4" />
+              </button>
+            )}
 
-            {/* Кнопка "Календарь" - неактивна на мобильных */}
-            <button
-              onClick={() => !isMobile && setListView('calendar')}
-              disabled={isMobile}
-              className={`${isMobile ? 'p-2.5' : 'p-2'} rounded-lg transition-normal touch-manipulation ${
-                isMobile
-                  ? 'text-gray-400 dark:text-gray-600 cursor-not-allowed opacity-50'
-                  : listView === 'calendar'
-                    ? 'text-blue-500 bg-blue-500/10 hover-lift-scale click-shrink'
-                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-500/10 hover-lift-scale click-shrink'
-              }`}
-              style={{
-                minWidth: isMobile ? '44px' : 'auto',
-                minHeight: isMobile ? '44px' : 'auto',
-              }}
-              title={isMobile ? 'Календарь доступен только на десктопе' : 'Календарь'}
-              aria-label="Вид календарём"
-              data-icon-id="view-calendar"
-            >
-              <Calendar className={isMobile ? 'w-5 h-5' : 'w-4 h-4'} />
-            </button>
+            {/* Кнопка "Календарь" - только десктоп */}
+            {!isMobile && (
+              <button
+                onClick={() => setListView('calendar')}
+                className={`p-2 rounded-lg transition-normal hover-lift-scale click-shrink ${
+                  listView === 'calendar'
+                    ? 'text-blue-500 bg-blue-500/10'
+                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-500/10'
+                }`}
+                title="Календарь"
+                aria-label="Вид календарём"
+                data-icon-id="view-calendar"
+              >
+                <Calendar className="w-4 h-4" />
+              </button>
+            )}
+
+            {/* === МОБИЛЬНЫЕ ВИДЫ === */}
+            {/* Кнопка "Agenda" - только мобильные */}
+            {isMobile && (
+              <button
+                onClick={() => setListView('agenda')}
+                className={`p-2.5 rounded-lg transition-normal hover-lift-scale click-shrink touch-manipulation ${
+                  listView === 'agenda'
+                    ? 'text-blue-500 bg-blue-500/10'
+                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-500/10'
+                }`}
+                style={{ minWidth: '44px', minHeight: '44px' }}
+                title="Agenda"
+                aria-label="Вид агендой"
+                data-icon-id="view-agenda"
+              >
+                <List className="w-5 h-5" />
+              </button>
+            )}
+
+            {/* Кнопка "Cards" - только мобильные */}
+            {isMobile && (
+              <button
+                onClick={() => setListView('cards')}
+                className={`p-2.5 rounded-lg transition-normal hover-lift-scale click-shrink touch-manipulation ${
+                  listView === 'cards'
+                    ? 'text-blue-500 bg-blue-500/10'
+                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-500/10'
+                }`}
+                style={{ minWidth: '44px', minHeight: '44px' }}
+                title="Cards"
+                aria-label="Вид карточками"
+                data-icon-id="view-cards"
+              >
+                <Clock className="w-5 h-5" />
+              </button>
+            )}
           </div>
         </div>
 

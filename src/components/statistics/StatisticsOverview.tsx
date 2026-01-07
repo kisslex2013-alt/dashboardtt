@@ -171,7 +171,7 @@ export const StatisticsOverview = memo(() => {
               <Activity className="w-6 h-6 text-blue-500" aria-hidden="true" />
               <h2
                 id="statistics-overview-header"
-                className="text-xl font-bold text-gray-900 dark:text-white"
+                className="text-lg font-bold text-gray-900 dark:text-white"
               >
                 Базовая аналитика
               </h2>

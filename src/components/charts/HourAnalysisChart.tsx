@@ -257,7 +257,7 @@ export function HourAnalysisChart({ entries: entriesProp }) {
               {isDropdownOpen && (
                 <div
                   ref={dropdownRef}
-                  className="absolute right-0 mt-2 w-40 glass-effect rounded-lg border border-gray-300 dark:border-gray-600 shadow-xl z-[9999] backdrop-blur-lg bg-white/95 dark:bg-gray-800/95 animate-slide-down"
+                  className={`absolute mt-2 w-40 glass-effect rounded-lg border border-gray-300 dark:border-gray-600 shadow-xl z-[9999] backdrop-blur-lg bg-white/95 dark:bg-gray-800/95 animate-slide-down ${isMobile ? 'left-0' : 'right-0'}`}
                 >
                   {metricOptions.map(option => (
                     <div

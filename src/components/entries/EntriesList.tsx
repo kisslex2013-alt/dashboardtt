@@ -23,7 +23,10 @@ import { ListView } from './views/ListView'
 import { GridView } from './views/GridView'
 import { TimelineView } from './views/TimelineView'
 import { EntriesCalendarView } from './views/EntriesCalendarView'
+import { AgendaView } from './views/AgendaView'
+import { MobileCardsView } from './views/MobileCardsView'
 import { lazy, Suspense } from 'react'
+import { useIsMobile } from '../../hooks/useIsMobile'
 import { BulkActionsPanel } from './BulkActionsPanel'
 
 // ✅ ОПТИМИЗАЦИЯ: Lazy loading для модальных окон
@@ -75,6 +78,7 @@ export function EntriesList({
   const timer = useTimer()
   const { confirmConfig, openConfirm } = useConfirmModal()
   const openModal = useOpenModal()
+  const isMobile = useIsMobile()
   
   // --- RESTORED FILTER LOGIC ---
   const { filters, updateFilters } = useUIStore()
@@ -367,6 +371,21 @@ export function EntriesList({
                 selectionMode={selectionMode}
                 selectedEntries={selectedEntriesSet}
                 onToggleSelection={toggleSelection}
+              />
+            )}
+
+            {/* Мобильные виды */}
+            {listView === 'agenda' && (
+              <AgendaView
+                entries={filteredEntries}
+                onEdit={onEditEntry}
+              />
+            )}
+
+            {listView === 'cards' && (
+              <MobileCardsView
+                entries={filteredEntries}
+                onEdit={onEditEntry}
               />
             )}
           </div>

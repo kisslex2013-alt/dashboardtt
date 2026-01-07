@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
-import { X, Moon, Sun, Info, HelpCircle, GitCompare, Volume2, Database, Folder, Upload, Download } from '../../utils/icons'
-import { Cloud } from 'lucide-react'
+import { X, Moon, Sun, Info, HelpCircle, GitCompare, Volume2, Database, Folder, Upload, Download, Sparkles } from '../../utils/icons'
+import { User, LogIn } from 'lucide-react'
 import { useUIStore } from '../../store/useUIStore'
 
 /**
@@ -156,18 +156,13 @@ export function MobileMenu({
             </button>
           </div>
 
-          {/* Список действий */}
-          <div className="space-y-2">
-            {/* Cloud Sync / Account */}
+          {/* === ГЛАВНЫЕ КНОПКИ (Аккаунт) === */}
+          <div className="space-y-2 mb-4">
+            <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider px-1 mb-2">Аккаунт</p>
+            
+            {/* Вход/регистрация */}
             <button
                onClick={() => {
-                 // Открываем модалку авторизации через глобальный стор
-                 // Так как здесь нет доступа к useUIStore напрямую (или есть через пропсы?),
-                 // Лучше использовать window.dispatchEvent или добавить onOpenAuth в пропсы.
-                 // Но у нас нет onOpenAuth в пропсах.
-                 // Давайте добавим его или используем событие.
-                 // В MobileMenu нет useUIStore. 
-                 // Используем глобальный стор
                  const { openModal } = useUIStore.getState()
                  openModal('auth')
                  onClose()
@@ -175,8 +170,61 @@ export function MobileMenu({
                className="w-full glass-button px-4 py-3 rounded-lg flex items-center gap-3 text-left transition-normal hover-lift-scale click-shrink"
                style={{ minHeight: '44px' }}
             >
-               <Cloud className="w-5 h-5 flex-shrink-0 text-blue-500" />
-               <span className="text-sm font-medium">Облако / Аккаунт</span>
+               <LogIn className="w-5 h-5 flex-shrink-0 text-blue-500" />
+               <span className="text-sm font-medium">Вход / Регистрация</span>
+            </button>
+
+            {/* Аккаунт (бывшие Настройки) */}
+            <button
+               onClick={() => {
+                 const { openModal } = useUIStore.getState()
+                 openModal('soundSettings', { activeTab: 'account' })
+                 onClose()
+               }}
+               className="w-full glass-button px-4 py-3 rounded-lg flex items-center gap-3 text-left transition-normal hover-lift-scale click-shrink"
+               style={{ minHeight: '44px' }}
+            >
+               <User className="w-5 h-5 flex-shrink-0 text-indigo-500" />
+               <span className="text-sm font-medium">Аккаунт</span>
+            </button>
+          </div>
+
+          {/* Разделитель */}
+          <div className="border-t border-gray-200 dark:border-gray-700 my-4"></div>
+
+          {/* === ОСТАЛЬНЫЕ ДЕЙСТВИЯ === */}
+          <div className="space-y-2">
+            <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider px-1 mb-2">Действия</p>
+
+            {/* Промо-страница */}
+            <button
+               onClick={() => {
+                 // Добавляем анимацию fade-out
+                 document.body.style.transition = 'opacity 0.5s ease-out'
+                 document.body.style.opacity = '0'
+                 // Переходим на промо-страницу после анимации
+                 setTimeout(() => {
+                   window.location.href = '/promo/time-tracker-promo-variant-3.html'
+                 }, 500)
+               }}
+               className="w-full glass-button px-4 py-3 rounded-lg flex items-center gap-3 text-left transition-normal hover-lift-scale click-shrink"
+               style={{ minHeight: '44px' }}
+            >
+               <Sparkles className="w-5 h-5 flex-shrink-0 text-amber-500" />
+               <span className="text-sm font-medium">Промо-страница</span>
+            </button>
+
+            {/* AI-уведомления */}
+            <button
+               onClick={() => {
+                 window.dispatchEvent(new CustomEvent('toggleAINotifications'))
+                 onClose()
+               }}
+               className="w-full glass-button px-4 py-3 rounded-lg flex items-center gap-3 text-left transition-normal hover-lift-scale click-shrink"
+               style={{ minHeight: '44px' }}
+            >
+               <Volume2 className="w-5 h-5 flex-shrink-0 text-purple-500" />
+               <span className="text-sm font-medium">AI-уведомления</span>
             </button>
 
             {/* Тема */}

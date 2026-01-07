@@ -72,29 +72,27 @@ export function Header({
                 <h1 className="text-lg sm:text-2xl font-bold transition-all duration-300 hover:text-blue-600 dark:hover:text-blue-400 truncate text-gray-900 dark:text-white">
                   {isMobile ? 'Time Tracker' : 'Time Tracker Dashboard'}
                 </h1>
-                {/* Кнопка промо-страницы */}
-                <button
-                  onClick={() => {
-                    // Добавляем анимацию fade-out
-                    document.body.style.transition = 'opacity 0.5s ease-out'
-                    document.body.style.opacity = '0'
+                {/* Кнопка промо-страницы - только на десктопе (на мобильных в MobileMenu) */}
+                {!isMobile && (
+                  <button
+                    onClick={() => {
+                      // Добавляем анимацию fade-out
+                      document.body.style.transition = 'opacity 0.5s ease-out'
+                      document.body.style.opacity = '0'
 
-                    // Переходим на промо-страницу после анимации
-                    setTimeout(() => {
-                      window.location.href = '/promo/time-tracker-promo-variant-3.html'
-                    }, 500)
-                  }}
-                  className="glass-button p-1.5 sm:p-2 rounded-lg transition-normal hover-lift-scale click-shrink touch-manipulation"
-                  style={{
-                    minWidth: isMobile ? '44px' : 'auto',
-                    minHeight: isMobile ? '44px' : 'auto',
-                  }}
-                  title="Открыть промо-страницу"
-                  aria-label="Открыть промо-страницу"
-                  data-icon-id="header-promo"
-                >
-                  <Sparkles className={isMobile ? 'w-4 h-4' : 'w-5 h-5'} />
-                </button>
+                      // Переходим на промо-страницу после анимации
+                      setTimeout(() => {
+                        window.location.href = '/promo/time-tracker-promo-variant-3.html'
+                      }, 500)
+                    }}
+                    className="glass-button p-2 rounded-lg transition-normal hover-lift-scale click-shrink"
+                    title="Открыть промо-страницу"
+                    aria-label="Открыть промо-страницу"
+                    data-icon-id="header-promo"
+                  >
+                    <Sparkles className="w-5 h-5" />
+                  </button>
+                )}
               </div>
               {!isMobile && (
                 <div className="flex items-center gap-2">
@@ -113,16 +111,20 @@ export function Header({
           <div className="flex gap-2 items-center flex-shrink-0">
             {/* Мобильное меню (hamburger) - только на мобильных */}
             {isMobile ? (
-              <button
-                onClick={() => setIsMobileMenuOpen(true)}
-                className="glass-button p-2 rounded-lg transition-normal hover-lift-scale click-shrink"
-                aria-label="Открыть меню"
-                title="Открыть меню"
-                style={{ minWidth: '44px', minHeight: '44px' }}
-                data-icon-id="header-mobile-menu"
-              >
-                <Menu className="w-5 h-5" />
-              </button>
+              <>
+                {/* AI-уведомления - теперь доступны на мобильных */}
+                <AINotificationsButton />
+                <button
+                  onClick={() => setIsMobileMenuOpen(true)}
+                  className="glass-button p-2 rounded-lg transition-normal hover-lift-scale click-shrink"
+                  aria-label="Открыть меню"
+                  title="Открыть меню"
+                  style={{ minWidth: '44px', minHeight: '44px' }}
+                  data-icon-id="header-mobile-menu"
+                >
+                  <Menu className="w-5 h-5" />
+                </button>
+              </>
             ) : (
               <>
                 {/* Контролы сравнения */}

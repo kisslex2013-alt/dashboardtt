@@ -95,9 +95,16 @@ export function AINotificationsButton() {
       }
     }
 
+    // Слушатель для открытия панели из мобильного меню
+    const handleToggleFromMobile = () => {
+      setIsOpen(true)
+    }
+
     document.addEventListener('keydown', handleKeyDown)
+    window.addEventListener('toggleAINotifications', handleToggleFromMobile)
     return () => {
       document.removeEventListener('keydown', handleKeyDown)
+      window.removeEventListener('toggleAINotifications', handleToggleFromMobile)
     }
   }, [])
 

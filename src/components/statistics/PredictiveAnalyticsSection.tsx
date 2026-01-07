@@ -80,10 +80,10 @@ export const PredictiveAnalyticsSection = memo(() => {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Calculator className={`w-6 h-6 ${iconColor}`} aria-hidden="true" />
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+            <h2 className={`font-bold text-gray-900 dark:text-white ${isMobile ? 'text-base' : 'text-xl'}`}>
               Предиктивная аналитика
             </h2>
-            <InfoTooltip text="Прогноз дохода и выгорания на основе исторических данных. Помогает планировать нагрузку." />
+            {!isMobile && <InfoTooltip text="Прогноз дохода и выгорания на основе исторических данных. Помогает планировать нагрузку." />}
           </div>
 
           <div className="flex items-center gap-2">
