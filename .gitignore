@@ -87,3 +87,12 @@ pic/
 
 # Documentation (stored locally, not in repo)
 docs/
+
+# Memory Bank / Artifacts (local AI context)
+artifacts/
+
+# Agent rules (local)
+.agent/
+
+# Husky (git hooks - local)
+.husky/
