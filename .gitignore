@@ -85,3 +85,5 @@ coverage/
 json/
 pic/
 
+# Documentation (stored locally, not in repo)
+docs/
