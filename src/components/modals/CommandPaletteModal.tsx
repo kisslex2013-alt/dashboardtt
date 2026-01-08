@@ -48,7 +48,7 @@ export function CommandPaletteModal({ isOpen, onClose }) {
       id: 'new-entry',
       label: 'Создать запись',
       icon: Plus,
-      shortcut: 'Ctrl+N',
+      shortcut: 'N / Ctrl+Shift+N',
       action: handlers.handleShowEditEntry,
       keywords: ['new', 'create', 'add', 'entry', 'новая', 'создать', 'добавить']
     },
@@ -56,7 +56,7 @@ export function CommandPaletteModal({ isOpen, onClose }) {
       id: 'toggle-timer',
       label: 'Старт / Стоп таймера',
       icon: Play,
-      shortcut: 'Ctrl+T',
+      shortcut: 'T / Ctrl+Shift+T',
       action: handlers.handleTimerToggle,
       keywords: ['timer', 'start', 'stop', 'pause', 'таймер', 'старт', 'стоп', 'пауза']
     },
@@ -64,7 +64,7 @@ export function CommandPaletteModal({ isOpen, onClose }) {
       id: 'search',
       label: 'Поиск глобальный',
       icon: Search,
-      shortcut: 'Ctrl+F',
+      shortcut: '/',
       action: () => {
         onClose()
         window.dispatchEvent(new CustomEvent('global-search-focus'))
@@ -83,7 +83,7 @@ export function CommandPaletteModal({ isOpen, onClose }) {
         id: 'theme',
         label: isThemeDark ? 'Светлая тема' : 'Темная тема',
         icon: isThemeDark ? Sun : Moon,
-        shortcut: 'Ctrl+D',
+        shortcut: 'Ctrl+Shift+D',
         action: () => setTheme(isThemeDark ? 'light' : 'dark'),
         keywords: ['theme', 'dark', 'light', 'mode', 'тема', 'темная', 'светлая']
     },

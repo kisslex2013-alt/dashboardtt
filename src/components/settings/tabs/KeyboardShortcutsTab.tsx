@@ -8,26 +8,38 @@ import { Keyboard, Command, Timer, Palette, Folder, Lightbulb } from '../../../u
 
 interface ShortcutItemProps {
   keys: string[]
+  altKeys?: string[]  // Альтернативные клавиши (отображаются через " / ")
   description: string
   category?: 'navigation' | 'timer' | 'data' | 'ui'
 }
 
-const ShortcutItem = memo(function ShortcutItem({ keys, description }: ShortcutItemProps) {
+const ShortcutItem = memo(function ShortcutItem({ keys, altKeys, description }: ShortcutItemProps) {
   const isMac = navigator.platform.toLowerCase().includes('mac')
   
-  const displayKeys = keys.map(key => {
-    // Заменяем Ctrl на ⌘ для Mac
-    if (key === 'Ctrl') {
-      return isMac ? '⌘' : 'Ctrl'
-    }
-    if (key === 'Alt') {
-      return isMac ? '⌥' : 'Alt'
-    }
-    if (key === 'Shift') {
-      return isMac ? '⇧' : 'Shift'
-    }
+  const formatKey = (key: string) => {
+    if (key === 'Ctrl') return isMac ? '⌘' : 'Ctrl'
+    if (key === 'Alt') return isMac ? '⌥' : 'Alt'
+    if (key === 'Shift') return isMac ? '⇧' : 'Shift'
     return key
-  })
+  }
+
+  const renderKeys = (keyList: string[]) => (
+    keyList.map((key, index) => (
+      <span key={index}>
+        <kbd className="inline-flex items-center justify-center min-w-[28px] h-7 px-2 
+          bg-gradient-to-b from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800
+          border border-gray-300 dark:border-gray-600
+          rounded-md shadow-sm
+          text-xs font-medium text-gray-700 dark:text-gray-300
+          font-mono tracking-wide">
+          {formatKey(key)}
+        </kbd>
+        {index < keyList.length - 1 && (
+          <span className="mx-0.5 text-gray-400 dark:text-gray-500">+</span>
+        )}
+      </span>
+    ))
+  )
 
   return (
     <div className="flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors group">
@@ -35,25 +47,18 @@ const ShortcutItem = memo(function ShortcutItem({ keys, description }: ShortcutI
         {description}
       </span>
       <div className="flex items-center gap-1">
-        {displayKeys.map((key, index) => (
-          <span key={index}>
-            <kbd className="inline-flex items-center justify-center min-w-[28px] h-7 px-2 
-              bg-gradient-to-b from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800
-              border border-gray-300 dark:border-gray-600
-              rounded-md shadow-sm
-              text-xs font-medium text-gray-700 dark:text-gray-300
-              font-mono tracking-wide">
-              {key}
-            </kbd>
-            {index < displayKeys.length - 1 && (
-              <span className="mx-0.5 text-gray-400 dark:text-gray-500">+</span>
-            )}
-          </span>
-        ))}
+        {renderKeys(keys)}
+        {altKeys && (
+          <>
+            <span className="mx-1.5 text-gray-400 dark:text-gray-500">/</span>
+            {renderKeys(altKeys)}
+          </>
+        )}
       </div>
     </div>
   )
 })
+
 
 interface ShortcutGroupProps {
   title: string
@@ -89,7 +94,7 @@ export const KeyboardShortcutsTab = memo(function KeyboardShortcutsTab() {
       shortcuts: [
         { keys: ['Ctrl', ','], description: 'Открыть настройки' },
         { keys: ['Ctrl', 'K'], description: 'Командная палитра' },
-        { keys: ['Ctrl', 'F'], description: 'Поиск' },
+        { keys: ['/'], description: 'Поиск' },
         { keys: ['Ctrl', '/'], description: 'Справка / Туториал' },
         { keys: ['Escape'], description: 'Закрыть модальное окно' },
       ]
@@ -99,8 +104,8 @@ export const KeyboardShortcutsTab = memo(function KeyboardShortcutsTab() {
       icon: Timer,
       iconColor: 'bg-gradient-to-br from-rose-500 to-rose-600',
       shortcuts: [
-        { keys: ['Ctrl', 'T'], description: 'Старт/стоп таймера' },
-        { keys: ['Ctrl', 'N'], description: 'Создать новую запись' },
+        { keys: ['T'], altKeys: ['Ctrl', 'Shift', 'T'], description: 'Старт/стоп таймера' },
+        { keys: ['N'], altKeys: ['Ctrl', 'Shift', 'N'], description: 'Создать новую запись' },
       ]
     },
     {
@@ -118,7 +123,7 @@ export const KeyboardShortcutsTab = memo(function KeyboardShortcutsTab() {
       icon: Palette,
       iconColor: 'bg-gradient-to-br from-violet-500 to-violet-600',
       shortcuts: [
-        { keys: ['Ctrl', 'D'], description: 'Переключить тему (светлая/тёмная)' },
+        { keys: ['Ctrl', 'Shift', 'D'], description: 'Переключить тему (светлая/тёмная)' },
       ]
     },
   ], [])

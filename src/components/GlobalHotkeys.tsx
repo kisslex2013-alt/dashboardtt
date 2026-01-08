@@ -25,43 +25,51 @@ export function GlobalHotkeys({
   }
 
   useHotkeys({
-    // 🌓 Theme: Ctrl/Cmd + D
-    'ctrl+d': (e) => {
+    // 🌓 Theme: Ctrl+Shift+D (избегаем Ctrl+D — закладки браузера)
+    'ctrl+shift+d': (e) => {
       e.preventDefault()
       handleToggleTheme()
     },
 
-    // ➕ New Entry: Ctrl/Cmd + N
-    'ctrl+n': (e) => {
+    // ➕ New Entry: Ctrl+Shift+N или N (Vim-стиль)
+    'ctrl+shift+n': (e) => {
+       e.preventDefault()
+       onNewEntry()
+    },
+    'n': (e) => {
        e.preventDefault()
        onNewEntry()
     },
 
-    // ⏱️ Timer: Ctrl/Cmd + T
-    'ctrl+t': (e) => {
+    // ⏱️ Timer: Ctrl+Shift+T или T (Vim-стиль)
+    'ctrl+shift+t': (e) => {
+      e.preventDefault()
+      onToggleTimer()
+    },
+    't': (e) => {
       e.preventDefault()
       onToggleTimer()
     },
 
-    // ⚙️ Settings: Ctrl/Cmd + , (Comma)
+    // ⚙️ Settings: Ctrl/Cmd + , (Comma) — работает
     'ctrl+comma': (e) => {
        e.preventDefault()
        onSettings()
     },
 
-    // ❓ Shortcuts/Help: Ctrl/Cmd + / (Slash)
+    // ❓ Shortcuts/Help: Ctrl/Cmd + / (Slash) — работает
     'ctrl+slash': (e) => {
       e.preventDefault()
       onHelp()
     },
 
-    // 🔍 Search: Ctrl/Cmd + F
-    'ctrl+f': (e) => {
+    // 🔍 Search: / (слэш без модификаторов, как в GitHub/YouTube)
+    'slash': (e) => {
       e.preventDefault()
       window.dispatchEvent(new CustomEvent('global-search-focus'))
     },
 
-    // 🎨 Command Palette: Ctrl/Cmd + K
+    // 🎨 Command Palette: Ctrl/Cmd + K — работает
     'ctrl+k': (e) => {
        e.preventDefault()
        openModal('commandPalette')

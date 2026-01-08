@@ -58,7 +58,7 @@ export function EntriesListHeader({
   const [isSearchFocused, setIsSearchFocused] = useState(false)
   const pomodoroIsRunning = usePomodoroIsRunning() // ✅ ИНТЕГРАЦИЯ: проверка Pomodoro
   
-  // 🎹 Слушаем глобальный хоткей поиска (Ctrl+F)
+  // 🎹 Слушаем глобальный хоткей поиска (/)
   useEffect(() => {
     const handleGlobalSearch = () => {
       setIsSearchExpanded(true)

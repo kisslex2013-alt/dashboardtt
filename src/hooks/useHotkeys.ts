@@ -228,23 +228,23 @@ export function useHotkeys(keyMap: KeyMap, options: UseHotkeysOptions = {}): Use
 
 /**
  * Предустановленные горячие клавиши для приложения
+ * (Избегаем конфликтов с браузером: Ctrl+T, Ctrl+N, Ctrl+F, Ctrl+D)
  */
 export const DEFAULT_HOTKEYS: Record<string, string> = {
   space: 'toggleTimer',
-  'Ctrl+s': 'startTimer',
-  'Ctrl+ ': 'stopTimer',
-  n: 'newEntry',
-  t: 'toggleTimer',
-  s: 'settings',
-  h: 'help',
-  'Ctrl+z': 'undo',
-  'Ctrl+y': 'redo',
+  'ctrl+shift+t': 'toggleTimer',
+  'ctrl+shift+n': 'newEntry',
+  'ctrl+shift+d': 'toggleTheme',
+  'ctrl+comma': 'settings',
+  'ctrl+slash': 'help',
+  'ctrl+k': 'commandPalette',
+  'slash': 'search',
+  'ctrl+z': 'undo',
+  'ctrl+y': 'redo',
   Delete: 'deleteSelected',
-  'Ctrl+e': 'export',
-  'Ctrl+i': 'import',
-  'Ctrl+f': 'search',
+  'ctrl+e': 'export',
+  'ctrl+i': 'import',
   Escape: 'closeModal',
-  'Ctrl+d': 'toggleTheme',
 }
 
 
