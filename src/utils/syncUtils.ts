@@ -131,6 +131,26 @@ export function checkSyncConfirmation(
       }
     }
     
+    // Защита от повторного показа диалога:
+    // Если с момента последней синхронизации прошло меньше 5 минут
+    // и локальных записей больше, чем облачных — скорее всего,
+    // пользователь только что разрешил конфликт, но облачный бэкап еще не обновился
+    const timeSinceLastSync = Date.now() - lastSyncTime
+    const localHasMore = localEntries.length > cloudEntries.length
+    
+    if (timeSinceLastSync < 5 * 60 * 1000 && localHasMore) {
+      logger.log(`⏭️ Пропускаем диалог конфликта: прошло ${Math.round(timeSinceLastSync / 1000)}с с последней синхронизации`)
+      return {
+        needsConfirmation: false,
+        reason: 'Конфликт недавно разрешен, локальные данные актуальны',
+        localCount: localEntries.length,
+        cloudCount: cloudEntries.length,
+        cloudTimestamp,
+        localLastSync: lastSyncTime,
+        recommendation: 'keep-local'
+      }
+    }
+    
     // Количество разное — есть реальный конфликт
     return {
       needsConfirmation: true,

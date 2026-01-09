@@ -4,6 +4,7 @@ import { supabase, supabaseService } from '../services/supabase'
 import { useUIStore } from './useUIStore'
 import { resetEntriesStore, useEntriesStore } from './useEntriesStore'
 import { checkSyncConfirmation, createPreRestoreBackup, mergeEntries, resolveTimeOverlaps, type SyncConfirmationData, type CloudBackupData, type TimeOverlap, type OverlapResolution } from '../utils/syncUtils'
+import { logger } from '../utils/logger'
 
 interface User {
   id: string
@@ -312,15 +313,21 @@ export const useAuthStore = create<AuthState>()(
             const currentEntries = useEntriesStore.getState().entries
             const settingsStore = await import('../store/useSettingsStore').then(m => m.useSettingsStore.getState())
             
-            supabaseService.uploadBackup(user.id, {
-              entries: currentEntries,
-              categories: settingsStore.categories,
-              dailyGoal: settingsStore.dailyGoal,
-              dailyHours: settingsStore.dailyHours,
-              theme: settingsStore.theme,
-              timestamp: Date.now(),
-              version: 1,
-            } as any).catch(err => console.error('Post-sync upload failed:', err))
+            try {
+              await supabaseService.uploadBackup(user.id, {
+                entries: currentEntries,
+                categories: settingsStore.categories,
+                dailyGoal: settingsStore.dailyGoal,
+                dailyHours: settingsStore.dailyHours,
+                theme: settingsStore.theme,
+                timestamp: Date.now(),
+                version: 1,
+              } as any)
+              logger.log('✅ Бэкап успешно загружен в облако после разрешения конфликта')
+            } catch (err) {
+              logger.error('❌ Ошибка загрузки бэкапа после разрешения конфликта:', err)
+              // Продолжаем, даже если загрузка не удалась - локальные данные уже обновлены
+            }
           }
           
           set({
