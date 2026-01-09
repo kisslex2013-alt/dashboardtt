@@ -635,7 +635,30 @@ export const useEntriesStore = create<EntriesState>()(
 
              // Восстанавливаем записи
              if (backupData.entries && Array.isArray(backupData.entries)) {
-               set({ entries: backupData.entries })
+               // ⚠️ КРИТИЧЕСКИ ВАЖНО: проверяем целостность данных СРАЗУ после восстановления
+               // Облачные данные могут содержать невалидные записи, которые нужно удалить
+               const integrityResult = checkEntriesIntegrity(backupData.entries as TimeEntry[])
+               
+               if (!integrityResult.isValid) {
+                 logger.error('❌ Cloud data integrity check failed', {
+                   invalid: integrityResult.invalidEntries,
+                   total: integrityResult.totalEntries,
+                 })
+                 
+                 // Восстанавливаем только валидные записи
+                 const { repaired, removed, fixed } = repairEntries(backupData.entries as TimeEntry[])
+                 
+                 if (removed.length > 0) {
+                   logger.warn(`⚠️ Removed ${removed.length} invalid entries from cloud data`)
+                 }
+                 
+                 // Устанавливаем флаг времени ремонта для подавления ложных конфликтов
+                 setLastIntegrityRepairTime(Date.now())
+                 
+                 set({ entries: repaired })
+               } else {
+                 set({ entries: backupData.entries as TimeEntry[] })
+               }
              }
 
              // Восстанавливаем настройки

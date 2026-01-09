@@ -307,9 +307,11 @@ export const useAuthStore = create<AuthState>()(
               break
           }
           
-          // После любого решения — загружаем актуальные данные в облако
+          // После ЛЮБОГО решения — загружаем актуальные (возможно очищенные) данные в облако
+          // ⚠️ КРИТИЧЕСКИ ВАЖНО: при use-cloud данные восстанавливаются, но integrity check
+          // может удалить невалидные записи. Нужно сразу перезаписать облако чистой версией!
           const { user } = get()
-          if (user && (decision === 'merge' || decision === 'keep-local')) {
+          if (user) {
             const currentEntries = useEntriesStore.getState().entries
             const settingsStore = await import('../store/useSettingsStore').then(m => m.useSettingsStore.getState())
             
