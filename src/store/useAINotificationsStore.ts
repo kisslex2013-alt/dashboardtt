@@ -315,8 +315,7 @@ export const useAINotificationsStore = create<AINotificationsState>()(
     }),
     {
       name: 'ai-notifications-storage',
-      // Не сохраняем уведомления в localStorage (они временные)
-      // Сохраняем только настройки
+      // Сохраняем настройки И уведомления (без JSX-полей)
       partialize: (state) => ({
         enabled: state.enabled,
         frequencyMode: state.frequencyMode,
@@ -326,6 +325,8 @@ export const useAINotificationsStore = create<AINotificationsState>()(
         enableSounds: state.enableSounds,
         enabledTypes: state.enabledTypes,
         quietHours: state.quietHours,
+        // Исключаем content и icon (JSX не сериализуется)
+        notifications: state.notifications.map(({ content, icon, ...rest }) => rest),
         dismissedRecommendations: state.dismissedRecommendations,
         lastShownDates: state.lastShownDates,
         lastAnalyzed: state.lastAnalyzed,

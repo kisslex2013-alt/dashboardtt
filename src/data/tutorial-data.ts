@@ -264,6 +264,44 @@ export const tutorialSteps: TutorialStep[] = [
     ],
   },
   {
+    title: 'Режимы: Focus и Analytics',
+    icon: 'Focus',
+    blocks: [
+      {
+        type: 'text',
+        content: 'Приложение поддерживает два режима интерфейса для разных задач.',
+      },
+      {
+        type: 'alert',
+        color: 'purple',
+        title: 'Focus Mode 🎯',
+        icon: 'Focus',
+        content: 'Минималистичный режим для концентрации на работе:\n\n• Скрывает всю аналитику и графики\n• Оставляет только список записей и таймер\n• Идеален для ежедневного использования',
+      },
+      {
+        type: 'alert',
+        color: 'blue',
+        title: 'Analytics Mode 📊',
+        icon: 'BarChart3',
+        content: 'Полный режим с аналитикой:\n\n• Базовая статистика\n• Описательная аналитика (графики)\n• Предиктивная аналитика (прогнозы)\n• Сравнительная аналитика (MoM, YoY)',
+      },
+      {
+        type: 'alert',
+        color: 'green',
+        title: 'Как переключаться',
+        icon: 'Keyboard',
+        content: '• Кнопки в шапке (иконки 🎯 и 📊)\n• Горячая клавиша: **Ctrl+Shift+F**',
+      },
+      {
+        type: 'alert',
+        color: 'gray',
+        title: 'Совет:',
+        icon: 'Lightbulb',
+        content: 'Режим сохраняется автоматически и будет активен при следующем открытии приложения.',
+      },
+    ],
+  },
+  {
     title: 'Графики и аналитика',
     icon: 'BarChart3',
     blocks: [

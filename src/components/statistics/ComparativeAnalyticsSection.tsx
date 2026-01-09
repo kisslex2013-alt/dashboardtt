@@ -98,7 +98,7 @@ export function ComparativeAnalyticsSection() {
   }, [])
 
   return (
-    <div className={`relative z-10 ${isExpanded ? 'mb-6' : 'mb-4'}`}>
+    <div className={`relative z-10 ${isExpanded ? 'mb-6' : 'mb-4'}`} data-tour="analytics-comparative">
       <div
         className={`glass-effect rounded-xl p-4 mb-4 overflow-visible ${
           isExpanded ? 'sticky top-0 z-40 backdrop-blur-xl bg-white/90 dark:bg-gray-800/90 shadow-lg transition-normal' : ''

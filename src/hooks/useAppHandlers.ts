@@ -53,7 +53,7 @@ export function useAppHandlers() {
   // Modal Handlers
   // ========================================
 
-  const handleShowTutorial = useCallback(() => openModal('tutorial'), [openModal])
+  const handleShowTutorial = useCallback(() => openModal('helpCenter'), [openModal])
   const handleShowAbout = useCallback(() => openModal('about'), [openModal])
   const handleShowSoundSettings = useCallback(() => openModal('soundSettings'), [openModal])
   const handleShowEditEntry = useCallback(() => openModal('editEntry'), [openModal])

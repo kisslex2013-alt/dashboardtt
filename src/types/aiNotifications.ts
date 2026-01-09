@@ -85,6 +85,11 @@ export interface AINotification {
     hours?: number
     /** Категория */
     category?: string
+    /** Глубина анализа (для индикатора) */
+    analysisDepth?: {
+      daysAnalyzed: number
+      entriesCount?: number
+    }
     /** Любые другие данные */
     [key: string]: any
   }
@@ -98,6 +103,8 @@ export interface AINotification {
   isRead: boolean
   /** Тестовое уведомление (созданное в режиме тестирования) */
   isTest: boolean
+  /** "Удивительный" инсайт — показывается с WOW-эффектом */
+  isSurprising?: boolean
   /** Дата создания */
   createdAt: string
   /** Дата прочтения */

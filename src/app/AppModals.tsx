@@ -18,8 +18,9 @@ const PaymentDatesSettingsModal = lazy(() =>
     default: module.PaymentDatesSettingsModal,
   }))
 )
-const TutorialModal = lazy(() =>
-  import('../components/modals/TutorialModal').then(module => ({ default: module.TutorialModal }))
+
+const HelpCenterModal = lazy(() =>
+  import('../components/modals/HelpCenterModal').then(module => ({ default: module.HelpCenterModal }))
 )
 const AboutModal = lazy(() =>
   import('../components/modals/AboutModal').then(module => ({ default: module.AboutModal }))
@@ -47,6 +48,11 @@ const CommandPaletteModal = lazy(() =>
 const AuthModal = lazy(() =>
   import('../components/auth/AuthModal').then(module => ({
     default: module.default,
+  }))
+)
+const AINotificationsModal = lazy(() =>
+  import('../components/modals/AINotificationsModal').then(module => ({
+    default: module.AINotificationsModal,
   }))
 )
 const SyncConflictModal = lazy(() =>
@@ -116,26 +122,23 @@ export const AppModals: React.FC<{ modals: any }> = ({ modals }) => {
           onClose={handleClose('paymentDatesSettings')}
         />
       )}
-      {modals.tutorial?.isOpen && (
-        <TutorialModal
-          isOpen={modals.tutorial.isOpen}
-          onClose={handleClose('tutorial')}
-          onClearDemoData={handleClearDemoData}
-        />
-      )}
-      {modals.about?.isOpen && (
-        <AboutModal
-          isOpen={modals.about.isOpen}
-          onClose={handleClose('about')}
-        />
-      )}
-      {modals.soundSettings?.isOpen && (
-        <SoundNotificationsSettingsModal
-          isOpen={modals.soundSettings.isOpen}
-          onClose={handleClose('soundSettings')}
-          initialTab={modals.soundSettings.activeTab}
-        />
-      )}
+
+
+      <HelpCenterModal
+        isOpen={modals.helpCenter?.isOpen ?? false}
+        onClose={handleClose('helpCenter')}
+        initialSection={modals.helpCenter?.initialSection}
+      />
+      <AboutModal
+        isOpen={modals.about?.isOpen ?? false}
+        onClose={handleClose('about')}
+      />
+      <SoundNotificationsSettingsModal
+        isOpen={modals.soundSettings?.isOpen ?? false}
+        onClose={handleClose('soundSettings')}
+        initialTab={modals.soundSettings?.activeTab}
+      />
+
       {modals.floatingPanelSettings?.isOpen && (
         <FloatingPanelSettingsModal
           isOpen={modals.floatingPanelSettings.isOpen}
@@ -159,6 +162,11 @@ export const AppModals: React.FC<{ modals: any }> = ({ modals }) => {
       {modals.auth?.isOpen && (
         <AuthModal />
       )}
+
+      <AINotificationsModal
+        isOpen={modals.aiNotifications?.isOpen ?? false}
+        onClose={handleClose('aiNotifications')}
+      />
 
       {/* Dev Tools */}
       {import.meta.env.DEV && modals.categoryManager?.isOpen && ( // Example dev tool or check store better

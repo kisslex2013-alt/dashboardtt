@@ -12,7 +12,7 @@
 import { formatDistanceToNow } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import { motion } from 'framer-motion'
-import { Eye, X, Clock, Lightbulb } from '../../utils/icons'
+import { Eye, X, Clock, Lightbulb, Sparkles, Database } from '../../utils/icons'
 import type { AINotification } from '../../types/aiNotifications'
 import { useNotificationActions } from '../../store/useAINotificationsStore'
 import { NotificationProgressBar } from './NotificationProgress'
@@ -102,21 +102,31 @@ const getIconBgColor = (notification: AINotification) => {
 
 // Neon Glow стили для карточек
 const getNeonGlow = (notification: AINotification) => {
+  // WOW-эффект для "удивительных" инсайтов
+  if (notification.isSurprising) {
+    return { 
+      glow: 'shadow-[0_0_20px_rgba(168,85,247,0.35)]', 
+      border: 'border-purple-500/50', 
+      gradient: 'from-pink-500 via-purple-500 to-cyan-500',
+      isRainbow: true
+    }
+  }
+
   const data = notification.data || {}
   
   if (data.status) {
     switch (data.status) {
-      case 'exceeded': return { glow: 'shadow-[0_0_15px_rgba(34,197,94,0.25)]', border: 'border-green-500/30', gradient: 'from-green-500 to-emerald-400' }
-      case 'on-track': return { glow: 'shadow-[0_0_15px_rgba(59,130,246,0.25)]', border: 'border-blue-500/30', gradient: 'from-blue-500 to-cyan-400' }
-      case 'behind': return { glow: 'shadow-[0_0_15px_rgba(245,158,11,0.25)]', border: 'border-amber-500/30', gradient: 'from-amber-500 to-yellow-400' }
-      case 'failed': return { glow: 'shadow-[0_0_15px_rgba(239,68,68,0.25)]', border: 'border-red-500/30', gradient: 'from-red-500 to-rose-400' }
+      case 'exceeded': return { glow: 'shadow-[0_0_15px_rgba(34,197,94,0.25)]', border: 'border-green-500/30', gradient: 'from-green-500 to-emerald-400', isRainbow: false }
+      case 'on-track': return { glow: 'shadow-[0_0_15px_rgba(59,130,246,0.25)]', border: 'border-blue-500/30', gradient: 'from-blue-500 to-cyan-400', isRainbow: false }
+      case 'behind': return { glow: 'shadow-[0_0_15px_rgba(245,158,11,0.25)]', border: 'border-amber-500/30', gradient: 'from-amber-500 to-yellow-400', isRainbow: false }
+      case 'failed': return { glow: 'shadow-[0_0_15px_rgba(239,68,68,0.25)]', border: 'border-red-500/30', gradient: 'from-red-500 to-rose-400', isRainbow: false }
     }
   }
   
   switch (notification.priority) {
-    case 'critical': return { glow: 'shadow-[0_0_15px_rgba(239,68,68,0.25)]', border: 'border-red-500/30', gradient: 'from-red-500 to-rose-400' }
-    case 'high': return { glow: 'shadow-[0_0_15px_rgba(245,158,11,0.25)]', border: 'border-amber-500/30', gradient: 'from-amber-500 to-yellow-400' }
-    default: return { glow: 'shadow-[0_0_15px_rgba(59,130,246,0.25)]', border: 'border-blue-500/30', gradient: 'from-blue-500 to-cyan-400' }
+    case 'critical': return { glow: 'shadow-[0_0_15px_rgba(239,68,68,0.25)]', border: 'border-red-500/30', gradient: 'from-red-500 to-rose-400', isRainbow: false }
+    case 'high': return { glow: 'shadow-[0_0_15px_rgba(245,158,11,0.25)]', border: 'border-amber-500/30', gradient: 'from-amber-500 to-yellow-400', isRainbow: false }
+    default: return { glow: 'shadow-[0_0_15px_rgba(59,130,246,0.25)]', border: 'border-blue-500/30', gradient: 'from-blue-500 to-cyan-400', isRainbow: false }
   }
 }
 
@@ -265,9 +275,17 @@ export function NotificationItem({
         <div className="flex-1 min-w-0">
           {/* Title */}
           <h4 className={`
-            text-sm font-bold mb-1
+            text-sm font-bold mb-1 flex items-center gap-1.5
             ${notification.isRead ? 'text-gray-600 dark:text-gray-400' : 'text-gray-900 dark:text-white'}
           `}>
+            {notification.isSurprising && (
+              <motion.span
+                animate={{ rotate: [0, 15, -15, 0], scale: [1, 1.2, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                <Sparkles className="w-4 h-4 text-purple-500" />
+              </motion.span>
+            )}
             {notification.title}
           </h4>
 
@@ -335,10 +353,16 @@ export function NotificationItem({
           )}
 
           {/* Footer */}
-          <div className="flex items-center gap-2 mt-2">
+          <div className="flex items-center gap-2 mt-2 flex-wrap">
             <span className="text-xs text-gray-400 dark:text-gray-500">
               {getTimeAgo()}
             </span>
+            {notification.data?.analysisDepth && (
+              <span className="text-xs text-gray-400 dark:text-gray-500 flex items-center gap-1">
+                <Database className="w-3 h-3" />
+                {notification.data.analysisDepth.daysAnalyzed} дн.
+              </span>
+            )}
             {notification.isTest && (
               <span className="text-xs px-1.5 py-0.5 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded">
                 Тест

@@ -50,6 +50,7 @@ import { getIcon } from '../../utils/iconHelper'
 import { useAINotificationsStore } from '../../store/useAINotificationsStore'
 import { APP_VERSION_FULL } from '../../config/appVersion'
 import { NotificationsTab, ProductivityTab, PersonalizationTab, FinanceTab, BackupsTab, WorkScheduleTab, CategoriesTab, AITab, AccountTab, KeyboardShortcutsTab } from '../settings/tabs'
+import { useOnboardingTour } from '../onboarding/OnboardingTour'
 
 /**
  * Компонент карточки предпросмотра анимации фавикона
@@ -905,8 +906,8 @@ export function SoundNotificationsSettingsModal({ isOpen, onClose, initialTab = 
                   {/* Заголовок группы — стили как у subtitle */}
                   <div className={`
                     px-3 text-sm text-gray-500 dark:text-gray-400 font-medium
-                    pb-3
-                    ${groupIndex > 0 ? 'mt-4 pt-3 border-t border-gray-100 dark:border-gray-800' : ''}
+                    pb-2
+                    ${groupIndex > 0 ? 'mt-1 pt-1 border-t border-gray-100 dark:border-gray-800' : ''}
                   `}>
                     {group.title}
                   </div>
@@ -959,17 +960,33 @@ export function SoundNotificationsSettingsModal({ isOpen, onClose, initialTab = 
                   </h2>
                   
                   {/* Описание */}
-                  <p className="text-gray-500 dark:text-gray-400 mb-6 max-w-md">
+                  <p className="text-gray-500 dark:text-gray-400 mb-8 max-w-md">
                     Выберите раздел слева, чтобы настроить приложение под свои задачи и предпочтения
                   </p>
                   
-                  {/* Декоративные элементы или пустой блок если нужно */}
+                  {/* Кнопка обучающего тура */}
+                  <button
+                    onClick={() => {
+                      onClose()
+                      setTimeout(() => {
+                        window.dispatchEvent(new CustomEvent('start-onboarding-tour'))
+                      }, 300)
+                    }}
+                    className="group flex items-center gap-3 px-5 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-medium shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all hover:scale-105 hover:-translate-y-0.5"
+                  >
+                    <Play className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                    <span>Пройти обучающий тур</span>
+                  </button>
+                  
+                  <p className="text-xs text-gray-400 dark:text-gray-500 mt-4">
+                    8 шагов • около 1 минуты
+                  </p>
                 </div>
               ) : (
               <NestedModal
                 key={activeTab}
                 isOpen={true}
-                onClose={() => {}}
+                onClose={() => setActiveTab(null)}
                 title={activeCard?.title || 'Настройки'}
                 icon={activeCard?.icon || SettingsIcon}
                 embedded={true}

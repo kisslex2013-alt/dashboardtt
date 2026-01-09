@@ -584,6 +584,7 @@ export interface SettingsState {
   animations: boolean
   themeTransitionType: 'circle' | 'fade' | 'wipe' | 'blur' | 'rotate'
   listView: 'list' | 'grid' | 'timeline' | 'calendar' | 'agenda' | 'cards'
+  viewMode: 'focus' | 'analytics'
   defaultEntriesFilter: string
   defaultAnalyticsFilter: string
   defaultChartVisibility: ChartVisibility | null
@@ -615,6 +616,8 @@ export interface SettingsState {
   setThemeTransitionType: (type: 'circle' | 'fade' | 'wipe' | 'blur' | 'rotate') => void
   toggleAnimations: () => void
   setListView: (view: 'list' | 'grid' | 'timeline' | 'calendar' | 'agenda' | 'cards') => void
+  setViewMode: (mode: 'focus' | 'analytics') => void
+  toggleViewMode: () => void
   setDefaultEntriesFilter: (filter: string) => void
   setDefaultAnalyticsFilter: (filter: string) => void
   updateChartVisibility: (visibility: Partial<ChartVisibility>) => void

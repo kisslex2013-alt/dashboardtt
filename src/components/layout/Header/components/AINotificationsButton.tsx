@@ -5,28 +5,24 @@
  * - Иконку AI (BotMessageSquare)
  * - Бейдж с количеством непрочитанных
  * - Разные анимации в зависимости от приоритета
- * - Dropdown панель при клике
+ * - Открывает модал (унифицированный интерфейс)
  */
 
-import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
-import { AnimatePresence } from 'framer-motion'
+import { useEffect, useRef, useMemo } from 'react'
 import { BotMessageSquare } from '../../../../utils/icons'
 import { useAINotificationsStore } from '../../../../store/useAINotificationsStore'
+import { useOpenModal } from '../../../../store/useUIStore'
 import { useIsMobile } from '../../../../hooks/useIsMobile'
-import { AINotificationsPanel } from '../../../notifications/AINotificationsPanel'
 
 export function AINotificationsButton() {
-  const [isOpen, setIsOpen] = useState(false)
-  const [panelPosition, setPanelPosition] = useState({ top: 0, right: 0 })
   const isMobile = useIsMobile()
   const buttonRef = useRef<HTMLButtonElement>(null)
-  const panelRef = useRef<HTMLDivElement>(null)
+  const openModal = useOpenModal()
 
   // Получаем notifications из store (stable reference)
   const notifications = useAINotificationsStore((state) => state.notifications)
 
   // Мемоизируем вычисления
-  // Проверяем snoozedUntil здесь, чтобы избежать бесконечных циклов
   const { unreadCount, hasCritical } = useMemo(() => {
     const now = new Date().toISOString()
     // Фильтруем только непрочитанные и не отложенные
@@ -39,65 +35,23 @@ export function AINotificationsButton() {
     }
   }, [notifications])
 
-  // Вычисление позиции панели
-  const calculatePanelPosition = useCallback(() => {
-    if (buttonRef.current) {
-      const rect = buttonRef.current.getBoundingClientRect()
-      setPanelPosition({
-        top: rect.bottom + 8, // 8px от кнопки
-        right: window.innerWidth - rect.right,
-      })
-    }
-  }, [])
-
-  // Обновление позиции при открытии и изменении размера окна
-  useEffect(() => {
-    if (isOpen) {
-      calculatePanelPosition()
-      window.addEventListener('resize', calculatePanelPosition)
-      window.addEventListener('scroll', calculatePanelPosition, true)
-    }
-    return () => {
-      window.removeEventListener('resize', calculatePanelPosition)
-      window.removeEventListener('scroll', calculatePanelPosition, true)
-    }
-  }, [isOpen, calculatePanelPosition])
-
-  // Закрытие панели при клике вне
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        isOpen &&
-        buttonRef.current &&
-        panelRef.current &&
-        !buttonRef.current.contains(event.target as Node) &&
-        !panelRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false)
-      }
-    }
-
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside)
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [isOpen])
+  // Открытие модала
+  const handleClick = () => {
+    openModal('aiNotifications')
+  }
 
   // Keyboard shortcut: Alt + N
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.altKey && event.key === 'n') {
         event.preventDefault()
-        setIsOpen((prev) => !prev)
+        openModal('aiNotifications')
       }
     }
 
     // Слушатель для открытия панели из мобильного меню
     const handleToggleFromMobile = () => {
-      setIsOpen(true)
+      openModal('aiNotifications')
     }
 
     document.addEventListener('keydown', handleKeyDown)
@@ -106,7 +60,7 @@ export function AINotificationsButton() {
       document.removeEventListener('keydown', handleKeyDown)
       window.removeEventListener('toggleAINotifications', handleToggleFromMobile)
     }
-  }, [])
+  }, [openModal])
 
   // Классы для анимации иконки
   const getIconClasses = () => {
@@ -132,21 +86,12 @@ export function AINotificationsButton() {
     return 'bg-blue-500 dark:bg-blue-600'
   }
 
-  // Классы для подсветки кнопки
-  const getButtonGlow = () => {
-    if (unreadCount === 0) return ''
-    if (hasCritical) {
-      return 'ring-2 ring-red-500/50 shadow-[0_0_15px_rgba(239,68,68,0.3)]'
-    }
-    return 'ring-2 ring-blue-500/50 shadow-[0_0_15px_rgba(59,130,246,0.3)]'
-  }
-
   return (
     <div className="relative">
       {/* Кнопка */}
       <button
         ref={buttonRef}
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={handleClick}
         className={`p-2 rounded-lg transition-all hover-lift-scale click-shrink relative ${
           unreadCount > 0 
             ? hasCritical 
@@ -173,18 +118,6 @@ export function AINotificationsButton() {
           </span>
         )}
       </button>
-
-      {/* Dropdown панель */}
-      <AnimatePresence>
-        {isOpen && (
-          <AINotificationsPanel
-            ref={panelRef}
-            onClose={() => setIsOpen(false)}
-            position={panelPosition}
-            isMobile={isMobile}
-          />
-        )}
-      </AnimatePresence>
     </div>
   )
 }

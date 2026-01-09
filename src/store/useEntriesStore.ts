@@ -9,6 +9,12 @@ import { logger } from '../utils/logger'
 import { generateUUID } from '../utils/uuid'
 import { handleError, checkStorageSpace } from '../utils/errorHandler'
 import { syncManager, SyncMessageType } from '../utils/syncManager'
+import {
+  validateEntry,
+  checkEntriesIntegrity,
+  repairEntries,
+  createIntegrityReport,
+} from '../utils/dataIntegrity'
 import type { EntriesState, TimeEntry, BackupResult, BackupData } from '../types'
 
 /**
@@ -130,17 +136,34 @@ export const useEntriesStore = create<EntriesState>()(
          * @param {Object} entry - объект записи с полями: date, start, end, category, description, rate
          */
         addEntry: entry => {
+          // ✅ ВАЛИДАЦИЯ: Проверяем данные перед сохранением
+          const validation = validateEntry(entry)
+          if (!validation.isValid) {
+            const errorMessage = validation.errors.join(', ')
+            logger.error('Entry validation failed', { errors: validation.errors })
+            handleError(new Error(`Ошибка валидации: ${errorMessage}`), {
+              operation: 'Добавление записи',
+            })
+            return // Не сохраняем невалидную запись
+          }
+
           // Сохраняем текущее состояние перед изменением
           const currentEntries = get().entries
           useHistoryStore.getState().pushToUndo(currentEntries, 'Добавлена запись')
 
+          // Применяем автоматические исправления если есть
+          const fixedValues = validation.fixed || {}
+
           // Используем ID из entry, если он есть, иначе генерируем новый
-          const entryWithId = {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const entryAny = entry as any
+          const entryWithId: TimeEntry = {
             ...entry,
-            id: entry.id || generateUUID(),
-            createdAt: entry.createdAt || new Date().toISOString(),
-            updatedAt: entry.updatedAt || new Date().toISOString(),
-          }
+            ...fixedValues,
+            id: entryAny.id || generateUUID(),
+            createdAt: entryAny.createdAt || new Date().toISOString(),
+            updatedAt: entryAny.updatedAt || new Date().toISOString(),
+          } as TimeEntry
 
           set(state => ({
             entries: [...state.entries, entryWithId],
@@ -653,6 +676,44 @@ export const useEntriesStore = create<EntriesState>()(
       // ✅ ОПТИМИЗАЦИЯ: Используем partialize для оптимизации размера данных
       // Сохраняем только entries, исключаем функции и временные данные
       partialize: state => ({ entries: state.entries }),
+      
+      // ✅ ПРОВЕРКА ЦЕЛОСТНОСТИ: При восстановлении из localStorage
+      onRehydrateStorage: () => (state) => {
+        if (!state?.entries) return
+        
+        // Проверяем целостность данных
+        const integrityResult = checkEntriesIntegrity(state.entries)
+        
+        if (!integrityResult.isValid) {
+          logger.warn('Data integrity issues detected', {
+            invalid: integrityResult.invalidEntries,
+            total: integrityResult.totalEntries,
+          })
+          
+          // Пытаемся восстановить данные
+          const { repaired, removed, fixed } = repairEntries(state.entries)
+          
+          if (removed.length > 0) {
+            logger.error('Some entries were removed due to unfixable errors', { removed })
+          }
+          
+          if (fixed.length > 0) {
+            logger.info('Some entries were auto-fixed', { fixed: fixed.length })
+          }
+          
+          // Обновляем state с исправленными данными
+          state.entries = repaired
+          
+          // Создаём бэкап после восстановления
+          setTimeout(() => {
+            useEntriesStore.getState().createManualBackup()
+          }, 1000)
+        } else {
+          logger.info('Data integrity check passed', {
+            entries: integrityResult.totalEntries,
+          })
+        }
+      },
     }
   )
 )

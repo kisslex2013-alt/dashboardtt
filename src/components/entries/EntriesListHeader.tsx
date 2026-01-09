@@ -289,6 +289,7 @@ export function EntriesListHeader({
               style={{ width: 'auto' }}
               iconId="header-add-new"
               defaultIcon={Plus}
+              data-tour="quick-add"
             >
               <span className="ml-0 pr-0 opacity-0 max-w-0 group-hover:opacity-100 group-hover:max-w-xs group-hover:ml-2 group-hover:pr-4 transition-normal whitespace-nowrap overflow-hidden">
                 Новая запись
@@ -312,6 +313,7 @@ export function EntriesListHeader({
                   style={{ width: 'auto' }}
                   iconId={timer.isRunning ? 'header-timer-stop' : 'header-timer-start'}
                   defaultIcon={timer.isRunning ? Square : Play}
+                  data-tour="timer-bottom"
                 >
                   <span className="ml-0 pr-0 opacity-0 max-w-0 group-hover:opacity-100 group-hover:max-w-xs group-hover:ml-2 group-hover:pr-4 transition-normal whitespace-nowrap overflow-hidden">
                     Таймер

@@ -408,9 +408,9 @@ const AnalyticsSectionComponent = memo(() => {
   const handleToggleFilterDropdown = useCallback(() => setIsFilterDropdownOpen(prev => !prev), [])
 
   return (
-    // ИСПРАВЛЕНО: Убираем mb-6 когда контент закрыт или закрывается, чтобы не было пустого пространства
     <div
       className={`${isExpanded || (shouldMountContent && !isExitingContent) ? 'mb-6' : 'mb-0'} relative z-10`}
+      data-tour="analytics-descriptive"
     >
       {/* Заголовок секции с кнопкой сворачивания и фильтром */}
       {/* ИСПРАВЛЕНО: Уменьшен z-index с z-[100] до z-40, чтобы не перекрывать модальные окна (z-[999999]) */}

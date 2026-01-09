@@ -3,8 +3,9 @@
  * Отображает все доступные сочетания клавиш в приложении
  */
 
-import { memo, useMemo } from 'react'
-import { Keyboard, Command, Timer, Palette, Folder, Lightbulb } from '../../../utils/icons'
+import { memo, useMemo, useCallback } from 'react'
+import { Keyboard, Command, Timer, Palette, Folder, Lightbulb, RefreshCw } from '../../../utils/icons'
+import { startOnboardingTour, resetOnboardingTour } from '../../onboarding/OnboardingTour'
 
 interface ShortcutItemProps {
   keys: string[]
@@ -124,6 +125,7 @@ export const KeyboardShortcutsTab = memo(function KeyboardShortcutsTab() {
       iconColor: 'bg-gradient-to-br from-violet-500 to-violet-600',
       shortcuts: [
         { keys: ['Ctrl', 'Shift', 'D'], description: 'Переключить тему (светлая/тёмная)' },
+        { keys: ['Ctrl', 'Shift', 'F'], description: 'Переключить режим Focus/Analytics' },
       ]
     },
   ], [])

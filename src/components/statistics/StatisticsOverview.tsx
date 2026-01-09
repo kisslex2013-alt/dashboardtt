@@ -127,7 +127,7 @@ export const StatisticsOverview = memo(() => {
   }, [isExitingContent])
 
   return (
-    <div className={`relative z-10 ${isExpanded ? 'mb-6' : 'mb-4'}`}>
+    <div className={`relative z-10 ${isExpanded ? 'mb-6' : 'mb-4'}`} data-tour="analytics-basic">
       {/* Заголовок секции с кнопкой сворачивания */}
       <div
         ref={headerRef}

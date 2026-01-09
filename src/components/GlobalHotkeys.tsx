@@ -1,5 +1,5 @@
 import { useHotkeys } from '../hooks/useHotkeys'
-import { useTheme, useSetTheme } from '../store/useSettingsStore'
+import { useTheme, useSetTheme, useToggleViewMode } from '../store/useSettingsStore'
 import { useOpenModal, useCloseAllModals } from '../store/useUIStore'
 
 interface GlobalHotkeysProps {
@@ -17,6 +17,7 @@ export function GlobalHotkeys({
 }: GlobalHotkeysProps) {
   const theme = useTheme()
   const setTheme = useSetTheme()
+  const toggleViewMode = useToggleViewMode()
   const openModal = useOpenModal()
   const closeAllModals = useCloseAllModals()
 
@@ -29,6 +30,12 @@ export function GlobalHotkeys({
     'ctrl+shift+d': (e) => {
       e.preventDefault()
       handleToggleTheme()
+    },
+
+    // 🎯 View Mode: Ctrl+Shift+F — переключение Focus/Analytics
+    'ctrl+shift+f': (e) => {
+      e.preventDefault()
+      toggleViewMode()
     },
 
     // ➕ New Entry: Ctrl+Shift+N или N (Vim-стиль)
@@ -63,6 +70,12 @@ export function GlobalHotkeys({
       onHelp()
     },
 
+    // 📚 Help: F1 — Справка
+    'f1': (e) => {
+      e.preventDefault()
+      onHelp()
+    },
+
     // 🔍 Search: / (слэш без модификаторов, как в GitHub/YouTube)
     'slash': (e) => {
       e.preventDefault()
@@ -84,3 +97,4 @@ export function GlobalHotkeys({
 
   return null
 }
+

@@ -1,9 +1,26 @@
 /**
  * Компонент логотипа приложения с анимацией Data Pulse
+ * При клике открывает промо-страницу
  */
 export function AppLogo({ className }: { className?: string }) {
+  const handleClick = () => {
+    // Добавляем анимацию fade-out
+    document.body.style.transition = 'opacity 0.5s ease-out'
+    document.body.style.opacity = '0'
+
+    // Переходим на промо-страницу после анимации
+    setTimeout(() => {
+      window.location.href = '/promo/time-tracker-promo-variant-3.html'
+    }, 500)
+  }
+
   return (
-    <div className="flex-shrink-0 logo-wrapper logo-animation-1">
+    <button 
+      onClick={handleClick}
+      className="flex-shrink-0 logo-wrapper logo-animation-1 cursor-pointer transition-transform hover:scale-110 active:scale-95"
+      title="Открыть промо-страницу"
+      aria-label="Открыть промо-страницу"
+    >
       <svg
         viewBox="0 0 200 200"
         xmlns="http://www.w3.org/2000/svg"
@@ -137,7 +154,8 @@ export function AppLogo({ className }: { className?: string }) {
         </g>
         <circle className="center-dot" cx="100" cy="100" r="3" fill="#F59E0B" />
       </svg>
-    </div>
+    </button>
   )
 }
+
 

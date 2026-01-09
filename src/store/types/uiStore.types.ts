@@ -85,6 +85,7 @@ export interface ModalsState {
   soundSettings: SoundSettingsModal
   commandPalette: SimpleModal
   auth: SimpleModal
+  aiNotifications: SimpleModal
 }
 
 // ===== Loading/Errors Types =====

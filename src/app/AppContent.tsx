@@ -4,6 +4,7 @@ import { Header } from '../components/layout/Header/index'
 import { Footer } from '../components/layout/Footer'
 import { RouteWrapper, StatisticsRoute, AnalyticsRoute, PredictiveAnalyticsRoute, ComparativeAnalyticsRoute, EntriesRoute, FloatingPomodoroRoute } from '../routes/index'
 import { GlobalHotkeys } from '../components/GlobalHotkeys'
+import { useViewMode } from '../store/useSettingsStore'
 
 // Lazy load FloatingPanel
 const FloatingPanel = lazy(() =>
@@ -16,10 +17,14 @@ interface AppContentProps {
 
 export const AppContent: React.FC<AppContentProps> = () => {
   const handlers = useAppHandlers()
+  const viewMode = useViewMode()
 
   // Local state for UI modes
   const [compareMode, setCompareMode] = useState(false)
   const handleToggleCompare = useCallback(() => setCompareMode(prev => !prev), [])
+
+  // В Focus режиме скрываем расширенную аналитику
+  const isAnalyticsVisible = viewMode === 'analytics'
 
   return (
     <div className="min-h-screen bg-main text-text-primary transition-colors duration-300 flex flex-col font-sans selection:bg-purple-500/30 selection:text-purple-200">
@@ -45,18 +50,31 @@ export const AppContent: React.FC<AppContentProps> = () => {
 
       <main className="flex-grow max-w-7xl mx-auto w-full px-4 pt-6 pb-8 relative z-10">
         <Suspense fallback={null}>
-          <RouteWrapper route="statistics">
-            <StatisticsRoute />
-          </RouteWrapper>
-          <RouteWrapper route="analytics">
-            <AnalyticsRoute />
-          </RouteWrapper>
-          <RouteWrapper route="predictive">
-            <PredictiveAnalyticsRoute />
-          </RouteWrapper>
-          <RouteWrapper route="comparative">
-            <ComparativeAnalyticsRoute />
-          </RouteWrapper>
+          {/* Аналитика — только в Analytics режиме с анимацией */}
+          <div 
+            className={`
+              transition-all duration-300 ease-out
+              ${isAnalyticsVisible 
+                ? 'opacity-100 max-h-[5000px]' 
+                : 'opacity-0 max-h-0 overflow-hidden pointer-events-none'
+              }
+            `}
+          >
+            <RouteWrapper route="statistics">
+              <StatisticsRoute />
+            </RouteWrapper>
+            <RouteWrapper route="analytics">
+              <AnalyticsRoute />
+            </RouteWrapper>
+            <RouteWrapper route="predictive">
+              <PredictiveAnalyticsRoute />
+            </RouteWrapper>
+            <RouteWrapper route="comparative">
+              <ComparativeAnalyticsRoute />
+            </RouteWrapper>
+          </div>
+
+          {/* Записи — всегда видны */}
           <RouteWrapper route="entries">
             <EntriesRoute
               onAddNew={handlers.handleShowEditEntry}
@@ -70,6 +88,7 @@ export const AppContent: React.FC<AppContentProps> = () => {
               onImport={handlers.handleShowImport}
             />
           </RouteWrapper>
+
           <RouteWrapper route="pomodoro">
             <FloatingPomodoroRoute />
           </RouteWrapper>
@@ -84,3 +103,4 @@ export const AppContent: React.FC<AppContentProps> = () => {
     </div>
   )
 }
+

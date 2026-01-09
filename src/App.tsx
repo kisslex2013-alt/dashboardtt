@@ -6,7 +6,9 @@ import { useAppSelectors } from './hooks/useAppSelectors'
 import { useAINotificationMonitor } from './hooks/useAINotificationMonitor'
 import { useAuthMonitor } from './hooks/useAuthMonitor'
 import { useWelcomeScreen } from './hooks/useWelcomeScreen'
+import { useAutoBackup } from './hooks/useAutoBackup'
 import { UpdatePasswordModal } from './components/auth/UpdatePasswordModal'
+import { OnboardingTourProvider } from './components/onboarding/OnboardingTour'
 
 
 /**
@@ -27,17 +29,22 @@ export function App() {
   // Автоматический показ приветственного окна при первом визите
   useWelcomeScreen()
 
+  // Автоматический бекап при закрытии вкладки
+  useAutoBackup()
+
   return (
     <AppProviders>
-      <AppContent />
-      <AppModals modals={modals} />
-      <SyncConflictModalContainer />
-      <TimeOverlapModalContainer />
-      {/* Модал для обновления пароля (после сброса) */}
-      <UpdatePasswordModal 
-        isOpen={showUpdatePassword} 
-        onClose={handleCloseUpdatePassword} 
-      />
+      <OnboardingTourProvider>
+        <AppContent />
+        <AppModals modals={modals} />
+        <SyncConflictModalContainer />
+        <TimeOverlapModalContainer />
+        {/* Модал для обновления пароля (после сброса) */}
+        <UpdatePasswordModal 
+          isOpen={showUpdatePassword} 
+          onClose={handleCloseUpdatePassword} 
+        />
+      </OnboardingTourProvider>
     </AppProviders>
   )
 }

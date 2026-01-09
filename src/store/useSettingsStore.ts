@@ -66,6 +66,9 @@ export const useSettingsStore = create<SettingsState>()(
       // Вид отображения списка записей
       listView: 'list', // 'list' | 'grid' | 'timeline'
 
+      // Режим отображения: Focus (только работа) или Analytics (полная аналитика)
+      viewMode: 'analytics', // 'focus' | 'analytics'
+
       // Фильтры по умолчанию (независимые для каждого блока)
       defaultEntriesFilter: 'month', // Фильтр для блока "Записи времени"
       defaultAnalyticsFilter: 'month', // Фильтр для блока "Аналитика и графики"
@@ -339,6 +342,19 @@ export const useSettingsStore = create<SettingsState>()(
        * @param {string} view - 'list', 'grid', 'timeline'
        */
       setListView: view => set({ listView: view }),
+
+      /**
+       * Устанавливает режим отображения (focus/analytics)
+       * @param {string} mode - 'focus' | 'analytics'
+       */
+      setViewMode: mode => set({ viewMode: mode }),
+
+      /**
+       * Переключает режим отображения между focus и analytics
+       */
+      toggleViewMode: () => set(state => ({ 
+        viewMode: state.viewMode === 'focus' ? 'analytics' : 'focus' 
+      })),
 
       /**
        * Устанавливает фильтр по умолчанию для блока "Записи времени"
@@ -790,6 +806,9 @@ export const useCustomWorkDates = () => useSettingsStore(state => state.customWo
 export const usePaymentDates = () => useSettingsStore(state => state.paymentDates)
 export const useFloatingPanel = () => useSettingsStore(state => state.floatingPanel)
 export const useListView = () => useSettingsStore(state => state.listView)
+export const useViewMode = () => useSettingsStore(state => state.viewMode)
+export const useSetViewMode = () => useSettingsStore(state => state.setViewMode)
+export const useToggleViewMode = () => useSettingsStore(state => state.toggleViewMode)
 export const useDefaultEntriesFilter = () => useSettingsStore(state => state.defaultEntriesFilter)
 export const useDefaultAnalyticsFilter = () => useSettingsStore(state => state.defaultAnalyticsFilter)
 export const useDefaultChartVisibility = () => useSettingsStore(state => state.defaultChartVisibility)

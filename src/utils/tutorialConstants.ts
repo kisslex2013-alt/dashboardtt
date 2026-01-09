@@ -44,7 +44,9 @@ import {
   Lightbulb,
   Flag,
   Clock,
+  Keyboard,
 } from './icons'
+import { Focus } from 'lucide-react'
 
 /**
  * Текущая версия приложения для туториала
@@ -97,6 +99,8 @@ export const TUTORIAL_ICON_MAP: Record<string, any> = {
   Lightbulb,
   Flag,
   Clock,
+  Focus,
+  Keyboard,
 }
 
 /**

@@ -47,6 +47,7 @@ export const useUIStore = create<UIState>()(
     soundSettings: { isOpen: false, activeTab: null },
     commandPalette: { isOpen: false },
     auth: { isOpen: false },
+    aiNotifications: { isOpen: false },
   },
 
   // Состояние загрузки
@@ -168,6 +169,7 @@ export const useUIStore = create<UIState>()(
         notificationsDisplay: { isOpen: false },
         commandPalette: { isOpen: false },
         auth: { isOpen: false },
+        aiNotifications: { isOpen: false },
       }
 
       // Возвращаем модальное окно к начальному состоянию
@@ -202,6 +204,7 @@ export const useUIStore = create<UIState>()(
         soundSettings: { isOpen: false, activeTab: null },
         commandPalette: { isOpen: false },
         auth: { isOpen: false },
+        aiNotifications: { isOpen: false },
       },
     }),
 

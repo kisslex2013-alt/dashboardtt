@@ -237,7 +237,11 @@ const getTestNotificationData = (
         peakEfficiency: 47,
         worstTime: '16:00 - 18:00',
         worstEfficiency: -31,
+        analysisDepth: {
+          daysAnalyzed: 30,
+        },
       },
+      isSurprising: true, // 47% > 40% — удивительный паттерн
       recommendations: [
         'Планируйте сложные задачи на 10:00-13:00',
         'Рутинные задачи делайте после 16:00',
@@ -399,6 +403,7 @@ const getTestNotificationData = (
         normalRate: 875,
         deviation: 4.3,
       },
+      isSurprising: true, // Аномалия = всегда удивительно
       recommendations: [
         'Проанализируйте, какие задачи выполнялись',
         'Попробуйте повторить успешный паттерн',
@@ -728,6 +733,9 @@ export class AINotificationService {
         forecast: data.forecast,
         overachievement: data.overachievement,
         daysAnalyzed: data.daysAnalyzed,
+        analysisDepth: {
+          daysAnalyzed: data.daysAnalyzed,
+        },
       },
       recommendations: [
         'Поддерживайте текущий темп',
@@ -773,12 +781,16 @@ export class AINotificationService {
         peakEfficiency: data.peakEfficiency,
         worstHour: data.worstHour,
         worstEfficiency: data.worstEfficiency,
+        analysisDepth: {
+          daysAnalyzed: 30,
+        },
       },
       recommendations: [
         `Планируйте сложные задачи на ${data.peakHour}:00`,
         `Рутинные задачи делайте после ${data.worstHour}:00`,
         'Возьмите перерыв в часы низкой продуктивности',
       ],
+      isSurprising: data.peakEfficiency > 40, // Если эффективность >40% — это "удивительно"
       isRead: false,
       isTest: false,
       createdAt: new Date().toISOString(),
@@ -880,6 +892,7 @@ export class AINotificationService {
         'Попробуйте повторить успешный паттерн',
         'Подумайте о повышении базовой ставки',
       ],
+      isSurprising: true, // Аномалия — всегда "удивительный" инсайт
       isRead: false,
       isTest: false,
       createdAt: new Date().toISOString(),

@@ -9,6 +9,7 @@ import { ThemeToggle } from './components/ThemeToggle'
 import { ColorSchemeSelector } from './components/ColorSchemeSelector'
 import { QuickStartPanel } from './components/QuickStartPanel'
 import { ComparisonControls } from './components/ComparisonControls'
+import { ViewModeToggle } from './components/ViewModeToggle'
 import { AINotificationsButton } from './components/AINotificationsButton'
 import { AuthSyncStatus } from '../../auth/AuthSyncStatus'
 import { APP_VERSION_FULL } from '../../../config/appVersion'
@@ -61,7 +62,7 @@ export function Header({
       <header className="glass-effect rounded-xl p-4 sm:p-6 mb-0 relative z-50" role="banner">
         {/* Верхняя строка с названием и кнопками */}
         <div className="flex items-center justify-between mb-4 sm:mb-6">
-          <div className="flex items-center gap-2 sm:gap-4 flex-1 min-w-0">
+          <div className="flex items-center gap-2 sm:gap-4 flex-1 min-w-0" data-tour="header">
             {/* Логотип приложения */}
             <AppLogo />
 
@@ -72,27 +73,6 @@ export function Header({
                 <h1 className="text-lg sm:text-2xl font-bold transition-all duration-300 hover:text-blue-600 dark:hover:text-blue-400 truncate text-gray-900 dark:text-white">
                   {isMobile ? 'Time Tracker' : 'Time Tracker Dashboard'}
                 </h1>
-                {/* Кнопка промо-страницы - только на десктопе (на мобильных в MobileMenu) */}
-                {!isMobile && (
-                  <button
-                    onClick={() => {
-                      // Добавляем анимацию fade-out
-                      document.body.style.transition = 'opacity 0.5s ease-out'
-                      document.body.style.opacity = '0'
-
-                      // Переходим на промо-страницу после анимации
-                      setTimeout(() => {
-                        window.location.href = '/promo/time-tracker-promo-variant-3.html'
-                      }, 500)
-                    }}
-                    className="glass-button p-2 rounded-lg transition-normal hover-lift-scale click-shrink"
-                    title="Открыть промо-страницу"
-                    aria-label="Открыть промо-страницу"
-                    data-icon-id="header-promo"
-                  >
-                    <Sparkles className="w-5 h-5" />
-                  </button>
-                )}
               </div>
               {!isMobile && (
                 <div className="flex items-center gap-2">
@@ -127,6 +107,7 @@ export function Header({
               </>
             ) : (
               <>
+                {/* === ГРУППА 1: ДЕЙСТВИЯ === */}
                 {/* Контролы сравнения */}
                 <ComparisonControls
                   compareMode={compareMode}
@@ -136,21 +117,21 @@ export function Header({
                 />
 
                 {/* Quick Start - быстрый запуск таймера */}
-                <QuickStartPanel />
+                <div data-tour="timer-button">
+                  <QuickStartPanel />
+                </div>
 
-                {/* Cloud Sync Status moved to left */}
-                {/* <AuthSyncStatus /> removed */}
+                {/* Переключатель Focus/Analytics */}
+                <ViewModeToggle />
 
-                {/* AI-уведомления */}
-                <AINotificationsButton />
+                {/* === РАЗДЕЛИТЕЛЬ === */}
+                <div className="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1" />
 
-                {/* Цветовая схема - скрыта */}
-                {/* <ColorSchemeSelector /> */}
-
-                {/* Тема - всегда видна */}
+                {/* === ГРУППА 2: СИСТЕМА === */}
+                {/* Тема */}
                 <ThemeToggle />
 
-                {/* Настройки - только на десктопе */}
+                {/* Настройки */}
                 {onShowSoundSettings && (
                   <button
                     aria-label="Настройки"
@@ -158,23 +139,24 @@ export function Header({
                     className="glass-button p-2 rounded-lg transition-normal hover-lift-scale click-shrink"
                     title="Настройки"
                     data-icon-id="header-settings"
+                    data-tour="settings"
                   >
                     <Settings className="w-5 h-5" />
                   </button>
                 )}
 
-
-                {/* Tutorial и About - только на десктопе */}
+                {/* Справка */}
                 <button
-                  aria-label="Открыть обучалку"
+                  aria-label="Справка (F1)"
                   onClick={onShowTutorial}
                   className="glass-button p-2 rounded-lg transition-normal hover-lift-scale click-shrink"
-                  title="Открыть обучалку"
-                  data-icon-id="header-tutorial"
+                  title="Справка (F1)"
+                  data-icon-id="header-help"
                 >
                   <HelpCircle className="w-5 h-5" />
                 </button>
 
+                {/* О приложении */}
                 <button
                   aria-label="О приложении"
                   onClick={onShowAbout}
@@ -185,7 +167,16 @@ export function Header({
                   <Info className="w-5 h-5" />
                 </button>
 
-                {/* Cloud Sync Status (Far Right) */}
+                {/* === РАЗДЕЛИТЕЛЬ === */}
+                <div className="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1" />
+
+                {/* === ГРУППА 3: АККАУНТ === */}
+                {/* AI-уведомления */}
+                <div data-tour="ai-notifications">
+                  <AINotificationsButton />
+                </div>
+
+                {/* Cloud Sync Status */}
                 <AuthSyncStatus />
               </>
             )}
