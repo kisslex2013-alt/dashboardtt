@@ -18,6 +18,7 @@ interface AuthState {
   isAuthenticated: boolean
   isSyncing: boolean
   lastSyncTime: number | null
+  cloudEntriesCount: number | null
   
   // Данные для диалога подтверждения синхронизации
   pendingSyncData: {
@@ -60,6 +61,7 @@ export const useAuthStore = create<AuthState>()(
       isAuthenticated: false,
       isSyncing: false,
       lastSyncTime: null,
+      cloudEntriesCount: null,
       pendingSyncData: {
         show: false,
         data: null,
@@ -99,6 +101,9 @@ export const useAuthStore = create<AuthState>()(
              const cloudBackup = await supabaseService.downloadLastBackup(data.user.id)
              
              if (cloudBackup) {
+               // Сохраняем количество записей в облаке
+               set({ cloudEntriesCount: cloudBackup.entries?.length || 0 })
+               
                const syncCheck = checkSyncConfirmation(localEntries, cloudBackup as unknown as CloudBackupData, get().lastSyncTime)
                
                if (syncCheck.needsConfirmation) {
@@ -194,6 +199,9 @@ export const useAuthStore = create<AuthState>()(
              const cloudBackup = await supabaseService.downloadLastBackup(session.user.id)
              
              if (cloudBackup) {
+               // Сохраняем количество записей в облаке
+               set({ cloudEntriesCount: cloudBackup.entries?.length || 0 })
+               
                const syncCheck = checkSyncConfirmation(localEntries, cloudBackup as unknown as CloudBackupData, get().lastSyncTime)
                
                if (syncCheck.needsConfirmation) {
@@ -326,6 +334,8 @@ export const useAuthStore = create<AuthState>()(
                 version: 1,
               } as any)
               logger.log('✅ Бэкап успешно загружен в облако после разрешения конфликта')
+              // Обновляем счётчик облачных записей
+              set({ cloudEntriesCount: currentEntries.length })
             } catch (err) {
               logger.error('❌ Ошибка загрузки бэкапа после разрешения конфликта:', err)
               // Продолжаем, даже если загрузка не удалась - локальные данные уже обновлены

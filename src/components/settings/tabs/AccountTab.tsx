@@ -259,14 +259,24 @@ export const AccountTab = () => {
               </div>
               
               {user && (
-                 <div className="text-right">
+                <div className="flex gap-6">
+                  <div className="text-right">
                     <div className="text-sm text-gray-700 dark:text-gray-300">
-                        {useEntriesStore.getState().entries.length} записей
+                      {useEntriesStore.getState().entries.length} записей
                     </div>
                     <div className="text-xs text-gray-500">
-                        на устройстве
+                      на устройстве
                     </div>
-                 </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-sm text-blue-600 dark:text-blue-400">
+                      {useAuthStore.getState().cloudEntriesCount ?? '—'} записей
+                    </div>
+                    <div className="text-xs text-gray-500">
+                      в облаке
+                    </div>
+                  </div>
+                </div>
               )}
             </div>
 
