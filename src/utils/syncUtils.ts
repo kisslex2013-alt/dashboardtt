@@ -11,6 +11,26 @@ import type { TimeEntry } from '../types'
 import { backupManager } from './backupManager'
 import { logger } from './logger'
 
+// 🛡️ Глобальный флаг: время последнего ремонта данных (integrity check)
+// Используется для подавления ложных конфликтов сразу после очистки данных
+let lastIntegrityRepairTime: number | null = null
+
+/**
+ * Устанавливает время последнего ремонта данных.
+ * Вызывается из onRehydrateStorage после удаления невалидных записей.
+ */
+export function setLastIntegrityRepairTime(time: number = Date.now()): void {
+  lastIntegrityRepairTime = time
+  logger.log(`🛡️ Integrity repair timestamp set: ${new Date(time).toLocaleTimeString()}`)
+}
+
+/**
+ * Возвращает время последнего ремонта данных.
+ */
+export function getLastIntegrityRepairTime(): number | null {
+  return lastIntegrityRepairTime
+}
+
 // Используем облегчённый интерфейс для совместимости с supabase.ts и types/index.ts
 export interface CloudBackupData {
   entries?: TimeEntry[]
@@ -148,6 +168,29 @@ export function checkSyncConfirmation(
         cloudTimestamp,
         localLastSync: lastSyncTime,
         recommendation: 'keep-local'
+      }
+    }
+    
+    // 🛡️ Защита от ложных конфликтов после integrity check:
+    // Если недавно был ремонт данных (удаление невалидных записей),
+    // не показываем диалог — локальные данные уже "чистые" и будут загружены в облако.
+    if (lastIntegrityRepairTime) {
+      const timeSinceRepair = Date.now() - lastIntegrityRepairTime
+      const localHasLess = localEntries.length < cloudEntries.length
+      
+      // Если прошло менее 30 секунд с момента ремонта и локальных меньше — 
+      // это результат удаления невалидных записей, не конфликт
+      if (timeSinceRepair < 30 * 1000 && localHasLess) {
+        logger.log(`🛡️ Пропускаем диалог: недавно был ремонт данных (${Math.round(timeSinceRepair / 1000)}с назад)`)
+        return {
+          needsConfirmation: false,
+          reason: 'Данные только что исправлены, синхронизация в процессе',
+          localCount: localEntries.length,
+          cloudCount: cloudEntries.length,
+          cloudTimestamp,
+          localLastSync: lastSyncTime,
+          recommendation: 'keep-local'
+        }
       }
     }
     

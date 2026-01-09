@@ -9,6 +9,7 @@ import { logger } from '../utils/logger'
 import { generateUUID } from '../utils/uuid'
 import { handleError, checkStorageSpace } from '../utils/errorHandler'
 import { syncManager, SyncMessageType } from '../utils/syncManager'
+import { setLastIntegrityRepairTime } from '../utils/syncUtils'
 import {
   validateEntry,
   checkEntriesIntegrity,
@@ -713,6 +714,10 @@ export const useEntriesStore = create<EntriesState>()(
           
           // Обновляем state с исправленными данными
           state.entries = repaired
+          
+          // 🛡️ Устанавливаем флаг времени ремонта для подавления ложных конфликтов
+          // Это предотвратит показ диалога синхронизации сразу после очистки данных
+          setLastIntegrityRepairTime(Date.now())
           
           // Создаём бэкап после восстановления И синхронизируем с облаком
           // Используем scheduleBackup, чтобы "чистая" версия улетела в Supabase
