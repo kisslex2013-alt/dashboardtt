@@ -100,11 +100,12 @@ function isValidDateFormat(date: string): boolean {
 }
 
 /**
- * Проверяет формат времени (HH:MM)
+ * Проверяет формат времени (HH:MM или H:MM)
  */
 function isValidTimeFormat(time: string): boolean {
   if (!time || typeof time !== 'string') return false
-  const regex = /^\d{2}:\d{2}$/
+  // Поддерживаем как H:MM (7:30), так и HH:MM (07:30)
+  const regex = /^\d{1,2}:\d{2}$/
   if (!regex.test(time)) return false
 
   const [hours, minutes] = time.split(':').map(Number)
