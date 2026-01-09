@@ -1,17 +1,11 @@
 import { createClient } from '@supabase/supabase-js'
+import type { BackupData } from '../types'
 
 // Конфигурация Supabase (в продакшене лучше вынести в .env)
 const SUPABASE_URL = 'https://ogieecraxlynhgogsqgl.supabase.co'
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9naWVlY3JheGx5bmhnb2dzcWdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjczNDM3NjYsImV4cCI6MjA4MjkxOTc2Nn0.G2hiNmZST_PpUoOibW0O8kICOIfZ_8qtE4z2UtHXVCI'
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
-
-export interface BackupData {
-  entries: any[]
-  settings: any
-  timestamp: number
-  version: number
-}
 
 export const supabaseService = {
   /**

@@ -306,7 +306,7 @@ export interface IconSettings {
 export interface BackupResult {
   success: boolean
   timestamp?: number
-  error?: string
+  error?: unknown
 }
 
 /**
@@ -319,6 +319,8 @@ export interface BackupData {
   dailyHours: number
   theme: string
   timestamp: number
+  version?: number
+  [key: string]: unknown
 }
 
 /**
@@ -344,6 +346,7 @@ export interface EntriesState {
   restoreFromCloudBackup: (backupData: any) => Promise<boolean>
   updateEntryCategoryDetails: (categoryId: string, newName: string, oldName?: string) => void
   syncCategories: (categories: Category[]) => number
+  scheduleBackup: () => void
 }
 
 /**

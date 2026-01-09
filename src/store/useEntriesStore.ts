@@ -15,7 +15,7 @@ import {
   repairEntries,
   createIntegrityReport,
 } from '../utils/dataIntegrity'
-import type { EntriesState, TimeEntry, BackupResult, BackupData } from '../types'
+import type { EntriesState, TimeEntry, BackupResult, BackupData, Category } from '../types'
 
 /**
  * 🎓 ПОЯСНЕНИЕ ДЛЯ НАЧИНАЮЩИХ:
@@ -105,7 +105,7 @@ export const useEntriesStore = create<EntriesState>()(
             backupTimeouts.set(storeInstance, null)
           } catch (error) {
             // Используем централизованную обработку ошибок
-            handleError(error, { operation: 'Автоматический бэкап' })
+            handleError(error instanceof Error ? error : new Error(String(error)), { operation: 'Автоматический бэкап' })
             // Очищаем ссылку даже при ошибке
             backupTimeouts.set(storeInstance, null)
           }
@@ -201,7 +201,7 @@ export const useEntriesStore = create<EntriesState>()(
                     earned:
                       typeof updates.earned === 'number'
                         ? updates.earned
-                        : parseFloat(updates.earned) || entry.earned,
+                        : parseFloat(String(updates.earned ?? '')) || entry.earned,
                     updatedAt: new Date().toISOString(),
                   }
                 : entry
@@ -313,11 +313,11 @@ export const useEntriesStore = create<EntriesState>()(
           const targetEntries = entries || get().entries
 
           const totalHours = targetEntries.reduce(
-            (sum, entry) => sum + parseFloat(entry.duration || 0),
+            (sum, entry) => sum + parseFloat(String(entry.duration) || '0'),
             0
           )
           const totalEarned = targetEntries.reduce(
-            (sum, entry) => sum + parseFloat(entry.earned || 0),
+            (sum, entry) => sum + parseFloat(String(entry.earned) || '0'),
             0
           )
           const averageRate = totalHours > 0 ? totalEarned / totalHours : 0
@@ -468,7 +468,7 @@ export const useEntriesStore = create<EntriesState>()(
             return result
           } catch (error) {
             // Используем централизованную обработку ошибок
-            const errorMessage = handleError(error, { operation: 'Ручной бэкап' })
+            const errorMessage = handleError(error instanceof Error ? error : new Error(String(error)), { operation: 'Ручной бэкап' })
             return { success: false, error: errorMessage }
           }
         },
@@ -592,32 +592,32 @@ export const useEntriesStore = create<EntriesState>()(
             }
 
             // Восстанавливаем записи
-            if (backupData.entries) {
-              set({ entries: backupData.entries })
+            if (backupData.entries && Array.isArray(backupData.entries)) {
+              set({ entries: backupData.entries as TimeEntry[] })
             }
 
             // Восстанавливаем настройки если они есть
             if (backupData.categories || backupData.dailyGoal !== undefined) {
               const settingsStore = useSettingsStore.getState()
 
-              if (backupData.categories) {
-                settingsStore.importCategories(backupData.categories)
+              if (backupData.categories && Array.isArray(backupData.categories)) {
+                settingsStore.importCategories(backupData.categories as Category[])
               }
-              if (backupData.dailyGoal !== undefined || backupData.dailyHours !== undefined) {
+              if (typeof backupData.dailyGoal === 'number' || typeof backupData.dailyHours === 'number') {
                 settingsStore.updateSettings({
-                  ...(backupData.dailyGoal !== undefined && { dailyGoal: backupData.dailyGoal }),
-                  ...(backupData.dailyHours !== undefined && { dailyHours: backupData.dailyHours }),
+                  ...(typeof backupData.dailyGoal === 'number' && { dailyGoal: backupData.dailyGoal }),
+                  ...(typeof backupData.dailyHours === 'number' && { dailyHours: backupData.dailyHours }),
                 })
               }
-              if (backupData.theme) {
-                settingsStore.setTheme(backupData.theme)
+              if (typeof backupData.theme === 'string' && ['light', 'dark', 'auto'].includes(backupData.theme)) {
+                settingsStore.setTheme(backupData.theme as 'light' | 'dark' | 'auto')
               }
             }
 
             return true
           } catch (error) {
             // Используем централизованную обработку ошибок
-            handleError(error, { operation: 'Восстановление из бэкапа', timestamp })
+            handleError(error instanceof Error ? error : new Error(String(error)), { operation: 'Восстановление из бэкапа', timestamp })
             return false
           }
         },
@@ -652,9 +652,14 @@ export const useEntriesStore = create<EntriesState>()(
                  settingsStore.updateSettings({ dailyHours: backupData.dailyHours })
              }
 
+             // ⚠️ FIX: Не восстанавливаем тему из облака при синхронизации данных,
+             // так как это часто сбрасывает локальную настройку (Dark -> Light)
+             // и раздражает пользователя. Тема должна быть локальной прерогативой или синхронизироваться отдельно.
+             /*
              if (backupData.theme && ['light', 'dark', 'auto'].includes(backupData.theme)) {
                settingsStore.setTheme(backupData.theme as 'light' | 'dark' | 'auto')
              }
+             */
              
              // Сохраняем восстановленные данные как новый локальный бэкап
              scheduleBackup()
@@ -668,6 +673,11 @@ export const useEntriesStore = create<EntriesState>()(
              return false
           }
         },
+        
+        /**
+         * Запускает процедуру бэкапа (включая облако)
+         */
+        scheduleBackup,
       }
     },
     {
@@ -704,10 +714,10 @@ export const useEntriesStore = create<EntriesState>()(
           // Обновляем state с исправленными данными
           state.entries = repaired
           
-          // Создаём бэкап после восстановления
-          setTimeout(() => {
-            useEntriesStore.getState().createManualBackup()
-          }, 1000)
+          // Создаём бэкап после восстановления И синхронизируем с облаком
+          // Используем scheduleBackup, чтобы "чистая" версия улетела в Supabase
+          // и предотвратила повторный конфликт (Local != Cloud)
+          useEntriesStore.getState().scheduleBackup()
         } else {
           logger.info('Data integrity check passed', {
             entries: integrityResult.totalEntries,

@@ -1,0 +1,22 @@
+# Time Tracker Dashboard - Robots.txt
+# https://dashboardtt.vercel.app/
+
+User-agent: *
+Allow: /
+Allow: /promo/
+
+# Блокируем служебные файлы
+Disallow: /assets/
+Disallow: /*.js$
+Disallow: /*.css$
+
+# Sitemap
+Sitemap: https://dashboardtt.vercel.app/sitemap.xml
+
+# Дополнительные правила для основных поисковиков
+User-agent: Googlebot
+Allow: /
+
+User-agent: Yandex
+Allow: /
+Host: dashboardtt.vercel.app
