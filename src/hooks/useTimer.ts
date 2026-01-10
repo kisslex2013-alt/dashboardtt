@@ -7,23 +7,21 @@ import {
   useActiveTimer,
   useIsPaused,
   useStartTime,
-  useTimerEntryId,
   useStartTimer,
   useStopTimer,
   usePauseTimer,
   useResumeTimer,
   useUpdateElapsed,
   useResetTimer,
-  useSetTimerEntryId,
   useTimerStore,
 } from '../store/useTimerStore'
-import { useAddEntry, useUpdateEntry, useEntriesStore } from '../store/useEntriesStore'
+import { useAddEntry } from '../store/useEntriesStore'
 import { useCategories, useNotificationsSettings } from '../store/useSettingsStore'
 import { usePomodoroIsRunning } from '../store/usePomodoroStore'
 import { useSoundManager } from './useSound'
 import { useFavicon } from './useFavicon'
 import { useBreakReminders } from './useBreakReminders'
-import { calculateDuration, calculateEarned } from '../utils/calculations'
+import { calculateEarned } from '../utils/calculations'
 import { formatDate, formatTime } from '../utils/dateHelpers'
 import { generateUUID } from '../utils/uuid'
 import { logger } from '../utils/logger'
@@ -66,7 +64,6 @@ export function useTimer(): UseTimerReturn {
   const activeTimer = useActiveTimer()
   const startTime = useStartTime()
   const isPaused = useIsPaused()
-  const timerEntryId = useTimerEntryId()
   const pomodoroIsRunning = usePomodoroIsRunning()
 
   const startTimer = useStartTimer()
@@ -75,7 +72,6 @@ export function useTimer(): UseTimerReturn {
   const resumeTimer = useResumeTimer()
   const updateElapsed = useUpdateElapsed()
   const resetTimer = useResetTimer()
-  const setTimerEntryId = useSetTimerEntryId()
 
   const getCurrentElapsed = useCallback((): number => {
     return useTimerStore.getState().getCurrentElapsed()
@@ -90,7 +86,6 @@ export function useTimer(): UseTimerReturn {
   }, [])
 
   const addEntry = useAddEntry()
-  const updateEntry = useUpdateEntry()
   const categories = useCategories() as Category[]
   const notifications = useNotificationsSettings()
   const { playSound } = useSoundManager()
@@ -197,37 +192,7 @@ export function useTimer(): UseTimerReturn {
 
   const start = (category: string): void => {
     try {
-      const now = new Date()
-      const startDate = formatDate(now)
-      const startTimeStr = formatTime(now)
-
-      const categoryObj = categories.find((cat: Category) => cat.name === category)
-      const rate = categoryObj?.rate || 1000
-
-      const newEntry = {
-        date: startDate,
-        start: startTimeStr,
-        end: '',
-        category,
-        categoryId: categoryObj?.id || null,
-        description: 'Работа по таймеру',
-        rate,
-        earned: 0,
-        duration: 0,
-        isManual: false,
-      }
-
-      const entryId = generateUUID()
-
-      const entryWithId = {
-        ...newEntry,
-        id: entryId,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      }
-
-      setTimerEntryId(entryId)
-      addEntry(entryWithId)
+      // Запускаем таймер, запись будет создана при остановке
       startTimer(category)
 
       logger.log(`⏱️ Таймер запущен для категории: ${category}`)
@@ -245,64 +210,42 @@ export function useTimer(): UseTimerReturn {
         return null
       }
 
+      // Сохраняем данные до сброса таймера
+      const currentCategory = activeTimer
+      const currentStartTime = startTime
+
       const elapsed = stopTimer()
       playSound('timerStop')
 
       const now = new Date()
-      const startDate = new Date(startTime)
+      const startDate = new Date(currentStartTime)
       const durationHours = (elapsed / 3600).toFixed(2)
 
-      const categoryObj = categories.find((cat: Category) => cat.name === activeTimer)
+      const categoryObj = categories.find((cat: Category) => cat.name === currentCategory)
       const rate = categoryObj?.rate || 1000
       const earned = parseFloat(calculateEarned(durationHours, rate))
 
-      if (timerEntryId) {
-        const updates = {
-          end: formatTime(now),
-          duration: parseFloat(durationHours),
-          earned,
-        }
-
-        updateEntry(timerEntryId, updates)
-        logger.log(`⏹️ Таймер остановлен. Запись обновлена (ID: ${timerEntryId})`)
-
-        const entries = useEntriesStore.getState().entries as TimeEntry[]
-        const timerEntryIdString = timerEntryId ? String(timerEntryId) : null
-        const updatedEntry = timerEntryIdString
-          ? entries.find((e: TimeEntry) => String(e.id) === timerEntryIdString)
-          : null
-
-        setTimerEntryId(null)
-
-        return (
-          updatedEntry || {
-            id: timerEntryId,
-            date: formatDate(startDate),
-            start: formatTime(startDate),
-            end: formatTime(now),
-            duration: parseFloat(durationHours),
-            category: activeTimer,
-            description: 'Работа по таймеру',
-            rate,
-            isManual: false,
-          }
-        ) as TimeEntry
-      }
-
+      // Создаём полноценную запись с start и end
       const entryData: TimeEntry = {
         id: generateUUID(),
         date: formatDate(startDate),
         start: formatTime(startDate),
         end: formatTime(now),
         duration: parseFloat(durationHours),
-        category: activeTimer,
+        category: currentCategory,
+        categoryId: categoryObj?.id || null,
         description: 'Работа по таймеру',
         rate,
         earned,
         isManual: false,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       }
 
-      logger.log(`⏹️ Таймер остановлен.`)
+      // Добавляем запись в store
+      addEntry(entryData)
+
+      logger.log(`⏹️ Таймер остановлен. Создана запись (ID: ${entryData.id})`)
       return entryData
     } catch (error) {
       logger.error('Ошибка остановки таймера:', error)
