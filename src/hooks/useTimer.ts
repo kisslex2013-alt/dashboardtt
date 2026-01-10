@@ -260,6 +260,7 @@ export function useTimer(): UseTimerReturn {
         const updates = {
           end: formatTime(now),
           duration: parseFloat(durationHours),
+          earned,
         }
 
         updateEntry(timerEntryId, updates)
