@@ -150,13 +150,11 @@ export function validateEntry(entry: Partial<TimeEntry>): ValidationResult {
   } else {
     if (!isValidTimeFormat(entry.start) || !isValidTimeFormat(entry.end)) {
       errors.push(ERROR_MESSAGES.INVALID_TIME_RANGE)
-    } else {
-      const startMinutes = timeToMinutes(entry.start)
-      const endMinutes = timeToMinutes(entry.end)
-      if (startMinutes >= endMinutes) {
-        errors.push(ERROR_MESSAGES.INVALID_TIME_RANGE)
-      }
     }
+    // ✅ FIX: Убрана проверка start >= end, так как это допустимый случай
+    // для overnight shifts (работа через полночь, например 23:50 - 10:55)
+    // Duration рассчитывается правильно из timestamps, валидация времени
+    // только проверяет формат
   }
 
   // 4. Проверка длительности
@@ -389,11 +387,17 @@ function attemptDeepFix(entry: Partial<TimeEntry>): TimeEntry | null {
   const startMinutes = timeToMinutes(entry.start)
   const endMinutes = timeToMinutes(entry.end)
 
-  if (startMinutes >= endMinutes) {
-    return null // Время начала >= времени окончания
+  // ✅ FIX: Поддержка overnight shifts (работа через полночь)
+  // Если end < start, то работа была через полночь
+  let durationMinutes: number
+  if (endMinutes < startMinutes) {
+    // Overnight: 24 часа - start + end
+    durationMinutes = (24 * 60 - startMinutes) + endMinutes
+  } else {
+    durationMinutes = endMinutes - startMinutes
   }
 
-  const duration = ((endMinutes - startMinutes) / 60).toFixed(2)
+  const duration = (durationMinutes / 60).toFixed(2)
   const earned = safeParseNumber(entry.earned, 0)
   const rate = safeParseNumber(entry.rate, 0)
 
