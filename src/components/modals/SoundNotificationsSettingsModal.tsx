@@ -262,6 +262,23 @@ export function SoundNotificationsSettingsModal({ isOpen, onClose, initialTab = 
     }
   }, [faviconAnimationStyle, faviconAnimationColor, faviconAnimationSpeed, faviconAnimationEnabled])
 
+  // ✅ Автосохранение настроек графика работы при изменении
+  useEffect(() => {
+    if (isOpen) {
+      const settingsToSave: any = {
+        workScheduleTemplate: selectedTemplate,
+        dailyGoal: dailyPlan,
+        workScheduleStartDay: weekStart,
+      }
+      
+      if (selectedTemplate === 'custom') {
+        settingsToSave.customWorkDates = customWorkDates
+      }
+      
+      updateSettings(settingsToSave)
+    }
+  }, [selectedTemplate, dailyPlan, weekStart, customWorkDates, isOpen])
+
   // Типы звуков (компактный список - только основные)
   const soundTypes = [
     { value: 'chime', label: 'Мелодия', description: 'Мелодичное уведомление' },
