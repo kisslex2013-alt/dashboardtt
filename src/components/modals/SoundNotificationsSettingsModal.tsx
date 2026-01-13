@@ -245,7 +245,8 @@ export function SoundNotificationsSettingsModal({ isOpen, onClose, initialTab = 
       setWeekStart(workScheduleStartDay || 1)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen, savedPaymentDates, savedCustomWorkDates, workScheduleTemplate, dailyGoal, workScheduleStartDay])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]) // Убрали savedCustomWorkDates и другие store-значения из зависимостей, чтобы не создавать бесконечный цикл с useEffect автосохранения
 
   // ✅ Автосохранение настроек фавикона при изменении
   useEffect(() => {
