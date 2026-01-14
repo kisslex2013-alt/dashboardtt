@@ -13,6 +13,11 @@ import { formatHoursToTime } from '../../utils/formatting'
  * - Максимальный перерыв (опционально)
  */
 
+// Кастомная иконка символа рубля
+const RubleIcon = ({ className }: { className?: string }) => (
+  <span className={`inline-flex items-center justify-center font-bold text-sm ${className}`}>₽</span>
+)
+
 export interface DayMetricsBarProps {
   /** Общее время работы в часах */
   totalHours: number
@@ -103,9 +108,9 @@ export const DayMetricsBar = memo(function DayMetricsBar({
     },
     {
       key: 'rate',
-      icon: DollarSign,
+      icon: RubleIcon,
       label: 'Средняя ставка',
-      value: `${averageRate}₽`,
+      value: averageRate,
       iconColor: 'text-green-500 dark:text-green-400',
       textColor: 'text-green-700 dark:text-green-300',
       bgColor: 'bg-green-50 dark:bg-green-900/30',

@@ -102,20 +102,20 @@ const DayAccordion = memo<DayAccordionProps>(
         onToggle={handleToggle}
       >
         <summary className="relative overflow-hidden list-none cursor-pointer group">
-          {/* Фоновый прогресс-бар - видимость 30% */}
-          <div className="absolute inset-0 opacity-30 pointer-events-none">
+          {/* Фоновый прогресс-бар - тонкая полоска вверху */}
+          <div className="absolute top-0 left-0 right-0 opacity-60 pointer-events-none">
             <ProgressBar
               percent={progressPercent}
               status={metrics.status?.status}
               showLabel={false}
-              className="h-full rounded-none"
+              height="sm"
             />
           </div>
 
           {/* Содержимое summary */}
           <div
-            className="relative px-3 py-2 grid grid-cols-[1fr_minmax(0,1fr)_minmax(100px,min-content)] md:grid-cols-[1fr_minmax(280px,1fr)_minmax(120px,min-content)] items-center hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors"
-            style={{ columnGap: '8px' }}
+            className="relative px-3 pt-[12px] pb-2 grid grid-cols-[1fr_minmax(0,1fr)_minmax(100px,min-content)] md:grid-cols-[1fr_minmax(320px,1fr)_minmax(120px,min-content)] items-center hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors"
+            style={{ columnGap: '24px' }}
           >
             {/* Левая часть: Дата */}
             <div className="flex items-center gap-2 min-w-0 overflow-hidden">
@@ -143,9 +143,9 @@ const DayAccordion = memo<DayAccordionProps>(
               <div
                 className="hidden md:flex items-center justify-center relative"
                 style={{
-                  minWidth: '280px',
-                  marginLeft: `${gridWidths?.columnGap || 16}px`,
-                  marginRight: `${gridWidths?.columnGap || 16}px`,
+                  minWidth: '320px',
+                  marginLeft: `${gridWidths?.columnGap || 24}px`,
+                  marginRight: `${gridWidths?.columnGap || 24}px`,
                 }}
               >
                 <div className="flex gap-2">
