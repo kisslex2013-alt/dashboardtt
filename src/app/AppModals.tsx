@@ -137,6 +137,7 @@ export const AppModals: React.FC<{ modals: any }> = ({ modals }) => {
         isOpen={modals.soundSettings?.isOpen ?? false}
         onClose={handleClose('soundSettings')}
         initialTab={modals.soundSettings?.activeTab}
+        nested={modals.editEntry?.isOpen ?? false}
       />
 
       {modals.floatingPanelSettings?.isOpen && (

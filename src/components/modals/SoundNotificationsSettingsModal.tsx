@@ -60,9 +60,11 @@ interface SoundNotificationsSettingsModalProps {
   isOpen: boolean
   onClose: () => void
   initialTab?: string | null
+  /** Флаг для вложенных модальных окон (увеличивает z-index) */
+  nested?: boolean
 }
 
-export function SoundNotificationsSettingsModal({ isOpen, onClose, initialTab = null }: SoundNotificationsSettingsModalProps) {
+export function SoundNotificationsSettingsModal({ isOpen, onClose, initialTab = null, nested = false }: SoundNotificationsSettingsModalProps) {
   // ✅ ОПТИМИЗАЦИЯ: Используем атомарные селекторы для минимизации ре-рендеров
   const notifications = useNotificationsSettings()
   const dailyHours = useDailyHours()
@@ -908,6 +910,7 @@ export function SoundNotificationsSettingsModal({ isOpen, onClose, initialTab = 
         size="large"
         className={`transition-all duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] md:!max-w-6xl md:!w-[95vw] md:!h-[90vh]`}
         closeOnOverlayClick={false}
+        nested={nested}
         disableContentScroll={true}
         footer={null}
       >
