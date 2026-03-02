@@ -3,7 +3,10 @@ import { persist } from 'zustand/middleware'
 import { supabase, supabaseService } from '../services/supabase'
 import { useUIStore } from './useUIStore'
 import { resetEntriesStore, useEntriesStore } from './useEntriesStore'
-import { checkSyncConfirmation, createPreRestoreBackup, mergeEntries, resolveTimeOverlaps, type SyncConfirmationData, type CloudBackupData, type TimeOverlap, type OverlapResolution } from '../utils/syncUtils'
+import { useSettingsStore } from './useSettingsStore'
+import { useTimerStore } from './useTimerStore'
+import { usePomodoroStore } from './usePomodoroStore'
+import { checkSyncConfirmation, createPreRestoreBackup, mergeEntries, mergeCategories, resolveTimeOverlaps, type SyncConfirmationData, type CloudBackupData, type TimeOverlap, type OverlapResolution } from '../utils/syncUtils'
 import { logger } from '../utils/logger'
 
 interface User {
@@ -34,8 +37,8 @@ interface AuthState {
     resolution: OverlapResolution | null
   }
   
-  login: (data: any) => Promise<void>
-  register: (data: any) => Promise<void>
+  login: (data: { email: string; password: string }) => Promise<void>
+  register: (data: { email: string; password: string }) => Promise<void>
   logout: () => void
   checkAuth: () => Promise<void>
   
@@ -52,6 +55,46 @@ interface AuthState {
   // Функции для обработки пересечений
   handleFixOverlaps: () => Promise<void>
   closeOverlapsDialog: () => void
+}
+
+async function performAuthSync(userId: string, set: any, get: any) {
+  try {
+     const store = useEntriesStore.getState()
+     const localEntries = store.entries
+     const cloudBackup = await supabaseService.downloadLastBackup(userId)
+     
+     if (cloudBackup) {
+       // Сохраняем количество записей в облаке
+       set({ cloudEntriesCount: cloudBackup.entries?.length || 0 })
+       
+       const syncCheck = checkSyncConfirmation(localEntries, cloudBackup as unknown as CloudBackupData, get().lastSyncTime)
+       
+       if (syncCheck.needsConfirmation) {
+         set({
+           pendingSyncData: {
+             show: true,
+             data: syncCheck,
+             cloudBackup: cloudBackup as unknown as CloudBackupData,
+           }
+         })
+       } else {
+         if (syncCheck.recommendation === 'merge') {
+           const { merged } = mergeEntries(localEntries, cloudBackup.entries || [])
+           useEntriesStore.setState({ entries: merged })
+           
+           const settingsStore = useSettingsStore.getState()
+           const mergedCategories = mergeCategories(settingsStore.categories, (cloudBackup as any).categories || [])
+           settingsStore.importCategories(mergedCategories as any)
+           
+         } else if (syncCheck.recommendation === 'use-cloud') {
+           await store.restoreFromCloudBackup(cloudBackup)
+         }
+         set({ lastSyncTime: Date.now() })
+       }
+     }
+  } catch (e) {
+     logger.error('Critical Sync Error on Auth:', e)
+  }
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -73,7 +116,7 @@ export const useAuthStore = create<AuthState>()(
         resolution: null,
       },
 
-      login: async ({ email, password }) => {
+      login: async ({ email, password }: { email: string; password: string }) => {
         const { data, error } = await supabase.auth.signInWithPassword({
           email,
           password
@@ -94,46 +137,12 @@ export const useAuthStore = create<AuthState>()(
             isAuthenticated: true
           })
 
-          // ✅ SAFE SYNC: Проверяем, нужно ли показать диалог подтверждения
-          try {
-             const store = useEntriesStore.getState()
-             const localEntries = store.entries
-             const cloudBackup = await supabaseService.downloadLastBackup(data.user.id)
-             
-             if (cloudBackup) {
-               // Сохраняем количество записей в облаке
-               set({ cloudEntriesCount: cloudBackup.entries?.length || 0 })
-               
-               const syncCheck = checkSyncConfirmation(localEntries, cloudBackup as unknown as CloudBackupData, get().lastSyncTime)
-               
-               if (syncCheck.needsConfirmation) {
-                 // Показываем диалог — пользователь должен выбрать
-                 set({
-                   pendingSyncData: {
-                     show: true,
-                     data: syncCheck,
-                     cloudBackup: cloudBackup as unknown as CloudBackupData,
-                   }
-                 })
-               } else {
-                 // Безопасно — выполняем автоматически
-                 if (syncCheck.recommendation === 'merge') {
-                   const { merged } = mergeEntries(localEntries, cloudBackup.entries || [])
-                   useEntriesStore.setState({ entries: merged })
-                 } else if (syncCheck.recommendation === 'use-cloud') {
-                   await store.restoreFromCloudBackup(cloudBackup)
-                 }
-                 // keep-local — ничего не делаем
-                 set({ lastSyncTime: Date.now() })
-               }
-             }
-          } catch (e) {
-             console.error('Critical Sync Error on Login:', e)
-          }
+          // ✅ SAFE SYNC: Разрешение конфликтов и слияние при входе
+          await performAuthSync(data.user.id, set, get)
         }
       },
 
-      register: async ({ email, password }) => {
+      register: async ({ email, password }: { email: string; password: string }) => {
         console.log('Attempting to register:', email)
         const { data, error } = await supabase.auth.signUp({
           email,
@@ -173,7 +182,22 @@ export const useAuthStore = create<AuthState>()(
       logout: async () => {
         await supabase.auth.signOut()
         set({ user: null, isAuthenticated: false, lastSyncTime: null })
+        
+        // Сброс основных данных
         resetEntriesStore()
+        useSettingsStore.getState().resetToDefaults()
+        
+        // Сброс таймеров
+        useTimerStore.getState().resetTimer()
+        usePomodoroStore.getState().reset()
+        
+        // Сброс UI-состояния
+        const ui = useUIStore.getState()
+        ui.clearNotifications()
+        ui.closeAllModals()
+        ui.clearErrors()
+        ui.resetFilters()
+        ui.clearSelection()
       },
 
       checkAuth: async () => {
@@ -192,44 +216,18 @@ export const useAuthStore = create<AuthState>()(
             isAuthenticated: true
           })
 
-          // ✅ SAFE SYNC: Проверяем синхронизацию при восстановлении сессии
-          try {
-             const store = useEntriesStore.getState()
-             const localEntries = store.entries
-             const cloudBackup = await supabaseService.downloadLastBackup(session.user.id)
-             
-             if (cloudBackup) {
-               // Сохраняем количество записей в облаке
-               set({ cloudEntriesCount: cloudBackup.entries?.length || 0 })
-               
-               const syncCheck = checkSyncConfirmation(localEntries, cloudBackup as unknown as CloudBackupData, get().lastSyncTime)
-               
-               if (syncCheck.needsConfirmation) {
-                 set({
-                   pendingSyncData: {
-                     show: true,
-                     data: syncCheck,
-                     cloudBackup: cloudBackup as unknown as CloudBackupData,
-                   }
-                 })
-               } else if (syncCheck.recommendation === 'merge') {
-                 const { merged } = mergeEntries(localEntries, cloudBackup.entries || [])
-                 useEntriesStore.setState({ entries: merged })
-                 set({ lastSyncTime: Date.now() })
-               } else if (syncCheck.recommendation === 'use-cloud') {
-                 await store.restoreFromCloudBackup(cloudBackup)
-               }
-             }
-          } catch (e) {
-             console.error('Critical Sync Error on Session Restore:', e)
-          }
+          // ✅ SAFE SYNC: Разрешение конфликтов и слияние при восстановлении сессии
+          await performAuthSync(session.user.id, set, get)
 
         } else {
           set({ user: null, isAuthenticated: false })
         }
       },
 
-      updateProfile: async (data) => {
+      updateProfile: async (data: Partial<User>) => {
+          const state = get()
+          if (!state.user) return
+          
           // Обновляем метаданные в Supabase
           const { data: { user }, error } = await supabase.auth.updateUser({
               data: { 
@@ -293,6 +291,10 @@ export const useAuthStore = create<AuthState>()(
             case 'merge':
               const { merged, overlaps } = mergeEntries(localEntries, cloudBackup.entries || [])
               useEntriesStore.setState({ entries: merged })
+              
+              const settingsStore = useSettingsStore.getState()
+              const mergedCategories = mergeCategories(settingsStore.categories, (cloudBackup as any).categories || [])
+              settingsStore.importCategories(mergedCategories as any)
               
               // Если есть пересечения — показываем модал
               if (overlaps.length > 0) {

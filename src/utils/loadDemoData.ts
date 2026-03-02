@@ -51,7 +51,29 @@ export async function loadDemoData(): Promise<TimeEntry[]> {
 
     logger.log('📥 Загружено тестовых записей:', rawEntries.length)
 
+    // Сдвиг дат демо-данных к текущему дню
+    let diffDays = 0;
+    if (rawEntries.length > 0) {
+      const latestDateStr = rawEntries.reduce((max, entry) => entry.date > max ? entry.date : max, rawEntries[0].date);
+      const latestDate = new Date(latestDateStr);
+      const today = new Date();
+      const diffTime = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime() - 
+                       new Date(latestDate.getFullYear(), latestDate.getMonth(), latestDate.getDate()).getTime();
+      diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    }
+
     const processedEntries = rawEntries.map((entry, index) => {
+      let entryDateStr = entry.date;
+      if (diffDays !== 0) {
+        const entryDate = new Date(entry.date);
+        entryDate.setDate(entryDate.getDate() + diffDays);
+        // Избегаем сдвига часового пояса при toISOString
+        const year = entryDate.getFullYear();
+        const month = String(entryDate.getMonth() + 1).padStart(2, '0');
+        const day = String(entryDate.getDate()).padStart(2, '0');
+        entryDateStr = `${year}-${month}-${day}`;
+      }
+
       const category = entry.categoryId || entry.category || 'remix'
 
       let duration: string | number = entry.duration || '0.00'
@@ -71,7 +93,7 @@ export async function loadDemoData(): Promise<TimeEntry[]> {
 
       const processedEntry = {
         id: entry.id || `demo-${Date.now()}-${index}`,
-        date: entry.date,
+        date: entryDateStr,
         start: entry.start || '',
         end: entry.end || '',
         category,

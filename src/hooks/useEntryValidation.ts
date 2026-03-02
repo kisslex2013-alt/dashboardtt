@@ -50,26 +50,29 @@ export function useEntryValidation(
   const checkTimeOverlap = (start: string, end: string, date: string): string | null => {
     if (!start || !end || !date) return null
 
-    const startMinutes = timeToMinutes(start)
-    const endMinutes = timeToMinutes(end)
+    const startTimeObj = new Date(`${date}T${start}:00`)
+    const endTimeObj = new Date(`${date}T${end}:00`)
+    if (endTimeObj <= startTimeObj) {
+      endTimeObj.setDate(endTimeObj.getDate() + 1) // next day
+    }
+
+    const startMs = startTimeObj.getTime()
+    const endMs = endTimeObj.getTime()
 
     const excludeIdString = effectiveEntry?.id ? String(effectiveEntry.id) : null
-    const sameDayEntries = entries.filter(
-      (e: TimeEntry) =>
-        e.date === date &&
-        (excludeIdString ? String(e.id) !== excludeIdString : true) &&
-        e.start &&
-        e.end
-    )
 
-    if (sameDayEntries.length === 0) return null
+    for (const otherEntry of entries) {
+      if (!otherEntry.start || !otherEntry.end || !otherEntry.date) continue
+      if (excludeIdString && String(otherEntry.id) === excludeIdString) continue
 
-    for (const otherEntry of sameDayEntries) {
-      const otherStart = timeToMinutes(otherEntry.start)
-      const otherEnd = timeToMinutes(otherEntry.end)
+      const otherStartObj = new Date(`${otherEntry.date}T${otherEntry.start}:00`)
+      const otherEndObj = new Date(`${otherEntry.date}T${otherEntry.end}:00`)
+      if (otherEndObj <= otherStartObj) {
+        otherEndObj.setDate(otherEndObj.getDate() + 1)
+      }
 
-      if (startMinutes < otherEnd && endMinutes > otherStart) {
-        return `Время пересекается с записью ${otherEntry.start} → ${otherEntry.end}`
+      if (startMs < otherEndObj.getTime() && endMs > otherStartObj.getTime()) {
+        return `Пересекается с записью ${otherEntry.date} ${otherEntry.start} → ${otherEntry.end}`
       }
     }
 
@@ -103,14 +106,9 @@ export function useEntryValidation(
     const newErrors: ValidationErrors = {}
 
     if (start && end) {
-      const [startH, startM] = start.split(':').map(Number)
-      const [endH, endM] = end.split(':').map(Number)
-      const startMinutes = startH * 60 + startM
-      const endMinutes = endH * 60 + endM
-
-      if (startMinutes >= endMinutes) {
-        newErrors.start = 'Время начала должно быть раньше времени окончания'
-        newErrors.end = 'Время окончания должно быть позже времени начала'
+      if (start === end) {
+        newErrors.start = 'Время начала и окончания не могут совпадать'
+        newErrors.end = 'Время начала и окончания не могут совпадать'
       } else {
         const overlapError = checkTimeOverlap(start, end, date)
         if (overlapError) {

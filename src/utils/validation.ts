@@ -135,8 +135,8 @@ export function isTimeRangeValid(startTime: string, endTime: string): Validation
   const startMinutes = startH * 60 + startM
   const endMinutes = endH * 60 + endM
 
-  if (startMinutes >= endMinutes) {
-    return { isValid: false, error: 'Время окончания должно быть позже времени начала' }
+  if (startMinutes === endMinutes) {
+    return { isValid: false, error: 'Время начала и окончания не могут совпадать' }
   }
 
   return { isValid: true }

@@ -5,7 +5,8 @@
 import { useEffect, useRef } from 'react'
 import { syncManager, SyncMessageType } from '../utils/syncManager'
 import { useEntriesStore } from '../store/useEntriesStore'
-import type { TimeEntry } from '../types'
+import { useSettingsStore } from '../store/useSettingsStore'
+import type { TimeEntry, Category } from '../types'
 
 interface UpdateData {
   id: string | number
@@ -20,6 +21,15 @@ interface BulkUpdateData {
   type: 'delete' | 'update'
   entryIds: (string | number)[]
   categoryId?: string
+}
+
+interface UpdateCategoryData {
+  id: string | number
+  updates: Partial<Category>
+}
+
+interface DeleteCategoryData {
+  id: string | number
 }
 
 /**
@@ -102,11 +112,41 @@ export function useSync(): void {
       }
     }
 
+    const syncAddCategory = (category: Category): void => {
+      const state = useSettingsStore.getState()
+      const exists = state.categories.some((c: Category) => String(c.id) === String(category.id))
+      if (!exists) {
+        useSettingsStore.setState((prev) => ({
+          categories: [...prev.categories, category],
+        }))
+      }
+    }
+
+    const syncUpdateCategory = ({ id, updates }: UpdateCategoryData): void => {
+      const idString = String(id)
+      useSettingsStore.setState((prev) => ({
+        categories: prev.categories.map((c: Category) =>
+          String(c.id) === idString ? { ...c, ...updates } : c
+        ),
+      }))
+    }
+
+    const syncDeleteCategory = ({ id }: DeleteCategoryData): void => {
+      const idString = String(id)
+      useSettingsStore.setState((prev) => ({
+        categories: prev.categories.filter((c: Category) => String(c.id) !== idString),
+      }))
+    }
+
     const unsubscribeEntryAdded = syncManager.subscribe(SyncMessageType.ENTRY_ADDED, syncAddEntry)
     const unsubscribeEntryUpdated = syncManager.subscribe(SyncMessageType.ENTRY_UPDATED, syncUpdateEntry)
     const unsubscribeEntryDeleted = syncManager.subscribe(SyncMessageType.ENTRY_DELETED, syncDeleteEntry)
     const unsubscribeEntriesCleared = syncManager.subscribe(SyncMessageType.ENTRIES_CLEARED, syncClearEntries)
     const unsubscribeEntriesBulkUpdate = syncManager.subscribe(SyncMessageType.ENTRIES_BULK_UPDATE, syncBulkUpdate)
+
+    const unsubscribeCategoryAdded = syncManager.subscribe(SyncMessageType.CATEGORY_ADDED, syncAddCategory)
+    const unsubscribeCategoryUpdated = syncManager.subscribe(SyncMessageType.CATEGORY_UPDATED, syncUpdateCategory)
+    const unsubscribeCategoryDeleted = syncManager.subscribe(SyncMessageType.CATEGORY_DELETED, syncDeleteCategory)
 
     return () => {
       unsubscribeEntryAdded()
@@ -114,6 +154,10 @@ export function useSync(): void {
       unsubscribeEntryDeleted()
       unsubscribeEntriesCleared()
       unsubscribeEntriesBulkUpdate()
+      
+      unsubscribeCategoryAdded()
+      unsubscribeCategoryUpdated()
+      unsubscribeCategoryDeleted()
     }
   }, [])
 }

@@ -40,7 +40,10 @@ export function calculateDuration(startTime: string, endTime: string): string {
   const startTotalMinutes = startHours * 60 + startMinutes
   const endTotalMinutes = endHours * 60 + endMinutes
 
-  const durationMinutes = endTotalMinutes - startTotalMinutes
+  let durationMinutes = endTotalMinutes - startTotalMinutes
+  if (durationMinutes < 0) {
+    durationMinutes += 24 * 60
+  }
   return `${(durationMinutes / 60).toFixed(2)} ч.`
 }
 

@@ -119,20 +119,12 @@ export const DEFAULT_TOUR_STEPS: TourStep[] = [
     icon: 'solar:magic-stick-3-linear',
   },
   {
-    id: 'settings',
+    id: 'more-menu',
     target: '[data-tour="settings"]',
-    title: 'Настройки ⚙️',
-    description: 'Настройте категории, уведомления, бэкапы и многое другое.',
+    title: 'Настройки и Справка ⚙️',
+    description: 'В этом меню находятся настройки приложения, справочный центр (также доступен по F1) и информация о приложении.',
     position: 'auto',
     icon: 'solar:settings-linear',
-  },
-  {
-    id: 'help',
-    target: '[data-icon-id="header-help"]',
-    title: 'Справочный центр 📚',
-    description: 'Подробная информация обо всех функциях приложения. Открывается также по клавише F1.',
-    position: 'bottom',
-    icon: 'solar:book-linear',
     nextButtonText: 'Завершить!',
   },
 ]

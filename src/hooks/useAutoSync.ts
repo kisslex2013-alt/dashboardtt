@@ -12,6 +12,7 @@ import {
   useImportEntries,
 } from '../store/useEntriesStore'
 import {
+  useSettingsStore,
   useTheme,
   useCategories,
   useSetTheme,
@@ -19,7 +20,7 @@ import {
 } from '../store/useSettingsStore'
 import { useNotifications, useAddNotification, useRemoveNotification } from '../store/useUIStore'
 import { logger } from '../utils/logger'
-import type { TimeEntry, Category } from '../types'
+import type { TimeEntry, Category, BackupData } from '../types'
 
 declare global {
   interface Window {
@@ -27,15 +28,7 @@ declare global {
   }
 }
 
-interface BackupData {
-  entries: TimeEntry[]
-  categories: Category[]
-  settings: {
-    theme: string
-    notifications: unknown
-  }
-  version: string
-}
+
 
 interface Backup {
   id: number
@@ -91,6 +84,7 @@ export function useAutoSync(options: UseAutoSyncOptions = {}): UseAutoSyncReturn
 
   const createBackup = useCallback(
     (type: string = 'auto'): Backup => {
+      const state = useSettingsStore.getState()
       const backup: Backup = {
         id: Date.now(),
         type,
@@ -98,14 +92,17 @@ export function useAutoSync(options: UseAutoSyncOptions = {}): UseAutoSyncReturn
         data: {
           entries: [...entries],
           categories: [...categories],
-          settings: { theme, notifications },
-          version: '1.0',
+          dailyGoal: state.dailyGoal,
+          dailyHours: state.dailyHours,
+          theme: state.theme,
+          timestamp: Date.now(),
+          version: 1,
         },
       }
 
       return backup
     },
-    [entries, categories, theme, notifications]
+    [entries, categories]
   )
 
   const saveBackup = useCallback(
@@ -175,13 +172,14 @@ export function useAutoSync(options: UseAutoSyncOptions = {}): UseAutoSyncReturn
           updateSettings({ categories: data.categories })
         }
 
-        if (data.settings) {
-          if (data.settings.theme) {
-            setTheme(data.settings.theme)
-          }
-          if (data.settings.notifications) {
-            updateSettings({ notifications: data.settings.notifications })
-          }
+        if (data.theme) {
+          setTheme(data.theme as 'light' | 'dark' | 'auto')
+        }
+        if (data.dailyGoal !== undefined || data.dailyHours !== undefined) {
+          updateSettings({ 
+            ...(data.dailyGoal !== undefined && { dailyGoal: data.dailyGoal }),
+            ...(data.dailyHours !== undefined && { dailyHours: data.dailyHours })
+          })
         }
 
         logger.log(`💾 Данные восстановлены из резервной копии: ${backup.type}`)
@@ -245,7 +243,7 @@ export function useAutoSync(options: UseAutoSyncOptions = {}): UseAutoSyncReturn
           return
         }
 
-        if (event.storageArea === window.localStorage) {
+        if (event.storageArea !== window.localStorage) {
           return
         }
 

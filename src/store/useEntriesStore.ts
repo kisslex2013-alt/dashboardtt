@@ -626,9 +626,6 @@ export const useEntriesStore = create<EntriesState>()(
         /**
          * Восстанавливает данные из облачного бэкапа
          */
-        /**
-         * Восстанавливает данные из облачного бэкапа
-         */
         restoreFromCloudBackup: async (backupData: BackupData) => {
           try {
              if (!backupData) return false
@@ -676,15 +673,9 @@ export const useEntriesStore = create<EntriesState>()(
                  settingsStore.updateSettings({ dailyHours: backupData.dailyHours })
              }
 
-             // ⚠️ FIX: Не восстанавливаем тему из облака при синхронизации данных,
-             // так как это часто сбрасывает локальную настройку (Dark -> Light)
-             // и раздражает пользователя. Тема должна быть локальной прерогативой или синхронизироваться отдельно.
-             /*
              if (backupData.theme && ['light', 'dark', 'auto'].includes(backupData.theme)) {
                settingsStore.setTheme(backupData.theme as 'light' | 'dark' | 'auto')
              }
-             */
-             
              // Сохраняем восстановленные данные как новый локальный бэкап
              scheduleBackup()
              

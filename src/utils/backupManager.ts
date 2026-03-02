@@ -4,10 +4,7 @@
 
 import { logger } from './logger'
 
-interface BackupData {
-  entries?: unknown[]
-  [key: string]: unknown
-}
+import type { BackupData } from '../types'
 
 interface BackupEntry {
   timestamp: number

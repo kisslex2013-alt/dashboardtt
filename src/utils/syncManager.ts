@@ -13,6 +13,9 @@ export const SyncMessageType = {
   ENTRY_DELETED: 'entry-deleted',
   ENTRIES_BULK_UPDATE: 'entries-bulk-update',
   ENTRIES_CLEARED: 'entries-cleared',
+  CATEGORY_ADDED: 'category-added',
+  CATEGORY_UPDATED: 'category-updated',
+  CATEGORY_DELETED: 'category-deleted',
 } as const
 
 export type SyncMessageTypeName = typeof SyncMessageType[keyof typeof SyncMessageType]

@@ -369,6 +369,32 @@ export function mergeEntries(
 }
 
 /**
+ * Выполняет Smart Merge категорий
+ * Уникальные категории по ID добавляются из обоих списков.
+ * Если ID совпадают, берётся категория из облака, так как она обычно более актуальна
+ * (категории не имеют timestamp, поэтому отдаём приоритет облаку при мерже).
+ */
+export function mergeCategories(
+  localCategories: import('../types').Category[],
+  cloudCategories: import('../types').Category[]
+): import('../types').Category[] {
+  const merged: import('../types').Category[] = []
+  const categoryMap = new Map<string, import('../types').Category>()
+
+  // Сначала добавляем локальные
+  localCategories.forEach(cat => {
+    categoryMap.set(cat.id, cat)
+  })
+
+  // Затем добавляем/перезаписываем облачными
+  cloudCategories.forEach(cat => {
+    categoryMap.set(cat.id, cat)
+  })
+
+  return Array.from(categoryMap.values())
+}
+
+/**
  * Информация о пересечении времени
  */
 export interface TimeOverlap {

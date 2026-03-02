@@ -918,6 +918,7 @@ export function SoundNotificationsSettingsModal({ isOpen, onClose, initialTab = 
           {/* Левая колонка (Меню) */}
           <div className={`
             flex flex-col h-full overflow-y-auto custom-scrollbar transition-all duration-300 overflow-x-hidden
+            ${activeTab ? 'hidden md:flex' : 'flex'} 
             md:w-[25%] md:border-r md:border-gray-100 dark:md:border-gray-800 md:pr-4
           `}>
             {/* Навигация с группировкой */}
@@ -960,11 +961,14 @@ export function SoundNotificationsSettingsModal({ isOpen, onClose, initialTab = 
           </div>
 
           {/* Правая колонка (Контент) */}
-          <div className="hidden md:block md:w-[75%] h-full pl-6 overflow-hidden relative">
+          <div className={`
+             ${activeTab ? 'block' : 'hidden md:block'} 
+             w-full md:w-[75%] h-full md:pl-6 overflow-hidden relative
+          `}>
             <AnimatePresence mode="wait">
               {activeTab === null ? (
                 /* Приветственный экран */
-                <div className="h-full flex flex-col items-center justify-center text-center px-8">
+                <div className="h-full flex-col items-center justify-center text-center px-8 hidden md:flex">
                   {/* Анимированная иконка */}
                   <div className="relative mb-6">
                     <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 dark:from-blue-500/10 dark:to-purple-500/10 flex items-center justify-center animate-pulse">
@@ -1131,142 +1135,7 @@ export function SoundNotificationsSettingsModal({ isOpen, onClose, initialTab = 
             </AnimatePresence>
           </div>
 
-          {/* Мобильная версия NestedModal (Overlay) */}
-          <AnimatePresence>
-            {isOpen && activeTab && (
-               <div className="md:hidden">
-                 <NestedModal
-                    isOpen={true}
-                    onClose={() => {
-                        // На мобильном: закрываем модалку настроек полностью или делаем "Назад"?
-                        // В AboutModal мы делали setActiveSection(null).
-                        // Но здесь activeTab всегда установлен.
-                        // Если мы хотим "свернуть", то нужно состояние "мобильное меню активно".
-                        // Пока просто закроем всё модальное окно, как и было.
-                        onClose()
-                    }}
-                    title={activeCard?.title || ''}
-                    icon={activeCard?.icon || SettingsIcon}
-                    embedded={false}
-                  >
-                    <div className="pb-20">
-                       {activeTab === 'notifications' && (
-                      <NotificationsTab
-                        soundNotificationsEnabled={soundNotificationsEnabled}
-                        setSoundNotificationsEnabled={setSoundNotificationsEnabled}
-                        notificationSound={notificationSound}
-                        setNotificationSound={(val) => setNotificationSound(val as any)}
-                        notificationInterval={notificationInterval}
-                        setNotificationInterval={setNotificationInterval}
-                        customIntervalMinutes={customIntervalMinutes}
-                        setCustomIntervalMinutes={setCustomIntervalMinutes}
-                        breakRemindersEnabled={breakRemindersEnabled}
-                        setBreakRemindersEnabled={setBreakRemindersEnabled}
-                        breakReminderInterval={breakReminderInterval}
-                        setBreakReminderInterval={setBreakReminderInterval}
-                        overtimeAlertsEnabled={overtimeAlertsEnabled}
-                        setOvertimeAlertsEnabled={setOvertimeAlertsEnabled}
-                        overtimeWarningThreshold={overtimeWarningThreshold}
-                        setOvertimeWarningThreshold={setOvertimeWarningThreshold}
-                        overtimeCriticalThreshold={overtimeCriticalThreshold}
-                        setOvertimeCriticalThreshold={setOvertimeCriticalThreshold}
-                        overtimeSoundEnabled={overtimeSoundAlert}
-                        setOvertimeSoundEnabled={setOvertimeSoundAlert}
-                        dailyHours={dailyHours || 8}
-                        onTestSound={handleTestSound}
-                        onTestBreakReminder={handleTestBreakReminder}
-                        onTestOvertimeAlert={handleTestOvertimeAlert}
-                      />
-                    )}
-                    {activeTab === 'productivity' && (
-                      <ProductivityTab
-                        pomodoroEnabled={pomodoroEnabled}
-                        setPomodoroEnabled={setPomodoroEnabled}
-                        pomodoroAutoStartBreaks={pomodoroAutoStartBreaks}
-                        setPomodoroAutoStartBreaks={setPomodoroAutoStartBreaks}
-                        pomodoroAutoStartWork={pomodoroAutoStartWork}
-                        setPomodoroAutoStartWork={setPomodoroAutoStartWork}
-                        pomodoroSoundOnComplete={pomodoroSoundOnComplete}
-                        setPomodoroSoundOnComplete={setPomodoroSoundOnComplete}
-                        pomodoroShowNotifications={pomodoroShowNotifications}
-                        setPomodoroShowNotifications={setPomodoroShowNotifications}
-                        onTestPomodoroNotification={handleTestPomodoroNotification}
-                      />
-                    )}
-                    {activeTab === 'personalization' && (
-                      <PersonalizationTab
-                        faviconEnabled={faviconAnimationEnabled}
-                        setFaviconEnabled={setFaviconAnimationEnabled}
-                        faviconStyle={faviconAnimationStyle}
-                        setFaviconStyle={(val) => setFaviconAnimationStyle(val as any)}
-                        faviconColor={faviconAnimationColor}
-                        setFaviconColor={setFaviconAnimationColor}
-                        faviconSpeed={faviconAnimationSpeed}
-                        setFaviconSpeed={(val) => setFaviconAnimationSpeed(val as any)}
-                      />
-                    )}
-                     {activeTab === 'finance' && (
-                      <FinanceTab
-                        paymentDates={paymentDates}
-                        calendar={calendar}
-                        isPaymentDay={isPaymentDay}
-                        isInPeriod={isInPeriod}
-                        selectionState={selectionState}
-                        handleDayClick={handleDayClick}
-                        selection={selection}
-                        editingId={editingId}
-                        handleStartEdit={handleStartEdit}
-                        handleUpdateField={handleUpdateField}
-                        handleUpdatePeriodBoth={handleUpdatePeriodBoth}
-                        handleSaveEdit={handleSaveEdit}
-                        handleDeletePayment={handleDelete}
-                        handleCancelEdit={handleCancelEdit}
-                        handleToggleRepeat={handleToggleRepeat}
-                        handleUpdatePaymentDay={handleUpdatePaymentDay}
-                        draggedId={draggedId}
-                        handleDragStart={handleDragStart}
-                        handleDragEnd={handleDragEnd}
-                        handleDragOver={handleDragOver}
-                        handleDragEnter={handleDragEnter}
-                        handleDrop={handleDrop}
-                        handleAddPayment={handleAddPayment}
-                      />
-                    )}
-                    {activeTab === 'backups' && (
-                      <BackupsTab />
-                    )}
-                     {activeTab === 'workSchedule' && (
-                      <WorkScheduleTab
-                        scheduleTemplates={scheduleTemplates}
-                        selectedTemplate={selectedTemplate}
-                        onSelectTemplate={handleTemplateSelect}
-                        onCustomDayToggle={handleCustomDayToggle}
-                        selectedSchedule={selectedSchedule}
-                        dailyPlan={dailyPlan}
-                        monthlyPlan={monthlyPlan}
-                        weekStart={weekStart}
-                        onDailyPlanChange={setDailyPlan}
-                        onWeekStartChange={setWeekStart}
-                        animateStats={animateStats}
-                      />
-                    )}
-                    {activeTab === 'categories' && (
-                      <CategoriesTab />
-                    )}
-                    {activeTab === 'ai' && (
-                      <AITab />
-                    )}
-                    {activeTab === 'account' && (
-                      <AccountTab />
-                    )}
-                    {activeTab === 'shortcuts' && (
-                      <KeyboardShortcutsTab />
-                    )}
-                    </div>
-                  </NestedModal>
-               </div>
-            )}
-          </AnimatePresence>
+
         </div>
 
         {/* Портал для уведомлений */}

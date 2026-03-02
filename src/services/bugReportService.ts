@@ -64,7 +64,7 @@ export const bugReportService = {
     if (storedVersion) return storedVersion
     
     // Fallback на хардкод версию
-    return '1.3.1'
+    return '1.5.0'
   },
 
   /**

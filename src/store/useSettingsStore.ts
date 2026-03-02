@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { generateUUID } from '../utils/uuid'
+import { syncManager, SyncMessageType } from '../utils/syncManager'
 import type { SettingsState, Category, WorkScheduleStats, ExportReminderSettings, UserProfile } from '../types'
 
 /**
@@ -448,10 +449,13 @@ export const useSettingsStore = create<SettingsState>()(
        * Добавляет новую категорию
        * @param {Object} category - объект категории
        */
-      addCategory: category =>
+      addCategory: category => {
+        const newCategory = { ...category, id: generateUUID() }
         set(state => ({
-          categories: [...state.categories, { ...category, id: generateUUID() }],
-        })),
+          categories: [...state.categories, newCategory],
+        }))
+        syncManager.broadcast(SyncMessageType.CATEGORY_ADDED, newCategory)
+      },
 
       /**
        * Обновляет категорию
@@ -461,11 +465,12 @@ export const useSettingsStore = create<SettingsState>()(
       updateCategory: (id, updates) => {
         // ✅ СТАНДАРТИЗАЦИЯ ID: Конвертируем в строку для корректного сравнения
         const idString = String(id)
-        return set(state => ({
+        set(state => ({
           categories: state.categories.map(cat =>
             String(cat.id) === idString ? { ...cat, ...updates } : cat
           ),
         }))
+        syncManager.broadcast(SyncMessageType.CATEGORY_UPDATED, { id: idString, updates })
       },
 
       /**
@@ -475,9 +480,10 @@ export const useSettingsStore = create<SettingsState>()(
       deleteCategory: id => {
         // ✅ СТАНДАРТИЗАЦИЯ ID: Конвертируем в строку для корректного сравнения
         const idString = String(id)
-        return set(state => ({
+        set(state => ({
           categories: state.categories.filter(cat => String(cat.id) !== idString),
         }))
+        syncManager.broadcast(SyncMessageType.CATEGORY_DELETED, { id: idString })
       },
 
       /**
@@ -691,8 +697,11 @@ export const useSettingsStore = create<SettingsState>()(
     {
       name: 'time-tracker-settings',
       version: 6, // ✅ Увеличили версию для включения Neon Glow уведомлений
+      partialize: (state) => Object.fromEntries(
+        Object.entries(state).filter(([_, value]) => typeof value !== 'function')
+      ) as SettingsState,
       // Миграция для существующих пользователей
-      migrate: (persistedState, version) => {
+      migrate: (persistedState: any, version) => {
         const newState = { ...persistedState }
 
         // Миграция v0 → v1: добавляем paymentDates если их нет
@@ -776,7 +785,7 @@ export const useSettingsStore = create<SettingsState>()(
 
         // Миграция v5 → v6: включаем Neon Glow уведомления (вариант 6)
         if (version < 6) {
-          if (newState.notifications) {
+          if (newState.notifications && !newState.notifications.variant) {
             newState.notifications.variant = 6
           }
         }

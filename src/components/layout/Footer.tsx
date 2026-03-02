@@ -82,7 +82,7 @@ export function Footer() {
   )
 
   return (
-    <footer className="fixed bottom-0 left-0 right-0 z-50 pointer-events-none p-4">
+    <footer className="hidden sm:block fixed bottom-0 left-0 right-0 z-50 pointer-events-none p-4">
       <div className="max-w-screen-2xl mx-auto flex justify-end">
         <div 
           className={`

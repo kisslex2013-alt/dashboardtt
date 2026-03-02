@@ -91,6 +91,7 @@ export function ThemeToggle() {
         aria-label="Переключить тему"
         onClick={toggleTheme}
         className="glass-button p-2 rounded-lg transition-normal hover-lift-scale click-shrink"
+        data-tour="theme"
         data-icon-id={theme === 'light' ? 'header-theme-light' : 'header-theme-dark'}
       >
         {theme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}

@@ -53,8 +53,8 @@ export function validateTimeEntry(entry: Partial<TimeEntry>): ValidationResult {
   }
 
   if (entry.start && entry.end && isValidTime(entry.start) && isValidTime(entry.end)) {
-    if (entry.start >= entry.end) {
-      errors.timeLogic = 'Время окончания должно быть позже времени начала'
+    if (entry.start === entry.end) {
+      errors.timeLogic = 'Время окончания не может совпадать с временем начала'
     }
 
     const duration = calculateDuration(entry.start, entry.end)

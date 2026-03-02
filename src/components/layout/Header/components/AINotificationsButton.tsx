@@ -101,6 +101,7 @@ export function AINotificationsButton() {
         }`}
         aria-label={`AI-уведомления${unreadCount > 0 ? ` (${unreadCount} новых)` : ''}`}
         title={`AI-уведомления${unreadCount > 0 ? ` (${unreadCount} новых)` : ''} (Alt+N)`}
+        data-tour="ai-notifications"
         style={{
           minWidth: isMobile ? '44px' : 'auto',
           minHeight: isMobile ? '44px' : 'auto',
