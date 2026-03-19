@@ -7,6 +7,7 @@ import { useAINotificationMonitor } from './hooks/useAINotificationMonitor'
 import { useAuthMonitor } from './hooks/useAuthMonitor'
 import { useWelcomeScreen } from './hooks/useWelcomeScreen'
 import { useAutoBackup } from './hooks/useAutoBackup'
+import { useCategoryRestore } from './hooks/useCategoryRestore'
 import { UpdatePasswordModal } from './components/auth/UpdatePasswordModal'
 import { OnboardingTourProvider } from './components/onboarding/OnboardingTour'
 import { BugReportButton } from './components/ui/BugReportButton'
@@ -32,6 +33,9 @@ export function App() {
 
   // Автоматический бекап при закрытии вкладки
   useAutoBackup()
+
+  // 🔄 Автовосстановление категорий из IndexedDB если localStorage был очищен
+  useCategoryRestore()
 
   return (
     <AppProviders>

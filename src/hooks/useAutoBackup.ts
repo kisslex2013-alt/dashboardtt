@@ -26,13 +26,15 @@ export function useAutoBackup() {
     try {
       await backupManager.saveBackup({
         entries,
-        // Дополнительные данные можно добавить здесь
+        categories, // ✅ FIX: сохраняем категории вместе с записями
+        timestamp: Date.now(),
+        version: 1,
       })
-      console.log('💾 Автобекап создан при закрытии вкладки')
+      console.log('💾 Автобекап создан при закрытии вкладки (с категориями)')
     } catch (error) {
       console.error('❌ Ошибка создания автобекапа:', error)
     }
-  }, [entries])
+  }, [entries, categories])
 
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
